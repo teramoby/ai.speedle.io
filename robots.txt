@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://ai.speedle.io/sitemap.xml
