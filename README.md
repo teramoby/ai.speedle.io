@@ -27,5 +27,8 @@ Original bird artwork, without raster modification, from teramoby/speedle-plus:
 - docs/images/Speedle+ Horizontal-01.png → assets/speedle-plus.png
 - docs/images/sp_small.png → assets/speedle-bird.png
 
+assets/favicon.svg embeds assets/speedle-bird.png unmodified on a dark tile,
+so the white bird stays visible on light browser tabs.
+
 Speedle+ continues Oracle Speedle and is maintained by the original developers.
 Speedle+ is licensed under UPL 1.0. Contact: contact@speedle.io.
