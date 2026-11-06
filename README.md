@@ -19,8 +19,8 @@ not a Speedle engine, MCP integration, RAG adapter, or production service.
 The Speedle MCP section is a launch preview: `@speedle/mcp` is not published
 on npm, and its install and client configuration snippets are marked as
 available at launch. MCP facts come from teramoby/speedle-mcp issues #1 and #2.
-The white-first visual language follows speedle.io and cloud.speedle.io,
-with slightly shifted purple tokens and dark-purple brand bands.
+Speedle AI uses white backgrounds with light-purple accents; the header and
+the "Speedle | AI" lock-up follow the shared three-site format of speedle.io.
 
 ## Preview
 
@@ -45,6 +45,8 @@ Original bird artwork, without raster modification, from teramoby/speedle-plus:
 - docs/img/speedle/Speedle_logo_home_bold.svg → assets/speedle-logo-header.svg
 - docs/img/speedle/Speedle_logo_about.svg → assets/speedle-mark.svg
 - docs/img/speedle/Speedle_logo_w.svg → assets/speedle-logo-footer.svg
+- docs/img/speedle/Speedle_logo_home_bold.svg → assets/speedle-mark-ai.svg,
+  colours changed only (wordmark #fff → #182034, sphere #ff9a45 → #8b5cf6)
 
 assets/favicon.svg embeds assets/speedle-bird.png unmodified on a dark tile,
 so the white bird stays visible on light browser tabs.
