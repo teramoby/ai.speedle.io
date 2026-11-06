@@ -122,6 +122,15 @@ for (const lang of ['en', 'x-default']) {
   check(pageAlt && mapAlt && pageAlt.href === mapAlt.href, `hreflang="${lang}" must match between index.html and sitemap.xml`);
 }
 check((html.match(/<h1[\s>]/g) || []).length === 1, 'index.html must have exactly one <h1>');
+// Cloudflare Web Analytics: the public site token, cookieless, before </body>.
+check(
+  /<script defer src="https:\/\/static\.cloudflareinsights\.com\/beacon\.min\.js" data-cf-beacon='\{"token": "3b49dd9a82634bba833340481ce6ccbe"\}'><\/script>/.test(html),
+  'index.html must load the Cloudflare Web Analytics beacon with the ai.speedle.io token'
+);
+check(
+  html.lastIndexOf('cloudflareinsights.com/beacon.min.js') < html.lastIndexOf('</body>'),
+  'the Cloudflare Web Analytics beacon must be inside the page body'
+);
 check(/<meta property="og:image" content="https:\/\/ai\.speedle\.io\/assets\/og-image\.png">/.test(html), 'og:image must point at the share image');
 check(/<meta name="twitter:card" content="summary_large_image">/.test(html), 'twitter:card must be summary_large_image');
 const ogImage = join(root, 'assets/og-image.png');

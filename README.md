@@ -36,7 +36,11 @@ Cloud is coming soon, and AI risk detection is not shipped.
 resolve to files and anchors in this repository, that the sitemap's `hreflang`
 entries match the page, that the JSON-LD blocks parse and cover Organization,
 WebSite, SoftwareApplication and FAQPage, and that the visible FAQ text matches
-the FAQPage data. No dependencies.
+the FAQPage data. It also checks that the Cloudflare Web Analytics beacon is
+present with the ai.speedle.io site token. No dependencies.
+
+Every public page loads the cookieless Cloudflare Web Analytics beacon before
+`</body>`; the site has no signed-in pages or API responses.
 
 ## Preview
 
