@@ -23,7 +23,8 @@ Speedle AI has two parts. AI for access management covers using AI to design, ma
 - [Run: agents acting for users](https://ai.speedle.io/#lc-agents): both the agent and the delegating user must be allowed.
 - [Run: tool calls over MCP](https://ai.speedle.io/#lc-mcp): the tool, the call and its arguments are checked before the tool runs.
 - [Run: agent-to-agent (A2A) authorization](https://ai.speedle.io/#lc-a2a): each hop is checked and delegation only narrows permissions.
-- [Run: zero standing privileges (ZSP)](https://ai.speedle.io/#zsp): a just-in-time token must be short-lived, unexpired and unused; on self-hosted Speedle, a custom function reads the used and revoked store.
+- [Run: zero standing privileges (ZSP)](https://ai.speedle.io/#zsp): just-in-time, short-lived, narrowly scoped credentials support a ZSP pattern when issuance and controls are in place; the example checks lifetime, not-before and token status, and production verifies token binding and consumes single-use tokens atomically.
+- [ZSP sample](https://github.com/teramoby/ai.speedle.io/tree/main/samples/zsp): a local PMS + ADS + custom function demo with the atomic consume step; its in-memory state and admin endpoints are demo only.
 - [Cross-cutting concerns](https://ai.speedle.io/#cross-cutting): identity, audit and explainability, and OWASP LLM06:2025 Excessive Agency.
 - [Interactive demo](https://ai.speedle.io/#playground): a simplified browser-local policy example, not the Speedle engine.
 - [Where Speedle stops](https://ai.speedle.io/#boundary): it does not detect prompt injection, filter content or verify model and dataset supply chains.

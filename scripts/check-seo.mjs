@@ -251,17 +251,25 @@ for (const [name, source] of englishSpdl) {
   check(chineseSpdl.get(name) === source, `zh/index.html ${name} SPDL must be byte-identical, including comments`);
 }
 
-// The ZSP example must cover the token lifetime, the request-time expiry check
-// and the custom function, and its comments must use "#" only. The source is
-// HTML-escaped inside <code>, so decode the entities before checking.
+// The ZSP example must cover the complete time checks and the read-only status
+// function, and its comments must use "#" only. The source is HTML-escaped
+// inside <code>, so decode the entities before checking.
 const zspSource = (englishSpdl.get('zsp') || '')
   .replaceAll('&lt;', '<')
   .replaceAll('&gt;', '>')
   .replaceAll('&amp;', '&')
   .replaceAll('&quot;', '"');
-for (const fragment of ['expires_at - issued_at <= 600', 'request_time < expires_at', 'TokenUnused(token_id)']) {
+for (const fragment of [
+  'expires_at > issued_at',
+  'expires_at - issued_at <= 600',
+  'issued_at <= request_time + 60',
+  'not_before <= request_time + 60',
+  'request_time < expires_at',
+  'TokenUnused(token_id)'
+]) {
   check(zspSource.includes(fragment), `zsp SPDL example must include "${fragment}"`);
 }
+check(!/consume/i.test(zspSource), 'zsp SPDL example must keep the policy function read-only: no consume');
 for (const line of zspSource.split('\n')) {
   const trimmed = line.trim();
   check(!/^(\/\/|\/\*|\*)/.test(trimmed), `zsp SPDL comments must use "#" only: ${trimmed}`);
@@ -274,6 +282,23 @@ for (const html of [englishHtml, chineseHtml]) {
 }
 check(englishHtml.includes('Solution pattern · Self-hosted Speedle'), 'index.html ZSP block must present the pattern as self-hosted Speedle');
 check(chineseHtml.includes('解决方案模式 · 自托管 Speedle'), 'zh/index.html ZSP block must present the pattern as self-hosted Speedle');
+// The ZSP copy must stay scoped: a pattern under the right conditions, with
+// token verification and an atomic consume left to production.
+check(englishHtml.includes('Just-in-time tokens support a zero standing privileges pattern'), 'index.html ZSP title must present ZSP as a pattern');
+check(chineseHtml.includes('即时令牌支撑零常驻权限模式'), 'zh/index.html ZSP title must present ZSP as a pattern');
+check(englishHtml.includes('Under the right issuance and control conditions'), 'index.html ZSP copy must scope the claim to the right conditions');
+check(chineseHtml.includes('签发和管控到位时'), 'zh/index.html ZSP copy must scope the claim to the right conditions');
+check(englishHtml.includes('production also needs a trusted component'), 'index.html ZSP copy must state the production verification requirement');
+check(chineseHtml.includes('生产环境还需要可信组件'), 'zh/index.html ZSP copy must state the production verification requirement');
+check(englishHtml.includes('atomic consume'), 'index.html ZSP copy must state the atomic consume requirement');
+check(chineseHtml.includes('原子消费'), 'zh/index.html ZSP copy must state the atomic consume requirement');
+for (const [html, label] of [[englishHtml, 'index.html'], [chineseHtml, 'zh/index.html']]) {
+  check(!html.includes('A token for each request, not a standing privilege'), `${label} must not use the old ZSP title`);
+  check(!html.includes('每次请求一个令牌，不留常驻权限'), `${label} must not use the old ZSP title`);
+}
+const sampleReadme = read('samples/zsp/README.md');
+check(/^## Production requirements$/m.test(sampleReadme), 'samples/zsp/README.md must have a Production requirements section');
+check(sampleReadme.includes('not a security guarantee'), 'samples/zsp/README.md must state that the sample is not a security guarantee');
 for (const label of ['身份输入', '构建', '运行', '策略决策点', '审计与解释输出', '边界', '数据与训练', '模型发布']) {
   check(chineseHtml.includes(`>${label}</text>`), `zh/index.html concept diagram is missing the Chinese label "${label}"`);
 }
