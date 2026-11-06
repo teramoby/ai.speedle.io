@@ -1,6 +1,6 @@
 # Speedle AI — AI agent authorization and access control
 
-> Speedle AI is the Speedle site for access management for AI. It shows how to apply the open-source Speedle policy engine to authorization for AI agents: MCP tool calls, permission-aware RAG, agent-to-agent (A2A) calls and the AI lifecycle from training data to model release. It also previews Speedle MCP for designing, managing and checking policies with AI, and an AI-based risk-detection approach that is being built. Everything here is a solution pattern on the Speedle policy engine; none of it is a shipped integration with an ML or agent platform.
+> Speedle AI is the Speedle site for access management for AI. It shows how to apply the open-source Speedle policy engine to authorization for AI agents: MCP tool calls, permission-aware RAG, agent-to-agent (A2A) calls, zero standing privileges (ZSP) and the AI lifecycle from training data to model release. It also previews Speedle MCP for designing, managing and checking policies with AI, and an AI-based risk-detection approach that is being built. Everything here is a solution pattern on the Speedle policy engine; none of it is a shipped integration with an ML or agent platform.
 
 Source: https://ai.speedle.io/
 
