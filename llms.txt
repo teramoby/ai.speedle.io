@@ -7,7 +7,7 @@ Speedle AI has two parts. AI for access management covers using AI to design, ma
 ## Home
 
 - [Speedle AI home](https://ai.speedle.io/): What Speedle AI is and the two parts.
-- [中文](https://ai.speedle.io/zh/): Speedle AI 中文首页，介绍 AI 智能体授权、AI 访问控制、MCP 授权、RAG 权限控制和智能体最小权限。
+- [中文](https://ai.speedle.io/zh/): Speedle AI 中文首页：用 AI 管理权限，用策略约束 AI，涵盖 AI 智能体授权、AI 访问控制、MCP 授权、RAG 权限控制和智能体最小权限。
 
 ## AI for access management
 
