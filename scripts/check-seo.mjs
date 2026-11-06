@@ -252,7 +252,7 @@ for (const [name, source] of englishSpdl) {
 for (const label of ['身份输入', '构建', '运行', '策略决策点', '审计与解释输出', '边界', '数据与训练', '模型发布']) {
   check(chineseHtml.includes(`>${label}</text>`), `zh/index.html concept diagram is missing the Chinese label "${label}"`);
 }
-for (const keyword of ['AI 智能体授权', 'AI 访问控制', 'MCP 授权', 'RAG 权限控制', '大模型应用权限管理', '智能体最小权限']) {
+for (const keyword of ['AI 智能体授权', 'AI 访问控制', 'MCP 授权', 'RAG 权限控制', '大模型应用权限管理', '智能体最小权限', 'AI 智能体授权：用 AI 管权限，用策略约束 AI', 'Speedle MCP：两种独立模式']) {
   check(chineseHtml.includes(keyword), `zh/index.html must naturally include the Chinese keyword "${keyword}"`);
 }
 check(chineseHtml.includes('>产品<svg class="products-chevron"'), 'zh/index.html header must use the Chinese 产品 label');
