@@ -1,0 +1,137 @@
+# Speedle AI — AI agent authorization and access control
+
+> Speedle AI is the Speedle site for access management for AI. It shows how to apply the open-source Speedle policy engine to authorization for AI agents: MCP tool calls, permission-aware RAG, agent-to-agent (A2A) calls and the AI lifecycle from training data to model release. It also previews Speedle MCP for designing, managing and checking policies with AI, and an AI-based risk-detection approach that is being built. Everything here is a solution pattern on the Speedle policy engine; none of it is a shipped integration with an ML or agent platform.
+
+Source: https://ai.speedle.io/
+
+## What is Speedle AI?
+
+Speedle AI has two connected directions.
+
+- **AI for access management:** AI helping people design, manage and check access policies with Speedle MCP, plus an AI-based risk-detection approach being built.
+- **Access management for AI:** policy patterns that govern what AI systems and agents may do while they are built and while they run.
+
+Both directions rest on clear, enforceable policy decisions. Speedle decides; the application enforces the decision.
+
+## AI for access management
+
+### Speedle MCP (launch preview)
+
+`@speedle/mcp` is planned as one npm package with a `speedle-mcp` binary that runs as a local stdio MCP server. It is an MCP server for authorization work, with two deliberately separate modes. It is not published on npm yet.
+
+- **check mode:** registers only the authorization-check tools and reads only ADS configuration. It answers authorization questions through the Speedle ADS REST API using subject, resource, action and typed attributes; it does not enforce anything in the calling application.
+- **manage mode:** registers only the management tools and reads only PMS configuration for designing and managing Speedle policies through the PMS REST API: services, authorization policies, role policies, SPDL validation and effective-policy explanation helpers. A read-only option exists and destructive deletes require explicit target confirmation.
+
+Security rule: never give the manage mode to an agent that is itself governed by these policies. An agent holding both check and management tools could be prompted into granting itself access. There is no default mode that exposes both; running with no mode is planned to print usage and exit non-zero.
+
+Install and MCP client configuration snippets on the site are future launch examples, marked "Available at launch". They do not work today.
+
+### AI-based risk detection (being built)
+
+AI-based risk detection is a direction Speedle is exploring and building, not a shipped feature. The approach looks across more dimensions and relationships than a single rule, for example unusual combinations of agent, user, data and task context.
+
+Policy keeps the veto. The target flow is: request context, then the deterministic policy decision, then AI risk signals, then a final decision. A policy deny stops at the decision step; risk signals can add scrutiny or protection but can never turn a policy deny into an allow.
+
+## Access management for AI
+
+Speedle's policy engine applied wherever AI systems touch data, models, tools and other agents. Each area has an enforcement point in the application; it asks Speedle before it acts and enforces the answer. Identity comes in from the IdP; decisions and explanations go out to the audit trail. The SPDL examples below are solution patterns, not shipped platform integrations.
+
+### Build: data and training
+
+Training jobs read datasets, use compute and write checkpoints. The application asks before each dataset read, job start and checkpoint export, passing sensitivity, tenant, consent and region as attributes.
+
+- Subjects: training pipelines as entities; ML engineers and their teams.
+- Resources and actions: datasets `read`, training jobs `start`, checkpoints `export`.
+- Enforcement point: the data loader before it opens a dataset, the job scheduler before it allocates compute, and the artifact store before an export.
+- SPDL example rules: consent and region checked per dataset, restricted data denied outright, and a GPU-hour limit on job start.
+
+### Build: model release
+
+Registering, approving, promoting and rolling back models are separate actions with separate owners. Separation of duties keeps the person who trained a model from approving it.
+
+- Subjects: ML engineers, release managers and the service identities of release pipelines.
+- Resources and actions: models and endpoints with `register`, `approve`, `promote` and `rollback`.
+- Enforcement point: the model registry and the release pipeline, before each change of model or endpoint state.
+
+### Run: inference and permission-aware RAG
+
+Users, apps and tenants call models. For permission-aware RAG (retrieval-augmented generation), the retriever asks Speedle about each document or collection before its content enters the prompt, so the model only sees what the person behind the request may read.
+
+- Subjects: the user behind the request with their groups; client applications and tenants as entities.
+- Resources and actions: collections and documents `retrieve`; models `invoke`.
+- Enforcement point: the retriever before a document enters the prompt, and the API gateway or inference service before it routes a request.
+- SPDL example rules: a document is retrieved only inside the user's tenant and at a label the user is cleared for; legal-hold documents are denied; apps call only the model tiers in their plan.
+
+### Run: agents acting for users
+
+The agent has its own identity. On behalf of a user, the request carries both the user and the agent as principals, and every grant names both roles, so the agent gets only what both may do. Scope is bound to the task and its expiry, and high-risk actions need a human approval.
+
+- Subjects: the agent as an entity plus the delegating user. The agent alone, or the user without the agent, matches no grant.
+- Resources and actions: tickets `read` and `update`; orders `refund`, a high-risk action.
+- Enforcement point: the agent runtime or the application backend before the action reaches the business system. The approval step records a human approval and the application passes it as `approved_amount`.
+
+### Run: tool calls over MCP
+
+Every tool call is checked before it runs. The tool is the resource, the call is the action, and the arguments become attributes, so limits such as a refund amount are part of the policy.
+
+- Subjects: agents, each with its own entity identity and role, so privileges stay per agent and per tool.
+- Resources and actions: tools `call`, with the tool arguments as attributes.
+- Enforcement point: the MCP client host, or a gateway in front of MCP servers, before the tool executes.
+
+### Run: agent-to-agent (A2A) authorization
+
+Each hop in a delegation chain is checked. The callee may receive only scopes the caller already holds, and the chain has a hop limit, so delegation only narrows permissions.
+
+- Subjects: calling agents, identified as entities.
+- Resources and actions: other agents and their skills `call`, with the requested scopes, the caller's scopes and the hop count as attributes.
+- Enforcement point: the calling agent before it sends a task, or the receiving agent before it accepts one.
+
+### Cross-cutting concerns
+
+- **Identity integration:** Speedle is the authorization decision point. Authentication comes from the IdP or OAuth authorization server, for users and for agents; MCP authorization builds on OAuth. The application maps verified identities to principals and Speedle decides on the principals it is given.
+- **Audit and explainability:** Speedle's diagnose API returns the decision, the reason, the effective roles and the policies examined, including which one matched and why. Applications log each decision with the agent and the delegating human. Diagnose exposes policy and request details, so keep it to trusted operators.
+- **Risk mapping:** the patterns map to OWASP LLM06:2025 Excessive Agency: an agent with more functionality, permission or autonomy than its task needs. Per-agent roles, per-tool checks, task- and time-bound delegation and human approval for high-risk actions narrow each of the three.
+
+### Where Speedle stops
+
+Speedle does not detect prompt injection, filter model input or output, or verify model and dataset supply chains; use dedicated controls for those. It bounds what a compromised or misled agent can do: Speedle answers deny to any request outside policy, whatever the prompt said.
+
+## Interactive example
+
+The page has a simplified browser-local demo: choose an executing agent, an action and a data scope, and fixed policy rules run locally in the browser to show an allow or deny decision. It is not a Speedle engine, MCP integration or production service, connects to no agent, data or service, and does not simulate AI risk detection.
+
+## FAQ
+
+### What is Speedle AI?
+
+Speedle AI is the Speedle site for access management for AI. It shows how to apply the open-source Speedle policy engine to authorization for AI agents: MCP tool calls, permission-aware RAG, agent-to-agent (A2A) calls and the AI lifecycle from training data to model release. It also previews Speedle MCP for designing, managing and checking policies with AI.
+
+### How is Speedle AI different from Speedle Engine and Speedle Cloud?
+
+Speedle Engine (https://engine.speedle.io/) is the open-source authorization engine. Speedle Cloud (https://cloud.speedle.io/) is the hosted authorization service for developers, coming soon. Speedle AI explores how that engine applies to AI access management and previews Speedle MCP; it is not a separate authorization runtime.
+
+### Does Speedle AI ship AI-based risk detection?
+
+No. AI-based risk detection is an approach being built, not a shipped feature. The deterministic policy decision holds the veto: AI risk signals can add scrutiny or protection but can never turn a policy deny into an allow.
+
+### Is Speedle MCP available today?
+
+Not yet. `@speedle/mcp` is not published on npm. The check mode for authorization checks and the manage mode for policy design and management are launch previews; their install and client configuration snippets are examples of what will be available at launch. The repository is https://github.com/teramoby/speedle-mcp.
+
+### How does Speedle authorize AI agents and tool calls?
+
+An application asks Speedle for a policy decision before an agent acts. For agents acting for a user, every grant names both the agent and the user roles, so the agent gets only what both may do. For MCP tool calls, the tool is the resource, the call is the action and the arguments are attributes, so limits such as a refund amount are part of the policy. For A2A calls, each hop is checked and a callee receives only scopes the caller already holds. Together these checks give fine-grained authorization and least privilege for AI agents.
+
+### Is Speedle open source, and how do I start?
+
+Yes. Speedle continues Oracle Speedle and is licensed under the Universal Permissive License (UPL) 1.0. Start with the Speedle Engine documentation (https://engine.speedle.io/) and the SPDL examples on this page, explore the Speedle SDK repository (https://github.com/teramoby/speedle-sdk), or share your AI authorization scenario on the ai.speedle.io issue tracker (https://github.com/teramoby/ai.speedle.io/issues).
+
+## Related links
+
+- Speedle Engine: https://engine.speedle.io/
+- Speedle Cloud (coming soon): https://cloud.speedle.io/
+- Speedle source code (UPL 1.0): https://github.com/teramoby/speedle-plus
+- Speedle MCP: https://github.com/teramoby/speedle-mcp
+- Speedle SDK: https://github.com/teramoby/speedle-sdk
+- Speedle documentation: https://speedle.io/docs/
+- Interactive example, source: https://ai.speedle.io/#playground

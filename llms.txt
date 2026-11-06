@@ -1,0 +1,41 @@
+# Speedle AI
+
+> Speedle AI is the Speedle site for access management for AI. It shows how to apply the open-source Speedle policy engine to AI agent authorization and access control: MCP authorization, permission-aware RAG, agent-to-agent (A2A) calls and least privilege for LLM applications. It also previews Speedle MCP, an MCP server for authorization checks and policy management, and an AI-based risk-detection approach that is being built.
+
+Speedle AI has two parts. AI for access management covers using AI to design, manage and check policies. Access management for AI covers policy patterns across the AI lifecycle, from data and training to inference, agents, tool calls and other agents. All of this is built on the open-source Speedle policy engine; the SPDL examples on the page are solution patterns, not shipped platform integrations.
+
+## Home
+
+- [Speedle AI home](https://ai.speedle.io/): What Speedle AI is, the two parts, and a visible FAQ.
+
+## AI for access management
+
+- [Speedle MCP launch preview](https://ai.speedle.io/#mcp): `@speedle/mcp` is planned as one npm package with separate check and manage modes; it is not published on npm yet.
+- [AI-based risk detection being built](https://ai.speedle.io/#risk-detection): policy keeps the veto; AI risk signals never grant access that policy denies.
+
+## Access management for AI
+
+- [Concept: one decision point](https://ai.speedle.io/#lifecycle): identity in, allow or deny out, audit and explain out.
+- [Build: data and training](https://ai.speedle.io/#lc-data): consent, region and restricted-data rules for datasets, training jobs and checkpoints.
+- [Build: model release](https://ai.speedle.io/#lc-release): separation of duties for register, approve, promote and rollback.
+- [Run: permission-aware RAG](https://ai.speedle.io/#lc-rag): the retriever asks per document or collection before content enters the prompt.
+- [Run: agents acting for users](https://ai.speedle.io/#lc-agents): both the agent and the delegating user must be allowed.
+- [Run: tool calls over MCP](https://ai.speedle.io/#lc-mcp): the tool, the call and its arguments are checked before the tool runs.
+- [Run: agent-to-agent (A2A) authorization](https://ai.speedle.io/#lc-a2a): each hop is checked and delegation only narrows permissions.
+- [Cross-cutting concerns](https://ai.speedle.io/#cross-cutting): identity, audit and explainability, and OWASP LLM06:2025 Excessive Agency.
+- [Interactive demo](https://ai.speedle.io/#playground): a simplified browser-local policy example, not the Speedle engine.
+- [Where Speedle stops](https://ai.speedle.io/#boundary): it does not detect prompt injection, filter content or verify model and dataset supply chains.
+- [FAQ](https://ai.speedle.io/#faq): what Speedle AI is, what ships today, and how to start.
+
+## Related Speedle sites
+
+- [Speedle Engine](https://engine.speedle.io/): the open-source authorization engine and SPDL policy language.
+- [Speedle Cloud](https://cloud.speedle.io/): hosted authorization for developers; coming soon.
+- [Speedle source on GitHub](https://github.com/teramoby/speedle-plus): Universal Permissive License (UPL) 1.0.
+- [Speedle MCP repository](https://github.com/teramoby/speedle-mcp): check-mode issue #1 and manage-mode issue #2; not published on npm yet.
+- [Speedle SDK](https://github.com/teramoby/speedle-sdk): client integration patterns and guidance.
+- [Speedle documentation](https://speedle.io/docs/): guides, SPDL and the diagnose API.
+
+## Optional
+
+- [ai.speedle.io issue tracker](https://github.com/teramoby/ai.speedle.io/issues): share an AI authorization scenario.

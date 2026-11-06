@@ -23,6 +23,25 @@ Speedle AI uses white backgrounds with light-purple accents; the header,
 Products navigation, sphere favicons and footer follow the shared three-site
 format of speedle.io.
 
+## SEO and GEO
+
+`sitemap.xml`, `robots.txt`, `llms.txt` and `llms-full.txt` at the root are
+hand-maintained; there is no generator. The sitemap and the page declare
+`hreflang` alternates for `en` and `x-default`; the Chinese version (#13) adds
+`zh-CN` and its `/zh/` URL to both when it exists. Every factual claim in these
+files must already be true on the page: `@speedle/mcp` is not on npm, Speedle
+Cloud is coming soon, and AI risk detection is not shipped.
+
+`node scripts/check-seo.mjs` verifies that the sitemap and `llms` link targets
+resolve to files and anchors in this repository, that the sitemap's `hreflang`
+entries match the page, that the JSON-LD blocks parse and cover Organization,
+WebSite, SoftwareApplication and FAQPage, and that the visible FAQ text matches
+the FAQPage data. It also checks that the Cloudflare Web Analytics beacon is
+present with the ai.speedle.io site token. No dependencies.
+
+Every public page loads the cookieless Cloudflare Web Analytics beacon before
+`</body>`; the site has no signed-in pages or API responses.
+
 ## Preview
 
 Run `python3 -m http.server 8765 --bind 127.0.0.1` in this directory.
@@ -49,10 +68,16 @@ Original bird artwork, without raster modification, from teramoby/speedle-plus:
   colours changed only (wordmark #fff → #182034, sphere #ff9a45 → #8b5cf6)
 
 favicon.svg uses the sphere paths from assets/speedle-mark-ai.svg without path
-edits on a transparent background. favicon.ico contains PNG renders at 16, 32
-and 48 px; apple-touch-icon.png is 180×180 with the sphere on white and 20 px
+edits on a transparent background, with the shared v9 favicon treatment: a 1 px
+#2a1660 circle outline (non-scaling stroke) so the mark stays legible on light
+browser tab bars. favicon.ico contains PNG renders of that SVG at 16, 32 and
+48 px; apple-touch-icon.png is 180×180 with the sphere on white and 20 px
 visible padding. The Products menu uses the same sphere paths in Engine orange
 (#ff9a45), Cloud blue (#4da3ff) and AI purple (#8b5cf6).
+
+assets/og-image.png is the 1200×630 share image: the Speedle | AI lock-up and
+page headline on the site's white and light-purple background. Its text repeats
+page copy; it adds no claims.
 
 The four assets/social-*.svg files are the speedle.io footer icons recoloured
 from white to AI ink (#182034), without path edits. The Google Groups icon is

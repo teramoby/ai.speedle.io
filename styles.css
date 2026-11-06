@@ -297,6 +297,8 @@ header.site-header:lang(zh) {
 .hero .eyebrow { padding: 4px 8px; color: var(--primary-dark); background: var(--tint-strong); }
 h1 { max-width: 650px; margin: 22px 0 26px; font-size: clamp(3.15rem, 5.25vw, 4.75rem); font-weight: 750; letter-spacing: -.055em; line-height: 1.03; }
 .hero-lead { max-width: 610px; margin: 0; color: var(--muted); font-size: 1.13rem; line-height: 1.75; }
+.definition { max-width: 610px; margin: 22px 0 0; padding-left: 16px; border-left: 2px solid var(--primary); color: var(--muted); font-size: .93rem; line-height: 1.7; }
+.definition strong { color: var(--ink); }
 .hero-note { display: flex; align-items: center; gap: 10px; margin: 28px 0 0; color: var(--muted); font-size: .88rem; }
 .hero-note > span { width: 9px; height: 9px; flex: none; border-radius: 50%; background: var(--primary); box-shadow: 0 0 0 6px rgba(var(--primary-rgb), .12); }
 .hero-paths { min-width: 0; display: grid; gap: 16px; }
@@ -583,6 +585,15 @@ h1 { max-width: 650px; margin: 22px 0 26px; font-size: clamp(3.15rem, 5.25vw, 4.
 .resource-card .resource-name { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .resource-card p { margin: 9px 0 0; color: var(--muted); font-size: .88rem; }
 
+/* Visible FAQ: answers match the FAQPage structured data in index.html. */
+.faq-section .section-head h2 { max-width: 730px; margin: 10px 0 0; font-size: clamp(2rem, 3.5vw, 2.85rem); font-weight: 750; letter-spacing: -.04em; line-height: 1.1; }
+.faq-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.faq-item { min-width: 0; padding: 26px 26px 28px; border: 1px solid var(--line); border-top: 3px solid var(--primary); border-radius: 16px; background: var(--white); box-shadow: var(--shadow-small); }
+.faq-item:nth-child(even) { border-top-color: var(--accent-light); }
+.faq-item h3 { margin: 0 0 10px; font-size: 1.15rem; line-height: 1.35; }
+.faq-item p { margin: 0; color: var(--muted); font-size: .9rem; }
+.faq-item a { color: var(--primary-dark); font-weight: 650; text-decoration: underline; text-underline-offset: 3px; }
+
 /* Call to action and footer. */
 .about { padding-block: 0 72px; }
 .cta { position: relative; isolation: isolate; overflow: hidden; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 32px 48px; padding: 58px 60px; border: 1px solid var(--line-purple); border-radius: 28px; color: var(--ink); background: linear-gradient(125deg, var(--tint-light), var(--tint-strong)); }
@@ -684,6 +695,7 @@ h1 { max-width: 650px; margin: 22px 0 26px; font-size: clamp(3.15rem, 5.25vw, 4.
 
 @media (max-width: 900px) {
   .crosscut-grid { grid-template-columns: 1fr; }
+  .faq-list { grid-template-columns: 1fr; }
   .hero-grid { grid-template-columns: 1fr; gap: 44px; padding-block: 72px; }
   .hero-copy { max-width: 760px; }
   .hero-paths { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -749,6 +761,7 @@ h1 { max-width: 650px; margin: 22px 0 26px; font-size: clamp(3.15rem, 5.25vw, 4.
   .part-summary { grid-column: auto; padding-left: 0; border-left: 0; }
   .section-head { margin-bottom: 30px; }
   .section-head h3 { font-size: 2.05rem; }
+  .faq-section .section-head h2 { font-size: 2.05rem; }
   .subsection { margin-top: 68px; padding-top: 60px; }
   .mode-card, .protection-card { padding: 24px 21px; }
   .mode-top, .protection-top { align-items: flex-start; }

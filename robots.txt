@@ -1,3 +1,21 @@
+# ai.speedle.io: every page is public. There are no private or app paths.
 User-agent: *
 Allow: /
+
+# AI crawlers may read the public content.
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
 Sitemap: https://ai.speedle.io/sitemap.xml
