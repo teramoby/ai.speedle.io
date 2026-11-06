@@ -2,14 +2,21 @@
 
 Standalone public exploration website: https://ai.speedle.io
 
-Potential applications: agent tool calls, knowledge access, and multi-agent
-authorization. The interactive example uses simplified browser-local rules.
-It is not a Speedle engine, MCP integration, RAG adapter, or production service.
+The site has two parts: AI for access management (the Speedle MCP launch
+preview) and access management for AI (deterministic policy control, an
+AI-based risk-detection approach being built, and agent authorization
+patterns). AI-based risk detection is not presented as a shipped feature;
+it never grants access that policy denies.
+
+Potential applications include agent tool calls, knowledge access, and
+multi-agent authorization. The interactive example uses simplified
+browser-local policy rules and does not simulate AI risk detection. It is
+not a Speedle engine, MCP integration, RAG adapter, or production service.
 The Speedle MCP section is a launch preview: `@speedle/mcp` is not published
 on npm, and its install and client configuration snippets are marked as
 available at launch. MCP facts come from teramoby/speedle-mcp issues #1 and #2.
-The visual language and colour tokens follow speedle.io and cloud.speedle.io.
-Like those references, the site uses a light theme with dark-purple brand bands.
+The white-first visual language follows speedle.io and cloud.speedle.io,
+with slightly shifted purple tokens and dark-purple brand bands.
 
 ## Preview
 
