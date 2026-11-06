@@ -5,21 +5,138 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#ffffff">
   <meta name="color-scheme" content="light">
-  <title>Speedle for AI — Access management for both sides of AI</title>
-  <meta name="description" content="AI for access management: Speedle MCP and an AI-based risk-detection approach being built. Access management for AI: policy patterns to build and run AI, from data and training to RAG, agents, MCP tool calls and agent-to-agent calls.">
+  <title>Speedle AI — AI agent authorization and access control</title>
+  <meta name="description" content="Speedle AI: policy-based access control for AI agents, MCP authorization, permission-aware RAG, A2A calls and least privilege for LLM applications.">
+  <meta name="robots" content="index, follow, max-image-preview:large">
   <link rel="canonical" href="https://ai.speedle.io/">
+  <link rel="alternate" hreflang="en" href="https://ai.speedle.io/">
+  <link rel="alternate" hreflang="x-default" href="https://ai.speedle.io/">
   <meta property="og:type" content="website">
-  <meta property="og:locale" content="en">
-  <meta property="og:site_name" content="Speedle for AI">
-  <meta property="og:title" content="Speedle for AI — Access management for both sides of AI">
-  <meta property="og:description" content="Use AI to design, manage and check access policies. Govern access across the AI lifecycle, from training data to agent-to-agent calls.">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:site_name" content="Speedle AI">
+  <meta property="og:title" content="Speedle AI — AI agent authorization and access control">
+  <meta property="og:description" content="Policy-based access control for AI agents: MCP authorization, permission-aware RAG, A2A calls and least privilege for LLM applications on the open-source Speedle engine.">
   <meta property="og:url" content="https://ai.speedle.io/">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://ai.speedle.io/assets/og-image.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Speedle AI: AI agent authorization and access control, with the Speedle sphere mark">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Speedle AI — AI agent authorization and access control">
+  <meta name="twitter:description" content="Policy-based access control for AI agents: MCP authorization, permission-aware RAG, A2A calls and least privilege for LLM applications on the open-source Speedle engine.">
+  <meta name="twitter:image" content="https://ai.speedle.io/assets/og-image.png">
+  <meta name="twitter:image:alt" content="Speedle AI: AI agent authorization and access control, with the Speedle sphere mark">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="stylesheet" href="/styles.css">
   <script src="/app.js" defer></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": "https://speedle.io/#organization",
+    "name": "Speedle",
+    "url": "https://speedle.io/",
+    "logo": "https://ai.speedle.io/apple-touch-icon.png",
+    "sameAs": [
+      "https://github.com/teramoby/speedle-plus",
+      "https://engine.speedle.io/",
+      "https://cloud.speedle.io/",
+      "https://ai.speedle.io/"
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": "https://ai.speedle.io/#website",
+    "url": "https://ai.speedle.io/",
+    "name": "Speedle AI",
+    "inLanguage": "en",
+    "publisher": {
+      "@id": "https://speedle.io/#organization"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "@id": "https://ai.speedle.io/#software",
+    "name": "Speedle AI",
+    "url": "https://ai.speedle.io/",
+    "description": "Speedle AI shows how to apply the open-source Speedle policy engine to AI access management: authorization for AI agents, MCP authorization, permission-aware RAG and agent-to-agent (A2A) calls.",
+    "applicationCategory": "SecurityApplication",
+    "isAccessibleForFree": true,
+    "license": "https://opensource.org/license/upl",
+    "codeRepository": "https://github.com/teramoby/speedle-plus",
+    "publisher": {
+      "@id": "https://speedle.io/#organization"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "@id": "https://ai.speedle.io/#faq",
+    "url": "https://ai.speedle.io/#faq",
+    "inLanguage": "en",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is Speedle AI?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Speedle AI is the Speedle site for access management for AI. It shows how to apply the open-source Speedle policy engine to authorization for AI agents: MCP tool calls, permission-aware RAG, agent-to-agent (A2A) calls and the AI lifecycle from training data to model release. It also previews Speedle MCP for designing, managing and checking policies with AI."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How is Speedle AI different from Speedle Engine and Speedle Cloud?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Speedle Engine is the open-source authorization engine. Speedle Cloud is the hosted authorization service for developers, coming soon. Speedle AI explores how that engine applies to AI access management and previews Speedle MCP; it is not a separate authorization runtime."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does Speedle AI ship AI-based risk detection?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. AI-based risk detection is an approach being built, not a shipped feature. The deterministic policy decision holds the veto: AI risk signals can add scrutiny or protection but can never turn a policy deny into an allow."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is Speedle MCP available today?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Not yet. @speedle/mcp is not published on npm. The check mode for authorization checks and the manage mode for policy design and management are launch previews; their install and client configuration snippets are examples of what will be available at launch."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does Speedle authorize AI agents and tool calls?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "An application asks Speedle for a policy decision before an agent acts. For agents acting for a user, every grant names both the agent and the user roles, so the agent gets only what both may do. For MCP tool calls, the tool is the resource, the call is the action and the arguments are attributes, so limits such as a refund amount are part of the policy. For A2A calls, each hop is checked and a callee receives only scopes the caller already holds. Together these checks give fine-grained authorization and least privilege for AI agents."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is Speedle open source, and how do I start?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Speedle continues Oracle Speedle and is licensed under the Universal Permissive License (UPL) 1.0. Start with the Speedle Engine documentation and the SPDL examples on this page, explore the Speedle SDK repository, or share your AI authorization scenario on the ai.speedle.io issue tracker."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
   <svg class="sprite" aria-hidden="true" focusable="false">
@@ -76,9 +193,10 @@
     <section id="top" class="hero" aria-labelledby="hero-title">
       <div class="wrap hero-grid">
         <div class="hero-copy">
-          <p class="eyebrow">Speedle for AI · Two connected directions</p>
-          <h1 id="hero-title">Access management for both sides of AI.</h1>
-          <p class="hero-lead">Use AI to design, manage and check access policies. Govern access across the AI lifecycle, from training data to agent-to-agent calls. Both directions rest on clear, enforceable policy decisions.</p>
+          <p class="eyebrow">Speedle AI · Two connected directions</p>
+          <h1 id="hero-title">AI agent authorization for both sides of AI.</h1>
+          <p class="hero-lead">Use AI to design, manage and check access policies — and apply the same policy to AI itself: MCP authorization, permission-aware RAG and least privilege for AI agents. Both directions rest on clear, enforceable policy decisions.</p>
+          <p class="definition"><strong>What is Speedle AI?</strong> Speedle AI shows how to apply policy-based access control for AI agents and their applications with the open-source Speedle policy engine. It covers authorization for LLM applications across the AI lifecycle: training data and model release, inference and permission-aware RAG, MCP authorization, and agent-to-agent (A2A) authorization.</p>
           <p class="hero-note"><span aria-hidden="true"></span>Built on the open-source Speedle policy engine.</p>
         </div>
         <div class="hero-paths" aria-label="Explore the two parts of Speedle for AI">
@@ -109,7 +227,7 @@
 
         <div id="mcp" class="mcp">
           <div class="section-head mcp-intro">
-            <div><p class="eyebrow">Speedle MCP · Coming soon</p><h3 id="mcp-title">One package. Two deliberately separate modes.</h3></div>
+            <div><p class="eyebrow">Speedle MCP · Coming soon</p><h3 id="mcp-title">Speedle MCP: one package, two deliberately separate modes.</h3></div>
             <div class="mcp-lead">
               <p><code>@speedle/mcp</code> is planned as one npm package with a <code>speedle-mcp</code> binary that runs as a local stdio MCP server. It is not published on npm yet.</p>
               <a class="button button-outline" href="https://github.com/teramoby/speedle-mcp">Follow the repository<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a>
@@ -189,7 +307,7 @@ npx @speedle/mcp manage
 
         <div id="risk-detection" class="subsection protection">
           <div class="section-head">
-            <div><p class="eyebrow">AI-based risk detection · Being built</p><h3 id="risk-title">AI looks wider. Policy keeps the veto.</h3></div>
+            <div><p class="eyebrow">AI-based risk detection · Being built</p><h3 id="risk-title">AI risk detection looks wider. Policy keeps the veto.</h3></div>
             <p>AI can look across more dimensions and relationships to find risk that a single rule does not see. Deterministic policy still makes the decision and holds the veto: AI never grants what policy denies. This is a direction, not a shipped feature.</p>
           </div>
 
@@ -580,7 +698,7 @@ grant user dana release-manager</code></pre>
               <div class="area-copy">
                 <p class="area-step">03 / Inference &amp; RAG</p>
                 <h4 id="lc-rag-title">Only what the user may read enters the prompt.</h4>
-                <p class="area-lead">Users, apps and tenants call models. For retrieval-augmented generation, the retriever asks Speedle about each document or collection before its content enters the prompt, so the model only sees what the person behind the request may read.</p>
+                <p class="area-lead">Users, apps and tenants call models. For permission-aware RAG (retrieval-augmented generation), the retriever asks Speedle about each document or collection before its content enters the prompt, so the model only sees what the person behind the request may read.</p>
                 <ol class="rag-flow" aria-label="Permission-aware retrieval">
                   <li><span>1</span>The retriever finds candidate documents.</li>
                   <li><span>2</span>It asks Speedle per document or collection, with the user’s tenant and clearances.</li>
@@ -611,7 +729,7 @@ grant entity acme-helpdesk tenant-app</code></pre>
             <article id="lc-agents" class="area" aria-labelledby="lc-agents-title">
               <div class="area-copy">
                 <p class="area-step">04 / Agents acting for users</p>
-                <h4 id="lc-agents-title">What may an agent do on behalf of a user?</h4>
+                <h4 id="lc-agents-title">What may an AI agent do on behalf of a user?</h4>
                 <p class="area-lead">The agent has its own identity. On behalf of a user, the request carries both the user and the agent as principals, and every grant names both roles, so the agent gets only what both may do. Scope is bound to the task and its expiry, and high-risk actions need a human approval.</p>
                 <dl class="area-facts">
                   <div><dt>Subjects</dt><dd>The agent as an entity plus the delegating user. The agent alone, or the user without the agent, matches no grant here.</dd></div>
@@ -636,7 +754,7 @@ grant group support support-staff</code></pre>
             <article id="lc-mcp" class="area" aria-labelledby="lc-mcp-title">
               <div class="area-copy">
                 <p class="area-step">05 / Tool calls (MCP)</p>
-                <h4 id="lc-mcp-title">May this agent run this tool, with these arguments?</h4>
+                <h4 id="lc-mcp-title">May this AI agent call this MCP tool, with these arguments?</h4>
                 <p class="area-lead">Every tool call is checked before it runs. The tool is the resource, the call is the action, and the arguments become attributes, so limits such as a refund amount are part of the policy.</p>
                 <dl class="area-facts">
                   <div><dt>Subjects</dt><dd>Agents, each with its own entity identity and role, so privileges stay per agent and per tool.</dd></div>
@@ -662,7 +780,7 @@ grant entity agent-billing-1 billing-agent</code></pre>
             <article id="lc-a2a" class="area" aria-labelledby="lc-a2a-title">
               <div class="area-copy">
                 <p class="area-step">06 / Agent-to-agent (A2A)</p>
-                <h4 id="lc-a2a-title">Which agent may call which agent, for what?</h4>
+                <h4 id="lc-a2a-title">Which agent may call which agent for A2A authorization?</h4>
                 <p class="area-lead">Each hop in a delegation chain is checked. The callee may receive only scopes the caller already holds, and the chain has a hop limit, so delegation only narrows permissions.</p>
                 <dl class="area-facts">
                   <div><dt>Subjects</dt><dd>Calling agents, identified as entities.</dd></div>
@@ -809,6 +927,41 @@ grant entity researcher-1 researcher-agent</code></pre>
               <a class="resource-card" href="https://github.com/teramoby/speedle-sdk"><span>INTEGRATE</span><strong>Speedle SDK<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>Explore the SDK repository for client integration patterns and guidance.</p></a>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="section faq-section" aria-labelledby="faq-title">
+      <div class="wrap">
+        <div class="section-head">
+          <div><p class="eyebrow">FAQ</p><h2 id="faq-title">Speedle AI: common questions.</h2></div>
+          <p>The questions people ask about Speedle AI: what it is, what ships today, and how it relates to Speedle Engine and Speedle Cloud.</p>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item">
+            <h3>What is Speedle AI?</h3>
+            <p>Speedle AI is the Speedle site for access management for AI. It shows how to apply the open-source Speedle policy engine to authorization for AI agents: MCP tool calls, permission-aware RAG, agent-to-agent (A2A) calls and the AI lifecycle from training data to model release. It also previews Speedle MCP for designing, managing and checking policies with AI.</p>
+          </article>
+          <article class="faq-item">
+            <h3>How is Speedle AI different from Speedle Engine and Speedle Cloud?</h3>
+            <p>Speedle Engine is the open-source authorization engine. Speedle Cloud is the hosted authorization service for developers, coming soon. Speedle AI explores how that engine applies to AI access management and previews Speedle MCP; it is not a separate authorization runtime.</p>
+          </article>
+          <article class="faq-item">
+            <h3>Does Speedle AI ship AI-based risk detection?</h3>
+            <p>No. AI-based risk detection is an approach being built, not a shipped feature. The deterministic policy decision holds the veto: AI risk signals can add scrutiny or protection but can never turn a policy deny into an allow.</p>
+          </article>
+          <article class="faq-item">
+            <h3>Is Speedle MCP available today?</h3>
+            <p>Not yet. <code>@speedle/mcp</code> is not published on npm. The check mode for authorization checks and the manage mode for policy design and management are launch previews; their install and client configuration snippets are examples of what will be available at launch.</p>
+          </article>
+          <article class="faq-item">
+            <h3>How does Speedle authorize AI agents and tool calls?</h3>
+            <p>An application asks Speedle for a policy decision before an agent acts. For agents acting for a user, every grant names both the agent and the user roles, so the agent gets only what both may do. For MCP tool calls, the tool is the resource, the call is the action and the arguments are attributes, so limits such as a refund amount are part of the policy. For A2A calls, each hop is checked and a callee receives only scopes the caller already holds. Together these checks give fine-grained authorization and least privilege for AI agents.</p>
+          </article>
+          <article class="faq-item">
+            <h3>Is Speedle open source, and how do I start?</h3>
+            <p>Yes. Speedle continues Oracle Speedle and is licensed under the Universal Permissive License (UPL) 1.0. Start with the <a href="https://engine.speedle.io/">Speedle Engine documentation</a> and the SPDL examples on this page, explore the <a href="https://github.com/teramoby/speedle-sdk">Speedle SDK repository</a>, or <a href="https://github.com/teramoby/ai.speedle.io/issues">share your AI authorization scenario</a> on the ai.speedle.io issue tracker.</p>
+          </article>
         </div>
       </div>
     </section>
