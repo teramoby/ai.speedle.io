@@ -11,8 +11,9 @@ agents, MCP tool calls and agent-to-agent calls. These are solution
 patterns on the Speedle policy engine, not shipped platform integrations.
 Every SPDL example on the page is parsed and evaluated with the Speedle
 file store (`eval.NewFromFile`) before it is published; keep each SPDL block
-byte-identical to what was tested. The Chinese page retains the same six SPDL
-blocks, including their English comments.
+byte-identical to what was tested. The Chinese page retains the same seven SPDL
+blocks, including their English comments. The zero standing privileges sample
+runs from `samples/zsp/`; it is not part of the sitemap.
 
 The interactive example uses simplified
 browser-local policy rules and does not simulate AI risk detection. It is

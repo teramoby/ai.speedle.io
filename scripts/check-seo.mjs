@@ -243,12 +243,37 @@ function spdlBlocks(html) {
 }
 const englishSpdl = spdlBlocks(englishHtml);
 const chineseSpdl = spdlBlocks(chineseHtml);
-check(englishSpdl.size === 6, `index.html must contain six SPDL examples (found ${englishSpdl.size})`);
+check(englishSpdl.size === 7, `index.html must contain seven SPDL examples (found ${englishSpdl.size})`);
+check(englishSpdl.has('zsp'), 'index.html is missing the zsp SPDL example');
 check(chineseSpdl.size === englishSpdl.size, 'zh/index.html must contain the same number of SPDL examples');
 for (const [name, source] of englishSpdl) {
   check(chineseSpdl.has(name), `zh/index.html is missing the ${name} SPDL example`);
   check(chineseSpdl.get(name) === source, `zh/index.html ${name} SPDL must be byte-identical, including comments`);
 }
+
+// The ZSP example must cover the token lifetime, the request-time expiry check
+// and the custom function, and its comments must use "#" only. The source is
+// HTML-escaped inside <code>, so decode the entities before checking.
+const zspSource = (englishSpdl.get('zsp') || '')
+  .replaceAll('&lt;', '<')
+  .replaceAll('&gt;', '>')
+  .replaceAll('&amp;', '&')
+  .replaceAll('&quot;', '"');
+for (const fragment of ['expires_at - issued_at <= 600', 'request_time < expires_at', 'TokenUnused(token_id)']) {
+  check(zspSource.includes(fragment), `zsp SPDL example must include "${fragment}"`);
+}
+for (const line of zspSource.split('\n')) {
+  const trimmed = line.trim();
+  check(!/^(\/\/|\/\*|\*)/.test(trimmed), `zsp SPDL comments must use "#" only: ${trimmed}`);
+}
+const sampleSpdl = read('samples/zsp/zsp.spdl').replace(/\n$/, '');
+check(sampleSpdl === zspSource, 'samples/zsp/zsp.spdl must match the zsp SPDL example on index.html');
+const sampleLink = 'https://github.com/teramoby/ai.speedle.io/tree/main/samples/zsp';
+for (const html of [englishHtml, chineseHtml]) {
+  check(html.includes(`href="${sampleLink}"`), `${html === englishHtml ? 'index.html' : 'zh/index.html'} must link the samples/zsp runnable sample`);
+}
+check(englishHtml.includes('Solution pattern · Self-hosted Speedle'), 'index.html ZSP block must present the pattern as self-hosted Speedle');
+check(chineseHtml.includes('解决方案模式 · 自托管 Speedle'), 'zh/index.html ZSP block must present the pattern as self-hosted Speedle');
 for (const label of ['身份输入', '构建', '运行', '策略决策点', '审计与解释输出', '边界', '数据与训练', '模型发布']) {
   check(chineseHtml.includes(`>${label}</text>`), `zh/index.html concept diagram is missing the Chinese label "${label}"`);
 }

@@ -1,0 +1,6 @@
+[service.zsp]
+[policy]
+# A just-in-time token: short-lived, still valid, and not used or revoked
+grant role agent-runtime invoke /api/orders if expires_at - issued_at <= 600 && request_time < expires_at && TokenUnused(token_id)
+[rolepolicy]
+grant entity agent-billing-1 agent-runtime
