@@ -1,0 +1,58 @@
+{
+  "service": "replace_with_the_spdl_service_name",
+  "cases": [
+    {
+      "id": "T01",
+      "clause": "4.2",
+      "description": "Replace with the decision this case proves",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "alice"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          }
+        ]
+      },
+      "resource": "/records/1001",
+      "action": "read",
+      "attributes": [
+        {
+          "name": "location",
+          "type": "string",
+          "value": "London"
+        },
+        {
+          "name": "amount",
+          "type": "numeric",
+          "value": 4000
+        }
+      ],
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T02",
+      "clause": "4.2",
+      "description": "Replace with a deny case",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "bob"
+          }
+        ]
+      },
+      "resource": "/records/1001",
+      "action": "read",
+      "expect": {
+        "allowed": false
+      }
+    }
+  ]
+}

@@ -2,10 +2,10 @@
 
 Standalone public exploration website: https://ai.speedle.io
 
-The site has two parts. AI for access management covers the Speedle MCP
-launch preview and an AI-based risk-detection approach being built; risk
-detection is not presented as a shipped feature and never grants access
-that policy denies. Access management for AI shows policy patterns across
+The site has two parts. AI for access management covers the open-source
+Speedle policy modeler skill, the Speedle MCP launch preview and an AI-based
+risk-detection approach being built; risk detection is not presented as a
+shipped feature and never grants access that policy denies. Access management for AI shows policy patterns across
 the AI lifecycle: model training, deployment, operations and inference,
 agents, MCP tool calls and agent-to-agent calls. These are solution
 patterns on the Speedle policy engine, not shipped platform integrations.
@@ -14,6 +14,11 @@ file store (`eval.NewFromFile`) before it is published; keep each SPDL block
 byte-identical to what was tested. The Chinese page retains the same seven SPDL
 blocks, including their English comments. The zero standing privileges sample
 runs from `samples/zsp/`; it is not part of the sitemap.
+
+The policy modeler skill lives in `skills/speedle-policy-modeler/`. It turns a
+handbook or regulation into SPDL, a design document and executable test cases.
+`examples/en/` and `examples/zh/` record two synthetic runs, each validated with
+`spctl check` and 37 authorization cases against a local PMS and ADS.
 
 The interactive example uses simplified
 browser-local policy rules and does not simulate AI risk detection. It is

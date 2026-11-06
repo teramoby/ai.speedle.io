@@ -1,0 +1,1061 @@
+{
+  "service": "northstar_hr",
+  "cases": [
+    {
+      "id": "T01",
+      "clause": "3.1, 5.2",
+      "description": "员工读取员工手册",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "dave"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          }
+        ]
+      },
+      "resource": "/hr/handbook",
+      "action": "read",
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T02",
+      "clause": "5.1",
+      "description": "员工读取自己的员工档案",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "dave"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          }
+        ]
+      },
+      "resource": "/hr/employees/dave",
+      "action": "read",
+      "attributes": [
+        {
+          "name": "owner",
+          "type": "string",
+          "value": "dave"
+        }
+      ],
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T03",
+      "clause": "5.1",
+      "description": "员工不能读取其他员工的档案",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "dave"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          }
+        ]
+      },
+      "resource": "/hr/employees/alice",
+      "action": "read",
+      "attributes": [
+        {
+          "name": "owner",
+          "type": "string",
+          "value": "alice"
+        }
+      ],
+      "expect": {
+        "allowed": false,
+        "reason": 3
+      }
+    },
+    {
+      "id": "T04",
+      "clause": "4.4",
+      "description": "HR 专员读取本工作地点、非受限的档案",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "bob"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "hr"
+          }
+        ]
+      },
+      "resource": "/hr/employees/e-200",
+      "action": "read",
+      "attributes": [
+        {
+          "name": "location",
+          "type": "string",
+          "value": "London"
+        },
+        {
+          "name": "requester_location",
+          "type": "string",
+          "value": "London"
+        },
+        {
+          "name": "classification",
+          "type": "string",
+          "value": "internal"
+        }
+      ],
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T05",
+      "clause": "4.4",
+      "description": "HR 专员不能读取其他工作地点的档案",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "bob"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "hr"
+          }
+        ]
+      },
+      "resource": "/hr/employees/e-300",
+      "action": "read",
+      "attributes": [
+        {
+          "name": "location",
+          "type": "string",
+          "value": "Berlin"
+        },
+        {
+          "name": "requester_location",
+          "type": "string",
+          "value": "London"
+        },
+        {
+          "name": "classification",
+          "type": "string",
+          "value": "internal"
+        }
+      ],
+      "expect": {
+        "allowed": false,
+        "reason": 3
+      }
+    },
+    {
+      "id": "T06",
+      "clause": "4.5, 4.6",
+      "description": "HR 专员不能读取薪资数据",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "bob"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "hr"
+          }
+        ]
+      },
+      "resource": "/hr/salary/e-200",
+      "action": "read",
+      "expect": {
+        "allowed": false,
+        "reason": 3
+      }
+    },
+    {
+      "id": "T07",
+      "clause": "4.5",
+      "description": "HR 经理读取薪资数据",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "alice"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "hr"
+          }
+        ]
+      },
+      "resource": "/hr/salary/e-200",
+      "action": "read",
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T08",
+      "clause": "4.5",
+      "description": "HR 经理更新非受限的员工档案",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "alice"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "hr"
+          }
+        ]
+      },
+      "resource": "/hr/employees/e-200",
+      "action": "update",
+      "attributes": [
+        {
+          "name": "classification",
+          "type": "string",
+          "value": "internal"
+        }
+      ],
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T09",
+      "clause": "4.5",
+      "description": "HR 经理不能更新受限的员工档案",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "alice"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "hr"
+          }
+        ]
+      },
+      "resource": "/hr/employees/e-200",
+      "action": "update",
+      "attributes": [
+        {
+          "name": "classification",
+          "type": "string",
+          "value": "restricted"
+        }
+      ],
+      "expect": {
+        "allowed": false,
+        "reason": 3
+      }
+    },
+    {
+      "id": "T10",
+      "clause": "4.6",
+      "description": "薪资管理员更新薪资数据",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "frank"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "finance"
+          }
+        ]
+      },
+      "resource": "/hr/salary/e-200",
+      "action": "update",
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T11",
+      "clause": "7.1",
+      "description": "财务分析师读取部门财务报告",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "erin"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "finance"
+          }
+        ]
+      },
+      "resource": "/finance/reports/department/q3",
+      "action": "read",
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T12",
+      "clause": "7.2",
+      "description": "财务分析师不能读取高管财务报告",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "erin"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "finance"
+          }
+        ]
+      },
+      "resource": "/finance/reports/executive/q3",
+      "action": "read",
+      "expect": {
+        "allowed": false,
+        "reason": 3
+      }
+    },
+    {
+      "id": "T13",
+      "clause": "3.6, 7.2",
+      "description": "高管读取高管财务报告",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "grace"
+          }
+        ]
+      },
+      "resource": "/finance/reports/executive/q3",
+      "action": "read",
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T14",
+      "clause": "6.1, 6.4",
+      "description": "部门经理审批本部门、限额内的支出",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "carol"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          }
+        ]
+      },
+      "resource": "/expenses/engineering/e-100",
+      "action": "approve",
+      "attributes": [
+        {
+          "name": "amount",
+          "type": "numeric",
+          "value": 4000
+        }
+      ],
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T15",
+      "clause": "6.4",
+      "description": "部门经理不能审批其他部门的支出",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "carol"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          }
+        ]
+      },
+      "resource": "/expenses/sales/e-200",
+      "action": "approve",
+      "attributes": [
+        {
+          "name": "amount",
+          "type": "numeric",
+          "value": 4000
+        }
+      ],
+      "expect": {
+        "allowed": false,
+        "reason": 3
+      }
+    },
+    {
+      "id": "T16",
+      "clause": "6.1",
+      "description": "部门经理不能审批超过 5,000 的支出",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "carol"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          }
+        ]
+      },
+      "resource": "/expenses/engineering/e-101",
+      "action": "approve",
+      "attributes": [
+        {
+          "name": "amount",
+          "type": "numeric",
+          "value": 6000
+        }
+      ],
+      "expect": {
+        "allowed": false,
+        "reason": 3
+      }
+    },
+    {
+      "id": "T17",
+      "clause": "6.2",
+      "description": "财务分析师审批 5,000 至 25,000 的支出",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "erin"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "finance"
+          }
+        ]
+      },
+      "resource": "/expenses/engineering/e-101",
+      "action": "approve",
+      "attributes": [
+        {
+          "name": "amount",
+          "type": "numeric",
+          "value": 6000
+        }
+      ],
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T18",
+      "clause": "6.2",
+      "description": "财务分析师不能审批超过 25,000 的支出",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "erin"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "finance"
+          }
+        ]
+      },
+      "resource": "/expenses/engineering/e-102",
+      "action": "approve",
+      "attributes": [
+        {
+          "name": "amount",
+          "type": "numeric",
+          "value": 30000
+        }
+      ],
+      "expect": {
+        "allowed": false,
+        "reason": 3
+      }
+    },
+    {
+      "id": "T19",
+      "clause": "6.3",
+      "description": "高管审批超过 25,000 的支出",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "grace"
+          }
+        ]
+      },
+      "resource": "/expenses/engineering/e-102",
+      "action": "approve",
+      "attributes": [
+        {
+          "name": "amount",
+          "type": "numeric",
+          "value": 30000
+        }
+      ],
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T20",
+      "clause": "4.3, 9.1",
+      "description": "明确拒绝阻止外包人员读取内部机密数据",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "heidi"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "contractors"
+          }
+        ]
+      },
+      "resource": "/data/internal/confidential/roadmap",
+      "action": "read",
+      "expect": {
+        "allowed": false,
+        "reason": 1
+      }
+    },
+    {
+      "id": "T21",
+      "clause": "4.2",
+      "description": "员工读取内部机密数据",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "dave"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          }
+        ]
+      },
+      "resource": "/data/internal/confidential/roadmap",
+      "action": "read",
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T22",
+      "clause": "7.3",
+      "description": "安全专员通过继承的员工角色读取审计日志",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "ivan"
+          },
+          {
+            "type": "group",
+            "name": "security"
+          }
+        ]
+      },
+      "resource": "/security/audit/2026-11",
+      "action": "read",
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T23",
+      "clause": "3.4, 4.5",
+      "description": "安全专员不能读取薪资数据",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "ivan"
+          },
+          {
+            "type": "group",
+            "name": "security"
+          }
+        ]
+      },
+      "resource": "/hr/salary/e-200",
+      "action": "read",
+      "expect": {
+        "allowed": false,
+        "reason": 3
+      }
+    },
+    {
+      "id": "T24",
+      "clause": "8.1",
+      "description": "payroll_sync 服务账号读取薪资批次",
+      "subject": {
+        "principals": [
+          {
+            "type": "entity",
+            "name": "payroll_sync"
+          }
+        ]
+      },
+      "resource": "/hr/payroll/2026-11",
+      "action": "read",
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T25",
+      "clause": "8.1",
+      "description": "人类员工不能读取薪资批次",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "dave"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          }
+        ]
+      },
+      "resource": "/hr/payroll/2026-11",
+      "action": "read",
+      "expect": {
+        "allowed": false,
+        "reason": 3
+      }
+    },
+    {
+      "id": "T26",
+      "clause": "4.5",
+      "description": "HR 经理读取不受地点和级别条件限制的档案",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "alice"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "hr"
+          }
+        ]
+      },
+      "resource": "/hr/employees/e-300",
+      "action": "read",
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T27",
+      "clause": "4.4",
+      "description": "HR 专员不能读取受限档案",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "bob"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "hr"
+          }
+        ]
+      },
+      "resource": "/hr/employees/e-200",
+      "action": "read",
+      "attributes": [
+        {
+          "name": "location",
+          "type": "string",
+          "value": "London"
+        },
+        {
+          "name": "requester_location",
+          "type": "string",
+          "value": "London"
+        },
+        {
+          "name": "classification",
+          "type": "string",
+          "value": "restricted"
+        }
+      ],
+      "expect": {
+        "allowed": false,
+        "reason": 3
+      }
+    },
+    {
+      "id": "T28",
+      "clause": "3.6, 3.1",
+      "description": "高管继承经理和员工角色",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "grace"
+          }
+        ]
+      },
+      "resource": "/hr/handbook",
+      "action": "read",
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T29",
+      "clause": "3.7, 4.3",
+      "description": "外包人员可以读取手册，但不能读取机密数据",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "heidi"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "contractors"
+          }
+        ]
+      },
+      "resource": "/hr/handbook",
+      "action": "read",
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T30",
+      "clause": "3.1, 5.2",
+      "description": "另一位员工读取员工手册",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "carol"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          }
+        ]
+      },
+      "resource": "/hr/handbook",
+      "action": "read",
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T31",
+      "clause": "4.2",
+      "description": "员工读取公开数据",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "dave"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          }
+        ]
+      },
+      "resource": "/data/public/news",
+      "action": "read",
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T32",
+      "clause": "4.3",
+      "description": "外包人员读取公开数据",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "heidi"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "contractors"
+          }
+        ]
+      },
+      "resource": "/data/public/news",
+      "action": "read",
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T33",
+      "clause": "6.1",
+      "description": "经理审批上限包含 5,000",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "carol"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          }
+        ]
+      },
+      "resource": "/expenses/engineering/e-103",
+      "action": "approve",
+      "attributes": [
+        {
+          "name": "amount",
+          "type": "numeric",
+          "value": 5000
+        }
+      ],
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T34",
+      "clause": "6.1",
+      "description": "经理不能审批 5,000.01",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "carol"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          }
+        ]
+      },
+      "resource": "/expenses/engineering/e-104",
+      "action": "approve",
+      "attributes": [
+        {
+          "name": "amount",
+          "type": "numeric",
+          "value": 5000.01
+        }
+      ],
+      "expect": {
+        "allowed": false,
+        "reason": 3
+      }
+    },
+    {
+      "id": "T35",
+      "clause": "6.2",
+      "description": "财务分析师上限包含 25,000",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "erin"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "finance"
+          }
+        ]
+      },
+      "resource": "/expenses/engineering/e-105",
+      "action": "approve",
+      "attributes": [
+        {
+          "name": "amount",
+          "type": "numeric",
+          "value": 25000
+        }
+      ],
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T36",
+      "clause": "6.2",
+      "description": "财务分析师不能审批 25,000.01",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "erin"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "finance"
+          }
+        ]
+      },
+      "resource": "/expenses/engineering/e-106",
+      "action": "approve",
+      "attributes": [
+        {
+          "name": "amount",
+          "type": "numeric",
+          "value": 25000.01
+        }
+      ],
+      "expect": {
+        "allowed": false,
+        "reason": 3
+      }
+    },
+    {
+      "id": "T37",
+      "clause": "5.2",
+      "description": "员工读取员工通讯录",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "dave"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          }
+        ]
+      },
+      "resource": "/hr/directory",
+      "action": "read",
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    }
+  ]
+}

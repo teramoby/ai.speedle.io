@@ -1,0 +1,1061 @@
+{
+  "service": "northstar_hr",
+  "cases": [
+    {
+      "id": "T01",
+      "clause": "3.1, 5.2",
+      "description": "An employee reads the handbook",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "dave"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          }
+        ]
+      },
+      "resource": "/hr/handbook",
+      "action": "read",
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T02",
+      "clause": "5.1",
+      "description": "An employee reads their own employee record",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "dave"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          }
+        ]
+      },
+      "resource": "/hr/employees/dave",
+      "action": "read",
+      "attributes": [
+        {
+          "name": "owner",
+          "type": "string",
+          "value": "dave"
+        }
+      ],
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T03",
+      "clause": "5.1",
+      "description": "An employee cannot read another employee's record",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "dave"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          }
+        ]
+      },
+      "resource": "/hr/employees/alice",
+      "action": "read",
+      "attributes": [
+        {
+          "name": "owner",
+          "type": "string",
+          "value": "alice"
+        }
+      ],
+      "expect": {
+        "allowed": false,
+        "reason": 3
+      }
+    },
+    {
+      "id": "T04",
+      "clause": "4.4",
+      "description": "An HR specialist reads a non-restricted record at their own location",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "bob"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "hr"
+          }
+        ]
+      },
+      "resource": "/hr/employees/e-200",
+      "action": "read",
+      "attributes": [
+        {
+          "name": "location",
+          "type": "string",
+          "value": "London"
+        },
+        {
+          "name": "requester_location",
+          "type": "string",
+          "value": "London"
+        },
+        {
+          "name": "classification",
+          "type": "string",
+          "value": "internal"
+        }
+      ],
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T05",
+      "clause": "4.4",
+      "description": "An HR specialist cannot read a record at another location",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "bob"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "hr"
+          }
+        ]
+      },
+      "resource": "/hr/employees/e-300",
+      "action": "read",
+      "attributes": [
+        {
+          "name": "location",
+          "type": "string",
+          "value": "Berlin"
+        },
+        {
+          "name": "requester_location",
+          "type": "string",
+          "value": "London"
+        },
+        {
+          "name": "classification",
+          "type": "string",
+          "value": "internal"
+        }
+      ],
+      "expect": {
+        "allowed": false,
+        "reason": 3
+      }
+    },
+    {
+      "id": "T06",
+      "clause": "4.5, 4.6",
+      "description": "An HR specialist cannot read salary data",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "bob"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "hr"
+          }
+        ]
+      },
+      "resource": "/hr/salary/e-200",
+      "action": "read",
+      "expect": {
+        "allowed": false,
+        "reason": 3
+      }
+    },
+    {
+      "id": "T07",
+      "clause": "4.5",
+      "description": "An HR manager reads salary data",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "alice"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "hr"
+          }
+        ]
+      },
+      "resource": "/hr/salary/e-200",
+      "action": "read",
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T08",
+      "clause": "4.5",
+      "description": "An HR manager updates a non-restricted record",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "alice"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "hr"
+          }
+        ]
+      },
+      "resource": "/hr/employees/e-200",
+      "action": "update",
+      "attributes": [
+        {
+          "name": "classification",
+          "type": "string",
+          "value": "internal"
+        }
+      ],
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T09",
+      "clause": "4.5",
+      "description": "An HR manager cannot update a restricted record",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "alice"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "hr"
+          }
+        ]
+      },
+      "resource": "/hr/employees/e-200",
+      "action": "update",
+      "attributes": [
+        {
+          "name": "classification",
+          "type": "string",
+          "value": "restricted"
+        }
+      ],
+      "expect": {
+        "allowed": false,
+        "reason": 3
+      }
+    },
+    {
+      "id": "T10",
+      "clause": "4.6",
+      "description": "A payroll admin updates salary data",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "frank"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "finance"
+          }
+        ]
+      },
+      "resource": "/hr/salary/e-200",
+      "action": "update",
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T11",
+      "clause": "7.1",
+      "description": "A finance analyst reads a department report",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "erin"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "finance"
+          }
+        ]
+      },
+      "resource": "/finance/reports/department/q3",
+      "action": "read",
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T12",
+      "clause": "7.2",
+      "description": "A finance analyst cannot read an executive report",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "erin"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "finance"
+          }
+        ]
+      },
+      "resource": "/finance/reports/executive/q3",
+      "action": "read",
+      "expect": {
+        "allowed": false,
+        "reason": 3
+      }
+    },
+    {
+      "id": "T13",
+      "clause": "3.6, 7.2",
+      "description": "An executive reads an executive report",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "grace"
+          }
+        ]
+      },
+      "resource": "/finance/reports/executive/q3",
+      "action": "read",
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T14",
+      "clause": "6.1, 6.4",
+      "description": "A department manager approves an expense within their department and limit",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "carol"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          }
+        ]
+      },
+      "resource": "/expenses/engineering/e-100",
+      "action": "approve",
+      "attributes": [
+        {
+          "name": "amount",
+          "type": "numeric",
+          "value": 4000
+        }
+      ],
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T15",
+      "clause": "6.4",
+      "description": "A department manager cannot approve another department's expense",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "carol"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          }
+        ]
+      },
+      "resource": "/expenses/sales/e-200",
+      "action": "approve",
+      "attributes": [
+        {
+          "name": "amount",
+          "type": "numeric",
+          "value": 4000
+        }
+      ],
+      "expect": {
+        "allowed": false,
+        "reason": 3
+      }
+    },
+    {
+      "id": "T16",
+      "clause": "6.1",
+      "description": "A department manager cannot approve above 5000",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "carol"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          }
+        ]
+      },
+      "resource": "/expenses/engineering/e-101",
+      "action": "approve",
+      "attributes": [
+        {
+          "name": "amount",
+          "type": "numeric",
+          "value": 6000
+        }
+      ],
+      "expect": {
+        "allowed": false,
+        "reason": 3
+      }
+    },
+    {
+      "id": "T17",
+      "clause": "6.2",
+      "description": "A finance analyst approves between 5000 and 25000",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "erin"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "finance"
+          }
+        ]
+      },
+      "resource": "/expenses/engineering/e-101",
+      "action": "approve",
+      "attributes": [
+        {
+          "name": "amount",
+          "type": "numeric",
+          "value": 6000
+        }
+      ],
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T18",
+      "clause": "6.2",
+      "description": "A finance analyst cannot approve above 25000",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "erin"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "finance"
+          }
+        ]
+      },
+      "resource": "/expenses/engineering/e-102",
+      "action": "approve",
+      "attributes": [
+        {
+          "name": "amount",
+          "type": "numeric",
+          "value": 30000
+        }
+      ],
+      "expect": {
+        "allowed": false,
+        "reason": 3
+      }
+    },
+    {
+      "id": "T19",
+      "clause": "6.3",
+      "description": "An executive approves above 25000",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "grace"
+          }
+        ]
+      },
+      "resource": "/expenses/engineering/e-102",
+      "action": "approve",
+      "attributes": [
+        {
+          "name": "amount",
+          "type": "numeric",
+          "value": 30000
+        }
+      ],
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T20",
+      "clause": "4.3, 9.1",
+      "description": "Explicit deny blocks a contractor from confidential internal data",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "heidi"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "contractors"
+          }
+        ]
+      },
+      "resource": "/data/internal/confidential/roadmap",
+      "action": "read",
+      "expect": {
+        "allowed": false,
+        "reason": 1
+      }
+    },
+    {
+      "id": "T21",
+      "clause": "4.2",
+      "description": "An employee reads confidential internal data",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "dave"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          }
+        ]
+      },
+      "resource": "/data/internal/confidential/roadmap",
+      "action": "read",
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T22",
+      "clause": "7.3",
+      "description": "A security officer reads audit logs through inherited employee status",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "ivan"
+          },
+          {
+            "type": "group",
+            "name": "security"
+          }
+        ]
+      },
+      "resource": "/security/audit/2026-11",
+      "action": "read",
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T23",
+      "clause": "3.4, 4.5",
+      "description": "A security officer cannot read salary data",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "ivan"
+          },
+          {
+            "type": "group",
+            "name": "security"
+          }
+        ]
+      },
+      "resource": "/hr/salary/e-200",
+      "action": "read",
+      "expect": {
+        "allowed": false,
+        "reason": 3
+      }
+    },
+    {
+      "id": "T24",
+      "clause": "8.1",
+      "description": "The payroll sync entity reads a payroll run",
+      "subject": {
+        "principals": [
+          {
+            "type": "entity",
+            "name": "payroll_sync"
+          }
+        ]
+      },
+      "resource": "/hr/payroll/2026-11",
+      "action": "read",
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T25",
+      "clause": "8.1",
+      "description": "A human employee cannot read payroll runs",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "dave"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          }
+        ]
+      },
+      "resource": "/hr/payroll/2026-11",
+      "action": "read",
+      "expect": {
+        "allowed": false,
+        "reason": 3
+      }
+    },
+    {
+      "id": "T26",
+      "clause": "4.5",
+      "description": "An HR manager reads a record without location or classification conditions",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "alice"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "hr"
+          }
+        ]
+      },
+      "resource": "/hr/employees/e-300",
+      "action": "read",
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T27",
+      "clause": "4.4",
+      "description": "An HR specialist cannot read a restricted record",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "bob"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "hr"
+          }
+        ]
+      },
+      "resource": "/hr/employees/e-200",
+      "action": "read",
+      "attributes": [
+        {
+          "name": "location",
+          "type": "string",
+          "value": "London"
+        },
+        {
+          "name": "requester_location",
+          "type": "string",
+          "value": "London"
+        },
+        {
+          "name": "classification",
+          "type": "string",
+          "value": "restricted"
+        }
+      ],
+      "expect": {
+        "allowed": false,
+        "reason": 3
+      }
+    },
+    {
+      "id": "T28",
+      "clause": "3.6, 3.1",
+      "description": "Executive inherits manager and employee",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "grace"
+          }
+        ]
+      },
+      "resource": "/hr/handbook",
+      "action": "read",
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T29",
+      "clause": "3.7, 4.3",
+      "description": "A contractor can read the handbook but not confidential data",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "heidi"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "contractors"
+          }
+        ]
+      },
+      "resource": "/hr/handbook",
+      "action": "read",
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T30",
+      "clause": "3.1, 5.2",
+      "description": "Another employee reads the handbook",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "carol"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          }
+        ]
+      },
+      "resource": "/hr/handbook",
+      "action": "read",
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T31",
+      "clause": "4.2",
+      "description": "An employee reads public data",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "dave"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          }
+        ]
+      },
+      "resource": "/data/public/news",
+      "action": "read",
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T32",
+      "clause": "4.3",
+      "description": "A contractor reads public data",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "heidi"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "contractors"
+          }
+        ]
+      },
+      "resource": "/data/public/news",
+      "action": "read",
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T33",
+      "clause": "6.1",
+      "description": "A manager's approval limit includes 5000",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "carol"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          }
+        ]
+      },
+      "resource": "/expenses/engineering/e-103",
+      "action": "approve",
+      "attributes": [
+        {
+          "name": "amount",
+          "type": "numeric",
+          "value": 5000
+        }
+      ],
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T34",
+      "clause": "6.1",
+      "description": "A manager cannot approve 5000.01",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "carol"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          }
+        ]
+      },
+      "resource": "/expenses/engineering/e-104",
+      "action": "approve",
+      "attributes": [
+        {
+          "name": "amount",
+          "type": "numeric",
+          "value": 5000.01
+        }
+      ],
+      "expect": {
+        "allowed": false,
+        "reason": 3
+      }
+    },
+    {
+      "id": "T35",
+      "clause": "6.2",
+      "description": "A finance analyst's limit includes 25000",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "erin"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "finance"
+          }
+        ]
+      },
+      "resource": "/expenses/engineering/e-105",
+      "action": "approve",
+      "attributes": [
+        {
+          "name": "amount",
+          "type": "numeric",
+          "value": 25000
+        }
+      ],
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    },
+    {
+      "id": "T36",
+      "clause": "6.2",
+      "description": "A finance analyst cannot approve 25000.01",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "erin"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          },
+          {
+            "type": "group",
+            "name": "finance"
+          }
+        ]
+      },
+      "resource": "/expenses/engineering/e-106",
+      "action": "approve",
+      "attributes": [
+        {
+          "name": "amount",
+          "type": "numeric",
+          "value": 25000.01
+        }
+      ],
+      "expect": {
+        "allowed": false,
+        "reason": 3
+      }
+    },
+    {
+      "id": "T37",
+      "clause": "5.2",
+      "description": "An employee reads the employee directory",
+      "subject": {
+        "principals": [
+          {
+            "type": "user",
+            "name": "dave"
+          },
+          {
+            "type": "group",
+            "name": "all_staff"
+          }
+        ]
+      },
+      "resource": "/hr/directory",
+      "action": "read",
+      "expect": {
+        "allowed": true,
+        "reason": 0
+      }
+    }
+  ]
+}

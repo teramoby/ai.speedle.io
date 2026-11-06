@@ -8,12 +8,26 @@ Source: https://ai.speedle.io/
 
 Speedle AI has two connected directions.
 
-- **AI for access management:** AI helping people design, manage and check access policies with Speedle MCP, plus an AI-based risk-detection approach being built.
+- **AI for access management:** AI helping people design, manage and check access policies with the open-source Speedle policy modeler skill and Speedle MCP, plus an AI-based risk-detection approach being built.
 - **Access management for AI:** policy patterns that govern what AI systems and agents may do while they are built and while they run.
 
 Both directions rest on clear, enforceable policy decisions. Speedle decides; the application enforces the decision.
 
 ## AI for access management
+
+### Speedle policy modeler skill
+
+An open-source Agent Skill for Claude Code at `skills/speedle-policy-modeler/` in teramoby/ai.speedle.io. It reads a company regulation, employee handbook or access matrix; asks the document owner to clarify missing org structure, roles, resources, attributes, exceptions and approval chains in small prioritized batches; and writes an RBAC + ABAC model.
+
+Outputs: `policies.spdl` in the Speedle file-store format, a `model.md` design document with a Mermaid role-inheritance diagram and a rationale for every policy, a `test-cases.json` suite, and `results.md`. The skill refuses to guess an authorization rule; every policy cites a handbook clause or a confirmed answer.
+
+Example runs: English and Chinese synthetic handbooks. Both pass `spctl check` and 37 of 37 authorization cases against a local PMS and ADS. The SPDL uses exact or prefix resource expressions only, so the evaluator uses hash-map and radix-tree lookups.
+
+Install: copy `skills/speedle-policy-modeler/` to `~/.claude/skills/` for a personal skill or `.claude/skills/` for a project skill, then run `/speedle-policy-modeler ./employee-handbook.md`. The `SKILL.md` frontmatter follows the Agent Skills format with `name` and `description`.
+
+- Skill folder: https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler
+- English sample: https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/en/model.md
+- Chinese sample: https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/zh/model.md
 
 ### Speedle MCP (launch preview)
 
