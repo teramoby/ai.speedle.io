@@ -126,7 +126,6 @@
         </div>
         <a href="#ai-for-access">AI 助力权限管理</a>
         <a href="#access-for-ai">面向 AI 的访问管理</a>
-        <a href="#playground">演示</a>
         <a href="/" lang="en" hreflang="en" aria-label="Switch to English">English</a>
       </nav>
     </div>
@@ -801,77 +800,6 @@ grant entity agent-billing-1 agent-runtime</code></pre>
             <p>Speedle 不检测提示词注入，不过滤模型输入或输出，也不验证模型和数据集供应链，这些需要专门的控制措施。<strong>它能限制遭攻陷或受误导的智能体做什么：</strong>无论提示词怎么写，只要请求不符合策略，Speedle 就拒绝。</p>
           </div>
         </aside>
-
-        <div id="playground" class="subsection">
-          <div class="section-head">
-            <div><p class="eyebrow">交互示例 · 仅看策略</p><h3 id="playground-title">一个请求，策略给出明确答案</h3></div>
-            <p>切换智能体、操作和数据范围，看看几条确定性规则会怎样改变结果。</p>
-          </div>
-
-          <div class="demo">
-            <div class="demo-banner">
-              <span class="demo-badge">简化演示 · 本地运行</span>
-              <p><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>固定策略规则只在你的浏览器里运行，不模拟 AI 风险检测。这不是 Speedle 引擎，也不是 MCP 集成，不连接任何智能体、数据或服务。</p>
-            </div>
-            <form class="demo-pane demo-input" id="demo-form" aria-label="选择示例请求">
-              <p class="pane-label"><span>1</span>选择操作</p>
-              <fieldset>
-                <legend>执行操作的智能体</legend>
-                <div class="seg">
-                  <label><input type="radio" name="agent" value="research" checked><span>研究智能体</span></label>
-                  <label><input type="radio" name="agent" value="support"><span>支持智能体</span></label>
-                </div>
-              </fieldset>
-              <fieldset>
-                <legend>操作</legend>
-                <div class="seg">
-                  <label><input type="radio" name="action" value="read" checked><span>读取</span></label>
-                  <label><input type="radio" name="action" value="export"><span>导出</span></label>
-                  <label><input type="radio" name="action" value="delete"><span>删除</span></label>
-                </div>
-              </fieldset>
-              <fieldset>
-                <legend>数据范围</legend>
-                <div class="seg">
-                  <label><input type="radio" name="resource" value="public" checked><span>公共知识</span></label>
-                  <label><input type="radio" name="resource" value="customer"><span>客户记录</span></label>
-                </div>
-              </fieldset>
-            </form>
-
-            <div class="demo-pane demo-wire">
-              <p class="pane-label"><span>2</span>授权请求</p>
-              <p class="wire-label">示例请求</p>
-              <pre class="code" tabindex="0" aria-label="示例授权请求"><span class="k">subject </span>  <span class="v" data-field="subject">entity research-agent</span>
-<span class="k">action  </span>  <span class="v" data-field="action">read</span>
-<span class="k">resource</span>  <span class="v" data-field="resource">/knowledge/public</span></pre>
-              <p class="wire-hop" aria-hidden="true"><span></span>策略评估<span></span></p>
-              <p class="wire-label">示例结果</p>
-              <pre class="code" tabindex="0" aria-label="示例授权结果"><span class="k">allowed</span>  <span class="v" data-field="allowed">true</span>
-<span class="k">reason </span>  <span class="v" data-field="reason">GRANT_POLICY_FOUND</span></pre>
-            </div>
-
-            <div class="demo-pane demo-output">
-              <p class="pane-label"><span>3</span>授权决策</p>
-              <div class="decision" id="decision" data-decision="allow" role="status" aria-live="polite" aria-atomic="true">
-                <span class="decision-icon" aria-hidden="true"><svg class="icon icon-allow"><use href="#i-check"/></svg><svg class="icon icon-deny"><use href="#i-cross"/></svg></span>
-                <div class="decision-head"><strong id="decision-code">允许</strong><span id="decision-name">操作已允许</span></div>
-                <p id="decision-reason">研究智能体可以读取公共知识。</p>
-              </div>
-              <p class="rules-title">简化规则</p>
-              <ol class="rules">
-                <li data-rule="research" class="is-match">研究智能体可以读取和导出公共知识，但不能访问客户记录。<span class="rule-hit">匹配</span></li>
-                <li data-rule="support">支持智能体可以读取两类数据，但不能导出记录。<span class="rule-hit">匹配</span></li>
-                <li data-rule="delete">规则明确拒绝所有智能体的删除操作。<span class="rule-hit">匹配</span></li>
-              </ol>
-            </div>
-            <div class="demo-foot">
-              <p>这里只演示概念，真实场景仍由应用执行授权决策。</p>
-              <a class="text-link" href="https://engine.speedle.io/zh/docs/decisions/">了解 Speedle 决策<svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg></a>
-            </div>
-          </div>
-          <noscript><p class="note">启用 JavaScript 就能切换示例；未启用时，页面固定展示研究智能体读取公共知识。</p></noscript>
-        </div>
 
         <div id="approach" class="subsection">
           <div class="section-head">
