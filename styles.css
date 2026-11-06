@@ -21,6 +21,10 @@
   --success-soft: #edf8f1;
   --danger: #a3243c;
   --danger-soft: #fff0f2;
+  --teal: #087568;
+  --teal-dark: #065f55;
+  --teal-soft: #e6f8f4;
+  --teal-wash: #f2fbf9;
   --shadow: 0 20px 60px rgba(46, 28, 88, .12);
   --shadow-small: 0 8px 24px rgba(46, 28, 88, .08);
   --radius: 22px;
@@ -167,7 +171,7 @@ h1 { max-width: 650px; margin: 22px 0 26px; font-size: clamp(3.15rem, 5.25vw, 4.
 .mcp-resources a { color: var(--primary-dark); font-weight: 700; }
 .mcp-resources a:hover { text-decoration: underline; text-underline-offset: 4px; }
 
-/* Part 02: deterministic policy plus the risk-detection approach being built. */
+/* Part 01: AI-based risk detection (being built) beside the deterministic policy veto. */
 .protection { scroll-margin-top: 96px; }
 .protection-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
 .protection-card { min-width: 0; display: flex; flex-direction: column; padding: 31px; border: 1px solid var(--line); border-radius: 20px; background: var(--white); box-shadow: var(--shadow-small); }
@@ -205,21 +209,38 @@ h1 { max-width: 650px; margin: 22px 0 26px; font-size: clamp(3.15rem, 5.25vw, 4.
 .flow-note { margin: 28px 0 0; padding-top: 22px; border-top: 1px solid rgba(255, 255, 255, .18); color: #ddd5e8; font-size: .87rem; }
 .flow-note strong { color: var(--white); }
 
-/* Exploration cards. */
-.cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
-.card { min-width: 0; display: flex; flex-direction: column; padding: 30px; border: 1px solid var(--line); border-radius: 18px; background: var(--white); box-shadow: 0 6px 20px rgba(46, 28, 88, .04); transition: transform .25s, box-shadow .25s, border-color .25s; }
-.card:hover { border-color: rgba(var(--primary-rgb), .38); box-shadow: var(--shadow); transform: translateY(-4px); }
-.card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 26px; }
-.card-icon { display: grid; place-items: center; width: 60px; height: 60px; border: 1px solid #d9cdea; border-radius: 15px; color: var(--primary-dark); background: var(--tint); }
-.card-icon .icon { width: 28px; height: 28px; }
-.card-num { color: var(--muted); font: 650 .68rem/1.4 var(--mono); letter-spacing: .03em; text-align: right; }
-.card h4 { margin: 0 0 12px; font-size: 1.25rem; line-height: 1.3; }
-.card > p { flex: 1; margin: 0; color: var(--muted); font-size: .95rem; }
-.card-example { margin-top: 24px; padding: 16px 18px; border-left: 3px solid var(--primary); border-radius: 4px 10px 10px 4px; background: var(--soft); }
-.card-example > span { display: block; margin-bottom: 4px; color: var(--primary-dark); font-size: .72rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
-.card-example p { margin: 0; font-size: .9rem; font-weight: 600; line-height: 1.65; }
-.tags { display: flex; flex-wrap: wrap; gap: 7px; margin: 20px 0 0; padding: 0; list-style: none; }
-.tags li { padding: 5px 9px; border: 1px solid #cfc5e4; border-radius: 999px; color: var(--muted); font: 500 .7rem/1.3 var(--mono); }
+/* Part 02: access management across the AI lifecycle, with teal accents. */
+.lifecycle-track { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px; margin: 0; padding: 0; list-style: none; }
+.lifecycle-track li { position: relative; min-width: 0; }
+.lifecycle-track li:not(:last-child)::after { content: ""; position: absolute; top: 31px; right: -16px; width: 16px; height: 2px; background: var(--cyan); }
+.lifecycle-track a { display: flex; flex-direction: column; height: 100%; padding: 18px 16px 20px; border: 1px solid var(--line); border-top: 3px solid var(--cyan); border-radius: 14px; background: var(--white); box-shadow: var(--shadow-small); transition: transform .2s, border-color .2s; }
+.lifecycle-track a:hover { border-color: #9fd8ce; border-top-color: var(--cyan); transform: translateY(-3px); }
+.lc-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.lc-num { color: var(--teal); font: 750 .78rem/1 var(--mono); }
+.lc-phase { padding: 2px 7px; border-radius: 999px; color: var(--teal-dark); background: var(--teal-soft); font: 700 .62rem/1.5 var(--mono); letter-spacing: .06em; text-transform: uppercase; }
+.lifecycle-track strong { margin-top: 14px; font-size: 1rem; line-height: 1.3; }
+.lc-ep { margin-top: 8px; color: var(--muted); font-size: .78rem; line-height: 1.5; }
+.decision-loop { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; margin: 20px 0 0; padding: 18px 22px; border: 1px solid #bfe6df; border-radius: 14px; background: var(--teal-wash); list-style: none; }
+.decision-loop li { position: relative; min-width: 0; color: var(--muted); font-size: .82rem; line-height: 1.5; }
+.decision-loop li:not(:last-child)::after { content: "→"; position: absolute; top: 50%; right: -23px; color: var(--teal); font: 600 1rem/1 var(--mono); transform: translateY(-50%); }
+.decision-loop span { display: block; color: var(--ink); font-size: .86rem; font-weight: 750; }
+.decision-loop code { color: var(--teal-dark); font: 600 .74rem/1.5 var(--mono); overflow-wrap: anywhere; }
+.areas { margin-top: 64px; }
+.areas-note { margin: 0 0 28px; }
+.area { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); align-items: start; gap: 28px 48px; padding-block: 48px; border-top: 1px solid var(--line); scroll-margin-top: 96px; }
+.area-step { margin: 0; color: var(--teal); font: 700 .72rem/1.4 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+.area h4 { margin: 10px 0 12px; font-size: 1.6rem; letter-spacing: -.025em; line-height: 1.2; }
+.area-lead { margin: 0; color: var(--muted); font-size: .95rem; }
+.area-facts { display: grid; gap: 14px; margin: 24px 0 0; }
+.area-facts div { display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 12px; padding-top: 14px; border-top: 1px dashed #d5d8e2; }
+.area-facts dt { color: var(--ink); font-size: .74rem; font-weight: 800; letter-spacing: .05em; line-height: 1.6; text-transform: uppercase; }
+.area-facts dd { margin: 0; color: var(--muted); font-size: .9rem; }
+.area-facts code, .spdl-caption code { color: var(--teal-dark); font-family: var(--mono); font-size: .9em; }
+.spdl-card { min-width: 0; margin: 0; overflow: hidden; border: 1px solid #cfe3df; border-left: 4px solid var(--cyan); border-radius: 14px; background: #fbfdfd; }
+.spdl-card figcaption { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 16px; border-bottom: 1px solid #dcebe8; color: var(--ink); background: var(--teal-wash); font: 650 .76rem/1.4 var(--mono); }
+.spdl-card figcaption span:last-child { color: var(--teal-dark); font-size: .66rem; letter-spacing: .05em; text-transform: uppercase; }
+.spdl-card pre { max-width: 100%; margin: 0; padding: 16px 18px; overflow: auto; color: var(--ink); font: 500 .76rem/1.75 var(--mono); white-space: pre; }
+.spdl-caption { margin: 0; padding: 12px 16px; border-top: 1px solid #dcebe8; color: var(--muted); font-size: .82rem; }
 .note { display: flex; align-items: flex-start; gap: 9px; margin: 26px 0 0; color: var(--muted); font-size: .88rem; }
 .note .icon { width: 18px; height: 18px; margin-top: 3px; }
 
@@ -332,6 +353,8 @@ h1 { max-width: 650px; margin: 22px 0 26px; font-size: clamp(3.15rem, 5.25vw, 4.
   .demo-input .pane-label { grid-column: 1/-1; margin-bottom: 0; }
   .demo-input fieldset, .demo-input fieldset:last-child { margin: 0; }
   .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lifecycle-track { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .lifecycle-track li::after { display: none; }
 }
 
 @media (max-width: 1000px) {
@@ -356,13 +379,9 @@ h1 { max-width: 650px; margin: 22px 0 26px; font-size: clamp(3.15rem, 5.25vw, 4.
   .section-head { align-items: start; flex-direction: column; gap: 18px; }
   .section-head > p { max-width: 680px; }
   .mode-grid { grid-template-columns: 1fr; }
-  .cards { grid-template-columns: 1fr; }
-  .card { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .85fr); grid-template-areas: "head head" "title example" "description example" "tags example"; column-gap: 32px; }
-  .card-head { grid-area: head; }
-  .card h4 { grid-area: title; }
-  .card > p { grid-area: description; }
-  .card-example { grid-area: example; align-self: center; margin-top: 0; }
-  .tags { grid-area: tags; }
+  .area { grid-template-columns: 1fr; }
+  .decision-loop { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 32px; }
+  .decision-loop li:nth-child(2)::after { display: none; }
   .resource-grid { grid-template-columns: 1fr; }
   .resource-card { display: grid; grid-template-columns: 100px minmax(0, .7fr) minmax(0, 1fr); align-items: center; gap: 18px; }
   .resource-card > span, .resource-card strong, .resource-card p { margin: 0; }
@@ -394,6 +413,7 @@ h1 { max-width: 650px; margin: 22px 0 26px; font-size: clamp(3.15rem, 5.25vw, 4.
   .resource-card { display: block; }
   .resource-card strong { margin-top: 10px; }
   .resource-card p { margin-top: 9px; }
+  .lifecycle-track { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 620px) {
@@ -431,9 +451,14 @@ h1 { max-width: 650px; margin: 22px 0 26px; font-size: clamp(3.15rem, 5.25vw, 4.
   .decision-architecture { padding: 25px 20px; border-radius: 19px; }
   .architecture-head h3 { font-size: 1.75rem; }
   .architecture-badge { white-space: normal; }
-  .card { display: flex; padding: 25px 22px; }
-  .card-example { margin-top: 22px; }
-  .card-num { font-size: .64rem; }
+  .lifecycle-track { gap: 12px; }
+  .lifecycle-track a { padding: 16px 14px 18px; }
+  .decision-loop { grid-template-columns: 1fr; gap: 26px; padding: 18px; }
+  .decision-loop li:not(:last-child)::after, .decision-loop li:nth-child(2)::after { display: block; content: "↓"; top: auto; right: auto; bottom: -21px; left: 0; transform: none; }
+  .area { padding-block: 40px; }
+  .area h4 { font-size: 1.4rem; }
+  .area-facts div { grid-template-columns: 1fr; gap: 4px; }
+  .spdl-card pre { padding: 14px; font-size: .7rem; }
   .demo-pane { padding: 24px 20px 28px; }
   .demo-banner, .demo-foot { padding: 16px 20px; }
   .code { font-size: .7rem; }
@@ -447,6 +472,10 @@ h1 { max-width: 650px; margin: 22px 0 26px; font-size: clamp(3.15rem, 5.25vw, 4.
   .provenance { text-align: left; }
   .footer-links { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px 22px; }
   .footer-bottom { flex-direction: column; }
+}
+
+@media (max-width: 400px) {
+  .lifecycle-track { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {

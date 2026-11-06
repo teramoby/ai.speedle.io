@@ -2,14 +2,18 @@
 
 Standalone public exploration website: https://ai.speedle.io
 
-The site has two parts: AI for access management (the Speedle MCP launch
-preview) and access management for AI (deterministic policy control, an
-AI-based risk-detection approach being built, and agent authorization
-patterns). AI-based risk detection is not presented as a shipped feature;
-it never grants access that policy denies.
+The site has two parts. AI for access management covers the Speedle MCP
+launch preview and an AI-based risk-detection approach being built; risk
+detection is not presented as a shipped feature and never grants access
+that policy denies. Access management for AI shows policy patterns across
+the AI lifecycle: model training, deployment, operations and inference,
+agents, MCP tool calls and agent-to-agent calls. These are solution
+patterns on the Speedle policy engine, not shipped platform integrations.
+Every SPDL example on the page is parsed and evaluated with the Speedle+
+file store (`eval.NewFromFile`) before it is published; keep the page text
+byte-identical to what was tested.
 
-Potential applications include agent tool calls, knowledge access, and
-multi-agent authorization. The interactive example uses simplified
+The interactive example uses simplified
 browser-local policy rules and does not simulate AI risk detection. It is
 not a Speedle engine, MCP integration, RAG adapter, or production service.
 The Speedle MCP section is a launch preview: `@speedle/mcp` is not published
