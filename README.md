@@ -72,11 +72,13 @@ Original bird artwork, without raster modification, from teramoby/speedle-plus:
   colours changed only (wordmark #fff → #182034, sphere #ff9a45 → #8b5cf6)
 
 favicon.svg uses the sphere paths from assets/speedle-mark-ai.svg without path
-edits on a transparent background, with the shared v9 favicon treatment: a 1 px
-#2a1660 circle outline (non-scaling stroke) so the mark stays legible on light
-browser tab bars. favicon.ico contains PNG renders of that SVG at 16, 32 and
-48 px; apple-touch-icon.png is 180×180 with the sphere on white and 20 px
-visible padding. The Products menu uses the same sphere paths in Engine orange
+edits, coloured #8b5cf6 on a transparent background, with the shared v13
+favicon treatment: no dark outline, and the sphere's own strokes scaled up
+(outer polygon ×2.0, inner lines ×2.2) so the mark stays legible at 16 px. The
+viewBox is the shared 115-unit sphere box used by the Engine and Cloud
+favicons. favicon.ico contains PNG renders of that SVG at 16, 32 and 48 px;
+apple-touch-icon.png is 180×180 with the sphere on white and 20 px visible
+padding. The Products menu uses the same sphere paths in Engine orange
 (#ff9a45), Cloud blue (#4da3ff) and AI purple (#8b5cf6).
 
 assets/og-image.png is the 1200×630 share image: the Speedle | AI lock-up and
