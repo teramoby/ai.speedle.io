@@ -510,6 +510,7 @@ h1 { max-width: 650px; margin: 22px 0 26px; font-size: clamp(3.15rem, 5.25vw, 4.
 .spdl-card figcaption span:last-child { color: var(--run-dark); font-size: .66rem; letter-spacing: .05em; text-transform: uppercase; }
 .spdl-card pre { max-width: 100%; margin: 0; padding: 16px 18px; overflow: auto; color: var(--ink); font: 500 .76rem/1.75 var(--mono); white-space: pre; }
 .spdl-caption { margin: 0; padding: 12px 16px; border-top: 1px solid var(--line-purple); color: var(--muted); font-size: .82rem; }
+.zsp-sample a { color: var(--primary-dark); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
 .note { display: flex; align-items: flex-start; gap: 9px; margin: 26px 0 0; color: var(--muted); font-size: .88rem; }
 .note .icon { width: 18px; height: 18px; margin-top: 3px; }
 

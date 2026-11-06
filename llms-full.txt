@@ -86,6 +86,10 @@ Each hop in a delegation chain is checked. The callee may receive only scopes th
 - Resources and actions: other agents and their skills `call`, with the requested scopes, the caller's scopes and the hop count as attributes.
 - Enforcement point: the calling agent before it sends a task, or the receiving agent before it accepts one.
 
+### Run: zero standing privileges (ZSP)
+
+Privileges are not held standing. Each request carries a just-in-time token, and Speedle checks at decision time that its lifetime is short and it has not expired; on self-hosted Speedle Engine a custom function also checks that it is unused in the issuer's store. (Speedle Cloud does not support custom external functions.) The issuer or application marks a token used or revoked after use; Speedle then denies any reuse.
+
 ### Cross-cutting concerns
 
 - **Identity integration:** Speedle is the authorization decision point. Authentication comes from the IdP or OAuth authorization server, for users and for agents; MCP authorization builds on OAuth. The application maps verified identities to principals and Speedle decides on the principals it is given.
