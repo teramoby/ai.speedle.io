@@ -28,7 +28,7 @@ document.addEventListener('keydown', event => {
     menuButton.focus();
   }
 });
-window.matchMedia('(min-width: 1001px)').addEventListener('change', closeMenu);
+window.matchMedia('(min-width: 1051px)').addEventListener('change', closeMenu);
 
 // Highlight the navigation link of the section crossing the middle of the viewport.
 const sectionLinks = [...navigation.querySelectorAll('a[href^="#"]')];

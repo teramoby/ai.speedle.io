@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#251343">
+  <meta name="theme-color" content="#ffffff">
   <meta name="color-scheme" content="light">
   <title>Speedle for AI — Access management for both sides of AI</title>
   <meta name="description" content="AI for access management: Speedle MCP and an AI-based risk-detection approach being built. Access management for AI: policy patterns to build and run AI, from data and training to RAG, agents, MCP tool calls and agent-to-agent calls.">
@@ -37,8 +37,9 @@
 
   <header class="site-header">
     <div class="wrap nav-wrap">
-      <a class="brand" href="#top" aria-label="Speedle for AI home">
-        <img src="/assets/speedle-logo-header.svg" width="152" height="52" alt="Speedle">
+      <a class="brand" href="/" aria-label="Speedle AI home">
+        <img src="/assets/speedle-mark-ai.svg" width="94" height="32" alt="Speedle">
+        <span class="brand-divider" aria-hidden="true"></span>
         <span class="brand-product">AI</span>
       </a>
       <button class="menu-button" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
@@ -225,11 +226,11 @@ npx @speedle/mcp manage
               <title id="cdw-title">Concept: Speedle as the decision point for building and running AI</title>
               <desc id="cdw-desc">An identity band at the top: your IdP and OAuth authenticate users and agents, MCP authorization builds on OAuth, and the principals flow into Speedle. On the left, the Build lane has two areas: data and training, asked by the data loader and job scheduler; and model release, asked by the model registry and release pipeline. On the right, the Run lane has four areas: inference and RAG, asked by the retriever per document and the API gateway; agents acting for users, asked by the agent runtime with the user and the agent as principals; tool calls over MCP, asked by the MCP host or gateway; and agent-to-agent calls, asked by the calling or receiving agent. Every area's enforcement point sends a request to Speedle's policy decision point in the centre and receives allow or deny. From Speedle, decisions and their explanations flow into the audit and explain band at the bottom: the diagnose API shows which policy matched and why, and applications log each decision with the agent and the delegating human. A boundary note: Speedle bounds what a compromised or misled agent can do; it does not detect prompt injection, filter content or verify model and dataset supply chains.</desc>
               <defs>
-                <linearGradient id="cdw-pdp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#251343"/><stop offset="1" stop-color="#4a2580"/></linearGradient>
+                <linearGradient id="cdw-pdp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4f0fb"/><stop offset="1" stop-color="#e9e1f8"/></linearGradient>
                 <filter id="cdw-lift" x="-8%" y="-8%" width="116%" height="130%"><feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#2e1c58" flood-opacity=".09"/></filter>
-                <filter id="cdw-lift-strong" x="-15%" y="-10%" width="130%" height="125%"><feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#251343" flood-opacity=".28"/></filter>
+                <filter id="cdw-lift-strong" x="-15%" y="-10%" width="130%" height="125%"><feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#5229ad" flood-opacity=".14"/></filter>
                 <marker id="cdw-ask" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0 1 9 5 0 9z" fill="#5229ad"/></marker>
-                <marker id="cdw-ans" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0 1 9 5 0 9z" fill="#087568"/></marker>
+                <marker id="cdw-ans" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0 1 9 5 0 9z" fill="#7546d8"/></marker>
               </defs>
 
               <g class="cd-band cd-band-id">
@@ -358,11 +359,11 @@ npx @speedle/mcp manage
               <title id="cds-title">Concept: Speedle as the decision point for building and running AI</title>
               <desc id="cds-desc">Stacked from top to bottom. Identity in: your IdP and OAuth authenticate users and agents, MCP authorization builds on OAuth, and Speedle decides on the principals it is given. Speedle's policy decision point evaluates SPDL policy and answers allow or deny. Every area's enforcement point asks it. Build lane: data and training, asked by the data loader and job scheduler; model release, asked by the model registry and release pipeline. Run lane: inference and RAG, asked by the retriever per document and the API gateway; agents acting for users, asked by the agent runtime with the user and the agent as principals; tool calls over MCP, asked by the MCP host or gateway per call; agent-to-agent calls, asked by the calling or receiving agent. Audit and explain out: the diagnose API shows which policy matched and why, and applications log each decision with the agent and the delegating human. Boundary: Speedle bounds what a compromised or misled agent can do; it does not detect prompt injection, filter content or verify model and dataset supply chains.</desc>
               <defs>
-                <linearGradient id="cds-pdp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#251343"/><stop offset="1" stop-color="#4a2580"/></linearGradient>
+                <linearGradient id="cds-pdp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4f0fb"/><stop offset="1" stop-color="#e9e1f8"/></linearGradient>
                 <filter id="cds-lift" x="-8%" y="-10%" width="116%" height="140%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#2e1c58" flood-opacity=".09"/></filter>
-                <filter id="cds-lift-strong" x="-12%" y="-15%" width="124%" height="145%"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#251343" flood-opacity=".26"/></filter>
+                <filter id="cds-lift-strong" x="-12%" y="-15%" width="124%" height="145%"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#5229ad" flood-opacity=".13"/></filter>
                 <marker id="cds-ask" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0 1 9 5 0 9z" fill="#5229ad"/></marker>
-                <marker id="cds-ans" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0 1 9 5 0 9z" fill="#087568"/></marker>
+                <marker id="cds-ans" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0 1 9 5 0 9z" fill="#7546d8"/></marker>
               </defs>
 
               <g class="cd-band cd-band-id">
@@ -484,7 +485,7 @@ npx @speedle/mcp manage
             </svg>
             <figcaption class="concept-legend">
               <span><svg viewBox="0 0 40 10" aria-hidden="true"><line x1="1" y1="5" x2="32" y2="5" stroke="#5229ad" stroke-width="2"/><path d="M30 1 39 5 30 9z" fill="#5229ad"/></svg>The enforcement point asks Speedle: subject, action, resource, attributes.</span>
-              <span><svg viewBox="0 0 40 10" aria-hidden="true"><line x1="1" y1="5" x2="32" y2="5" stroke="#087568" stroke-width="2" stroke-dasharray="5 4"/><path d="M30 1 39 5 30 9z" fill="#087568"/></svg>Speedle answers allow or deny; the application enforces it.</span>
+              <span><svg viewBox="0 0 40 10" aria-hidden="true"><line x1="1" y1="5" x2="32" y2="5" stroke="#7546d8" stroke-width="2" stroke-dasharray="5 4"/><path d="M30 1 39 5 30 9z" fill="#7546d8"/></svg>Speedle answers allow or deny; the application enforces it.</span>
             </figcaption>
           </figure>
         </div>
@@ -808,7 +809,7 @@ grant entity researcher-1 researcher-agent</code></pre>
     <div class="wrap">
       <div class="footer-content">
         <div class="footer-brand">
-          <a href="#top" aria-label="Back to Speedle for AI home"><img src="/assets/speedle-logo-footer.svg" width="132" height="58" alt="Speedle"></a>
+          <a href="#top" aria-label="Back to Speedle for AI home"><img src="/assets/speedle-mark-ai.svg" width="132" height="45" alt="Speedle"></a>
           <p class="footer-product">Speedle for AI</p>
           <p>AI for access management.<br>Access management for AI.</p>
         </div>
