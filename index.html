@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#251343">
   <meta name="color-scheme" content="light">
   <title>Speedle for AI — Access management for both sides of AI</title>
-  <meta name="description" content="AI for access management: Speedle MCP and an AI-based risk-detection approach being built. Access management for AI: policy patterns for training, deployment, inference, agents, MCP tool calls and agent-to-agent calls.">
+  <meta name="description" content="AI for access management: Speedle MCP and an AI-based risk-detection approach being built. Access management for AI: policy patterns to build and run AI, from data and training to RAG, agents, MCP tool calls and agent-to-agent calls.">
   <link rel="canonical" href="https://ai.speedle.io/">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="en">
@@ -71,8 +71,8 @@
           <a class="path-card" href="#access-for-ai">
             <div class="path-top"><span class="path-index">PART 02</span><span class="path-icon" aria-hidden="true"><svg class="icon"><use href="#i-shield"/></svg></span></div>
             <h2>Access management for AI</h2>
-            <p>Policy for every stage of AI: training, deployment, inference, agents, MCP tool calls and agent-to-agent calls.</p>
-            <span class="path-link">Explore the AI lifecycle<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></span>
+            <p>Policy to build and run AI: data and training, model release, inference and RAG, agents, MCP tool calls and agent-to-agent calls.</p>
+            <span class="path-link">Explore build and run<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></span>
           </a>
           <p class="hero-foundation"><span></span>One shared policy foundation<span></span></p>
         </div>
@@ -211,47 +211,306 @@ npx @speedle/mcp manage
       <div class="wrap">
         <header class="part-header">
           <span class="part-number" aria-hidden="true">02</span>
-          <div class="part-heading"><p class="eyebrow">Access management for AI</p><h2 id="access-for-ai-title">Govern access across the AI lifecycle.</h2></div>
-          <p class="part-summary">Speedle’s policy engine applied wherever AI systems touch data, models, tools and other agents, from training to agent-to-agent calls. These are solution patterns, not shipped integrations with any ML or agent platform.</p>
+          <div class="part-heading"><p class="eyebrow">Access management for AI</p><h2 id="access-for-ai-title">Govern access while you build and run AI.</h2></div>
+          <p class="part-summary">Speedle’s policy engine applied wherever AI systems touch data, models, tools and other agents: in Build, before a model serves, and in Run, while it serves and acts. These are solution patterns, not shipped integrations with any ML or agent platform.</p>
         </header>
 
-        <div id="lifecycle" class="lifecycle-intro">
+        <div id="lifecycle" class="concept">
           <div class="section-head">
-            <div><p class="eyebrow">Lifecycle overview</p><h3 id="lifecycle-title">Six places where an application asks Speedle.</h3></div>
-            <p>Every stage follows the same pattern: an enforcement point in the application describes the request, Speedle evaluates the policy, and the application enforces the answer.</p>
+            <div><p class="eyebrow">Concept</p><h3 id="concept-title">One decision point for building and running AI.</h3></div>
+            <p>Each area has an enforcement point in your application. It asks Speedle before it acts and enforces the answer. Identity comes in from your IdP; decisions and their explanations go out to your audit trail.</p>
           </div>
-          <ol class="lifecycle-track" aria-label="AI lifecycle stages">
-            <li><a href="#lc-training"><span class="lc-top"><span class="lc-num">01</span><span class="lc-phase">Build</span></span><strong>Model training</strong><span class="lc-ep">Data loader, job scheduler</span></a></li>
-            <li><a href="#lc-deployment"><span class="lc-top"><span class="lc-num">02</span><span class="lc-phase">Build</span></span><strong>Deployment</strong><span class="lc-ep">Model registry, release pipeline</span></a></li>
-            <li><a href="#lc-inference"><span class="lc-top"><span class="lc-num">03</span><span class="lc-phase">Run</span></span><strong>Operations and inference</strong><span class="lc-ep">API gateway, retriever, ops console</span></a></li>
-            <li><a href="#lc-agents"><span class="lc-top"><span class="lc-num">04</span><span class="lc-phase">Act</span></span><strong>Agents</strong><span class="lc-ep">Agent runtime, app backend</span></a></li>
-            <li><a href="#lc-mcp"><span class="lc-top"><span class="lc-num">05</span><span class="lc-phase">Act</span></span><strong>MCP tool calls</strong><span class="lc-ep">MCP host or gateway</span></a></li>
-            <li><a href="#lc-a2a"><span class="lc-top"><span class="lc-num">06</span><span class="lc-phase">Act</span></span><strong>Agent-to-agent</strong><span class="lc-ep">Calling or receiving agent</span></a></li>
-          </ol>
-          <ol class="decision-loop" aria-label="Decision pattern at every stage">
-            <li><span>Enforcement point</span>in the application</li>
-            <li><span>Asks Speedle</span><code>subject · action · resource · attributes</code></li>
-            <li><span>Policy decision</span><code>allow | deny</code></li>
-            <li><span>Application enforces</span>proceeds or blocks</li>
-          </ol>
+          <figure class="concept-figure">
+            <svg class="cd cd-wide" viewBox="0 0 1080 688" role="img" aria-labelledby="cdw-title cdw-desc">
+              <title id="cdw-title">Concept: Speedle as the decision point for building and running AI</title>
+              <desc id="cdw-desc">An identity band at the top: your IdP and OAuth authenticate users and agents, MCP authorization builds on OAuth, and the principals flow into Speedle. On the left, the Build lane has two areas: data and training, asked by the data loader and job scheduler; and model release, asked by the model registry and release pipeline. On the right, the Run lane has four areas: inference and RAG, asked by the retriever per document and the API gateway; agents acting for users, asked by the agent runtime with the user and the agent as principals; tool calls over MCP, asked by the MCP host or gateway; and agent-to-agent calls, asked by the calling or receiving agent. Every area's enforcement point sends a request to Speedle's policy decision point in the centre and receives allow or deny. From Speedle, decisions and their explanations flow into the audit and explain band at the bottom: the diagnose API shows which policy matched and why, and applications log each decision with the agent and the delegating human. A boundary note: Speedle bounds what a compromised or misled agent can do; it does not detect prompt injection, filter content or verify model and dataset supply chains.</desc>
+              <defs>
+                <linearGradient id="cdw-pdp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#251343"/><stop offset="1" stop-color="#4a2580"/></linearGradient>
+                <filter id="cdw-lift" x="-8%" y="-8%" width="116%" height="130%"><feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#2e1c58" flood-opacity=".09"/></filter>
+                <filter id="cdw-lift-strong" x="-15%" y="-10%" width="130%" height="125%"><feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#251343" flood-opacity=".28"/></filter>
+                <marker id="cdw-ask" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0 1 9 5 0 9z" fill="#5229ad"/></marker>
+                <marker id="cdw-ans" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0 1 9 5 0 9z" fill="#087568"/></marker>
+              </defs>
+
+              <g class="cd-band cd-band-id">
+                <rect x="0.5" y="0.5" width="1079" height="71" rx="14"/>
+                <text class="cd-label cd-teal" x="24" y="33">IDENTITY IN</text>
+                <text class="cd-sub" x="24" y="55">Cross-cutting</text>
+                <line class="cd-divider" x1="236" y1="16" x2="236" y2="56"/>
+                <text class="cd-strong" x="260" y="33">Your IdP and OAuth authenticate users and agents. MCP authorization builds on OAuth.</text>
+                <text class="cd-text" x="260" y="55">The application passes them as principals. Speedle decides on the principals it is given.</text>
+              </g>
+              <line class="cd-in" x1="540" y1="76" x2="540" y2="144" marker-end="url(#cdw-ans)"/>
+              <text class="cd-mono" x="552" y="116">principals</text>
+
+              <g class="cd-lane cd-lane-build">
+                <rect x="0.5" y="96.5" width="329" height="407" rx="18"/>
+                <text class="cd-label cd-purple" x="20" y="129">BUILD</text>
+                <text class="cd-sub" x="86" y="129">before a model serves</text>
+              </g>
+              <g class="cd-lane cd-lane-run">
+                <rect x="750.5" y="96.5" width="329" height="407" rx="18"/>
+                <text class="cd-label cd-teal" x="770" y="129">RUN</text>
+                <text class="cd-sub" x="818" y="129">while AI serves and acts</text>
+              </g>
+
+              <g class="cd-card cd-card-build" filter="url(#cdw-lift)">
+                <rect x="14.5" y="148.5" width="301" height="163" rx="12"/>
+                <rect class="cd-chip" x="30" y="170" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="48" y="187">01</text>
+                <text class="cd-title" x="78" y="189">Data &amp; training</text>
+                <text class="cd-text" x="30" y="224">Data loader, job scheduler</text>
+                <line class="cd-rule" x1="30" y1="246" x2="300" y2="246"/>
+                <text class="cd-res" x="30" y="272">datasets, training jobs,</text>
+                <text class="cd-res" x="30" y="292">checkpoint export</text>
+              </g>
+              <g class="cd-card cd-card-build" filter="url(#cdw-lift)">
+                <rect x="14.5" y="324.5" width="301" height="163" rx="12"/>
+                <rect class="cd-chip" x="30" y="346" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="48" y="363">02</text>
+                <text class="cd-title" x="78" y="365">Model release</text>
+                <text class="cd-text" x="30" y="400">Model registry, release pipeline</text>
+                <line class="cd-rule" x1="30" y1="422" x2="300" y2="422"/>
+                <text class="cd-res" x="30" y="448">register, approve, promote,</text>
+                <text class="cd-res" x="30" y="468">roll back</text>
+              </g>
+
+              <g class="cd-card cd-card-key" filter="url(#cdw-lift)">
+                <rect x="764.5" y="148.5" width="301" height="75" rx="12"/>
+                <rect class="cd-chip" x="780" y="164" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="798" y="181">03</text>
+                <text class="cd-title" x="828" y="183">Inference &amp; RAG</text>
+                <text class="cd-text" x="780" y="210">Retriever per document · gateway</text>
+              </g>
+              <g class="cd-card cd-card-run" filter="url(#cdw-lift)">
+                <rect x="764.5" y="236.5" width="301" height="75" rx="12"/>
+                <rect class="cd-chip" x="780" y="252" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="798" y="269">04</text>
+                <text class="cd-title" x="828" y="271">Agents acting for users</text>
+                <text class="cd-text" x="780" y="298">Agent runtime · user + agent</text>
+              </g>
+              <g class="cd-card cd-card-run" filter="url(#cdw-lift)">
+                <rect x="764.5" y="324.5" width="301" height="75" rx="12"/>
+                <rect class="cd-chip" x="780" y="340" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="798" y="357">05</text>
+                <text class="cd-title" x="828" y="359">Tool calls (MCP)</text>
+                <text class="cd-text" x="780" y="386">MCP host or gateway, per call</text>
+              </g>
+              <g class="cd-card cd-card-run" filter="url(#cdw-lift)">
+                <rect x="764.5" y="412.5" width="301" height="75" rx="12"/>
+                <rect class="cd-chip" x="780" y="428" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="798" y="445">06</text>
+                <text class="cd-title" x="828" y="447">Agent-to-agent (A2A)</text>
+                <text class="cd-text" x="780" y="474">Calling or receiving agent</text>
+              </g>
+
+              <g class="cd-arrows">
+                <line class="cd-ask" x1="322" y1="224" x2="404" y2="224" marker-end="url(#cdw-ask)"/>
+                <line class="cd-ans" x1="404" y1="236" x2="322" y2="236" marker-end="url(#cdw-ans)"/>
+                <line class="cd-ask" x1="322" y1="400" x2="404" y2="400" marker-end="url(#cdw-ask)"/>
+                <line class="cd-ans" x1="404" y1="412" x2="322" y2="412" marker-end="url(#cdw-ans)"/>
+                <line class="cd-ask" x1="758" y1="180" x2="676" y2="180" marker-end="url(#cdw-ask)"/>
+                <line class="cd-ans" x1="676" y1="192" x2="758" y2="192" marker-end="url(#cdw-ans)"/>
+                <line class="cd-ask" x1="758" y1="268" x2="676" y2="268" marker-end="url(#cdw-ask)"/>
+                <line class="cd-ans" x1="676" y1="280" x2="758" y2="280" marker-end="url(#cdw-ans)"/>
+                <line class="cd-ask" x1="758" y1="356" x2="676" y2="356" marker-end="url(#cdw-ask)"/>
+                <line class="cd-ans" x1="676" y1="368" x2="758" y2="368" marker-end="url(#cdw-ans)"/>
+                <line class="cd-ask" x1="758" y1="444" x2="676" y2="444" marker-end="url(#cdw-ask)"/>
+                <line class="cd-ans" x1="676" y1="456" x2="758" y2="456" marker-end="url(#cdw-ans)"/>
+              </g>
+
+              <g class="cd-pdp">
+                <rect x="410" y="148" width="260" height="340" rx="20" fill="url(#cdw-pdp)" filter="url(#cdw-lift-strong)"/>
+                <rect class="cd-pdp-ring" x="418.5" y="156.5" width="243" height="323" rx="14"/>
+                <circle class="cd-pdp-badge" cx="540" cy="212" r="30"/>
+                <path class="cd-pdp-icon" transform="translate(520.8 192.8) scale(1.6)" d="m12 3 7 3v5c0 4.6-2.8 8.1-7 10-4.2-1.9-7-5.4-7-10V6l7-3Z M8.5 12l2.2 2.2 4.8-5"/>
+                <text class="cd-pdp-eyebrow" x="540" y="272">SPEEDLE</text>
+                <text class="cd-pdp-title" x="540" y="304">Policy decision</text>
+                <text class="cd-pdp-title" x="540" y="331">point</text>
+                <line class="cd-pdp-rule" x1="450" y1="354" x2="630" y2="354"/>
+                <text class="cd-pdp-text" x="540" y="380">Evaluates SPDL policy for</text>
+                <text class="cd-pdp-text" x="540" y="400">each area’s request</text>
+                <rect class="cd-pdp-chip" x="468" y="420" width="144" height="34" rx="17"/>
+                <text class="cd-pdp-answer" x="540" y="442">allow | deny</text>
+              </g>
+
+              <line class="cd-out" x1="540" y1="492" x2="540" y2="524" marker-end="url(#cdw-ask)"/>
+              <text class="cd-mono" x="552" y="514">decision + why</text>
+              <g class="cd-band cd-band-audit">
+                <rect x="0.5" y="528.5" width="1079" height="71" rx="14"/>
+                <text class="cd-label cd-purple" x="24" y="561">AUDIT &amp; EXPLAIN OUT</text>
+                <text class="cd-sub" x="24" y="583">Cross-cutting</text>
+                <line class="cd-divider" x1="236" y1="544" x2="236" y2="584"/>
+                <text class="cd-strong" x="260" y="561">Every decision can be explained with Speedle’s diagnose API: which policy matched and why.</text>
+                <text class="cd-text" x="260" y="583">Applications log each decision with the agent and the delegating human.</text>
+              </g>
+
+              <g class="cd-band cd-boundary">
+                <rect x="0.5" y="616.5" width="1079" height="71" rx="14"/>
+                <text class="cd-label cd-ink" x="24" y="649">BOUNDARY</text>
+                <text class="cd-sub" x="24" y="671">Outside Speedle</text>
+                <line class="cd-divider" x1="236" y1="632" x2="236" y2="672"/>
+                <text class="cd-strong" x="260" y="649">Speedle bounds what a compromised or misled agent can do.</text>
+                <text class="cd-text" x="260" y="671">It does not detect prompt injection, filter content or verify model and dataset supply chains.</text>
+              </g>
+            </svg>
+            <svg class="cd cd-stack" viewBox="0 0 360 1384" role="img" aria-labelledby="cds-title cds-desc">
+              <title id="cds-title">Concept: Speedle as the decision point for building and running AI</title>
+              <desc id="cds-desc">Stacked from top to bottom. Identity in: your IdP and OAuth authenticate users and agents, MCP authorization builds on OAuth, and Speedle decides on the principals it is given. Speedle's policy decision point evaluates SPDL policy and answers allow or deny. Every area's enforcement point asks it. Build lane: data and training, asked by the data loader and job scheduler; model release, asked by the model registry and release pipeline. Run lane: inference and RAG, asked by the retriever per document and the API gateway; agents acting for users, asked by the agent runtime with the user and the agent as principals; tool calls over MCP, asked by the MCP host or gateway per call; agent-to-agent calls, asked by the calling or receiving agent. Audit and explain out: the diagnose API shows which policy matched and why, and applications log each decision with the agent and the delegating human. Boundary: Speedle bounds what a compromised or misled agent can do; it does not detect prompt injection, filter content or verify model and dataset supply chains.</desc>
+              <defs>
+                <linearGradient id="cds-pdp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#251343"/><stop offset="1" stop-color="#4a2580"/></linearGradient>
+                <filter id="cds-lift" x="-8%" y="-10%" width="116%" height="140%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#2e1c58" flood-opacity=".09"/></filter>
+                <filter id="cds-lift-strong" x="-12%" y="-15%" width="124%" height="145%"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#251343" flood-opacity=".26"/></filter>
+                <marker id="cds-ask" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0 1 9 5 0 9z" fill="#5229ad"/></marker>
+                <marker id="cds-ans" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0 1 9 5 0 9z" fill="#087568"/></marker>
+              </defs>
+
+              <g class="cd-band cd-band-id">
+                <rect x="0.5" y="0.5" width="359" height="163" rx="14"/>
+                <text class="cd-label cd-teal" x="18" y="31">IDENTITY IN</text>
+                <text class="cd-sub cd-end" x="342" y="31">Cross-cutting</text>
+                <text class="cd-strong" x="18" y="59">Your IdP and OAuth authenticate</text>
+                <text class="cd-strong" x="18" y="79">users and agents.</text>
+                <text class="cd-text" x="18" y="105">MCP authorization builds on OAuth.</text>
+                <text class="cd-text" x="18" y="125">Speedle decides on the principals</text>
+                <text class="cd-text" x="18" y="145">it is given.</text>
+              </g>
+              <line class="cd-in" x1="164" y1="168" x2="164" y2="204" marker-end="url(#cds-ans)"/>
+              <text class="cd-mono" x="176" y="192">principals</text>
+
+              <g class="cd-pdp">
+                <rect x="0" y="208" width="328" height="160" rx="18" fill="url(#cds-pdp)" filter="url(#cds-lift-strong)"/>
+                <rect class="cd-pdp-ring" x="7.5" y="215.5" width="313" height="145" rx="12"/>
+                <circle class="cd-pdp-badge" cx="52" cy="288" r="26"/>
+                <path class="cd-pdp-icon" transform="translate(36.4 272.4) scale(1.3)" d="m12 3 7 3v5c0 4.6-2.8 8.1-7 10-4.2-1.9-7-5.4-7-10V6l7-3Z M8.5 12l2.2 2.2 4.8-5"/>
+                <text class="cd-pdp-eyebrow cd-start" x="96" y="250">SPEEDLE</text>
+                <text class="cd-pdp-title cd-pdp-title-sm cd-start" x="96" y="276">Policy decision point</text>
+                <text class="cd-pdp-text cd-start" x="96" y="300">Evaluates SPDL policy</text>
+                <rect class="cd-pdp-chip" x="96" y="316" width="128" height="32" rx="16"/>
+                <text class="cd-pdp-answer" x="160" y="337">allow | deny</text>
+              </g>
+
+              <g class="cd-lane cd-lane-build">
+                <rect x="0.5" y="392.5" width="327" height="217" rx="16"/>
+                <text class="cd-label cd-purple" x="16" y="423">BUILD</text>
+                <text class="cd-sub" x="80" y="423">before a model serves</text>
+              </g>
+              <g class="cd-lane cd-lane-run">
+                <rect x="0.5" y="626.5" width="327" height="389" rx="16"/>
+                <text class="cd-label cd-teal" x="16" y="657">RUN</text>
+                <text class="cd-sub" x="62" y="657">while AI serves and acts</text>
+              </g>
+
+              <g class="cd-arrows">
+                <line class="cd-ask" x1="346" y1="288" x2="332" y2="288" marker-end="url(#cds-ask)"/>
+                <line class="cd-spine" x1="346" y1="288" x2="346" y2="966"/>
+                <line class="cd-ask" x1="316" y1="474" x2="346" y2="474"/>
+                <line class="cd-ask" x1="316" y1="560" x2="346" y2="560"/>
+                <line class="cd-ask" x1="316" y1="708" x2="346" y2="708"/>
+                <line class="cd-ask" x1="316" y1="794" x2="346" y2="794"/>
+                <line class="cd-ask" x1="316" y1="880" x2="346" y2="880"/>
+                <line class="cd-ask" x1="316" y1="966" x2="346" y2="966"/>
+                <circle class="cd-node" cx="346" cy="474" r="3.5"/>
+                <circle class="cd-node" cx="346" cy="560" r="3.5"/>
+                <circle class="cd-node" cx="346" cy="708" r="3.5"/>
+                <circle class="cd-node" cx="346" cy="794" r="3.5"/>
+                <circle class="cd-node" cx="346" cy="880" r="3.5"/>
+                <circle class="cd-node" cx="346" cy="966" r="3.5"/>
+              </g>
+
+              <g class="cd-card cd-card-build" filter="url(#cds-lift)">
+                <rect x="12.5" y="436.5" width="303" height="75" rx="12"/>
+                <rect class="cd-chip" x="26" y="452" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="44" y="469">01</text>
+                <text class="cd-title cd-title-sm" x="74" y="470">Data &amp; training</text>
+                <text class="cd-text" x="26" y="498">Data loader, job scheduler</text>
+              </g>
+              <g class="cd-card cd-card-build" filter="url(#cds-lift)">
+                <rect x="12.5" y="522.5" width="303" height="75" rx="12"/>
+                <rect class="cd-chip" x="26" y="538" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="44" y="555">02</text>
+                <text class="cd-title cd-title-sm" x="74" y="556">Model release</text>
+                <text class="cd-text" x="26" y="584">Model registry, release pipeline</text>
+              </g>
+              <g class="cd-card cd-card-key" filter="url(#cds-lift)">
+                <rect x="12.5" y="670.5" width="303" height="75" rx="12"/>
+                <rect class="cd-chip" x="26" y="686" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="44" y="703">03</text>
+                <text class="cd-title cd-title-sm" x="74" y="704">Inference &amp; RAG</text>
+                <text class="cd-text" x="26" y="732">Retriever per document · gateway</text>
+              </g>
+              <g class="cd-card cd-card-run" filter="url(#cds-lift)">
+                <rect x="12.5" y="756.5" width="303" height="75" rx="12"/>
+                <rect class="cd-chip" x="26" y="772" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="44" y="789">04</text>
+                <text class="cd-title cd-title-sm" x="74" y="790">Agents acting for users</text>
+                <text class="cd-text" x="26" y="818">Agent runtime · user + agent</text>
+              </g>
+              <g class="cd-card cd-card-run" filter="url(#cds-lift)">
+                <rect x="12.5" y="842.5" width="303" height="75" rx="12"/>
+                <rect class="cd-chip" x="26" y="858" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="44" y="875">05</text>
+                <text class="cd-title cd-title-sm" x="74" y="876">Tool calls (MCP)</text>
+                <text class="cd-text" x="26" y="904">MCP host or gateway, per call</text>
+              </g>
+              <g class="cd-card cd-card-run" filter="url(#cds-lift)">
+                <rect x="12.5" y="928.5" width="303" height="75" rx="12"/>
+                <rect class="cd-chip" x="26" y="944" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="44" y="961">06</text>
+                <text class="cd-title cd-title-sm" x="74" y="962">Agent-to-agent (A2A)</text>
+                <text class="cd-text" x="26" y="990">Calling or receiving agent</text>
+              </g>
+
+              <g class="cd-band cd-band-audit">
+                <rect x="0.5" y="1040.5" width="359" height="163" rx="14"/>
+                <text class="cd-label cd-purple" x="18" y="1071">AUDIT &amp; EXPLAIN OUT</text>
+                <text class="cd-strong" x="18" y="1099">Every decision can be explained</text>
+                <text class="cd-strong" x="18" y="1119">with Speedle’s diagnose API.</text>
+                <text class="cd-text" x="18" y="1145">Which policy matched and why. Apps</text>
+                <text class="cd-text" x="18" y="1165">log each decision with the agent</text>
+                <text class="cd-text" x="18" y="1185">and the delegating human.</text>
+              </g>
+
+              <g class="cd-band cd-boundary">
+                <rect x="0.5" y="1220.5" width="359" height="163" rx="14"/>
+                <text class="cd-label cd-ink" x="18" y="1251">BOUNDARY</text>
+                <text class="cd-sub cd-end" x="342" y="1251">Outside Speedle</text>
+                <text class="cd-strong" x="18" y="1279">Speedle bounds what a compromised</text>
+                <text class="cd-strong" x="18" y="1299">or misled agent can do.</text>
+                <text class="cd-text" x="18" y="1325">It does not detect prompt injection,</text>
+                <text class="cd-text" x="18" y="1345">filter content or verify model and</text>
+                <text class="cd-text" x="18" y="1365">dataset supply chains.</text>
+              </g>
+            </svg>
+            <figcaption class="concept-legend">
+              <span><svg viewBox="0 0 40 10" aria-hidden="true"><line x1="1" y1="5" x2="32" y2="5" stroke="#5229ad" stroke-width="2"/><path d="M30 1 39 5 30 9z" fill="#5229ad"/></svg>The enforcement point asks Speedle: subject, action, resource, attributes.</span>
+              <span><svg viewBox="0 0 40 10" aria-hidden="true"><line x1="1" y1="5" x2="32" y2="5" stroke="#087568" stroke-width="2" stroke-dasharray="5 4"/><path d="M30 1 39 5 30 9z" fill="#087568"/></svg>Speedle answers allow or deny; the application enforces it.</span>
+            </figcaption>
+          </figure>
         </div>
 
         <div class="areas">
           <p class="note areas-note"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>Each SPDL example below was parsed and evaluated with the Speedle file store against allow and deny cases. Names, paths and attributes are illustrative; your application supplies the attributes when it asks for a decision.</p>
-          <article id="lc-training" class="area" aria-labelledby="lc-training-title">
-            <div class="area-copy">
-              <p class="area-step">01 / Model training</p>
-              <h4 id="lc-training-title">Which pipelines may train on which data?</h4>
-              <p class="area-lead">Training jobs read datasets, use compute and write checkpoints. The application asks before each dataset read, job start and checkpoint export, passing sensitivity, tenant, consent and region as attributes.</p>
-              <dl class="area-facts">
-                <div><dt>Subjects</dt><dd>Training pipelines as entities; ML engineers and their teams.</dd></div>
-                <div><dt>Resources and actions</dt><dd>Datasets: <code>read</code>. Training jobs: <code>start</code>. Checkpoints: <code>export</code>.</dd></div>
-                <div><dt>Enforcement point</dt><dd>The data loader before it opens a dataset, the job scheduler before it allocates compute, and the artifact store before an export.</dd></div>
-              </dl>
+
+          <section id="build" class="phase" aria-labelledby="build-title">
+            <div class="phase-head phase-build">
+              <p class="phase-tag">Build</p>
+              <h3 id="build-title">Before a model serves: data, training and release.</h3>
             </div>
-            <figure class="spdl-card">
-              <figcaption><span>training.spdl</span><span>SPDL example</span></figcaption>
-              <pre tabindex="0" data-spdl="training" aria-label="SPDL example: Model training"><code>[service.ml-training]
+            <article id="lc-data" class="area" aria-labelledby="lc-data-title">
+              <div class="area-copy">
+                <p class="area-step">01 / Data &amp; training</p>
+                <h4 id="lc-data-title">Which pipelines may train on which data?</h4>
+                <p class="area-lead">Training jobs read datasets, use compute and write checkpoints. The application asks before each dataset read, job start and checkpoint export, passing sensitivity, tenant, consent and region as attributes.</p>
+                <dl class="area-facts">
+                  <div><dt>Subjects</dt><dd>Training pipelines as entities; ML engineers and their teams.</dd></div>
+                  <div><dt>Resources and actions</dt><dd>Datasets: <code>read</code>. Training jobs: <code>start</code>. Checkpoints: <code>export</code>.</dd></div>
+                  <div><dt>Enforcement point</dt><dd>The data loader before it opens a dataset, the job scheduler before it allocates compute, and the artifact store before an export.</dd></div>
+                </dl>
+              </div>
+              <figure class="spdl-card">
+                <figcaption><span>training.spdl</span><span>SPDL example</span></figcaption>
+                <pre tabindex="0" data-spdl="training" aria-label="SPDL example: Data and training"><code>[service.ml-training]
 [policy]
 # Pipelines read only consented data from their own region
 grant role training-pipeline read expr:^/datasets/ if consent == true &amp;&amp; data_region == job_region
@@ -262,23 +521,23 @@ grant role ml-engineer export expr:^/checkpoints/
 [rolepolicy]
 grant entity pipeline-churn training-pipeline
 grant group ml-team ml-engineer</code></pre>
-              <p class="spdl-caption">Consent and region checked per dataset, restricted data denied outright, and a GPU-hour limit on job start.</p>
-            </figure>
-          </article>
-          <article id="lc-deployment" class="area" aria-labelledby="lc-deployment-title">
-            <div class="area-copy">
-              <p class="area-step">02 / Deployment</p>
-              <h4 id="lc-deployment-title">Who may release a model?</h4>
-              <p class="area-lead">Registering, approving, promoting and rolling back models and endpoints are separate actions with separate owners. Separation of duties keeps the person who trained a model from approving it.</p>
-              <dl class="area-facts">
-                <div><dt>Subjects</dt><dd>ML engineers, release managers and the service identities of release pipelines.</dd></div>
-                <div><dt>Resources and actions</dt><dd>Models and endpoints: <code>register</code>, <code>approve</code>, <code>promote</code>, <code>rollback</code>.</dd></div>
-                <div><dt>Enforcement point</dt><dd>The model registry and the deployment pipeline, before each change of model or endpoint state.</dd></div>
-              </dl>
-            </div>
-            <figure class="spdl-card">
-              <figcaption><span>deployment.spdl</span><span>SPDL example</span></figcaption>
-              <pre tabindex="0" data-spdl="deployment" aria-label="SPDL example: Deployment"><code>[service.model-registry]
+                <p class="spdl-caption">Consent and region checked per dataset, restricted data denied outright, and a GPU-hour limit on job start.</p>
+              </figure>
+            </article>
+            <article id="lc-release" class="area" aria-labelledby="lc-release-title">
+              <div class="area-copy">
+                <p class="area-step">02 / Model release</p>
+                <h4 id="lc-release-title">Who may release a model?</h4>
+                <p class="area-lead">Registering, approving, promoting and rolling back models are separate actions with separate owners. Separation of duties keeps the person who trained a model from approving it.</p>
+                <dl class="area-facts">
+                  <div><dt>Subjects</dt><dd>ML engineers, release managers and the service identities of release pipelines.</dd></div>
+                  <div><dt>Resources and actions</dt><dd>Models and endpoints: <code>register</code>, <code>approve</code>, <code>promote</code>, <code>rollback</code>.</dd></div>
+                  <div><dt>Enforcement point</dt><dd>The model registry and the release pipeline, before each change of model or endpoint state.</dd></div>
+                </dl>
+              </div>
+              <figure class="spdl-card">
+                <figcaption><span>release.spdl</span><span>SPDL example</span></figcaption>
+                <pre tabindex="0" data-spdl="release" aria-label="SPDL example: Model release"><code>[service.model-registry]
 [policy]
 grant role ml-engineer register expr:^/models/
 grant role release-manager approve, promote, rollback expr:^/models/
@@ -287,75 +546,87 @@ deny role release-manager approve expr:^/models/ if trained_by == request_user
 [rolepolicy]
 grant group ml-team ml-engineer
 grant user dana release-manager</code></pre>
-              <p class="spdl-caption">Engineers register but cannot promote; a release manager cannot approve a model whose <code>trained_by</code> is the requesting user.</p>
-            </figure>
-          </article>
-          <article id="lc-inference" class="area" aria-labelledby="lc-inference-title">
-            <div class="area-copy">
-              <p class="area-step">03 / Operations and inference</p>
-              <h4 id="lc-inference-title">Who may call which model, with which data?</h4>
-              <p class="area-lead">Users, apps and tenants call model endpoints and features. Retrieval for RAG, and access to logs, traces and evaluation data, keep the same data-scope limits as the rest of the application.</p>
-              <dl class="area-facts">
-                <div><dt>Subjects</dt><dd>End users, client applications and tenants; operators and on-call engineers.</dd></div>
-                <div><dt>Resources and actions</dt><dd>Endpoints: <code>invoke</code>. Knowledge sources: <code>retrieve</code>. Logs, traces and evaluation data: <code>read</code>.</dd></div>
-                <div><dt>Enforcement point</dt><dd>The API gateway or inference service before it routes a request, the retriever before a document enters the prompt, and the observability console.</dd></div>
-              </dl>
+                <p class="spdl-caption">Engineers register but cannot promote; a release manager cannot approve a model whose <code>trained_by</code> is the requesting user.</p>
+              </figure>
+            </article>
+          </section>
+
+          <section id="run" class="phase" aria-labelledby="run-title">
+            <div class="phase-head phase-run">
+              <p class="phase-tag">Run</p>
+              <h3 id="run-title">While AI serves and acts: retrieval, agents, tools and other agents.</h3>
             </div>
-            <figure class="spdl-card">
-              <figcaption><span>inference.spdl</span><span>SPDL example</span></figcaption>
-              <pre tabindex="0" data-spdl="inference" aria-label="SPDL example: Operations and inference"><code>[service.inference]
+            <article id="lc-rag" class="area area-feature" aria-labelledby="lc-rag-title">
+              <div class="area-copy">
+                <p class="area-step">03 / Inference &amp; RAG</p>
+                <h4 id="lc-rag-title">Only what the user may read enters the prompt.</h4>
+                <p class="area-lead">Users, apps and tenants call models. For retrieval-augmented generation, the retriever asks Speedle about each document or collection before its content enters the prompt, so the model only sees what the person behind the request may read.</p>
+                <ol class="rag-flow" aria-label="Permission-aware retrieval">
+                  <li><span>1</span>The retriever finds candidate documents.</li>
+                  <li><span>2</span>It asks Speedle per document or collection, with the user’s tenant and clearances.</li>
+                  <li><span>3</span>Only allowed content goes into the prompt.</li>
+                </ol>
+                <dl class="area-facts">
+                  <div><dt>Subjects</dt><dd>The user behind the request, with their groups; client applications and tenants as entities.</dd></div>
+                  <div><dt>Resources and actions</dt><dd>Collections and documents: <code>retrieve</code>. Models: <code>invoke</code>.</dd></div>
+                  <div><dt>Enforcement point</dt><dd>The retriever before a document enters the prompt, and the API gateway or inference service before it routes a request.</dd></div>
+                </dl>
+              </div>
+              <figure class="spdl-card">
+                <figcaption><span>rag.spdl</span><span>SPDL example</span></figcaption>
+                <pre tabindex="0" data-spdl="rag" aria-label="SPDL example: Inference and RAG"><code>[service.rag]
 [policy]
-# Apps call only the endpoint tiers in their tenant's plan
-grant role tenant-app invoke expr:^/endpoints/ if endpoint_tier in plan_tiers
-# Retrieval (RAG) stays inside the caller's tenant
-grant role tenant-app retrieve expr:^/knowledge/ if doc_tenant == app_tenant
-grant role sre read /ops/traces
+# The retriever asks per document, before its content enters the prompt
+grant role tenant-user retrieve expr:^/collections/ if doc_tenant == user_tenant &amp;&amp; doc_label in user_clearances
+# Documents on legal hold never reach a prompt
+deny role tenant-user retrieve expr:^/collections/legal-hold/
+# Apps call only the model tiers in their tenant's plan
+grant role tenant-app invoke expr:^/models/ if model_tier in plan_tiers
 [rolepolicy]
-grant entity acme-helpdesk tenant-app
-grant group oncall sre</code></pre>
-              <p class="spdl-caption">Endpoint tiers limited to the tenant’s plan, retrieval kept inside the caller’s tenant, and traces readable by on-call engineers only.</p>
-            </figure>
-          </article>
-          <article id="lc-agents" class="area" aria-labelledby="lc-agents-title">
-            <div class="area-copy">
-              <p class="area-step">04 / Agents</p>
-              <h4 id="lc-agents-title">What may an agent do for a user?</h4>
-              <p class="area-lead">An agent acting for a user gets only what both the agent’s role and the user’s rights allow, only for the delegated task, and only until the delegation expires.</p>
-              <dl class="area-facts">
-                <div><dt>Subjects</dt><dd>One subject that carries both the user and the agent. The agent alone carries no user rights.</dd></div>
-                <div><dt>Resources and actions</dt><dd>The business objects the agent works on, for example tickets: <code>read</code>, <code>update</code>; orders: <code>refund</code>.</dd></div>
-                <div><dt>Enforcement point</dt><dd>The agent runtime or the application backend, before the agent’s action reaches the business system.</dd></div>
-              </dl>
-            </div>
-            <figure class="spdl-card">
-              <figcaption><span>agents.spdl</span><span>SPDL example</span></figcaption>
-              <pre tabindex="0" data-spdl="agents" aria-label="SPDL example: Agents"><code>[service.crm]
+grant group acme-staff tenant-user
+grant entity acme-helpdesk tenant-app</code></pre>
+                <p class="spdl-caption">A document is retrieved only inside the user’s tenant and at a label the user is cleared for; legal-hold documents are denied, and apps call only the model tiers in their plan.</p>
+              </figure>
+            </article>
+            <article id="lc-agents" class="area" aria-labelledby="lc-agents-title">
+              <div class="area-copy">
+                <p class="area-step">04 / Agents acting for users</p>
+                <h4 id="lc-agents-title">What may an agent do on behalf of a user?</h4>
+                <p class="area-lead">The agent has its own identity. On behalf of a user, the request carries both the user and the agent as principals, and every grant names both roles, so the agent gets only what both may do. Scope is bound to the task and its expiry, and high-risk actions need a human approval.</p>
+                <dl class="area-facts">
+                  <div><dt>Subjects</dt><dd>The agent as an entity plus the delegating user. The agent alone, or the user without the agent, matches no grant here.</dd></div>
+                  <div><dt>Resources and actions</dt><dd>Tickets: <code>read</code>, <code>update</code>. Orders: <code>refund</code>, a high-risk action.</dd></div>
+                  <div><dt>Enforcement point</dt><dd>The agent runtime or the application backend, before the action reaches the business system. The approval step records a human approval and the application passes it as <code>approved_amount</code>.</dd></div>
+                </dl>
+              </div>
+              <figure class="spdl-card">
+                <figcaption><span>agents.spdl</span><span>SPDL example</span></figcaption>
+                <pre tabindex="0" data-spdl="agents" aria-label="SPDL example: Agents acting for users"><code>[service.crm]
 [policy]
-# Agent and user roles are both required, for the task's tickets, until it expires
+# On behalf of a user: agent and user roles are both required, for the task's tickets, until it expires
 grant (role ticket-agent, role support-staff) read, update expr:^/tickets/ if request_resource in task_tickets &amp;&amp; request_time &lt; task_expires
-grant role support-staff refund expr:^/orders/
-# The agent never refunds, even for a user who may
-deny role ticket-agent refund expr:^/orders/
+# High risk: a refund also needs a human approval that covers the amount
+grant (role ticket-agent, role support-staff) refund expr:^/orders/ if approved_amount &gt;= amount
 [rolepolicy]
 grant entity triage-agent ticket-agent
 grant group support support-staff</code></pre>
-              <p class="spdl-caption">The grant names both roles, so both principals must be present. An explicit deny on the agent’s role keeps out refunds that the user alone may issue.</p>
-            </figure>
-          </article>
-          <article id="lc-mcp" class="area" aria-labelledby="lc-mcp-title">
-            <div class="area-copy">
-              <p class="area-step">05 / MCP tool calls</p>
-              <h4 id="lc-mcp-title">May this agent run this tool, with these arguments?</h4>
-              <p class="area-lead">Every tool call is checked before it runs. The tool is the resource, the call is the action, and the arguments become attributes, so limits such as a refund amount are part of the policy.</p>
-              <dl class="area-facts">
-                <div><dt>Subjects</dt><dd>Agents, each with its own entity identity and role, so privileges stay per agent and per tool.</dd></div>
-                <div><dt>Resources and actions</dt><dd>Tools: <code>call</code>, with the tool arguments as attributes.</dd></div>
-                <div><dt>Enforcement point</dt><dd>The MCP client host, or a gateway in front of MCP servers, before the tool executes.</dd></div>
-              </dl>
-            </div>
-            <figure class="spdl-card">
-              <figcaption><span>mcp.spdl</span><span>SPDL example</span></figcaption>
-              <pre tabindex="0" data-spdl="mcp" aria-label="SPDL example: MCP tool calls"><code>[service.mcp-gateway]
+                <p class="spdl-caption">Both principals must be present. Without an <code>approved_amount</code> that covers the refund, no grant matches and the refund is denied.</p>
+              </figure>
+            </article>
+            <article id="lc-mcp" class="area" aria-labelledby="lc-mcp-title">
+              <div class="area-copy">
+                <p class="area-step">05 / Tool calls (MCP)</p>
+                <h4 id="lc-mcp-title">May this agent run this tool, with these arguments?</h4>
+                <p class="area-lead">Every tool call is checked before it runs. The tool is the resource, the call is the action, and the arguments become attributes, so limits such as a refund amount are part of the policy.</p>
+                <dl class="area-facts">
+                  <div><dt>Subjects</dt><dd>Agents, each with its own entity identity and role, so privileges stay per agent and per tool.</dd></div>
+                  <div><dt>Resources and actions</dt><dd>Tools: <code>call</code>, with the tool arguments as attributes.</dd></div>
+                  <div><dt>Enforcement point</dt><dd>The MCP client host, or a gateway in front of MCP servers, before the tool executes.</dd></div>
+                </dl>
+              </div>
+              <figure class="spdl-card">
+                <figcaption><span>mcp.spdl</span><span>SPDL example</span></figcaption>
+                <pre tabindex="0" data-spdl="mcp" aria-label="SPDL example: Tool calls over MCP"><code>[service.mcp-gateway]
 [policy]
 # Tool arguments arrive as attributes and are checked before the tool runs
 grant role research-agent call /tools/web-search
@@ -365,23 +636,23 @@ deny role research-agent call expr:^/tools/admin/
 [rolepolicy]
 grant entity agent-research-1 research-agent
 grant entity agent-billing-1 billing-agent</code></pre>
-              <p class="spdl-caption">Web search for the research agent, refunds up to 100 for verified customers for the billing agent, and admin tools denied to the research agent.</p>
-            </figure>
-          </article>
-          <article id="lc-a2a" class="area" aria-labelledby="lc-a2a-title">
-            <div class="area-copy">
-              <p class="area-step">06 / Agent-to-agent</p>
-              <h4 id="lc-a2a-title">Which agent may call which agent, for what?</h4>
-              <p class="area-lead">Each hop in a delegation chain is checked. The callee may receive only scopes the caller already holds, and the chain has a hop limit, so delegation never widens permissions.</p>
-              <dl class="area-facts">
-                <div><dt>Subjects</dt><dd>Calling agents, identified as entities.</dd></div>
-                <div><dt>Resources and actions</dt><dd>Other agents: <code>call</code>, with the requested scopes, the caller’s scopes and the hop count as attributes.</dd></div>
-                <div><dt>Enforcement point</dt><dd>The calling agent before it sends a task, or the receiving agent before it accepts one. The application derives the caller’s scopes from the delegation it received.</dd></div>
-              </dl>
-            </div>
-            <figure class="spdl-card">
-              <figcaption><span>a2a.spdl</span><span>SPDL example</span></figcaption>
-              <pre tabindex="0" data-spdl="a2a" aria-label="SPDL example: Agent-to-agent"><code>[service.a2a]
+                <p class="spdl-caption">Web search for the research agent, refunds up to 100 for verified customers for the billing agent, and admin tools denied to the research agent.</p>
+              </figure>
+            </article>
+            <article id="lc-a2a" class="area" aria-labelledby="lc-a2a-title">
+              <div class="area-copy">
+                <p class="area-step">06 / Agent-to-agent (A2A)</p>
+                <h4 id="lc-a2a-title">Which agent may call which agent, for what?</h4>
+                <p class="area-lead">Each hop in a delegation chain is checked. The callee may receive only scopes the caller already holds, and the chain has a hop limit, so delegation only narrows permissions.</p>
+                <dl class="area-facts">
+                  <div><dt>Subjects</dt><dd>Calling agents, identified as entities.</dd></div>
+                  <div><dt>Resources and actions</dt><dd>Other agents and their skills: <code>call</code>, with the requested scopes, the caller’s scopes and the hop count as attributes.</dd></div>
+                  <div><dt>Enforcement point</dt><dd>The calling agent before it sends a task, or the receiving agent before it accepts one. The application derives the caller’s scopes from the delegation it received.</dd></div>
+                </dl>
+              </div>
+              <figure class="spdl-card">
+                <figcaption><span>a2a.spdl</span><span>SPDL example</span></figcaption>
+                <pre tabindex="0" data-spdl="a2a" aria-label="SPDL example: Agent-to-agent"><code>[service.a2a]
 [policy]
 # A callee gets only scopes the caller already holds, within two hops
 grant role planner-agent call /agents/researcher if IsSubSet(requested_scopes, caller_scopes) &amp;&amp; hops &lt;= 2
@@ -389,10 +660,43 @@ grant role researcher-agent call /agents/writer if IsSubSet(requested_scopes, ca
 [rolepolicy]
 grant entity planner-1 planner-agent
 grant entity researcher-1 researcher-agent</code></pre>
-              <p class="spdl-caption"><code>IsSubSet</code> rejects any requested scope the caller does not hold, and a third hop is denied.</p>
-            </figure>
-          </article>
+                <p class="spdl-caption"><code>IsSubSet</code> rejects any requested scope the caller does not hold, and a third hop is denied.</p>
+              </figure>
+            </article>
+          </section>
         </div>
+
+        <div id="cross-cutting" class="crosscut">
+          <div class="section-head">
+            <div><p class="eyebrow">Cross-cutting</p><h3 id="crosscut-title">Identity in. Decisions and explanations out.</h3></div>
+            <p>The same three concerns apply to every area in Build and Run.</p>
+          </div>
+          <div class="crosscut-grid">
+            <article class="crosscut-card">
+              <p class="crosscut-tag">Identity integration</p>
+              <h4>Speedle decides; your IdP authenticates.</h4>
+              <p>Speedle is the authorization decision point. Authentication comes from your IdP or OAuth authorization server, for users and for agents; MCP authorization builds on OAuth. The application maps verified identities to principals (user, groups, entity), and Speedle decides on the principals it is given.</p>
+            </article>
+            <article class="crosscut-card">
+              <p class="crosscut-tag">Audit &amp; explainability</p>
+              <h4>Every decision can be explained.</h4>
+              <p>Speedle’s <a href="https://speedle.io/docs/pms/diagnosis/">diagnose API</a> returns the decision, the reason, the effective roles and the policies examined, including which one matched and why. Applications log each decision with the agent and the delegating human. Diagnose exposes policy and request details, so keep it to trusted operators.</p>
+            </article>
+            <article class="crosscut-card">
+              <p class="crosscut-tag">Risk mapping</p>
+              <h4>Maps to OWASP LLM06:2025 Excessive Agency.</h4>
+              <p>The <a href="https://genai.owasp.org/llmrisk/llm062025-excessive-agency/">OWASP Top 10 for LLM Applications 2025</a> names Excessive Agency: an agent with more functionality, permission or autonomy than its task needs. Per-agent roles, per-tool checks, task- and time-bound delegation and human approval for high-risk actions narrow each of the three.</p>
+            </article>
+          </div>
+        </div>
+
+        <aside id="boundary" class="boundary" aria-labelledby="boundary-title">
+          <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
+          <div>
+            <h3 id="boundary-title">Where Speedle stops</h3>
+            <p>Speedle does not detect prompt injection, filter model input or output, or verify model and dataset supply chains; use dedicated controls for those. <strong>It bounds what a compromised or misled agent can do:</strong> Speedle answers deny to any request outside policy, whatever the prompt said.</p>
+          </div>
+        </aside>
 
         <div id="playground" class="subsection">
           <div class="section-head">
@@ -510,7 +814,7 @@ grant entity researcher-1 researcher-agent</code></pre>
         </div>
         <nav class="footer-links" aria-label="Footer navigation">
           <div><h2>Two parts</h2><ul><li><a href="#ai-for-access">AI for access management</a></li><li><a href="#mcp">Speedle MCP preview</a></li><li><a href="#access-for-ai">Access management for AI</a></li><li><a href="#risk-detection">AI risk detection</a></li></ul></div>
-          <div><h2>Explore</h2><ul><li><a href="#lifecycle">AI lifecycle</a></li><li><a href="#playground">Simplified demo</a></li><li><a href="#approach">Integration approach</a></li><li><a href="https://speedle.io/">Speedle website</a></li></ul></div>
+          <div><h2>Explore</h2><ul><li><a href="#lifecycle">Build and run concept</a></li><li><a href="#playground">Simplified demo</a></li><li><a href="#approach">Integration approach</a></li><li><a href="https://speedle.io/">Speedle website</a></li></ul></div>
           <div><h2>Community</h2><ul><li><a href="https://github.com/teramoby/ai.speedle.io">GitHub repository</a></li><li><a href="https://github.com/teramoby/ai.speedle.io/issues">Issues and ideas</a></li><li><a href="https://github.com/teramoby/speedle-sdk">Speedle SDK</a></li><li><a href="mailto:contact@speedle.io">contact@speedle.io</a></li></ul></div>
         </nav>
       </div>
