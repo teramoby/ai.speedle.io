@@ -9,7 +9,7 @@ that policy denies. Access management for AI shows policy patterns across
 the AI lifecycle: model training, deployment, operations and inference,
 agents, MCP tool calls and agent-to-agent calls. These are solution
 patterns on the Speedle policy engine, not shipped platform integrations.
-Every SPDL example on the page is parsed and evaluated with the Speedle+
+Every SPDL example on the page is parsed and evaluated with the Speedle
 file store (`eval.NewFromFile`) before it is published; keep the page text
 byte-identical to what was tested.
 
@@ -49,5 +49,5 @@ Original bird artwork, without raster modification, from teramoby/speedle-plus:
 assets/favicon.svg embeds assets/speedle-bird.png unmodified on a dark tile,
 so the white bird stays visible on light browser tabs.
 
-Speedle+ continues Oracle Speedle and is maintained by the original developers.
-Speedle+ is licensed under UPL 1.0. Contact: contact@speedle.io.
+Speedle continues Oracle Speedle and is maintained by the original developers.
+Speedle is licensed under UPL 1.0. Contact: contact@speedle.io.

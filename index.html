@@ -46,7 +46,7 @@
         <a href="#ai-for-access">AI for access management</a>
         <a href="#access-for-ai">Access management for AI</a>
         <a href="#playground">Demo</a>
-        <a href="https://speedle.io/">Speedle+</a>
+        <a href="https://speedle.io/">Speedle</a>
         <a class="nav-cta" href="https://github.com/teramoby/ai.speedle.io">GitHub<svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg></a>
       </nav>
     </div>
@@ -59,7 +59,7 @@
           <p class="eyebrow">Speedle for AI · Two connected directions</p>
           <h1 id="hero-title">Access management for both sides of AI.</h1>
           <p class="hero-lead">Use AI to design, manage and check access policies. Govern access across the AI lifecycle, from training data to agent-to-agent calls. Both directions rest on clear, enforceable policy decisions.</p>
-          <p class="hero-note"><span aria-hidden="true"></span>Built on the open-source Speedle+ policy engine.</p>
+          <p class="hero-note"><span aria-hidden="true"></span>Built on the open-source Speedle policy engine.</p>
         </div>
         <div class="hero-paths" aria-label="Explore the two parts of Speedle for AI">
           <a class="path-card" href="#ai-for-access">
@@ -102,7 +102,7 @@
               <h4>Authorization checks</h4>
               <p>The planned <code>check</code> mode registers only the authorization-check tools and reads only ADS configuration. It answers authorization questions; it does not enforce anything in the calling application.</p>
               <ul class="mode-list">
-                <li>Read-only authorization checks through the Speedle+ ADS REST API.</li>
+                <li>Read-only authorization checks through the Speedle ADS REST API.</li>
                 <li>Subject, resource, action, and typed attributes as inputs.</li>
                 <li>ADS base URL, service name, and optional bearer token from environment variables.</li>
               </ul>
@@ -111,7 +111,7 @@
             <article class="mode-card">
               <div class="mode-top"><span class="mode-label">Mode 02 · Launch preview</span><code>manage</code></div>
               <h4>Policy design and management</h4>
-              <p>The planned <code>manage</code> mode registers only the management tools and reads only PMS configuration for designing and managing Speedle+ policies through the PMS REST API.</p>
+              <p>The planned <code>manage</code> mode registers only the management tools and reads only PMS configuration for designing and managing Speedle policies through the PMS REST API.</p>
               <ul class="mode-list">
                 <li>Services, authorization policies, and role policies.</li>
                 <li>SPDL validation and effective-policy explanation helpers.</li>
@@ -164,7 +164,7 @@ npx @speedle/mcp manage
             </div>
           </div>
 
-          <div class="mcp-resources"><span>Source and foundations</span><a href="https://github.com/teramoby/speedle-mcp">Speedle MCP</a><a href="https://github.com/teramoby/speedle-plus">Speedle+</a><a href="https://cloud.speedle.io/">Speedle Cloud</a><a href="https://github.com/teramoby/speedle-sdk">Speedle SDK</a></div>
+          <div class="mcp-resources"><span>Source and foundations</span><a href="https://github.com/teramoby/speedle-mcp">Speedle MCP</a><a href="https://github.com/teramoby/speedle-plus">Speedle</a><a href="https://cloud.speedle.io/">Speedle Cloud</a><a href="https://github.com/teramoby/speedle-sdk">Speedle SDK</a></div>
         </div>
 
         <div id="risk-detection" class="subsection protection">
@@ -237,7 +237,7 @@ npx @speedle/mcp manage
         </div>
 
         <div class="areas">
-          <p class="note areas-note"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>Each SPDL example below was parsed and evaluated with the Speedle+ file store against allow and deny cases. Names, paths and attributes are illustrative; your application supplies the attributes when it asks for a decision.</p>
+          <p class="note areas-note"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>Each SPDL example below was parsed and evaluated with the Speedle file store against allow and deny cases. Names, paths and attributes are illustrative; your application supplies the attributes when it asks for a decision.</p>
           <article id="lc-training" class="area" aria-labelledby="lc-training-title">
             <div class="area-copy">
               <p class="area-step">01 / Model training</p>
@@ -480,8 +480,8 @@ grant entity researcher-1 researcher-agent</code></pre>
           <div class="ecosystem" aria-labelledby="ecosystem-title">
             <div class="ecosystem-head"><p class="eyebrow">Ecosystem</p><h3 id="ecosystem-title">Start with the Speedle building blocks.</h3></div>
             <div class="resource-grid">
-              <a class="resource-card" href="https://github.com/teramoby/speedle-plus"><span>OPEN SOURCE</span><strong>Speedle+<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>The open-source authorization engine and readable SPDL policy language.</p></a>
-              <a class="resource-card" href="https://cloud.speedle.io/"><span>HOSTED</span><strong>Speedle Cloud<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>Hosted authorization for developers, built on the Speedle+ policy engine.</p></a>
+              <a class="resource-card" href="https://github.com/teramoby/speedle-plus"><span>OPEN SOURCE</span><strong>Speedle<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>The open-source authorization engine and readable SPDL policy language.</p></a>
+              <a class="resource-card" href="https://cloud.speedle.io/"><span>HOSTED</span><strong>Speedle Cloud<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>Hosted authorization for developers, built on the Speedle policy engine.</p></a>
               <a class="resource-card" href="https://github.com/teramoby/speedle-sdk"><span>INTEGRATE</span><strong>Speedle SDK<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>Explore the SDK repository for client integration patterns and guidance.</p></a>
             </div>
           </div>
@@ -493,9 +493,9 @@ grant entity researcher-1 researcher-agent</code></pre>
       <div class="wrap">
         <div class="cta">
           <div class="cta-copy"><p class="eyebrow">Open source · Open exploration</p><h2 id="about-title">Bring a real AI authorization scenario.</h2><p>Help shape the next examples. Share the datasets, models, tools or agent workflows your application needs to protect.</p></div>
-          <div class="actions"><a class="button button-primary" href="https://github.com/teramoby/ai.speedle.io/issues">Share your scenario<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a><a class="button button-secondary" href="https://github.com/teramoby/speedle-plus">Explore Speedle+</a></div>
+          <div class="actions"><a class="button button-primary" href="https://github.com/teramoby/ai.speedle.io/issues">Share your scenario<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a><a class="button button-secondary" href="https://github.com/teramoby/speedle-plus">Explore Speedle</a></div>
         </div>
-        <p class="provenance">Speedle+ grew out of <a href="https://github.com/oracle/speedle">Oracle Speedle</a> and continues to be maintained by the original developers under the Universal Permissive License (UPL) 1.0. <a href="https://speedle.io/about/">Read the project story</a>.</p>
+        <p class="provenance">Speedle grew out of <a href="https://github.com/oracle/speedle">Oracle Speedle</a> and continues to be maintained by the original developers under the Universal Permissive License (UPL) 1.0. <a href="https://speedle.io/about/">Read the project story</a>.</p>
       </div>
     </section>
   </main>
@@ -510,7 +510,7 @@ grant entity researcher-1 researcher-agent</code></pre>
         </div>
         <nav class="footer-links" aria-label="Footer navigation">
           <div><h2>Two parts</h2><ul><li><a href="#ai-for-access">AI for access management</a></li><li><a href="#mcp">Speedle MCP preview</a></li><li><a href="#access-for-ai">Access management for AI</a></li><li><a href="#risk-detection">AI risk detection</a></li></ul></div>
-          <div><h2>Explore</h2><ul><li><a href="#lifecycle">AI lifecycle</a></li><li><a href="#playground">Simplified demo</a></li><li><a href="#approach">Integration approach</a></li><li><a href="https://speedle.io/">Speedle+ website</a></li></ul></div>
+          <div><h2>Explore</h2><ul><li><a href="#lifecycle">AI lifecycle</a></li><li><a href="#playground">Simplified demo</a></li><li><a href="#approach">Integration approach</a></li><li><a href="https://speedle.io/">Speedle website</a></li></ul></div>
           <div><h2>Community</h2><ul><li><a href="https://github.com/teramoby/ai.speedle.io">GitHub repository</a></li><li><a href="https://github.com/teramoby/ai.speedle.io/issues">Issues and ideas</a></li><li><a href="https://github.com/teramoby/speedle-sdk">Speedle SDK</a></li><li><a href="mailto:contact@speedle.io">contact@speedle.io</a></li></ul></div>
         </nav>
       </div>
