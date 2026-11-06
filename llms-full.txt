@@ -88,7 +88,9 @@ Each hop in a delegation chain is checked. The callee may receive only scopes th
 
 ### Run: zero standing privileges (ZSP)
 
-Privileges are not held standing. Each request carries a just-in-time token, and Speedle checks at decision time that its lifetime is short and it has not expired; on self-hosted Speedle Engine a custom function also checks that it is unused in the issuer's store. (Speedle Cloud does not support custom external functions.) The issuer or application marks a token used or revoked after use; Speedle then denies any reuse.
+Just-in-time, short-lived, narrowly scoped credentials can support a zero standing privileges (ZSP) pattern when token issuance and other controls are in place. On self-hosted Speedle Engine, the policy checks a positive and short lifetime, that the token is not issued or valid in the future beyond a 60-second clock-skew allowance, that it has not expired, and, through a read-only custom function, that it is unused in the issuer's store. (Speedle Cloud does not support custom external functions.) The application or enforcement layer then consumes a single-use token atomically before the operation; production also verifies the token's signature, issuer, audience and binding before its claims reach the policy.
+
+A runnable local sample with PMS, ADS and the custom function, including the atomic consume step, is in the repository: https://github.com/teramoby/ai.speedle.io/tree/main/samples/zsp
 
 ### Cross-cutting concerns
 

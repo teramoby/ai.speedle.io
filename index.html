@@ -752,15 +752,16 @@ grant entity researcher-1 researcher-agent</code></pre>
           <article id="lc-zsp" class="area" aria-labelledby="lc-zsp-title">
             <div class="area-copy">
               <p class="area-step">07 / Zero standing privileges</p>
-              <h4 id="lc-zsp-title">A token for each request, not a standing privilege</h4>
-              <p class="area-lead">Privileges are not held standing. Access needs a just-in-time token whose lifetime is short, that has not expired at request time and that has not been used or revoked; Speedle denies the request otherwise. Revoking a token after use is the token issuer’s or the application’s job: mark it used in the store the self-hosted Speedle custom function reads, and Speedle denies any reuse.</p>
+              <h4 id="lc-zsp-title">Just-in-time tokens support a zero standing privileges pattern</h4>
+              <p class="area-lead">Under the right issuance and control conditions, just-in-time, short-lived, narrowly scoped credentials, combined with Speedle’s policy decisions and application-side enforcement, can support a zero standing privileges pattern. The example checks lifetime, not-before and token status; production also needs a trusted component that verifies the token, binds its claims to the subject, resource, action and task scope, and an atomic consume for single-use credentials.</p>
             </div>
             <figure class="spdl-card">
               <figcaption><span>zsp.spdl</span><span>SPDL example</span></figcaption>
               <pre tabindex="0" data-spdl="zsp" aria-label="SPDL example: Zero standing privileges"><code>[service.zsp]
 [policy]
-# A just-in-time token: short-lived, still valid, and not used or revoked
-grant role agent-runtime invoke /api/orders if expires_at - issued_at &lt;= 600 &amp;&amp; request_time &lt; expires_at &amp;&amp; TokenUnused(token_id)
+# A just-in-time token: positive lifetime up to 600 s, inside its validity window, unused
+# request_time is the ADS server clock; 60 s is the explicit clock-skew allowance
+grant role agent-runtime invoke /api/orders if expires_at &gt; issued_at &amp;&amp; expires_at - issued_at &lt;= 600 &amp;&amp; issued_at &lt;= request_time + 60 &amp;&amp; not_before &lt;= request_time + 60 &amp;&amp; request_time &lt; expires_at &amp;&amp; TokenUnused(token_id)
 [rolepolicy]
 grant entity agent-billing-1 agent-runtime</code></pre>
               <p class="spdl-caption zsp-sample"><a href="https://github.com/teramoby/ai.speedle.io/tree/main/samples/zsp">Full runnable sample on GitHub</a></p>

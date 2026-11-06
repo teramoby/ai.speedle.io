@@ -753,15 +753,16 @@ grant entity researcher-1 researcher-agent</code></pre>
           <article id="lc-zsp" class="area" aria-labelledby="lc-zsp-title">
             <div class="area-copy">
               <p class="area-step">07 / 零常驻权限</p>
-              <h4 id="lc-zsp-title">每次请求一个令牌，不留常驻权限</h4>
-              <p class="area-lead">权限不常驻。访问要凭一个即时签发的短时令牌：有效期足够短、决策时尚未过期、也还没有被使用或吊销；任何一项不满足，Speedle 都拒绝。令牌用完后由签发方或应用负责吊销，在自托管 Speedle 的自定义函数读取的存储里标记为已使用，后续复用会被 Speedle 拒绝。</p>
+              <h4 id="lc-zsp-title">即时令牌支撑零常驻权限模式</h4>
+              <p class="area-lead">签发和管控到位时，即时签发、短期有效、范围受限的授权凭证，结合 Speedle 的策略决策和应用侧执行控制，可以构建零常驻权限模式。示例检查有效期、生效时间和令牌状态；生产环境还需要可信组件验证令牌，把声明绑定到主体、资源、操作和任务范围，并原子消费单次使用的凭证。</p>
             </div>
             <figure class="spdl-card">
               <figcaption><span>zsp.spdl</span><span>SPDL 示例</span></figcaption>
               <pre tabindex="0" data-spdl="zsp" aria-label="SPDL 示例：零常驻权限"><code>[service.zsp]
 [policy]
-# A just-in-time token: short-lived, still valid, and not used or revoked
-grant role agent-runtime invoke /api/orders if expires_at - issued_at &lt;= 600 &amp;&amp; request_time &lt; expires_at &amp;&amp; TokenUnused(token_id)
+# A just-in-time token: positive lifetime up to 600 s, inside its validity window, unused
+# request_time is the ADS server clock; 60 s is the explicit clock-skew allowance
+grant role agent-runtime invoke /api/orders if expires_at &gt; issued_at &amp;&amp; expires_at - issued_at &lt;= 600 &amp;&amp; issued_at &lt;= request_time + 60 &amp;&amp; not_before &lt;= request_time + 60 &amp;&amp; request_time &lt; expires_at &amp;&amp; TokenUnused(token_id)
 [rolepolicy]
 grant entity agent-billing-1 agent-runtime</code></pre>
               <p class="spdl-caption zsp-sample"><a href="https://github.com/teramoby/ai.speedle.io/tree/main/samples/zsp">GitHub 上的完整可运行示例</a></p>
