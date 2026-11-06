@@ -103,23 +103,50 @@ if ('IntersectionObserver' in window) {
 
 // Browser-local illustration only; not the Speedle engine or an API/MCP client.
 const demoForm = document.querySelector('#demo-form');
-const agents = {research: 'The research agent', support: 'The support agent'};
-const actions = {read: 'read', export: 'export', delete: 'delete'};
-const resources = {public: 'public knowledge', customer: 'customer records'};
+const chinese = document.documentElement.lang === 'zh-CN';
+const agents = chinese
+  ? {research: '研究智能体', support: '支持智能体'}
+  : {research: 'The research agent', support: 'The support agent'};
+const actions = chinese
+  ? {read: '读取', export: '导出', delete: '删除'}
+  : {read: 'read', export: 'export', delete: 'delete'};
+const resources = chinese
+  ? {public: '公共知识', customer: '客户记录'}
+  : {public: 'public knowledge', customer: 'customer records'};
+const demoText = chinese ? {
+  deleteDenied: '简化规则明确拒绝所有智能体执行删除操作。',
+  researchDenied: '研究智能体没有访问客户记录的授权。',
+  supportDenied: '支持智能体可以读取记录，但没有导出权限。',
+  allow: '允许',
+  deny: '拒绝',
+  allowedName: '操作已允许',
+  deniedName: '操作已拒绝'
+} : {
+  deleteDenied: 'The simplified rules explicitly deny delete for every agent.',
+  researchDenied: 'The research agent has no grant for customer records.',
+  supportDenied: 'The support agent can read records but has no export grant.',
+  allow: 'ALLOW',
+  deny: 'DENY',
+  allowedName: 'Action allowed',
+  deniedName: 'Action denied'
+};
 const decision = document.querySelector('#decision');
 const fields = Object.fromEntries([...document.querySelectorAll('[data-field]')].map(node => [node.dataset.field, node]));
 
 function evaluate(agent, action, resource) {
   if (action === 'delete') {
-    return {allow: false, rule: 'delete', code: 'DENY_POLICY_FOUND', reason: 'The simplified rules explicitly deny delete for every agent.'};
+    return {allow: false, rule: 'delete', code: 'DENY_POLICY_FOUND', reason: demoText.deleteDenied};
   }
   if (agent === 'research' && resource === 'customer') {
-    return {allow: false, rule: 'research', code: 'NO_APPLICABLE_POLICIES', reason: 'The research agent has no grant for customer records.'};
+    return {allow: false, rule: 'research', code: 'NO_APPLICABLE_POLICIES', reason: demoText.researchDenied};
   }
   if (agent === 'support' && action === 'export') {
-    return {allow: false, rule: 'support', code: 'NO_APPLICABLE_POLICIES', reason: 'The support agent can read records but has no export grant.'};
+    return {allow: false, rule: 'support', code: 'NO_APPLICABLE_POLICIES', reason: demoText.supportDenied};
   }
-  return {allow: true, rule: agent, code: 'GRANT_POLICY_FOUND', reason: `${agents[agent]} can ${actions[action]} ${resources[resource]}.`};
+  const reason = chinese
+    ? `${agents[agent]}可以${actions[action]}${resources[resource]}。`
+    : `${agents[agent]} can ${actions[action]} ${resources[resource]}.`;
+  return {allow: true, rule: agent, code: 'GRANT_POLICY_FOUND', reason};
 }
 
 function setField(name, value) {
@@ -144,8 +171,8 @@ function updateDecision(animate) {
   fields.allowed.classList.toggle('is-true', result.allow);
   fields.allowed.classList.toggle('is-false', !result.allow);
   decision.dataset.decision = result.allow ? 'allow' : 'deny';
-  document.querySelector('#decision-code').textContent = result.allow ? 'ALLOW' : 'DENY';
-  document.querySelector('#decision-name').textContent = result.allow ? 'Action allowed' : 'Action denied';
+  document.querySelector('#decision-code').textContent = result.allow ? demoText.allow : demoText.deny;
+  document.querySelector('#decision-name').textContent = result.allow ? demoText.allowedName : demoText.deniedName;
   document.querySelector('#decision-reason').textContent = result.reason;
   document.querySelectorAll('.rules li').forEach(item => item.classList.toggle('is-match', item.dataset.rule === result.rule));
   if (animate) {

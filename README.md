@@ -10,8 +10,9 @@ the AI lifecycle: model training, deployment, operations and inference,
 agents, MCP tool calls and agent-to-agent calls. These are solution
 patterns on the Speedle policy engine, not shipped platform integrations.
 Every SPDL example on the page is parsed and evaluated with the Speedle
-file store (`eval.NewFromFile`) before it is published; keep the page text
-byte-identical to what was tested.
+file store (`eval.NewFromFile`) before it is published; keep each SPDL block
+byte-identical to what was tested. The Chinese page retains the same six SPDL
+blocks, including their English comments.
 
 The interactive example uses simplified
 browser-local policy rules and does not simulate AI risk detection. It is
@@ -26,18 +27,21 @@ format of speedle.io.
 ## SEO and GEO
 
 `sitemap.xml`, `robots.txt`, `llms.txt` and `llms-full.txt` at the root are
-hand-maintained; there is no generator. The sitemap and the page declare
-`hreflang` alternates for `en` and `x-default`; the Chinese version (#13) adds
-`zh-CN` and its `/zh/` URL to both when it exists. Every factual claim in these
-files must already be true on the page: `@speedle/mcp` is not on npm, Speedle
-Cloud is coming soon, and AI risk detection is not shipped.
+hand-maintained; there is no generator. The sitemap and both home pages declare
+`hreflang` alternates for `en`, `zh-CN` and `x-default`. The complete Chinese
+page is at `/zh/`; the shared script localizes its interactive demo from the
+page's `lang` attribute. Every factual claim in these files must already be
+true on the page: `@speedle/mcp` is not on npm, Speedle Cloud is coming soon,
+and AI risk detection is not shipped.
 
 `node scripts/check-seo.mjs` verifies that the sitemap and `llms` link targets
-resolve to files and anchors in this repository, that the sitemap's `hreflang`
-entries match the page, that the JSON-LD blocks parse and cover Organization,
-WebSite, SoftwareApplication and FAQPage, and that the visible FAQ text matches
-the FAQPage data. It also checks that the Cloudflare Web Analytics beacon is
-present with the ai.speedle.io site token. No dependencies.
+resolve to files and anchors in this repository, that each sitemap entry's
+`hreflang` entries match its page, that both pages' JSON-LD blocks parse and
+cover Organization, WebSite and SoftwareApplication, and that the English
+page's visible FAQ matches its FAQPage data (the Chinese home has no FAQ). It
+also checks the language-switch links, Chinese metadata and diagram labels,
+Cloudflare Web Analytics on both pages, and byte-identical SPDL blocks
+including comments. No dependencies.
 
 Every public page loads the cookieless Cloudflare Web Analytics beacon before
 `</body>`; the site has no signed-in pages or API responses.

@@ -1,0 +1,917 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="color-scheme" content="light">
+  <title>Speedle AI — AI 智能体授权与访问控制</title>
+  <meta name="description" content="Speedle AI 介绍 AI 智能体授权与 AI 访问控制，涵盖 MCP 授权、RAG 权限控制、大模型应用权限管理和智能体最小权限。">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://ai.speedle.io/zh/">
+  <link rel="alternate" hreflang="en" href="https://ai.speedle.io/">
+  <link rel="alternate" hreflang="zh-CN" href="https://ai.speedle.io/zh/">
+  <link rel="alternate" hreflang="x-default" href="https://ai.speedle.io/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:site_name" content="Speedle AI">
+  <meta property="og:title" content="Speedle AI — AI 智能体授权与访问控制">
+  <meta property="og:description" content="基于开源 Speedle 策略引擎的 AI 智能体授权与访问控制，涵盖 MCP 授权、RAG 权限控制、A2A 调用和智能体最小权限。">
+  <meta property="og:url" content="https://ai.speedle.io/zh/">
+  <meta property="og:image" content="https://ai.speedle.io/assets/og-image.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Speedle AI：AI 智能体授权与访问控制，带有 Speedle 球形标志">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Speedle AI — AI 智能体授权与访问控制">
+  <meta name="twitter:description" content="基于开源 Speedle 策略引擎的 AI 智能体授权与访问控制，涵盖 MCP 授权、RAG 权限控制、A2A 调用和智能体最小权限。">
+  <meta name="twitter:image" content="https://ai.speedle.io/assets/og-image.png">
+  <meta name="twitter:image:alt" content="Speedle AI：AI 智能体授权与访问控制，带有 Speedle 球形标志">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": "https://speedle.io/#organization",
+    "name": "Speedle",
+    "url": "https://speedle.io/",
+    "logo": "https://ai.speedle.io/apple-touch-icon.png",
+    "sameAs": [
+      "https://github.com/teramoby/speedle-plus",
+      "https://engine.speedle.io/",
+      "https://cloud.speedle.io/",
+      "https://ai.speedle.io/"
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": "https://ai.speedle.io/zh/#website",
+    "url": "https://ai.speedle.io/zh/",
+    "name": "Speedle AI",
+    "inLanguage": "zh-CN",
+    "publisher": {
+      "@id": "https://speedle.io/#organization"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "@id": "https://ai.speedle.io/zh/#software",
+    "name": "Speedle AI",
+    "url": "https://ai.speedle.io/zh/",
+    "description": "Speedle AI 展示如何将开源 Speedle 策略引擎用于 AI 访问管理，包括 AI 智能体授权、MCP 授权、RAG 权限控制和智能体间（A2A）调用。",
+    "inLanguage": "zh-CN",
+    "applicationCategory": "SecurityApplication",
+    "isAccessibleForFree": true,
+    "license": "https://opensource.org/license/upl",
+    "codeRepository": "https://github.com/teramoby/speedle-plus",
+    "publisher": {
+      "@id": "https://speedle.io/#organization"
+    }
+  }
+  </script>
+</head>
+<body>
+  <svg class="sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M8 16 16 8M9.5 8H16v6.5"/></symbol>
+    <symbol id="i-terminal" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="3"/><path d="m7.5 9.5 3 2.5-3 2.5M13 15h3.5"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.5v.5"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5.5 12.5 4 4 9-9.5"/></symbol>
+    <symbol id="i-cross" viewBox="0 0 24 24"><path d="m7 7 10 10M17 7 7 17"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="m12 3 7 3v5c0 4.6-2.8 8.1-7 10-4.2-1.9-7-5.4-7-10V6l7-3Z"/><path d="m8.5 12 2.2 2.2 4.8-5"/></symbol>
+    <symbol id="i-signals" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.5"/><circle cx="5" cy="5" r="1.7"/><circle cx="19" cy="5" r="1.7"/><circle cx="5" cy="19" r="1.7"/><circle cx="19" cy="19" r="1.7"/><path d="m6.3 6.3 3.9 3.9m3.6 0 3.9-3.9m-11.4 11.4 3.9-3.9m3.6 0 3.9 3.9"/></symbol>
+    <symbol id="i-speedle-sphere" viewBox="22 22 114 114"><g fill="none" stroke="currentColor" stroke-linejoin="miter" stroke-miterlimit="3" stroke-linecap="butt"><polygon stroke-width="3.6" points="41.83 47.82 30.67 80.15 42.9 112.09 72.8 128.69 106.38 122.19 127.93 95.63 127.36 61.43 104.94 35.6 71.16 30.23"/><g stroke-width="2.4"><polygon points="81.97 43.92 52.19 57.23 44.03 88.8 63.62 114.87 96.22 115.81 117.28 90.9 110.94 58.91"/><polygon points="68.57 60.42 57.6 86.19 78.73 104.59 102.75 90.18 96.47 62.88"/><path d="M41.83 47.82L52.19 57.23 68.57 60.42 81.97 43.92 71.16 30.23 M30.67 80.15L44.03 88.8 42.9 112.09 M52.19 57.23L57.6 86.19 44.03 88.8 78.73 104.59 63.62 114.87 72.8 128.69 M78.73 104.59L96.22 115.81 106.38 122.19 M96.22 115.81L102.75 90.18 117.28 90.9 127.93 95.63 M117.28 90.9L127.36 61.43 110.94 58.91 104.94 35.6 81.97 43.92 M110.94 58.91L96.47 62.88 117.28 90.9"/></g></g></symbol>
+  </svg>
+
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <div class="wrap nav">
+      <a class="brand" href="/zh/" aria-label="Speedle AI 首页">
+        <img src="/assets/speedle-mark-ai.svg" width="152" height="52" alt="Speedle">
+        <span class="brand-divider" aria-hidden="true"></span>
+        <span class="brand-product">AI</span>
+      </a>
+      <button class="menu" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="打开导航">☰</button>
+      <nav id="site-nav" class="nav-links" aria-label="主导航">
+        <div class="products">
+          <button class="products-toggle" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="products-menu">产品<svg class="products-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+          <div class="products-panel" id="products-menu" role="menu" aria-label="Speedle 产品">
+            <span class="products-heading" aria-hidden="true">产品</span>
+            <a class="product-row" href="https://engine.speedle.io/zh/" role="menuitem">
+              <svg class="product-sphere product-engine" aria-hidden="true"><use href="#i-speedle-sphere"/></svg>
+              <span class="product-copy"><span class="product-name">Speedle Engine</span><span class="product-description">开源授权引擎</span></span>
+            </a>
+            <a class="product-row" href="https://cloud.speedle.io/zh-CN/" role="menuitem">
+              <svg class="product-sphere product-cloud" aria-hidden="true"><use href="#i-speedle-sphere"/></svg>
+              <span class="product-copy"><span class="product-name">Speedle Cloud<span class="coming-soon">即将上线</span></span><span class="product-description">面向开发者的托管授权服务</span></span>
+            </a>
+            <a class="product-row" href="https://ai.speedle.io/zh/" role="menuitem" aria-current="page">
+              <svg class="product-sphere product-ai" aria-hidden="true"><use href="#i-speedle-sphere"/></svg>
+              <span class="product-copy"><span class="product-name">Speedle AI</span><span class="product-description">面向 AI 的访问管理</span></span>
+              <svg class="product-check icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>
+            </a>
+          </div>
+        </div>
+        <a href="#ai-for-access">AI 辅助访问管理</a>
+        <a href="#access-for-ai">面向 AI 的访问管理</a>
+        <a href="#playground">演示</a>
+        <a href="/" lang="en" hreflang="en" aria-label="Switch to English">English</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section id="top" class="hero" aria-labelledby="hero-title">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Speedle AI · 两个相互关联的方向</p>
+          <h1 id="hero-title">AI 智能体授权：用 AI 管理访问，也为 AI 管理访问。</h1>
+          <p class="hero-lead">既可以用 AI 设计、管理和检查访问策略，也可以将同一套策略用于 AI 自身，覆盖 MCP 授权、RAG 权限控制与智能体最小权限。两个方向都建立在清晰、可执行的策略决策之上。</p>
+          <p class="definition"><strong>什么是 Speedle AI？</strong>Speedle AI 展示如何基于开源 Speedle 策略引擎实施 AI 访问控制，为 AI 智能体及其应用提供授权方案。内容覆盖大模型应用权限管理的完整生命周期：训练数据与模型发布、推理与 RAG 权限控制、MCP 授权以及智能体间（A2A）授权。</p>
+          <p class="hero-note"><span aria-hidden="true"></span>基于开源 Speedle 策略引擎构建。</p>
+        </div>
+        <div class="hero-paths" aria-label="探索 Speedle AI 的两个部分">
+          <a class="path-card" href="#ai-for-access">
+            <div class="path-top"><span class="path-index">第一部分</span><span class="path-icon" aria-hidden="true"><svg class="icon"><use href="#i-terminal"/></svg></span></div>
+            <h2>AI 辅助访问管理</h2>
+            <p>通过 Speedle MCP 用 AI 辅助策略设计、管理和检查，并了解正在构建的 AI 风险检测方案。</p>
+            <span class="path-link">探索 Speedle MCP<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></span>
+          </a>
+          <a class="path-card" href="#access-for-ai">
+            <div class="path-top"><span class="path-index">第二部分</span><span class="path-icon" aria-hidden="true"><svg class="icon"><use href="#i-shield"/></svg></span></div>
+            <h2>面向 AI 的访问管理</h2>
+            <p>用策略管理 AI 的构建与运行，覆盖数据与训练、模型发布、推理与 RAG、智能体、MCP 工具调用和智能体间调用。</p>
+            <span class="path-link">探索构建与运行<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></span>
+          </a>
+          <p class="hero-foundation"><span></span>统一的策略基础<span></span></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="ai-for-access" class="section part part-one" aria-labelledby="ai-for-access-title">
+      <div class="wrap">
+        <header class="part-header">
+          <span class="part-number" aria-hidden="true">01</span>
+          <div class="part-heading"><p class="eyebrow">AI 辅助访问管理</p><h2 id="ai-for-access-title">让 AI 助力访问策略管理。</h2></div>
+          <p class="part-summary">让 AI 帮助人们管理访问：通过 Speedle MCP 设计、管理和检查策略（上线预览）；正在构建的 AI 风险检测则从更广阔的上下文识别风险，同时保留策略的最终否决权。</p>
+        </header>
+
+        <div id="mcp" class="mcp">
+          <div class="section-head mcp-intro">
+            <div><p class="eyebrow">Speedle MCP · 即将上线</p><h3 id="mcp-title">Speedle MCP：一个软件包，两种刻意分离的模式。</h3></div>
+            <div class="mcp-lead">
+              <p><code>@speedle/mcp</code> 计划以单个 npm 软件包发布，其中的 <code>speedle-mcp</code> 可执行文件作为本地 stdio MCP 服务器运行。该软件包尚未发布到 npm。</p>
+              <a class="button button-outline" href="https://github.com/teramoby/speedle-mcp">关注代码仓库<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a>
+            </div>
+          </div>
+
+          <div class="mode-grid">
+            <article class="mode-card">
+              <div class="mode-top"><span class="mode-label">模式 01 · 上线预览</span><code>check</code></div>
+              <h4>授权检查</h4>
+              <p>规划中的 <code>check</code> 模式仅注册授权检查工具，并且只读取 ADS 配置。它负责回答授权问题，不会在调用应用中执行访问控制。</p>
+              <ul class="mode-list">
+                <li>通过 Speedle ADS REST API 进行只读授权检查。</li>
+                <li>输入包括主体、资源、操作和带类型的属性。</li>
+                <li>ADS 基础 URL、服务名称和可选的 bearer 令牌均从环境变量读取。</li>
+              </ul>
+              <a class="mode-link" href="https://github.com/teramoby/speedle-mcp/issues/1">查看 check 模式问题<svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg></a>
+            </article>
+            <article class="mode-card">
+              <div class="mode-top"><span class="mode-label">模式 02 · 上线预览</span><code>manage</code></div>
+              <h4>策略设计与管理</h4>
+              <p>规划中的 <code>manage</code> 模式仅注册管理工具，并且只读取 PMS 配置，用于通过 PMS REST API 设计和管理 Speedle 策略。</p>
+              <ul class="mode-list">
+                <li>管理服务、授权策略和角色策略。</li>
+                <li>提供 SPDL 验证和生效策略解释辅助工具。</li>
+                <li>提供只读选项；破坏性删除必须明确确认目标。</li>
+              </ul>
+              <a class="mode-link" href="https://github.com/teramoby/speedle-mcp/issues/2">查看 manage 模式问题<svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg></a>
+            </article>
+          </div>
+
+          <aside class="mcp-security" aria-labelledby="mcp-security-title">
+            <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
+            <div><h4 id="mcp-security-title">不要将策略管理权限授予受这些策略约束的智能体</h4><p><strong>切勿向本身受这些策略约束的智能体提供 <code>manage</code> 模式。</strong>同时拥有检查和管理工具的智能体，可能会受提示诱导而向自己授予访问权限。</p><p>不存在同时开放两种工具的默认模式。按规划，未指定模式时会打印用法并以非零状态退出。</p></div>
+          </aside>
+
+          <div class="launch-config" aria-labelledby="launch-config-title">
+            <div class="launch-heading">
+              <div><p class="eyebrow">安装与 MCP 客户端配置</p><h4 id="launch-config-title">配置预览</h4></div>
+              <span class="launch-badge">上线时提供</span>
+            </div>
+            <p class="launch-note"><strong><code>@speedle/mcp</code> 尚未发布到 npm。</strong>以下命令和客户端配置仅是未来上线时的示例，目前无法作为安装说明使用。</p>
+            <div class="config-grid">
+              <figure class="config-card">
+                <figcaption><span>check 模式</span><span>上线时提供</span></figcaption>
+                <pre tabindex="0" aria-label="未来 check 模式的安装命令和 MCP 客户端配置"><code># @speedle/mcp 发布后
+npx @speedle/mcp check
+
+{
+  "mcpServers": {
+    "speedle-check": {
+      "command": "npx",
+      "args": ["@speedle/mcp", "check"]
+    }
+  }
+}</code></pre>
+              </figure>
+              <figure class="config-card">
+                <figcaption><span>manage 模式</span><span>上线时提供</span></figcaption>
+                <pre tabindex="0" aria-label="未来 manage 模式的安装命令和 MCP 客户端配置"><code># @speedle/mcp 发布后
+npx @speedle/mcp manage
+
+{
+  "mcpServers": {
+    "speedle-manage": {
+      "command": "npx",
+      "args": ["@speedle/mcp", "manage"]
+    }
+  }
+}</code></pre>
+              </figure>
+            </div>
+          </div>
+
+          <div class="mcp-resources"><span>源码与基础项目</span><a href="https://github.com/teramoby/speedle-mcp">Speedle MCP</a><a href="https://github.com/teramoby/speedle-plus">Speedle</a><a href="https://cloud.speedle.io/zh-CN/">Speedle Cloud</a><a href="https://github.com/teramoby/speedle-sdk">Speedle SDK</a></div>
+        </div>
+
+        <div id="risk-detection" class="subsection protection">
+          <div class="section-head">
+            <div><p class="eyebrow">基于 AI 的风险检测 · 正在构建</p><h3 id="risk-title">AI 风险检测看得更广，策略保留最终否决权。</h3></div>
+            <p>AI 可以跨更多维度和关系发现单条规则无法识别的风险。确定性策略仍负责作出决策并保留最终否决权：策略拒绝的访问，AI 绝不会放行。这是一个探索方向，不是已发布功能。</p>
+          </div>
+
+          <div class="protection-grid">
+            <article class="protection-card policy-card">
+              <div class="protection-top"><span class="protection-icon" aria-hidden="true"><svg class="icon"><use href="#i-shield"/></svg></span><span class="status-pill">确定性基础</span></div>
+              <h4>基于策略的访问控制</h4>
+              <p>策略评估明确的请求并返回精确、可解释的决策。策略拥有最终否决权：<strong>策略拒绝时，结果就是拒绝。</strong></p>
+              <ul class="protection-points"><li>为主体、资源和操作定义明确规则。</li><li>结果确定且可以解释。</li><li>任何 AI 风险信号都无法推翻策略拒绝。</li></ul>
+              <p class="veto-note"><span aria-hidden="true">拒绝</span>策略拒绝即为最终结果。</p>
+            </article>
+            <article class="protection-card risk-card">
+              <div class="protection-top"><span class="protection-icon" aria-hidden="true"><svg class="icon"><use href="#i-signals"/></svg></span><span class="status-pill">方案正在构建</span></div>
+              <h4>基于 AI 的风险检测</h4>
+              <p>这是 Speedle 正在探索和构建的方向，不是已发布功能。该方案跨更多维度和关系检查风险，例如智能体、用户、数据与任务上下文的异常组合。</p>
+              <ul class="protection-points"><li>不局限于单个请求属性。</li><li>检查更广阔上下文中的关系。</li><li>在策略之上增加一层防护。</li></ul>
+              <p class="risk-note"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>它绝不会允许策略已拒绝的访问。</p>
+            </article>
+          </div>
+
+          <section class="decision-architecture" aria-labelledby="decision-flow-title">
+            <div class="architecture-head">
+              <div><p class="eyebrow">概念性目标流程</p><h3 id="decision-flow-title">策略先行，风险信号随后，否决权不变。</h3></div>
+              <span class="architecture-badge">AI 风险检测 · 尚未发布</span>
+            </div>
+            <ol class="decision-flow">
+              <li class="flow-node"><span class="flow-step">01 / 请求</span><h4>描述操作</h4><p>智能体、用户、数据、操作和任务上下文共同构成请求。</p><span class="flow-tag">在任何操作执行之前</span></li>
+              <li class="flow-node"><span class="flow-step">02 / 策略决策</span><h4>应用确定性边界</h4><p>策略返回精确决策。拒绝即在此终止，只有允许才能继续。</p><span class="flow-tag flow-tag-deny">否决权 · 拒绝为最终结果</span></li>
+              <li class="flow-node"><span class="flow-step">03 / AI 风险信号</span><h4>检查更广泛的关系</h4><p>正在构建的方案跨更多维度和关系识别其他风险。</p><span class="flow-tag flow-tag-building">方案正在构建</span></li>
+              <li class="flow-node"><span class="flow-step">04 / 最终决策</span><h4>只增强防护，不增加权限</h4><p>风险信号可以增加审查或防护，策略结果及其否决权始终不变。</p><span class="flow-tag">保留策略否决权</span></li>
+            </ol>
+            <p class="flow-note"><strong>风险信号不能将策略的拒绝结果改为允许。</strong>此图展示正在构建的方案，不代表已发布的 AI 风险检测能力。</p>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section id="access-for-ai" class="section part part-two" aria-labelledby="access-for-ai-title">
+      <div class="wrap">
+        <header class="part-header">
+          <span class="part-number" aria-hidden="true">02</span>
+          <div class="part-heading"><p class="eyebrow">面向 AI 的访问管理</p><h2 id="access-for-ai-title">在 AI 构建与运行全流程中实施访问治理。</h2></div>
+          <p class="part-summary">在 AI 系统接触数据、模型、工具和其他智能体的每个环节应用 Speedle 策略引擎：构建阶段覆盖模型提供服务之前，运行阶段覆盖模型提供服务并执行操作之时。这些是解决方案模式，不是与任何机器学习或智能体平台的已发布集成。</p>
+        </header>
+
+        <div id="lifecycle" class="concept">
+          <div class="section-head">
+            <div><p class="eyebrow">概念</p><h3 id="concept-title">构建和运行 AI，共用一个决策点。</h3></div>
+            <p>每个区域都在应用中设有策略执行点。执行操作前先向 Speedle 请求决策，并执行返回结果。身份信息来自您的 IdP；决策及其解释则写入审计记录。</p>
+          </div>
+          <figure class="concept-figure">
+            <svg class="cd cd-wide" viewBox="0 0 1080 688" role="img" aria-labelledby="cdw-title cdw-desc">
+              <title id="cdw-title">概念：Speedle 作为构建和运行 AI 的策略决策点</title>
+              <desc id="cdw-desc">顶部为身份区域：您的 IdP 和 OAuth 负责用户与智能体认证，MCP 授权基于 OAuth，主体信息传入 Speedle。左侧构建通道包含两个区域：数据与训练，由数据加载器和任务调度器发起请求；模型发布，由模型注册表和发布流水线发起请求。右侧运行通道包含四个区域：推理与 RAG，由检索器逐文档和 API 网关发起请求；智能体代表用户操作，由智能体运行时将用户和智能体作为主体发起请求；MCP 工具调用，由 MCP 宿主或网关发起请求；智能体间调用，由调用方或接收方智能体发起请求。每个区域的策略执行点都向中央的 Speedle 策略决策点发送请求并接收允许或拒绝结果。Speedle 将决策及其原因输出到底部的审计与解释区域：诊断 API 显示匹配的策略及原因，应用记录每项决策以及智能体和发起委托的用户。边界说明：Speedle 限制被攻陷或被误导的智能体可执行的操作，但不检测提示词注入、不过滤内容，也不验证模型和数据集供应链。</desc>
+              <defs>
+                <linearGradient id="cdw-pdp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4f0fb"/><stop offset="1" stop-color="#e9e1f8"/></linearGradient>
+                <filter id="cdw-lift" x="-8%" y="-8%" width="116%" height="130%"><feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#2e1c58" flood-opacity=".09"/></filter>
+                <filter id="cdw-lift-strong" x="-15%" y="-10%" width="130%" height="125%"><feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#5229ad" flood-opacity=".14"/></filter>
+                <marker id="cdw-ask" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0 1 9 5 0 9z" fill="#5229ad"/></marker>
+                <marker id="cdw-ans" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0 1 9 5 0 9z" fill="#7546d8"/></marker>
+              </defs>
+
+              <g class="cd-band cd-band-id">
+                <rect x="0.5" y="0.5" width="1079" height="71" rx="14"/>
+                <text class="cd-label cd-teal" x="24" y="33">身份输入</text>
+                <text class="cd-sub" x="24" y="55">贯穿全流程</text>
+                <line class="cd-divider" x1="236" y1="16" x2="236" y2="56"/>
+                <text class="cd-strong" x="260" y="33">您的 IdP 与 OAuth 负责用户和智能体认证。MCP 授权基于 OAuth。</text>
+                <text class="cd-text" x="260" y="55">应用将它们作为主体传入。Speedle 基于收到的主体进行决策。</text>
+              </g>
+              <line class="cd-in" x1="540" y1="76" x2="540" y2="144" marker-end="url(#cdw-ans)"/>
+              <text class="cd-mono" x="552" y="116">主体</text>
+
+              <g class="cd-lane cd-lane-build">
+                <rect x="0.5" y="96.5" width="329" height="407" rx="18"/>
+                <text class="cd-label cd-purple" x="20" y="129">构建</text>
+                <text class="cd-sub" x="86" y="129">模型提供服务前</text>
+              </g>
+              <g class="cd-lane cd-lane-run">
+                <rect x="750.5" y="96.5" width="329" height="407" rx="18"/>
+                <text class="cd-label cd-teal" x="770" y="129">运行</text>
+                <text class="cd-sub" x="818" y="129">AI 提供服务和执行操作时</text>
+              </g>
+
+              <g class="cd-card cd-card-build" filter="url(#cdw-lift)">
+                <rect x="14.5" y="148.5" width="301" height="163" rx="12"/>
+                <rect class="cd-chip" x="30" y="170" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="48" y="187">01</text>
+                <text class="cd-title" x="78" y="189">数据与训练</text>
+                <text class="cd-text" x="30" y="224">数据加载器、任务调度器</text>
+                <line class="cd-rule" x1="30" y1="246" x2="300" y2="246"/>
+                <text class="cd-res" x="30" y="272">数据集、训练任务、</text>
+                <text class="cd-res" x="30" y="292">检查点导出</text>
+              </g>
+              <g class="cd-card cd-card-build" filter="url(#cdw-lift)">
+                <rect x="14.5" y="324.5" width="301" height="163" rx="12"/>
+                <rect class="cd-chip" x="30" y="346" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="48" y="363">02</text>
+                <text class="cd-title" x="78" y="365">模型发布</text>
+                <text class="cd-text" x="30" y="400">模型注册表、发布流水线</text>
+                <line class="cd-rule" x1="30" y1="422" x2="300" y2="422"/>
+                <text class="cd-res" x="30" y="448">注册、审批、晋级、</text>
+                <text class="cd-res" x="30" y="468">回滚</text>
+              </g>
+
+              <g class="cd-card cd-card-key" filter="url(#cdw-lift)">
+                <rect x="764.5" y="148.5" width="301" height="75" rx="12"/>
+                <rect class="cd-chip" x="780" y="164" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="798" y="181">03</text>
+                <text class="cd-title" x="828" y="183">推理与 RAG</text>
+                <text class="cd-text" x="780" y="210">检索器逐文档检查 · 网关</text>
+              </g>
+              <g class="cd-card cd-card-run" filter="url(#cdw-lift)">
+                <rect x="764.5" y="236.5" width="301" height="75" rx="12"/>
+                <rect class="cd-chip" x="780" y="252" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="798" y="269">04</text>
+                <text class="cd-title" x="828" y="271">智能体代表用户操作</text>
+                <text class="cd-text" x="780" y="298">智能体运行时 · 用户 + 智能体</text>
+              </g>
+              <g class="cd-card cd-card-run" filter="url(#cdw-lift)">
+                <rect x="764.5" y="324.5" width="301" height="75" rx="12"/>
+                <rect class="cd-chip" x="780" y="340" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="798" y="357">05</text>
+                <text class="cd-title" x="828" y="359">工具调用（MCP）</text>
+                <text class="cd-text" x="780" y="386">MCP 宿主或网关，逐次调用</text>
+              </g>
+              <g class="cd-card cd-card-run" filter="url(#cdw-lift)">
+                <rect x="764.5" y="412.5" width="301" height="75" rx="12"/>
+                <rect class="cd-chip" x="780" y="428" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="798" y="445">06</text>
+                <text class="cd-title" x="828" y="447">智能体间调用（A2A）</text>
+                <text class="cd-text" x="780" y="474">调用方或接收方智能体</text>
+              </g>
+
+              <g class="cd-arrows">
+                <line class="cd-ask" x1="322" y1="224" x2="404" y2="224" marker-end="url(#cdw-ask)"/>
+                <line class="cd-ans" x1="404" y1="236" x2="322" y2="236" marker-end="url(#cdw-ans)"/>
+                <line class="cd-ask" x1="322" y1="400" x2="404" y2="400" marker-end="url(#cdw-ask)"/>
+                <line class="cd-ans" x1="404" y1="412" x2="322" y2="412" marker-end="url(#cdw-ans)"/>
+                <line class="cd-ask" x1="758" y1="180" x2="676" y2="180" marker-end="url(#cdw-ask)"/>
+                <line class="cd-ans" x1="676" y1="192" x2="758" y2="192" marker-end="url(#cdw-ans)"/>
+                <line class="cd-ask" x1="758" y1="268" x2="676" y2="268" marker-end="url(#cdw-ask)"/>
+                <line class="cd-ans" x1="676" y1="280" x2="758" y2="280" marker-end="url(#cdw-ans)"/>
+                <line class="cd-ask" x1="758" y1="356" x2="676" y2="356" marker-end="url(#cdw-ask)"/>
+                <line class="cd-ans" x1="676" y1="368" x2="758" y2="368" marker-end="url(#cdw-ans)"/>
+                <line class="cd-ask" x1="758" y1="444" x2="676" y2="444" marker-end="url(#cdw-ask)"/>
+                <line class="cd-ans" x1="676" y1="456" x2="758" y2="456" marker-end="url(#cdw-ans)"/>
+              </g>
+
+              <g class="cd-pdp">
+                <rect x="410" y="148" width="260" height="340" rx="20" fill="url(#cdw-pdp)" filter="url(#cdw-lift-strong)"/>
+                <rect class="cd-pdp-ring" x="418.5" y="156.5" width="243" height="323" rx="14"/>
+                <circle class="cd-pdp-badge" cx="540" cy="212" r="30"/>
+                <path class="cd-pdp-icon" transform="translate(520.8 192.8) scale(1.6)" d="m12 3 7 3v5c0 4.6-2.8 8.1-7 10-4.2-1.9-7-5.4-7-10V6l7-3Z M8.5 12l2.2 2.2 4.8-5"/>
+                <text class="cd-pdp-eyebrow" x="540" y="272">SPEEDLE</text>
+                <text class="cd-pdp-title" x="540" y="304">策略</text>
+                <text class="cd-pdp-title" x="540" y="331">决策点</text>
+                <line class="cd-pdp-rule" x1="450" y1="354" x2="630" y2="354"/>
+                <text class="cd-pdp-text" x="540" y="380">针对每个区域的请求</text>
+                <text class="cd-pdp-text" x="540" y="400">评估 SPDL 策略</text>
+                <rect class="cd-pdp-chip" x="468" y="420" width="144" height="34" rx="17"/>
+                <text class="cd-pdp-answer" x="540" y="442">允许 | 拒绝</text>
+              </g>
+
+              <line class="cd-out" x1="540" y1="492" x2="540" y2="524" marker-end="url(#cdw-ask)"/>
+              <text class="cd-mono" x="552" y="514">决策及原因</text>
+              <g class="cd-band cd-band-audit">
+                <rect x="0.5" y="528.5" width="1079" height="71" rx="14"/>
+                <text class="cd-label cd-purple" x="24" y="561">审计与解释输出</text>
+                <text class="cd-sub" x="24" y="583">贯穿全流程</text>
+                <line class="cd-divider" x1="236" y1="544" x2="236" y2="584"/>
+                <text class="cd-strong" x="260" y="561">每项决策都可通过 Speedle 诊断 API 解释：显示匹配的策略及原因。</text>
+                <text class="cd-text" x="260" y="583">应用记录每项决策，以及智能体和发起委托的用户。</text>
+              </g>
+
+              <g class="cd-band cd-boundary">
+                <rect x="0.5" y="616.5" width="1079" height="71" rx="14"/>
+                <text class="cd-label cd-ink" x="24" y="649">边界</text>
+                <text class="cd-sub" x="24" y="671">Speedle 之外</text>
+                <line class="cd-divider" x1="236" y1="632" x2="236" y2="672"/>
+                <text class="cd-strong" x="260" y="649">Speedle 限制被攻陷或被误导的智能体可执行的操作。</text>
+                <text class="cd-text" x="260" y="671">它不检测提示词注入、过滤内容，也不验证模型和数据集供应链。</text>
+              </g>
+            </svg>
+            <svg class="cd cd-stack" viewBox="0 0 360 1384" role="img" aria-labelledby="cds-title cds-desc">
+              <title id="cds-title">概念：Speedle 作为构建和运行 AI 的策略决策点</title>
+              <desc id="cds-desc">内容自上而下排列。身份输入：您的 IdP 和 OAuth 负责用户与智能体认证，MCP 授权基于 OAuth，Speedle 基于收到的主体进行决策。Speedle 策略决策点评估 SPDL 策略并返回允许或拒绝，每个区域的策略执行点都向其发起请求。构建通道：数据与训练，由数据加载器和任务调度器发起请求；模型发布，由模型注册表和发布流水线发起请求。运行通道：推理与 RAG，由检索器逐文档和 API 网关发起请求；智能体代表用户操作，由智能体运行时将用户和智能体作为主体发起请求；MCP 工具调用，由 MCP 宿主或网关逐次发起请求；智能体间调用，由调用方或接收方智能体发起请求。审计与解释输出：诊断 API 显示匹配的策略及原因，应用记录每项决策以及智能体和发起委托的用户。边界：Speedle 限制被攻陷或被误导的智能体可执行的操作，但不检测提示词注入、不过滤内容，也不验证模型和数据集供应链。</desc>
+              <defs>
+                <linearGradient id="cds-pdp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4f0fb"/><stop offset="1" stop-color="#e9e1f8"/></linearGradient>
+                <filter id="cds-lift" x="-8%" y="-10%" width="116%" height="140%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#2e1c58" flood-opacity=".09"/></filter>
+                <filter id="cds-lift-strong" x="-12%" y="-15%" width="124%" height="145%"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#5229ad" flood-opacity=".13"/></filter>
+                <marker id="cds-ask" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0 1 9 5 0 9z" fill="#5229ad"/></marker>
+                <marker id="cds-ans" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0 1 9 5 0 9z" fill="#7546d8"/></marker>
+              </defs>
+
+              <g class="cd-band cd-band-id">
+                <rect x="0.5" y="0.5" width="359" height="163" rx="14"/>
+                <text class="cd-label cd-teal" x="18" y="31">身份输入</text>
+                <text class="cd-sub cd-end" x="342" y="31">贯穿全流程</text>
+                <text class="cd-strong" x="18" y="59">您的 IdP 与 OAuth 负责</text>
+                <text class="cd-strong" x="18" y="79">用户和智能体认证。</text>
+                <text class="cd-text" x="18" y="105">MCP 授权基于 OAuth。</text>
+                <text class="cd-text" x="18" y="125">Speedle 基于收到的主体</text>
+                <text class="cd-text" x="18" y="145">进行决策。</text>
+              </g>
+              <line class="cd-in" x1="164" y1="168" x2="164" y2="204" marker-end="url(#cds-ans)"/>
+              <text class="cd-mono" x="176" y="192">主体</text>
+
+              <g class="cd-pdp">
+                <rect x="0" y="208" width="328" height="160" rx="18" fill="url(#cds-pdp)" filter="url(#cds-lift-strong)"/>
+                <rect class="cd-pdp-ring" x="7.5" y="215.5" width="313" height="145" rx="12"/>
+                <circle class="cd-pdp-badge" cx="52" cy="288" r="26"/>
+                <path class="cd-pdp-icon" transform="translate(36.4 272.4) scale(1.3)" d="m12 3 7 3v5c0 4.6-2.8 8.1-7 10-4.2-1.9-7-5.4-7-10V6l7-3Z M8.5 12l2.2 2.2 4.8-5"/>
+                <text class="cd-pdp-eyebrow cd-start" x="96" y="250">SPEEDLE</text>
+                <text class="cd-pdp-title cd-pdp-title-sm cd-start" x="96" y="276">策略决策点</text>
+                <text class="cd-pdp-text cd-start" x="96" y="300">评估 SPDL 策略</text>
+                <rect class="cd-pdp-chip" x="96" y="316" width="128" height="32" rx="16"/>
+                <text class="cd-pdp-answer" x="160" y="337">允许 | 拒绝</text>
+              </g>
+
+              <g class="cd-lane cd-lane-build">
+                <rect x="0.5" y="392.5" width="327" height="217" rx="16"/>
+                <text class="cd-label cd-purple" x="16" y="423">构建</text>
+                <text class="cd-sub" x="80" y="423">模型提供服务前</text>
+              </g>
+              <g class="cd-lane cd-lane-run">
+                <rect x="0.5" y="626.5" width="327" height="389" rx="16"/>
+                <text class="cd-label cd-teal" x="16" y="657">运行</text>
+                <text class="cd-sub" x="62" y="657">AI 提供服务和执行操作时</text>
+              </g>
+
+              <g class="cd-arrows">
+                <line class="cd-ask" x1="346" y1="288" x2="332" y2="288" marker-end="url(#cds-ask)"/>
+                <line class="cd-spine" x1="346" y1="288" x2="346" y2="966"/>
+                <line class="cd-ask" x1="316" y1="474" x2="346" y2="474"/>
+                <line class="cd-ask" x1="316" y1="560" x2="346" y2="560"/>
+                <line class="cd-ask" x1="316" y1="708" x2="346" y2="708"/>
+                <line class="cd-ask" x1="316" y1="794" x2="346" y2="794"/>
+                <line class="cd-ask" x1="316" y1="880" x2="346" y2="880"/>
+                <line class="cd-ask" x1="316" y1="966" x2="346" y2="966"/>
+                <circle class="cd-node" cx="346" cy="474" r="3.5"/>
+                <circle class="cd-node" cx="346" cy="560" r="3.5"/>
+                <circle class="cd-node" cx="346" cy="708" r="3.5"/>
+                <circle class="cd-node" cx="346" cy="794" r="3.5"/>
+                <circle class="cd-node" cx="346" cy="880" r="3.5"/>
+                <circle class="cd-node" cx="346" cy="966" r="3.5"/>
+              </g>
+
+              <g class="cd-card cd-card-build" filter="url(#cds-lift)">
+                <rect x="12.5" y="436.5" width="303" height="75" rx="12"/>
+                <rect class="cd-chip" x="26" y="452" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="44" y="469">01</text>
+                <text class="cd-title cd-title-sm" x="74" y="470">数据与训练</text>
+                <text class="cd-text" x="26" y="498">数据加载器、任务调度器</text>
+              </g>
+              <g class="cd-card cd-card-build" filter="url(#cds-lift)">
+                <rect x="12.5" y="522.5" width="303" height="75" rx="12"/>
+                <rect class="cd-chip" x="26" y="538" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="44" y="555">02</text>
+                <text class="cd-title cd-title-sm" x="74" y="556">模型发布</text>
+                <text class="cd-text" x="26" y="584">模型注册表、发布流水线</text>
+              </g>
+              <g class="cd-card cd-card-key" filter="url(#cds-lift)">
+                <rect x="12.5" y="670.5" width="303" height="75" rx="12"/>
+                <rect class="cd-chip" x="26" y="686" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="44" y="703">03</text>
+                <text class="cd-title cd-title-sm" x="74" y="704">推理与 RAG</text>
+                <text class="cd-text" x="26" y="732">检索器逐文档检查 · 网关</text>
+              </g>
+              <g class="cd-card cd-card-run" filter="url(#cds-lift)">
+                <rect x="12.5" y="756.5" width="303" height="75" rx="12"/>
+                <rect class="cd-chip" x="26" y="772" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="44" y="789">04</text>
+                <text class="cd-title cd-title-sm" x="74" y="790">智能体代表用户操作</text>
+                <text class="cd-text" x="26" y="818">智能体运行时 · 用户 + 智能体</text>
+              </g>
+              <g class="cd-card cd-card-run" filter="url(#cds-lift)">
+                <rect x="12.5" y="842.5" width="303" height="75" rx="12"/>
+                <rect class="cd-chip" x="26" y="858" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="44" y="875">05</text>
+                <text class="cd-title cd-title-sm" x="74" y="876">工具调用（MCP）</text>
+                <text class="cd-text" x="26" y="904">MCP 宿主或网关，逐次调用</text>
+              </g>
+              <g class="cd-card cd-card-run" filter="url(#cds-lift)">
+                <rect x="12.5" y="928.5" width="303" height="75" rx="12"/>
+                <rect class="cd-chip" x="26" y="944" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="44" y="961">06</text>
+                <text class="cd-title cd-title-sm" x="74" y="962">智能体间调用（A2A）</text>
+                <text class="cd-text" x="26" y="990">调用方或接收方智能体</text>
+              </g>
+
+              <g class="cd-band cd-band-audit">
+                <rect x="0.5" y="1040.5" width="359" height="163" rx="14"/>
+                <text class="cd-label cd-purple" x="18" y="1071">审计与解释输出</text>
+                <text class="cd-strong" x="18" y="1099">每项决策都可通过</text>
+                <text class="cd-strong" x="18" y="1119">Speedle 诊断 API 解释。</text>
+                <text class="cd-text" x="18" y="1145">显示匹配的策略及原因。应用</text>
+                <text class="cd-text" x="18" y="1165">记录每项决策，以及智能体</text>
+                <text class="cd-text" x="18" y="1185">和发起委托的用户。</text>
+              </g>
+
+              <g class="cd-band cd-boundary">
+                <rect x="0.5" y="1220.5" width="359" height="163" rx="14"/>
+                <text class="cd-label cd-ink" x="18" y="1251">边界</text>
+                <text class="cd-sub cd-end" x="342" y="1251">Speedle 之外</text>
+                <text class="cd-strong" x="18" y="1279">Speedle 限制被攻陷或</text>
+                <text class="cd-strong" x="18" y="1299">被误导的智能体可执行的操作。</text>
+                <text class="cd-text" x="18" y="1325">它不检测提示词注入、</text>
+                <text class="cd-text" x="18" y="1345">过滤内容，也不验证模型与</text>
+                <text class="cd-text" x="18" y="1365">数据集供应链。</text>
+              </g>
+            </svg>
+            <figcaption class="concept-legend">
+              <span><svg viewBox="0 0 40 10" aria-hidden="true"><line x1="1" y1="5" x2="32" y2="5" stroke="#5229ad" stroke-width="2"/><path d="M30 1 39 5 30 9z" fill="#5229ad"/></svg>策略执行点向 Speedle 发起请求，提供主体、操作、资源和属性。</span>
+              <span><svg viewBox="0 0 40 10" aria-hidden="true"><line x1="1" y1="5" x2="32" y2="5" stroke="#7546d8" stroke-width="2" stroke-dasharray="5 4"/><path d="M30 1 39 5 30 9z" fill="#7546d8"/></svg>Speedle 返回允许或拒绝，由应用执行该决策。</span>
+            </figcaption>
+          </figure>
+        </div>
+
+        <div class="areas">
+          <p class="note areas-note"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>以下每个 SPDL 示例都已使用 Speedle 文件存储，针对允许和拒绝用例完成解析与评估。名称、路径和属性仅作说明；应用请求决策时会提供这些属性。</p>
+
+          <section id="build" class="phase" aria-labelledby="build-title">
+            <div class="phase-head phase-build">
+              <p class="phase-tag">构建</p>
+              <h3 id="build-title">模型提供服务之前：数据、训练与发布。</h3>
+            </div>
+            <article id="lc-data" class="area" aria-labelledby="lc-data-title">
+              <div class="area-copy">
+                <p class="area-step">01 / 数据与训练</p>
+                <h4 id="lc-data-title">哪些流水线可以使用哪些数据进行训练？</h4>
+                <p class="area-lead">训练任务读取数据集、使用计算资源并写入检查点。应用会在每次读取数据集、启动任务和导出检查点之前请求授权，并传入敏感性、租户、同意状态和区域等属性。</p>
+                <dl class="area-facts">
+                  <div><dt>主体</dt><dd>作为实体的训练流水线、机器学习工程师及其团队。</dd></div>
+                  <div><dt>资源与操作</dt><dd>数据集：<code>read</code>。训练任务：<code>start</code>。检查点：<code>export</code>。</dd></div>
+                  <div><dt>策略执行点</dt><dd>数据加载器打开数据集之前、任务调度器分配计算资源之前，以及制品库执行导出之前。</dd></div>
+                </dl>
+              </div>
+              <figure class="spdl-card">
+                <figcaption><span>training.spdl</span><span>SPDL 示例</span></figcaption>
+                <pre tabindex="0" data-spdl="training" aria-label="SPDL 示例：数据与训练"><code>[service.ml-training]
+[policy]
+# Pipelines read only consented data from their own region
+grant role training-pipeline read expr:^/datasets/ if consent == true &amp;&amp; data_region == job_region
+# Restricted datasets never enter training
+deny role training-pipeline read expr:^/datasets/restricted/
+grant role ml-engineer start /jobs/training if gpu_hours &lt;= 64
+grant role ml-engineer export expr:^/checkpoints/
+[rolepolicy]
+grant entity pipeline-churn training-pipeline
+grant group ml-team ml-engineer</code></pre>
+                <p class="spdl-caption">逐个数据集检查同意状态和区域，直接拒绝受限数据，并限制任务启动时的 GPU 小时数。</p>
+              </figure>
+            </article>
+            <article id="lc-release" class="area" aria-labelledby="lc-release-title">
+              <div class="area-copy">
+                <p class="area-step">02 / 模型发布</p>
+                <h4 id="lc-release-title">谁可以发布模型？</h4>
+                <p class="area-lead">模型注册、审批、晋级和回滚是相互独立的操作，分别由不同角色负责。职责分离确保训练模型的人不能审批同一模型。</p>
+                <dl class="area-facts">
+                  <div><dt>主体</dt><dd>机器学习工程师、发布经理和发布流水线的服务身份。</dd></div>
+                  <div><dt>资源与操作</dt><dd>模型和端点：<code>register</code>、<code>approve</code>、<code>promote</code>、<code>rollback</code>。</dd></div>
+                  <div><dt>策略执行点</dt><dd>模型注册表和发布流水线，在每次更改模型或端点状态之前进行检查。</dd></div>
+                </dl>
+              </div>
+              <figure class="spdl-card">
+                <figcaption><span>release.spdl</span><span>SPDL 示例</span></figcaption>
+                <pre tabindex="0" data-spdl="release" aria-label="SPDL 示例：模型发布"><code>[service.model-registry]
+[policy]
+grant role ml-engineer register expr:^/models/
+grant role release-manager approve, promote, rollback expr:^/models/
+# Separation of duties: nobody approves a model they trained
+deny role release-manager approve expr:^/models/ if trained_by == request_user
+[rolepolicy]
+grant group ml-team ml-engineer
+grant user dana release-manager</code></pre>
+                <p class="spdl-caption">工程师可以注册但不能晋级模型；如果模型的 <code>trained_by</code> 是请求用户，发布经理不能审批该模型。</p>
+              </figure>
+            </article>
+          </section>
+
+          <section id="run" class="phase" aria-labelledby="run-title">
+            <div class="phase-head phase-run">
+              <p class="phase-tag">运行</p>
+              <h3 id="run-title">AI 提供服务和执行操作时：检索、智能体、工具与其他智能体。</h3>
+            </div>
+            <article id="lc-rag" class="area area-feature" aria-labelledby="lc-rag-title">
+              <div class="area-copy">
+                <p class="area-step">03 / 推理与 RAG</p>
+                <h4 id="lc-rag-title">只有用户有权阅读的内容才能进入提示词。</h4>
+                <p class="area-lead">用户、应用和租户都会调用模型。对于权限感知的 RAG（检索增强生成），检索器会在内容进入提示词之前，逐文档或逐集合向 Speedle 请求授权，确保模型只能看到请求发起者有权阅读的内容，从而实现 RAG 权限控制。</p>
+                <ol class="rag-flow" aria-label="权限感知检索">
+                  <li><span>1</span>检索器查找候选文档。</li>
+                  <li><span>2</span>携带用户的租户和许可级别，逐文档或逐集合向 Speedle 请求授权。</li>
+                  <li><span>3</span>只有获准的内容才会进入提示词。</li>
+                </ol>
+                <dl class="area-facts">
+                  <div><dt>主体</dt><dd>请求背后的用户及其用户组，以及作为实体的客户端应用和租户。</dd></div>
+                  <div><dt>资源与操作</dt><dd>集合和文档：<code>retrieve</code>。模型：<code>invoke</code>。</dd></div>
+                  <div><dt>策略执行点</dt><dd>检索器在文档进入提示词之前进行检查；API 网关或推理服务在路由请求之前进行检查。</dd></div>
+                </dl>
+              </div>
+              <figure class="spdl-card">
+                <figcaption><span>rag.spdl</span><span>SPDL 示例</span></figcaption>
+                <pre tabindex="0" data-spdl="rag" aria-label="SPDL 示例：推理与 RAG"><code>[service.rag]
+[policy]
+# The retriever asks per document, before its content enters the prompt
+grant role tenant-user retrieve expr:^/collections/ if doc_tenant == user_tenant &amp;&amp; doc_label in user_clearances
+# Documents on legal hold never reach a prompt
+deny role tenant-user retrieve expr:^/collections/legal-hold/
+# Apps call only the model tiers in their tenant's plan
+grant role tenant-app invoke expr:^/models/ if model_tier in plan_tiers
+[rolepolicy]
+grant group acme-staff tenant-user
+grant entity acme-helpdesk tenant-app</code></pre>
+                <p class="spdl-caption">文档必须属于用户所在租户，且标签在用户许可范围内才能检索；法律保全文档会被拒绝，应用也只能调用其套餐包含的模型层级。</p>
+              </figure>
+            </article>
+            <article id="lc-agents" class="area" aria-labelledby="lc-agents-title">
+              <div class="area-copy">
+                <p class="area-step">04 / 智能体代表用户操作</p>
+                <h4 id="lc-agents-title">AI 智能体可以代表用户执行哪些操作？</h4>
+                <p class="area-lead">智能体拥有独立身份。代表用户操作时，请求同时携带用户和智能体两个主体，每项授权也都指定双方角色，因此智能体只能执行双方都获准的操作。权限范围与任务及其有效期绑定，高风险操作还需要人工审批。</p>
+                <dl class="area-facts">
+                  <div><dt>主体</dt><dd>作为实体的智能体和发起委托的用户。只有智能体，或只有用户而没有智能体，都无法匹配此处的授权。</dd></div>
+                  <div><dt>资源与操作</dt><dd>工单：<code>read</code>、<code>update</code>。订单：<code>refund</code>，属于高风险操作。</dd></div>
+                  <div><dt>策略执行点</dt><dd>智能体运行时或应用后端，在操作到达业务系统之前进行检查。审批步骤记录人工审批结果，应用将其作为 <code>approved_amount</code> 传入。</dd></div>
+                </dl>
+              </div>
+              <figure class="spdl-card">
+                <figcaption><span>agents.spdl</span><span>SPDL 示例</span></figcaption>
+                <pre tabindex="0" data-spdl="agents" aria-label="SPDL 示例：智能体代表用户操作"><code>[service.crm]
+[policy]
+# On behalf of a user: agent and user roles are both required, for the task's tickets, until it expires
+grant (role ticket-agent, role support-staff) read, update expr:^/tickets/ if request_resource in task_tickets &amp;&amp; request_time &lt; task_expires
+# High risk: a refund also needs a human approval that covers the amount
+grant (role ticket-agent, role support-staff) refund expr:^/orders/ if approved_amount &gt;= amount
+[rolepolicy]
+grant entity triage-agent ticket-agent
+grant group support support-staff</code></pre>
+                <p class="spdl-caption">两个主体必须同时存在。如果没有足以覆盖退款金额的 <code>approved_amount</code>，就不会匹配任何授权，退款将被拒绝。</p>
+              </figure>
+            </article>
+            <article id="lc-mcp" class="area" aria-labelledby="lc-mcp-title">
+              <div class="area-copy">
+                <p class="area-step">05 / 工具调用（MCP）</p>
+                <h4 id="lc-mcp-title">这个 AI 智能体能否使用这些参数调用此 MCP 工具？</h4>
+                <p class="area-lead">每次工具调用都会在执行前接受检查。工具是资源，调用是操作，参数会转化为属性，因此退款金额等限制可以直接纳入策略。</p>
+                <dl class="area-facts">
+                  <div><dt>主体</dt><dd>每个智能体都有独立的实体身份和角色，权限可按智能体和工具分别控制。</dd></div>
+                  <div><dt>资源与操作</dt><dd>工具：<code>call</code>，工具参数作为属性。</dd></div>
+                  <div><dt>策略执行点</dt><dd>MCP 客户端宿主或 MCP 服务器前面的网关，在工具执行之前进行检查。</dd></div>
+                </dl>
+              </div>
+              <figure class="spdl-card">
+                <figcaption><span>mcp.spdl</span><span>SPDL 示例</span></figcaption>
+                <pre tabindex="0" data-spdl="mcp" aria-label="SPDL 示例：通过 MCP 调用工具"><code>[service.mcp-gateway]
+[policy]
+# Tool arguments arrive as attributes and are checked before the tool runs
+grant role research-agent call /tools/web-search
+grant role billing-agent call /tools/issue-refund if amount &lt;= 100 &amp;&amp; customer_verified == true
+# Admin tools stay out of reach for research agents
+deny role research-agent call expr:^/tools/admin/
+[rolepolicy]
+grant entity agent-research-1 research-agent
+grant entity agent-billing-1 billing-agent</code></pre>
+                <p class="spdl-caption">研究智能体可以使用网页搜索；计费智能体可为已验证客户办理不超过 100 的退款；研究智能体不能使用管理工具。</p>
+              </figure>
+            </article>
+            <article id="lc-a2a" class="area" aria-labelledby="lc-a2a-title">
+              <div class="area-copy">
+                <p class="area-step">06 / 智能体间调用（A2A）</p>
+                <h4 id="lc-a2a-title">在 A2A 授权中，哪个智能体可以调用哪个智能体？</h4>
+                <p class="area-lead">委托链中的每一跳都会接受检查。被调用方只能获得调用方已持有的权限范围，委托链还有跳数限制，因此委托只会收窄权限。</p>
+                <dl class="area-facts">
+                  <div><dt>主体</dt><dd>作为实体标识的调用方智能体。</dd></div>
+                  <div><dt>资源与操作</dt><dd>其他智能体及其技能：<code>call</code>，请求的权限范围、调用方权限范围和跳数作为属性。</dd></div>
+                  <div><dt>策略执行点</dt><dd>调用方智能体发送任务之前，或接收方智能体接受任务之前。应用根据收到的委托确定调用方的权限范围。</dd></div>
+                </dl>
+              </div>
+              <figure class="spdl-card">
+                <figcaption><span>a2a.spdl</span><span>SPDL 示例</span></figcaption>
+                <pre tabindex="0" data-spdl="a2a" aria-label="SPDL 示例：智能体间调用"><code>[service.a2a]
+[policy]
+# A callee gets only scopes the caller already holds, within two hops
+grant role planner-agent call /agents/researcher if IsSubSet(requested_scopes, caller_scopes) &amp;&amp; hops &lt;= 2
+grant role researcher-agent call /agents/writer if IsSubSet(requested_scopes, caller_scopes) &amp;&amp; hops &lt;= 2
+[rolepolicy]
+grant entity planner-1 planner-agent
+grant entity researcher-1 researcher-agent</code></pre>
+                <p class="spdl-caption"><code>IsSubSet</code> 会拒绝调用方未持有的任何请求权限范围，第三跳也会被拒绝。</p>
+              </figure>
+            </article>
+          </section>
+        </div>
+
+        <div id="cross-cutting" class="crosscut">
+          <div class="section-head">
+            <div><p class="eyebrow">贯穿全流程</p><h3 id="crosscut-title">输入身份信息，输出决策与解释。</h3></div>
+            <p>以下三个关注点适用于构建和运行阶段的每个区域。</p>
+          </div>
+          <div class="crosscut-grid">
+            <article class="crosscut-card">
+              <p class="crosscut-tag">身份集成</p>
+              <h4>Speedle 负责授权决策，IdP 负责身份认证。</h4>
+              <p>Speedle 是授权决策点。用户和智能体的身份认证来自您的 IdP 或 OAuth 授权服务器，MCP 授权基于 OAuth。应用将已验证的身份映射为主体（用户、用户组、实体），Speedle 基于收到的主体进行决策。</p>
+            </article>
+            <article class="crosscut-card">
+              <p class="crosscut-tag">审计与可解释性</p>
+              <h4>每项决策都可以解释。</h4>
+              <p>Speedle 的<a href="https://engine.speedle.io/zh/docs/pms/diagnosis/">诊断 API</a> 返回决策、原因、生效角色和已检查的策略，包括匹配了哪条策略及其原因。应用记录每项决策以及智能体和发起委托的用户。诊断接口会暴露策略和请求详情，因此只应向可信运维人员开放。</p>
+            </article>
+            <article class="crosscut-card">
+              <p class="crosscut-tag">风险映射</p>
+              <h4>对应 OWASP LLM06:2025 过度代理。</h4>
+              <p><a href="https://genai.owasp.org/llmrisk/llm062025-excessive-agency/">OWASP 2025 年大模型应用十大风险</a>列出了过度代理：智能体拥有的功能、权限或自主性超出任务所需。按智能体划分角色、按工具检查、将委托绑定到任务和时限，以及对高风险操作进行人工审批，可以分别收敛这三类风险。</p>
+            </article>
+          </div>
+        </div>
+
+        <aside id="boundary" class="boundary" aria-labelledby="boundary-title">
+          <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
+          <div>
+            <h3 id="boundary-title">Speedle 的能力边界</h3>
+            <p>Speedle 不检测提示词注入，不过滤模型输入或输出，也不验证模型和数据集供应链；这些方面需要专用控制措施。<strong>Speedle 限制被攻陷或被误导的智能体可执行的操作：</strong>无论提示词内容如何，任何不符合策略的请求都会被拒绝。</p>
+          </div>
+        </aside>
+
+        <div id="playground" class="subsection">
+          <div class="section-head">
+            <div><p class="eyebrow">交互示例 · 仅涉及策略</p><h3 id="playground-title">一个请求，一个清晰的策略决策。</h3></div>
+            <p>切换智能体、操作和数据范围，查看一小组确定性规则如何改变示例结果。</p>
+          </div>
+
+          <div class="demo">
+            <div class="demo-banner">
+              <span class="demo-badge">简化的浏览器演示</span>
+              <p><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>固定策略规则在您的浏览器本地运行，不模拟 AI 风险检测。这不是 Speedle 引擎或 MCP 集成，也不会连接任何智能体、数据或服务。</p>
+            </div>
+            <form class="demo-pane demo-input" id="demo-form" aria-label="选择示例请求">
+              <p class="pane-label"><span>1</span>选择操作</p>
+              <fieldset>
+                <legend>执行操作的智能体</legend>
+                <div class="seg">
+                  <label><input type="radio" name="agent" value="research" checked><span>研究智能体</span></label>
+                  <label><input type="radio" name="agent" value="support"><span>支持智能体</span></label>
+                </div>
+              </fieldset>
+              <fieldset>
+                <legend>操作</legend>
+                <div class="seg">
+                  <label><input type="radio" name="action" value="read" checked><span>读取</span></label>
+                  <label><input type="radio" name="action" value="export"><span>导出</span></label>
+                  <label><input type="radio" name="action" value="delete"><span>删除</span></label>
+                </div>
+              </fieldset>
+              <fieldset>
+                <legend>数据范围</legend>
+                <div class="seg">
+                  <label><input type="radio" name="resource" value="public" checked><span>公共知识</span></label>
+                  <label><input type="radio" name="resource" value="customer"><span>客户记录</span></label>
+                </div>
+              </fieldset>
+            </form>
+
+            <div class="demo-pane demo-wire">
+              <p class="pane-label"><span>2</span>授权请求</p>
+              <p class="wire-label">示例请求</p>
+              <pre class="code" tabindex="0" aria-label="示例授权请求"><span class="k">subject </span>  <span class="v" data-field="subject">entity research-agent</span>
+<span class="k">action  </span>  <span class="v" data-field="action">read</span>
+<span class="k">resource</span>  <span class="v" data-field="resource">/knowledge/public</span></pre>
+              <p class="wire-hop" aria-hidden="true"><span></span>策略评估<span></span></p>
+              <p class="wire-label">示例结果</p>
+              <pre class="code" tabindex="0" aria-label="示例授权结果"><span class="k">allowed</span>  <span class="v" data-field="allowed">true</span>
+<span class="k">reason </span>  <span class="v" data-field="reason">GRANT_POLICY_FOUND</span></pre>
+            </div>
+
+            <div class="demo-pane demo-output">
+              <p class="pane-label"><span>3</span>授权决策</p>
+              <div class="decision" id="decision" data-decision="allow" role="status" aria-live="polite" aria-atomic="true">
+                <span class="decision-icon" aria-hidden="true"><svg class="icon icon-allow"><use href="#i-check"/></svg><svg class="icon icon-deny"><use href="#i-cross"/></svg></span>
+                <div class="decision-head"><strong id="decision-code">允许</strong><span id="decision-name">操作已允许</span></div>
+                <p id="decision-reason">研究智能体可以读取公共知识。</p>
+              </div>
+              <p class="rules-title">简化规则</p>
+              <ol class="rules">
+                <li data-rule="research" class="is-match">研究智能体可以读取和导出公共知识，但不能访问客户记录。<span class="rule-hit">匹配</span></li>
+                <li data-rule="support">支持智能体可以读取两个数据范围，但不能导出记录。<span class="rule-hit">匹配</span></li>
+                <li data-rule="delete">所有智能体都被明确禁止执行删除操作。<span class="rule-hit">匹配</span></li>
+              </ol>
+            </div>
+            <div class="demo-foot">
+              <p>仅作概念说明：应用仍负责执行真实的授权决策。</p>
+              <a class="text-link" href="https://engine.speedle.io/zh/docs/decisions/">了解 Speedle 决策<svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg></a>
+            </div>
+          </div>
+          <noscript><p class="note">启用 JavaScript 后可切换示例。未启用时，页面展示研究智能体读取公共知识的示例。</p></noscript>
+        </div>
+
+        <div id="approach" class="subsection">
+          <div class="section-head">
+            <div><p class="eyebrow">集成方式</p><h3 id="approach-title">从智能体意图到可执行的授权决策。</h3></div>
+            <p>应用在访问数据或执行工具之前请求授权，然后执行返回的决策。</p>
+          </div>
+          <ol class="steps">
+            <li class="step"><span class="step-num">01</span><h4>描述身份和上下文</h4><p>确定请求发起者、执行操作的智能体，以及相关的用户、角色和租户。</p><code>subject</code></li>
+            <li class="step"><span class="step-num">02</span><h4>映射资源和操作</h4><p>将工具、文档或业务对象映射为资源，将要执行的操作映射为动作。</p><code>resource · action</code></li>
+            <li class="step"><span class="step-num">03</span><h4>请求策略决策</h4><p>使用清晰、可维护的策略描述访问规则，并向 Speedle 请求决策。</p><code>is-allowed</code></li>
+            <li class="step"><span class="step-num">04</span><h4>在应用中执行决策</h4><p>执行获准的操作，阻止被拒绝的操作，并记录应用自身的执行结果。</p><code>allowed: true | false</code></li>
+          </ol>
+
+          <div class="ecosystem" aria-labelledby="ecosystem-title">
+            <div class="ecosystem-head"><p class="eyebrow">生态系统</p><h3 id="ecosystem-title">从 Speedle 基础组件开始。</h3></div>
+            <div class="resource-grid">
+              <a class="resource-card" href="https://engine.speedle.io/zh/"><span>开源</span><strong>Speedle Engine<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>开源授权引擎和清晰易读的 SPDL 策略语言。</p></a>
+              <a class="resource-card" href="https://cloud.speedle.io/zh-CN/"><span>托管服务</span><strong><span class="resource-name">Speedle Cloud<span class="coming-soon">即将上线</span></span><svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>基于 Speedle 策略引擎构建，面向开发者的托管授权服务。</p></a>
+              <a class="resource-card" href="https://github.com/teramoby/speedle-sdk"><span>集成</span><strong>Speedle SDK<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>浏览 SDK 仓库，了解客户端集成模式和指南。</p></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section about" aria-labelledby="about-title">
+      <div class="wrap">
+        <div class="cta">
+          <div class="cta-copy"><p class="eyebrow">开源 · 开放探索</p><h2 id="about-title">分享一个真实的 AI 授权场景。</h2><p>帮助我们完善后续示例，分享您的应用需要保护的数据集、模型、工具或智能体工作流。</p></div>
+          <div class="actions"><a class="button button-primary" href="https://github.com/teramoby/ai.speedle.io/issues">分享您的场景<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a><a class="button button-secondary" href="https://github.com/teramoby/speedle-plus">探索 Speedle</a></div>
+        </div>
+        <p class="provenance">Speedle 源自 <a href="https://github.com/oracle/speedle">Oracle Speedle</a>，由原开发者继续维护，并采用 Universal Permissive License（UPL）1.0 授权。<a href="https://engine.speedle.io/zh/about/">了解项目历程</a>。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <div class="footer-brand">
+        <a class="footer-lockup" href="/zh/" aria-label="Speedle AI 首页">
+          <img src="/assets/speedle-mark-ai.svg" width="132" height="45" alt="Speedle">
+          <span class="footer-divider" aria-hidden="true"></span>
+          <span class="footer-product">AI</span>
+        </a>
+        <p>基于 Universal Permissive License v1.0 授权。</p>
+        <p>版权所有 © 2019–2026。</p>
+      </div>
+      <nav class="footer-family" aria-labelledby="footer-family-title">
+        <h2 id="footer-family-title">Speedle 产品</h2>
+        <ul>
+          <li><a href="https://engine.speedle.io/zh/"><svg class="product-sphere product-engine" aria-hidden="true"><use href="#i-speedle-sphere"/></svg><span class="footer-family-copy"><span class="footer-family-name">Speedle Engine</span><span class="footer-family-description">开源授权引擎</span></span></a></li>
+          <li><a href="https://cloud.speedle.io/zh-CN/"><svg class="product-sphere product-cloud" aria-hidden="true"><use href="#i-speedle-sphere"/></svg><span class="footer-family-copy"><span class="footer-family-name">Speedle Cloud<span class="coming-soon">即将上线</span></span><span class="footer-family-description">面向开发者的托管授权服务</span></span></a></li>
+          <li><a href="https://ai.speedle.io/zh/" aria-current="page"><svg class="product-sphere product-ai" aria-hidden="true"><use href="#i-speedle-sphere"/></svg><span class="footer-family-copy"><span class="footer-family-name">Speedle AI</span><span class="footer-family-description">面向 AI 的访问管理</span></span></a></li>
+        </ul>
+      </nav>
+      <nav class="social" aria-label="社区链接">
+        <a href="mailto:contact@speedle.io" aria-label="发送邮件至 contact@speedle.io" title="contact@speedle.io"><img src="/assets/social-email.svg" alt=""></a>
+        <a href="https://groups.google.com/forum/#!forum/speedle-users" aria-label="Google Groups" title="Google Groups — speedle-users"><img src="/assets/social-google-groups.svg" alt=""></a>
+        <a href="https://github.com/teramoby/speedle-plus" aria-label="GitHub"><img src="/assets/social-github.svg" alt=""></a>
+        <a href="https://discord.gg/uaY2xVsbbT" aria-label="Discord"><img src="/assets/social-discord.svg" alt=""></a>
+      </nav>
+    </div>
+  </footer>
+  <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3b49dd9a82634bba833340481ce6ccbe"}'></script>
+</body>
+</html>
