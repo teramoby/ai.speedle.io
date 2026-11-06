@@ -36,7 +36,8 @@ if ('IntersectionObserver' in window) {
   const visible = new Set();
   const spy = new IntersectionObserver(entries => {
     entries.forEach(entry => entry.isIntersecting ? visible.add(entry.target.id) : visible.delete(entry.target.id));
-    sectionLinks.forEach(link => link.classList.toggle('is-active', visible.has(link.hash.slice(1))));
+    const activeLink = sectionLinks.filter(link => visible.has(link.hash.slice(1))).pop();
+    sectionLinks.forEach(link => link.classList.toggle('is-active', link === activeLink));
   }, {rootMargin: '-45% 0px -50% 0px'});
   sectionLinks.forEach(link => {
     const section = document.querySelector(link.hash);
