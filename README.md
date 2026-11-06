@@ -19,8 +19,9 @@ not a Speedle engine, MCP integration, RAG adapter, or production service.
 The Speedle MCP section is a launch preview: `@speedle/mcp` is not published
 on npm, and its install and client configuration snippets are marked as
 available at launch. MCP facts come from teramoby/speedle-mcp issues #1 and #2.
-Speedle AI uses white backgrounds with light-purple accents; the header and
-the "Speedle | AI" lock-up follow the shared three-site format of speedle.io.
+Speedle AI uses white backgrounds with light-purple accents; the header,
+Products navigation, sphere favicons and footer follow the shared three-site
+format of speedle.io.
 
 ## Preview
 
@@ -41,15 +42,22 @@ Main site: https://speedle.io, managed in teramoby/speedle-plus separately.
 Original bird artwork, without raster modification, from teramoby/speedle-plus:
 
 - docs/images/Speedle+ Horizontal-01.png → assets/speedle-plus.png
-- docs/images/sp_small.png → assets/speedle-bird.png
 - docs/img/speedle/Speedle_logo_home_bold.svg → assets/speedle-logo-header.svg
 - docs/img/speedle/Speedle_logo_about.svg → assets/speedle-mark.svg
 - docs/img/speedle/Speedle_logo_w.svg → assets/speedle-logo-footer.svg
 - docs/img/speedle/Speedle_logo_home_bold.svg → assets/speedle-mark-ai.svg,
   colours changed only (wordmark #fff → #182034, sphere #ff9a45 → #8b5cf6)
 
-assets/favicon.svg embeds assets/speedle-bird.png unmodified on a dark tile,
-so the white bird stays visible on light browser tabs.
+favicon.svg uses the sphere paths from assets/speedle-mark-ai.svg without path
+edits on a transparent background. favicon.ico contains PNG renders at 16, 32
+and 48 px; apple-touch-icon.png is 180×180 with the sphere on white and 20 px
+visible padding. The Products menu uses the same sphere paths in Engine orange
+(#ff9a45), Cloud blue (#4da3ff) and AI purple (#8b5cf6).
+
+The four assets/social-*.svg files are the speedle.io footer icons recoloured
+from white to AI ink (#182034), without path edits. The Google Groups icon is
+from Google Material Icons; its notice and Apache 2.0 license are included in
+assets/Google-Groups-NOTICE.txt and assets/Material-Icons-LICENSE.txt.
 
 Speedle continues Oracle Speedle and is maintained by the original developers.
 Speedle is licensed under UPL 1.0. Contact: contact@speedle.io.

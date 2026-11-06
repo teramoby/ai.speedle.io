@@ -15,10 +15,10 @@
   <meta property="og:description" content="Use AI to design, manage and check access policies. Govern access across the AI lifecycle, from training data to agent-to-agent calls.">
   <meta property="og:url" content="https://ai.speedle.io/">
   <meta name="twitter:card" content="summary">
-  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-  <link rel="icon" href="/assets/speedle-bird.png" type="image/png">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="stylesheet" href="/styles.css">
-  <script>document.documentElement.classList.add('js');</script>
   <script src="/app.js" defer></script>
 </head>
 <body>
@@ -31,24 +31,43 @@
     <symbol id="i-cross" viewBox="0 0 24 24"><path d="m7 7 10 10M17 7 7 17"/></symbol>
     <symbol id="i-shield" viewBox="0 0 24 24"><path d="m12 3 7 3v5c0 4.6-2.8 8.1-7 10-4.2-1.9-7-5.4-7-10V6l7-3Z"/><path d="m8.5 12 2.2 2.2 4.8-5"/></symbol>
     <symbol id="i-signals" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.5"/><circle cx="5" cy="5" r="1.7"/><circle cx="19" cy="5" r="1.7"/><circle cx="5" cy="19" r="1.7"/><circle cx="19" cy="19" r="1.7"/><path d="m6.3 6.3 3.9 3.9m3.6 0 3.9-3.9m-11.4 11.4 3.9-3.9m3.6 0 3.9 3.9"/></symbol>
+    <symbol id="i-speedle-sphere" viewBox="22 22 114 114"><g fill="none" stroke="currentColor" stroke-linejoin="miter" stroke-miterlimit="3" stroke-linecap="butt"><polygon stroke-width="3.6" points="41.83 47.82 30.67 80.15 42.9 112.09 72.8 128.69 106.38 122.19 127.93 95.63 127.36 61.43 104.94 35.6 71.16 30.23"/><g stroke-width="2.4"><polygon points="81.97 43.92 52.19 57.23 44.03 88.8 63.62 114.87 96.22 115.81 117.28 90.9 110.94 58.91"/><polygon points="68.57 60.42 57.6 86.19 78.73 104.59 102.75 90.18 96.47 62.88"/><path d="M41.83 47.82L52.19 57.23 68.57 60.42 81.97 43.92 71.16 30.23 M30.67 80.15L44.03 88.8 42.9 112.09 M52.19 57.23L57.6 86.19 44.03 88.8 78.73 104.59 63.62 114.87 72.8 128.69 M78.73 104.59L96.22 115.81 106.38 122.19 M96.22 115.81L102.75 90.18 117.28 90.9 127.93 95.63 M117.28 90.9L127.36 61.43 110.94 58.91 104.94 35.6 81.97 43.92 M110.94 58.91L96.47 62.88 117.28 90.9"/></g></g></symbol>
   </svg>
 
   <a class="skip-link" href="#main">Skip to content</a>
 
   <header class="site-header">
-    <div class="wrap nav-wrap">
+    <div class="wrap nav">
       <a class="brand" href="/" aria-label="Speedle AI home">
-        <img src="/assets/speedle-mark-ai.svg" width="94" height="32" alt="Speedle">
+        <img src="/assets/speedle-mark-ai.svg" width="152" height="52" alt="Speedle">
         <span class="brand-divider" aria-hidden="true"></span>
         <span class="brand-product">AI</span>
       </a>
-      <button class="menu-button" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+      <button class="menu" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open navigation">☰</button>
       <nav id="site-nav" class="nav-links" aria-label="Main navigation">
+        <div class="products">
+          <button class="products-toggle" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="products-menu">Products<svg class="products-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+          <div class="products-panel" id="products-menu" role="menu" aria-label="Speedle products">
+            <span class="products-heading" aria-hidden="true">Products</span>
+            <a class="product-row" href="https://engine.speedle.io/" role="menuitem">
+              <svg class="product-sphere product-engine" aria-hidden="true"><use href="#i-speedle-sphere"/></svg>
+              <span class="product-copy"><span class="product-name">Speedle Engine</span><span class="product-description">Open-source authorization engine</span></span>
+            </a>
+            <a class="product-row" href="https://cloud.speedle.io/" role="menuitem">
+              <svg class="product-sphere product-cloud" aria-hidden="true"><use href="#i-speedle-sphere"/></svg>
+              <span class="product-copy"><span class="product-name">Speedle Cloud<span class="coming-soon">Coming soon</span></span><span class="product-description">Hosted authorization for developers</span></span>
+            </a>
+            <a class="product-row" href="https://ai.speedle.io/" role="menuitem" aria-current="page">
+              <svg class="product-sphere product-ai" aria-hidden="true"><use href="#i-speedle-sphere"/></svg>
+              <span class="product-copy"><span class="product-name">Speedle AI</span><span class="product-description">Access management for AI</span></span>
+              <svg class="product-check icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>
+            </a>
+          </div>
+        </div>
         <a href="#ai-for-access">AI for access management</a>
         <a href="#access-for-ai">Access management for AI</a>
         <a href="#playground">Demo</a>
-        <a href="https://speedle.io/">Speedle</a>
-        <a class="nav-cta" href="https://github.com/teramoby/ai.speedle.io">GitHub<svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg></a>
+        <a href="https://engine.speedle.io/">Speedle Engine</a>
       </nav>
     </div>
   </header>
@@ -785,8 +804,8 @@ grant entity researcher-1 researcher-agent</code></pre>
           <div class="ecosystem" aria-labelledby="ecosystem-title">
             <div class="ecosystem-head"><p class="eyebrow">Ecosystem</p><h3 id="ecosystem-title">Start with the Speedle building blocks.</h3></div>
             <div class="resource-grid">
-              <a class="resource-card" href="https://github.com/teramoby/speedle-plus"><span>OPEN SOURCE</span><strong>Speedle<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>The open-source authorization engine and readable SPDL policy language.</p></a>
-              <a class="resource-card" href="https://cloud.speedle.io/"><span>HOSTED</span><strong>Speedle Cloud<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>Hosted authorization for developers, built on the Speedle policy engine.</p></a>
+              <a class="resource-card" href="https://engine.speedle.io/"><span>OPEN SOURCE</span><strong>Speedle Engine<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>The open-source authorization engine and readable SPDL policy language.</p></a>
+              <a class="resource-card" href="https://cloud.speedle.io/"><span>HOSTED</span><strong><span class="resource-name">Speedle Cloud<span class="coming-soon">Coming soon</span></span><svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>Hosted authorization for developers, built on the Speedle policy engine.</p></a>
               <a class="resource-card" href="https://github.com/teramoby/speedle-sdk"><span>INTEGRATE</span><strong>Speedle SDK<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>Explore the SDK repository for client integration patterns and guidance.</p></a>
             </div>
           </div>
@@ -806,20 +825,30 @@ grant entity researcher-1 researcher-agent</code></pre>
   </main>
 
   <footer class="site-footer">
-    <div class="wrap">
-      <div class="footer-content">
-        <div class="footer-brand">
-          <a href="#top" aria-label="Back to Speedle for AI home"><img src="/assets/speedle-mark-ai.svg" width="132" height="45" alt="Speedle"></a>
-          <p class="footer-product">Speedle for AI</p>
-          <p>AI for access management.<br>Access management for AI.</p>
-        </div>
-        <nav class="footer-links" aria-label="Footer navigation">
-          <div><h2>Two parts</h2><ul><li><a href="#ai-for-access">AI for access management</a></li><li><a href="#mcp">Speedle MCP preview</a></li><li><a href="#access-for-ai">Access management for AI</a></li><li><a href="#risk-detection">AI risk detection</a></li></ul></div>
-          <div><h2>Explore</h2><ul><li><a href="#lifecycle">Build and run concept</a></li><li><a href="#playground">Simplified demo</a></li><li><a href="#approach">Integration approach</a></li><li><a href="https://speedle.io/">Speedle website</a></li></ul></div>
-          <div><h2>Community</h2><ul><li><a href="https://github.com/teramoby/ai.speedle.io">GitHub repository</a></li><li><a href="https://github.com/teramoby/ai.speedle.io/issues">Issues and ideas</a></li><li><a href="https://github.com/teramoby/speedle-sdk">Speedle SDK</a></li><li><a href="mailto:contact@speedle.io">contact@speedle.io</a></li></ul></div>
-        </nav>
+    <div class="wrap footer-inner">
+      <div class="footer-brand">
+        <a class="footer-lockup" href="/" aria-label="Speedle AI home">
+          <img src="/assets/speedle-mark-ai.svg" width="132" height="45" alt="Speedle">
+          <span class="footer-divider" aria-hidden="true"></span>
+          <span class="footer-product">AI</span>
+        </a>
+        <p>Licensed under the Universal Permissive License v1.0.</p>
+        <p>Copyright © 2019–2026. All rights reserved.</p>
       </div>
-      <div class="footer-bottom"><p>Copyright © 2019–2026 Speedle contributors.</p><p>Licensed under the <a href="https://github.com/teramoby/speedle-plus/blob/master/LICENSE">Universal Permissive License 1.0</a>.</p></div>
+      <nav class="footer-family" aria-labelledby="footer-family-title">
+        <h2 id="footer-family-title">Speedle family</h2>
+        <ul>
+          <li><a href="https://engine.speedle.io/"><svg class="product-sphere product-engine" aria-hidden="true"><use href="#i-speedle-sphere"/></svg><span class="footer-family-copy"><span class="footer-family-name">Speedle Engine</span><span class="footer-family-description">Open-source authorization engine</span></span></a></li>
+          <li><a href="https://cloud.speedle.io/"><svg class="product-sphere product-cloud" aria-hidden="true"><use href="#i-speedle-sphere"/></svg><span class="footer-family-copy"><span class="footer-family-name">Speedle Cloud<span class="coming-soon">Coming soon</span></span><span class="footer-family-description">Hosted authorization for developers</span></span></a></li>
+          <li><a href="https://ai.speedle.io/" aria-current="page"><svg class="product-sphere product-ai" aria-hidden="true"><use href="#i-speedle-sphere"/></svg><span class="footer-family-copy"><span class="footer-family-name">Speedle AI</span><span class="footer-family-description">Access management for AI</span></span></a></li>
+        </ul>
+      </nav>
+      <nav class="social" aria-label="Community links">
+        <a href="mailto:contact@speedle.io" aria-label="Email contact@speedle.io" title="contact@speedle.io"><img src="/assets/social-email.svg" alt=""></a>
+        <a href="https://groups.google.com/forum/#!forum/speedle-users" aria-label="Google Groups" title="Google Groups — speedle-users"><img src="/assets/social-google-groups.svg" alt=""></a>
+        <a href="https://github.com/teramoby/speedle-plus" aria-label="GitHub"><img src="/assets/social-github.svg" alt=""></a>
+        <a href="https://discord.gg/uaY2xVsbbT" aria-label="Discord"><img src="/assets/social-discord.svg" alt=""></a>
+      </nav>
     </div>
   </footer>
 </body>
