@@ -136,7 +136,7 @@
       <div class="wrap hero-grid">
         <div class="hero-copy">
           <p class="eyebrow">Speedle AI · Two connected directions</p>
-          <h1 id="hero-title">AI agent authorization for both sides of AI.</h1>
+          <h1 id="hero-title">AI agent authorization for both sides of AI</h1>
           <p class="hero-lead">Use AI to design, manage and check access policies — and apply the same policy to AI itself: MCP authorization, permission-aware RAG and least privilege for AI agents. Both directions rest on clear, enforceable policy decisions.</p>
           <p class="definition"><strong>What is Speedle AI?</strong> Speedle AI shows how to apply policy-based access control for AI agents and their applications with the open-source Speedle policy engine. It covers authorization for LLM applications across the AI lifecycle: training data and model release, inference and permission-aware RAG, MCP authorization, and agent-to-agent (A2A) authorization.</p>
           <p class="hero-note"><span aria-hidden="true"></span>Built on the open-source Speedle policy engine.</p>
@@ -163,13 +163,13 @@
       <div class="wrap">
         <header class="part-header">
           <span class="part-number" aria-hidden="true">01</span>
-          <div class="part-heading"><p class="eyebrow">AI for access management</p><h2 id="ai-for-access-title">Put AI to work on your access policies.</h2></div>
+          <div class="part-heading"><p class="eyebrow">AI for access management</p><h2 id="ai-for-access-title">Put AI to work on your access policies</h2></div>
           <p class="part-summary">AI helping people manage access: Speedle MCP for designing, managing and checking policies (launch preview), and AI-based risk detection that looks wider while policy keeps the veto (being built).</p>
         </header>
 
         <div id="mcp" class="mcp">
           <div class="section-head mcp-intro">
-            <div><p class="eyebrow">Speedle MCP · Coming soon</p><h3 id="mcp-title">Speedle MCP: one package, two deliberately separate modes.</h3></div>
+            <div><p class="eyebrow">Speedle MCP · Coming soon</p><h3 id="mcp-title">Speedle MCP: one package, two deliberately separate modes</h3></div>
             <div class="mcp-lead">
               <p><code>@speedle/mcp</code> is planned as one npm package with a <code>speedle-mcp</code> binary that runs as a local stdio MCP server. It is not published on npm yet.</p>
               <a class="button button-outline" href="https://github.com/teramoby/speedle-mcp">Follow the repository<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a>
@@ -249,7 +249,7 @@ npx @speedle/mcp manage
 
         <div id="risk-detection" class="subsection protection">
           <div class="section-head">
-            <div><p class="eyebrow">AI-based risk detection · Being built</p><h3 id="risk-title">AI risk detection looks wider. Policy keeps the veto.</h3></div>
+            <div><p class="eyebrow">AI-based risk detection · Being built</p><h3 id="risk-title">AI risk detection looks wider. Policy keeps the veto</h3></div>
             <p>AI can look across more dimensions and relationships to find risk that a single rule does not see. Deterministic policy still makes the decision and holds the veto: AI never grants what policy denies. This is a direction, not a shipped feature.</p>
           </div>
 
@@ -272,7 +272,7 @@ npx @speedle/mcp manage
 
           <section class="decision-architecture" aria-labelledby="decision-flow-title">
             <div class="architecture-head">
-              <div><p class="eyebrow">Conceptual target flow</p><h3 id="decision-flow-title">Policy first. Risk signals second. Veto intact.</h3></div>
+              <div><p class="eyebrow">Conceptual target flow</p><h3 id="decision-flow-title">Policy first. Risk signals second. Veto intact</h3></div>
               <span class="architecture-badge">AI risk detection · Not shipped</span>
             </div>
             <ol class="decision-flow">
@@ -291,13 +291,13 @@ npx @speedle/mcp manage
       <div class="wrap">
         <header class="part-header">
           <span class="part-number" aria-hidden="true">02</span>
-          <div class="part-heading"><p class="eyebrow">Access management for AI</p><h2 id="access-for-ai-title">Govern access while you build and run AI.</h2></div>
+          <div class="part-heading"><p class="eyebrow">Access management for AI</p><h2 id="access-for-ai-title">Govern access while you build and run AI</h2></div>
           <p class="part-summary">Speedle’s policy engine applied wherever AI systems touch data, models, tools and other agents: in Build, before a model serves, and in Run, while it serves and acts. These are solution patterns, not shipped integrations with any ML or agent platform.</p>
         </header>
 
         <div id="lifecycle" class="concept">
           <div class="section-head">
-            <div><p class="eyebrow">Concept</p><h3 id="concept-title">One decision point for building and running AI.</h3></div>
+            <div><p class="eyebrow">Concept</p><h3 id="concept-title">One decision point for building and running AI</h3></div>
             <p>Each area has an enforcement point in your application. It asks Speedle before it acts and enforces the answer. Identity comes in from your IdP; decisions and their explanations go out to your audit trail.</p>
           </div>
           <figure class="concept-figure">
@@ -575,7 +575,7 @@ npx @speedle/mcp manage
           <section id="build" class="phase" aria-labelledby="build-title">
             <div class="phase-head phase-build">
               <p class="phase-tag">Build</p>
-              <h3 id="build-title">Before a model serves: data, training and release.</h3>
+              <h3 id="build-title">Before a model serves: data, training and release</h3>
             </div>
             <article id="lc-data" class="area" aria-labelledby="lc-data-title">
               <div class="area-copy">
@@ -634,12 +634,12 @@ grant user dana release-manager</code></pre>
           <section id="run" class="phase" aria-labelledby="run-title">
             <div class="phase-head phase-run">
               <p class="phase-tag">Run</p>
-              <h3 id="run-title">While AI serves and acts: retrieval, agents, tools and other agents.</h3>
+              <h3 id="run-title">While AI serves and acts: retrieval, agents, tools and other agents</h3>
             </div>
             <article id="lc-rag" class="area area-feature" aria-labelledby="lc-rag-title">
               <div class="area-copy">
                 <p class="area-step">03 / Inference &amp; RAG</p>
-                <h4 id="lc-rag-title">Only what the user may read enters the prompt.</h4>
+                <h4 id="lc-rag-title">Only what the user may read enters the prompt</h4>
                 <p class="area-lead">Users, apps and tenants call models. For permission-aware RAG (retrieval-augmented generation), the retriever asks Speedle about each document or collection before its content enters the prompt, so the model only sees what the person behind the request may read.</p>
                 <ol class="rag-flow" aria-label="Permission-aware retrieval">
                   <li><span>1</span>The retriever finds candidate documents.</li>
@@ -748,23 +748,23 @@ grant entity researcher-1 researcher-agent</code></pre>
 
         <div id="cross-cutting" class="crosscut">
           <div class="section-head">
-            <div><p class="eyebrow">Cross-cutting</p><h3 id="crosscut-title">Identity in. Decisions and explanations out.</h3></div>
+            <div><p class="eyebrow">Cross-cutting</p><h3 id="crosscut-title">Identity in. Decisions and explanations out</h3></div>
             <p>The same three concerns apply to every area in Build and Run.</p>
           </div>
           <div class="crosscut-grid">
             <article class="crosscut-card">
               <p class="crosscut-tag">Identity integration</p>
-              <h4>Speedle decides; your IdP authenticates.</h4>
+              <h4>Speedle decides; your IdP authenticates</h4>
               <p>Speedle is the authorization decision point. Authentication comes from your IdP or OAuth authorization server, for users and for agents; MCP authorization builds on OAuth. The application maps verified identities to principals (user, groups, entity), and Speedle decides on the principals it is given.</p>
             </article>
             <article class="crosscut-card">
               <p class="crosscut-tag">Audit &amp; explainability</p>
-              <h4>Every decision can be explained.</h4>
+              <h4>Every decision can be explained</h4>
               <p>Speedle’s <a href="https://speedle.io/docs/pms/diagnosis/">diagnose API</a> returns the decision, the reason, the effective roles and the policies examined, including which one matched and why. Applications log each decision with the agent and the delegating human. Diagnose exposes policy and request details, so keep it to trusted operators.</p>
             </article>
             <article class="crosscut-card">
               <p class="crosscut-tag">Risk mapping</p>
-              <h4>Maps to OWASP LLM06:2025 Excessive Agency.</h4>
+              <h4>Maps to OWASP LLM06:2025 Excessive Agency</h4>
               <p>The <a href="https://genai.owasp.org/llmrisk/llm062025-excessive-agency/">OWASP Top 10 for LLM Applications 2025</a> names Excessive Agency: an agent with more functionality, permission or autonomy than its task needs. Per-agent roles, per-tool checks, task- and time-bound delegation and human approval for high-risk actions narrow each of the three.</p>
             </article>
           </div>
@@ -780,7 +780,7 @@ grant entity researcher-1 researcher-agent</code></pre>
 
         <div id="playground" class="subsection">
           <div class="section-head">
-            <div><p class="eyebrow">Interactive example · Policy only</p><h3 id="playground-title">One request. A clear policy decision.</h3></div>
+            <div><p class="eyebrow">Interactive example · Policy only</p><h3 id="playground-title">One request. A clear policy decision</h3></div>
             <p>Switch the agent, action, and data scope to see how a small set of deterministic rules changes the illustrated outcome.</p>
           </div>
 
@@ -851,7 +851,7 @@ grant entity researcher-1 researcher-agent</code></pre>
 
         <div id="approach" class="subsection">
           <div class="section-head">
-            <div><p class="eyebrow">Integration approach</p><h3 id="approach-title">From agent intent to an enforced decision.</h3></div>
+            <div><p class="eyebrow">Integration approach</p><h3 id="approach-title">From agent intent to an enforced decision</h3></div>
             <p>An application asks for authorization before accessing data or executing a tool, then applies the returned decision.</p>
           </div>
           <ol class="steps">
@@ -862,7 +862,7 @@ grant entity researcher-1 researcher-agent</code></pre>
           </ol>
 
           <div class="ecosystem" aria-labelledby="ecosystem-title">
-            <div class="ecosystem-head"><p class="eyebrow">Ecosystem</p><h3 id="ecosystem-title">Start with the Speedle building blocks.</h3></div>
+            <div class="ecosystem-head"><p class="eyebrow">Ecosystem</p><h3 id="ecosystem-title">Start with the Speedle building blocks</h3></div>
             <div class="resource-grid">
               <a class="resource-card" href="https://engine.speedle.io/"><span>OPEN SOURCE</span><strong>Speedle Engine<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>The open-source authorization engine and readable SPDL policy language.</p></a>
               <a class="resource-card" href="https://cloud.speedle.io/"><span>HOSTED</span><strong><span class="resource-name">Speedle Cloud<span class="coming-soon">Coming soon</span></span><svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>Hosted authorization for developers, built on the Speedle policy engine.</p></a>
@@ -876,7 +876,7 @@ grant entity researcher-1 researcher-agent</code></pre>
     <section id="about" class="section about" aria-labelledby="about-title">
       <div class="wrap">
         <div class="cta">
-          <div class="cta-copy"><p class="eyebrow">Open source · Open exploration</p><h2 id="about-title">Bring a real AI authorization scenario.</h2><p>Help shape the next examples. Share the datasets, models, tools or agent workflows your application needs to protect.</p></div>
+          <div class="cta-copy"><p class="eyebrow">Open source · Open exploration</p><h2 id="about-title">Bring a real AI authorization scenario</h2><p>Help shape the next examples. Share the datasets, models, tools or agent workflows your application needs to protect.</p></div>
           <div class="actions"><a class="button button-primary" href="https://github.com/teramoby/ai.speedle.io/issues">Share your scenario<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a><a class="button button-secondary" href="https://github.com/teramoby/speedle-plus">Explore Speedle</a></div>
         </div>
         <p class="provenance">Speedle grew out of <a href="https://github.com/oracle/speedle">Oracle Speedle</a> and continues to be maintained by the original developers under the Universal Permissive License (UPL) 1.0. <a href="https://speedle.io/about/">Read the project story</a>.</p>

@@ -6,7 +6,8 @@
 //
 // It verifies sitemap and llms link targets, hreflang alternates, page metadata,
 // JSON-LD and the absence of FAQ content, the language switch, Cloudflare Web
-// Analytics, and byte-identical SPDL examples across the English and Chinese pages.
+// Analytics, headline punctuation, and byte-identical SPDL examples across the
+// English and Chinese pages.
 
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -169,6 +170,9 @@ function checkPage(definition) {
     check(mapAlt && mapAlt.href === href, `sitemap.xml: ${canonical} hreflang="${lang}" must point to ${href}`);
   }
   check((html.match(/<h1[\s>]/g) || []).length === 1, `${file}: must have exactly one <h1>`);
+  for (const heading of html.matchAll(/<h([1-4])\b[^>]*>([\s\S]*?)<\/h\1>/g)) {
+    check(!/[.。]\s*$/.test(heading[2]), `${file}: <h${heading[1]}> must not end with a full stop: ${heading[2].trim()}`);
+  }
   check(html.includes(languageSwitch), `${file}: missing the correct language-switch link`);
   check(new RegExp(`${languageSwitch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*</nav>`).test(html), `${file}: language switch must be the last navigation item`);
   const siteNav = (html.match(/<nav id="site-nav"[\s\S]*?<\/nav>/) || [])[0] || '';
