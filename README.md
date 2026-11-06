@@ -30,8 +30,7 @@ format of speedle.io.
 `sitemap.xml`, `robots.txt`, `llms.txt` and `llms-full.txt` at the root are
 hand-maintained; there is no generator. The sitemap and both home pages declare
 `hreflang` alternates for `en`, `zh-CN` and `x-default`. The complete Chinese
-page is at `/zh/`; the shared script localizes its interactive demo from the
-page's `lang` attribute. Every factual claim in these files must already be
+page is at `/zh/`. Every factual claim in these files must already be
 true on the page: `@speedle/mcp` is not on npm, Speedle Cloud is coming soon,
 and AI risk detection is not shipped.
 
