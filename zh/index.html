@@ -144,7 +144,7 @@
           <a class="path-card" href="#ai-for-access">
             <div class="path-top"><span class="path-index">第一部分</span><span class="path-icon" aria-hidden="true"><svg class="icon"><use href="#i-terminal"/></svg></span></div>
             <h2>AI 助力权限管理</h2>
-            <p>用 Speedle MCP 让 AI 设计、管理和检查策略，并了解正在构建的 AI 风险检测方案。</p>
+            <p>用开源策略建模技能把制度文档变成 SPDL，用 Speedle MCP 设计、管理和检查策略，并了解正在构建的 AI 风险检测方案。</p>
             <span class="path-link">了解 Speedle MCP<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></span>
           </a>
           <a class="path-card" href="#access-for-ai">
@@ -163,7 +163,7 @@
         <header class="part-header">
           <span class="part-number" aria-hidden="true">01</span>
           <div class="part-heading"><p class="eyebrow">AI 助力权限管理</p><h2 id="ai-for-access-title">用 AI 管好访问策略</h2></div>
-          <p class="part-summary">AI 帮人管理访问：Speedle MCP 用于设计、管理和检查策略（上线预览）；正在构建的 AI 风险检测能从更多维度和关系中发现风险，策略仍保留最终否决权。</p>
+          <p class="part-summary">AI 帮人管理访问：开源策略建模技能把制度文档变成 SPDL；Speedle MCP 用于设计、管理和检查策略（上线预览）；正在构建的 AI 风险检测能从更多维度和关系中发现风险，策略仍保留最终否决权。</p>
         </header>
 
         <div id="mcp" class="mcp">
@@ -244,6 +244,56 @@ npx @speedle/mcp manage
           </div>
 
           <div class="mcp-resources"><span>源码与相关项目</span><a href="https://github.com/teramoby/speedle-mcp">Speedle MCP</a><a href="https://github.com/teramoby/speedle-plus">Speedle</a><a href="https://cloud.speedle.io/zh-CN/">Speedle Cloud</a><a href="https://github.com/teramoby/speedle-sdk">Speedle SDK</a></div>
+        </div>
+
+        <div id="policy-modeler" class="subsection policy-modeler">
+          <div class="section-head">
+            <div><p class="eyebrow">Speedle 策略建模技能 · 开源技能</p><h3 id="policy-modeler-title">把制度文档变成可复核的 SPDL</h3></div>
+            <p>面向 Claude Code 的 Agent Skill。它读取员工手册或制度文件，先问清文档没有写明的部分，再生成 RBAC + ABAC 策略，不会凭空猜规则。</p>
+          </div>
+
+          <div class="mode-grid">
+            <article class="mode-card">
+              <div class="mode-top"><span class="mode-label">产出</span><code>5 个文件</code></div>
+              <h4>从条款到可测试的策略</h4>
+              <p>每条策略都标注它实现的条款，或用户确认过的回答。模型文档包含 Mermaid 角色继承图和每条策略的理由。</p>
+              <ul class="mode-list">
+                <li><span>可直接导入文件存储的 <code>.spdl</code>，并通过 <code>spctl check</code>。</span></li>
+                <li><span>按部门、地点、数据级别和金额设置 ABAC 条件。</span></li>
+                <li><span>覆盖允许、拒绝和审批边界的可执行用例。</span></li>
+              </ul>
+              <a class="mode-link" href="https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler">打开技能目录<svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg></a>
+            </article>
+            <article class="mode-card">
+              <div class="mode-top"><span class="mode-label">示例输出</span><code>中英双语</code></div>
+              <h4>一本合成手册，完整建模</h4>
+              <p>两个示例都从虚构的员工手册出发，最后得到经过测试的模型。各自通过 <code>spctl check</code>，并在本地 PMS 和 ADS 上通过全部 37 条授权用例。</p>
+              <ul class="mode-list">
+                <li><span>角色继承和按部门限定的经理角色。</span></li>
+                <li><span>明确拒绝覆盖宽泛的员工授予。</span></li>
+                <li><span>用 <code>entity</code> 建模薪资服务账号。</span></li>
+              </ul>
+              <a class="mode-link" href="https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/zh/model.md">阅读中文示例<svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg></a>
+            </article>
+          </div>
+
+          <p class="launch-note">技能包遵循 Agent Skills 格式：<code>SKILL.md</code> 包含 <code>name</code> 和 <code>description</code> frontmatter，另有参考文档、脚本和示例。安装到 <code>~/.claude/skills/</code> 作为个人技能，或复制到 <code>.claude/skills/</code> 作为项目技能。</p>
+
+          <div class="config-grid">
+            <figure class="config-card">
+              <figcaption><span>安装</span><span>Claude Code</span></figcaption>
+              <pre tabindex="0" aria-label="安装 Speedle 策略建模技能"><code>git clone --depth 1 https://github.com/teramoby/ai.speedle.io.git
+mkdir -p ~/.claude/skills
+cp -R ai.speedle.io/skills/speedle-policy-modeler \
+  ~/.claude/skills/</code></pre>
+            </figure>
+            <figure class="config-card">
+              <figcaption><span>使用</span><span>Claude Code</span></figcaption>
+              <pre tabindex="0" aria-label="让策略建模技能处理员工手册"><code>/speedle-policy-modeler ./employee-handbook.md</code></pre>
+            </figure>
+          </div>
+
+          <div class="mcp-resources"><span>技能与示例</span><a href="https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler">技能目录</a><a href="https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/zh/model.md">中文示例</a><a href="https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/en/model.md">英文示例</a><a href="https://code.claude.com/docs/en/skills">Claude Code 技能文档</a></div>
         </div>
 
         <div id="risk-detection" class="subsection protection">

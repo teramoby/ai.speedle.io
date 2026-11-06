@@ -143,7 +143,7 @@
           <a class="path-card" href="#ai-for-access">
             <div class="path-top"><span class="path-index">PART 01</span><span class="path-icon" aria-hidden="true"><svg class="icon"><use href="#i-terminal"/></svg></span></div>
             <h2>AI for access management</h2>
-            <p>Put AI to work on policy design, management and checks with Speedle MCP, and see the AI-based risk detection being built.</p>
+            <p>Put AI to work on policy modeling, design, management and checks: turn documents into SPDL with the open-source policy modeler skill, use Speedle MCP, and see the AI-based risk detection being built.</p>
             <span class="path-link">Explore Speedle MCP<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></span>
           </a>
           <a class="path-card" href="#access-for-ai">
@@ -162,7 +162,7 @@
         <header class="part-header">
           <span class="part-number" aria-hidden="true">01</span>
           <div class="part-heading"><p class="eyebrow">AI for access management</p><h2 id="ai-for-access-title">Put AI to work on your access policies</h2></div>
-          <p class="part-summary">AI helping people manage access: Speedle MCP for designing, managing and checking policies (launch preview), and AI-based risk detection that looks wider while policy keeps the veto (being built).</p>
+          <p class="part-summary">AI helping people manage access: the open-source policy modeler skill for turning documents into SPDL, Speedle MCP for designing, managing and checking policies (launch preview), and AI-based risk detection that looks wider while policy keeps the veto (being built).</p>
         </header>
 
         <div id="mcp" class="mcp">
@@ -243,6 +243,56 @@ npx @speedle/mcp manage
           </div>
 
           <div class="mcp-resources"><span>Source and foundations</span><a href="https://github.com/teramoby/speedle-mcp">Speedle MCP</a><a href="https://github.com/teramoby/speedle-plus">Speedle</a><a href="https://cloud.speedle.io/">Speedle Cloud</a><a href="https://github.com/teramoby/speedle-sdk">Speedle SDK</a></div>
+        </div>
+
+        <div id="policy-modeler" class="subsection policy-modeler">
+          <div class="section-head">
+            <div><p class="eyebrow">Speedle policy modeler · Open source skill</p><h3 id="policy-modeler-title">Turn policy documents into reviewable SPDL</h3></div>
+            <p>An Agent Skill for Claude Code that reads an employee handbook or regulation, asks about what the document leaves open, and models the result as RBAC + ABAC policies. It never guesses a rule.</p>
+          </div>
+
+          <div class="mode-grid">
+            <article class="mode-card">
+              <div class="mode-top"><span class="mode-label">What it produces</span><code>5 files</code></div>
+              <h4>From handbook clauses to tested policies</h4>
+              <p>Every policy cites the clause it implements, or a confirmed answer. The model document includes a Mermaid role-inheritance diagram and each policy's rationale.</p>
+              <ul class="mode-list">
+                <li><span>Importable <code>.spdl</code> for the file store, checked with <code>spctl check</code>.</span></li>
+                <li><span>ABAC conditions for department, location, data class and amount.</span></li>
+                <li><span>Executable cases covering allows, denies and approval boundaries.</span></li>
+              </ul>
+              <a class="mode-link" href="https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler">Open the skill folder<svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg></a>
+            </article>
+            <article class="mode-card">
+              <div class="mode-top"><span class="mode-label">Sample output</span><code>EN + ZH</code></div>
+              <h4>A synthetic handbook, modeled end to end</h4>
+              <p>Both runs start from a fictional employee handbook and finish with a tested model. Each passes <code>spctl check</code> and all 37 authorization cases against a local PMS and ADS.</p>
+              <ul class="mode-list">
+                <li><span>Role inheritance and a department-scoped manager role.</span></li>
+                <li><span>An explicit deny that overrides a broad employee grant.</span></li>
+                <li><span>A payroll service account modeled as an <code>entity</code>.</span></li>
+              </ul>
+              <a class="mode-link" href="https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/en/model.md">Read the English sample<svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg></a>
+            </article>
+          </div>
+
+          <p class="launch-note">The package follows the Agent Skills format: a <code>SKILL.md</code> with <code>name</code> and <code>description</code> frontmatter, plus references, scripts and examples. Install it as a personal skill in <code>~/.claude/skills/</code>, or copy it to <code>.claude/skills/</code> for a project-scoped install.</p>
+
+          <div class="config-grid">
+            <figure class="config-card">
+              <figcaption><span>install</span><span>Claude Code</span></figcaption>
+              <pre tabindex="0" aria-label="Install the Speedle policy modeler skill"><code>git clone --depth 1 https://github.com/teramoby/ai.speedle.io.git
+mkdir -p ~/.claude/skills
+cp -R ai.speedle.io/skills/speedle-policy-modeler \
+  ~/.claude/skills/</code></pre>
+            </figure>
+            <figure class="config-card">
+              <figcaption><span>use</span><span>Claude Code</span></figcaption>
+              <pre tabindex="0" aria-label="Ask the policy modeler skill to model a handbook"><code>/speedle-policy-modeler ./employee-handbook.md</code></pre>
+            </figure>
+          </div>
+
+          <div class="mcp-resources"><span>Skill and samples</span><a href="https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler">Skill folder</a><a href="https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/en/model.md">English sample</a><a href="https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/zh/model.md">Chinese sample</a><a href="https://code.claude.com/docs/en/skills">Claude Code skills docs</a></div>
         </div>
 
         <div id="risk-detection" class="subsection protection">
