@@ -309,7 +309,15 @@ for (const keyword of ['AI 智能体授权', 'AI 访问控制', 'MCP 授权', 'R
   check(chineseHtml.includes(keyword), `zh/index.html must naturally include the Chinese keyword "${keyword}"`);
 }
 check(chineseHtml.includes('>产品<svg class="products-chevron"'), 'zh/index.html header must use the Chinese 产品 label');
-check(chineseHtml.includes('<h2 id="footer-family-title">Speedle 产品</h2>'), 'zh/index.html footer must use the Speedle 产品 label');
+for (const [html, file, footerLabel] of [
+  [englishHtml, 'index.html', 'Speedle products'],
+  [chineseHtml, 'zh/index.html', 'Speedle 产品']
+]) {
+  const footerFamily = (html.match(/<nav class="footer-family"[\s\S]*?<\/nav>/) || [])[0] || '';
+  check(footerFamily.startsWith(`<nav class="footer-family" aria-label="${footerLabel}">`), `${file}: footer product navigation must use its localized accessible label`);
+  check(!/<h[1-6]\b/.test(footerFamily), `${file}: footer products must not have a column heading`);
+  check((footerFamily.match(/<li>/g) || []).length === 3, `${file}: footer must contain exactly three product links`);
+}
 
 // --- llms.txt and llms-full.txt ------------------------------------------
 
