@@ -1,0 +1,87 @@
+# Northstar Health — Speedle 策略模型
+# skills/speedle-policy-modeler 的中文合成示例。
+# 服务：northstar_hr
+#
+# 这是只读的 SPDL 文件存储形式。不要对这份文件执行 spctl create/delete：
+# PMS 在管理写入时会把文件存储改写成 JSON。修改本文件后重启或重新加载 PMS 和 ADS。
+
+[service.northstar_hr]
+
+[policy]
+# P01 — 员工手册，3.1 + 5.3
+grant role employee read /hr/handbook
+
+# P02 — 员工通讯录，5.2
+grant role employee read /hr/directory
+
+# P03 — 读取自己的员工档案，5.1
+grant role employee read expr:^/hr/employees/.*$ if owner == request_user
+
+# P04 — HR 专员读取本工作地点、非受限的员工档案，4.4
+grant role hr_specialist read expr:^/hr/employees/.*$ if location == requester_location && classification != 'restricted'
+
+# P05 — HR 经理读取全部员工档案，4.5
+grant role hr_manager read expr:^/hr/employees/.*$
+
+# P06 — HR 经理更新非受限的员工档案，4.5
+grant role hr_manager update expr:^/hr/employees/.*$ if classification != 'restricted'
+
+# P07 — HR 经理读取薪资数据，4.5 + 4.7
+grant role hr_manager read expr:^/hr/salary/.*$
+
+# P08 — 薪资管理员读取和更新薪资数据，4.6
+grant role payroll_admin read,update expr:^/hr/salary/.*$
+
+# P09 — 员工读取公开数据，4.2
+grant role employee read expr:^/data/public/.*
+
+# P10 — 员工读取内部数据，4.2
+grant role employee read expr:^/data/internal/.*
+
+# P11 — 外包人员不得读取内部机密数据，4.3 + 9.1
+deny role contractor read expr:^/data/internal/confidential/.*
+
+# P12 — 部门经理审批不超过 5,000 的支出，6.1 + 6.4
+grant role manager approve expr:^/expenses/.*$ if amount <= 5000
+
+# P13 — 财务分析师审批超过 5,000 至 25,000 的支出，6.2
+grant role finance_analyst approve expr:^/expenses/.*$ if amount > 5000 && amount <= 25000
+
+# P14 — 高管审批超过 25,000 的支出，6.3
+grant role executive approve expr:^/expenses/.*$ if amount > 25000
+
+# P15 — 财务分析师读取部门财务报告，7.1
+grant role finance_analyst read expr:^/finance/reports/department/.*
+
+# P16 — 高管读取高管财务报告，7.2
+grant role executive read expr:^/finance/reports/executive/.*
+
+# P17 — 安全专员读取审计日志，7.3
+grant role security_officer read expr:^/security/audit/.*
+
+# P18 — payroll_sync 服务账号，8.1
+grant entity payroll_sync read,update expr:^/hr/payroll/.*
+
+[rolepolicy]
+# R01–R08 — 角色继承，3.8（子角色在前：子角色继承父角色）
+grant role manager role employee
+grant role hr_specialist role employee
+grant role hr_manager role hr_specialist
+grant role finance_analyst role employee
+grant role payroll_admin role finance_analyst
+grant role security_officer role employee
+grant role executive role manager
+grant role contractor role employee
+
+# R09–R16 — 组与用户分配，2.4 + 3.1–3.7
+grant group all_staff role employee
+grant group hr role hr_specialist
+grant user alice role hr_manager
+grant group finance role finance_analyst
+grant user frank role payroll_admin
+grant group security role security_officer
+grant user grace role executive
+grant group contractors role contractor
+
+# R17 — 工程经理的角色限定在工程支出，3.5 + 6.4
+grant user carol role manager on expr:^/expenses/engineering/.*$

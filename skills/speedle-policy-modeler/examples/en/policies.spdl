@@ -1,0 +1,88 @@
+# Northstar Health — Speedle policy model
+# Synthetic sample for skills/speedle-policy-modeler.
+# Service: northstar_hr
+#
+# This is the read-only SPDL file-store form. Do not run spctl create/delete
+# against this file: PMS rewrites a managed file store as JSON. Edit this file
+# and restart/reload PMS and ADS instead.
+
+[service.northstar_hr]
+
+[policy]
+# P01 — handbook, 3.1 + 5.3
+grant role employee read /hr/handbook
+
+# P02 — directory, 5.2
+grant role employee read /hr/directory
+
+# P03 — own employee record, 5.1
+grant role employee read expr:^/hr/employees/.*$ if owner == request_user
+
+# P04 — HR specialist reads a non-restricted record at their own location, 4.4
+grant role hr_specialist read expr:^/hr/employees/.*$ if location == requester_location && classification != 'restricted'
+
+# P05 — HR manager reads every employee record, 4.5
+grant role hr_manager read expr:^/hr/employees/.*$
+
+# P06 — HR manager updates a non-restricted employee record, 4.5
+grant role hr_manager update expr:^/hr/employees/.*$ if classification != 'restricted'
+
+# P07 — HR manager reads salary data, 4.5 + 4.7
+grant role hr_manager read expr:^/hr/salary/.*$
+
+# P08 — payroll administrator reads and updates salary data, 4.6
+grant role payroll_admin read,update expr:^/hr/salary/.*$
+
+# P09 — employees read Public data, 4.2
+grant role employee read expr:^/data/public/.*$
+
+# P10 — employees read Internal data, 4.2
+grant role employee read expr:^/data/internal/.*$
+
+# P11 — contractors may not read Internal Confidential data, 4.3 + 9.1
+deny role contractor read expr:^/data/internal/confidential/.*$
+
+# P12 — department manager approval up to and including 5,000, 6.1 + 6.4
+grant role manager approve expr:^/expenses/.*$ if amount <= 5000
+
+# P13 — finance analyst approval over 5,000 through 25,000 inclusive, 6.2
+grant role finance_analyst approve expr:^/expenses/.*$ if amount > 5000 && amount <= 25000
+
+# P14 — executive approval above 25,000, 6.3
+grant role executive approve expr:^/expenses/.*$ if amount > 25000
+
+# P15 — finance analyst reads department reports, 7.1
+grant role finance_analyst read expr:^/finance/reports/department/.*$
+
+# P16 — executive reads executive reports, 7.2
+grant role executive read expr:^/finance/reports/executive/.*$
+
+# P17 — security officer reads audit logs, 7.3
+grant role security_officer read expr:^/security/audit/.*$
+
+# P18 — payroll sync service account, 8.1
+grant entity payroll_sync read,update expr:^/hr/payroll/.*$
+
+[rolepolicy]
+# R01–R08 — role hierarchy, 3.8 (child first: the child inherits the parent)
+grant role manager role employee
+grant role hr_specialist role employee
+grant role hr_manager role hr_specialist
+grant role finance_analyst role employee
+grant role payroll_admin role finance_analyst
+grant role security_officer role employee
+grant role executive role manager
+grant role contractor role employee
+
+# R09–R16 — cohort assignments, 2.4 + 3.1–3.7
+grant group all_staff role employee
+grant group hr role hr_specialist
+grant user alice role hr_manager
+grant group finance role finance_analyst
+grant user frank role payroll_admin
+grant group security role security_officer
+grant user grace role executive
+grant group contractors role contractor
+
+# R17 — engineering manager is scoped to Engineering, 3.5 + 6.4
+grant user carol role manager on expr:^/expenses/engineering/.*$
