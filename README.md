@@ -37,9 +37,9 @@ and AI risk detection is not shipped.
 `node scripts/check-seo.mjs` verifies that the sitemap and `llms` link targets
 resolve to files and anchors in this repository, that each sitemap entry's
 `hreflang` entries match its page, that both pages' JSON-LD blocks parse and
-cover Organization, WebSite and SoftwareApplication, and that the English
-page's visible FAQ matches its FAQPage data (the Chinese home has no FAQ). It
-also checks the language-switch links, Chinese metadata and diagram labels,
+cover Organization, WebSite and SoftwareApplication, and that neither home
+page has a visible FAQ section or FAQPage data. It also checks the
+language-switch links, Chinese metadata and diagram labels,
 Cloudflare Web Analytics on both pages, and byte-identical SPDL blocks
 including comments. No dependencies.
 
