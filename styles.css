@@ -32,6 +32,11 @@
   --sans: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
+html:lang(zh-CN) {
+  --sans: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+/* Chinese headlines: keep words whole; fall back to emergency breaks only if a run cannot fit. */
+html:lang(zh-CN) h1 { word-break: keep-all; overflow-wrap: anywhere; }
 
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 96px; -webkit-text-size-adjust: 100%; }
@@ -616,8 +621,8 @@ h1 { max-width: 650px; margin: 22px 0 26px; font-size: clamp(3.15rem, 5.25vw, 4.
 .footer-family a { display: grid; grid-template-columns: 20px minmax(0, 1fr); align-items: center; gap: 10px; color: inherit; }
 .footer-family-copy { min-width: 0; }
 .footer-family a:hover { color: var(--primary); }
-.footer-family-name { display: flex; align-items: center; gap: 8px; font-size: .88rem; line-height: 1.65; white-space: nowrap; }
-.footer-family-description { display: block; font-size: .88rem; line-height: 1.65; white-space: nowrap; }
+.footer-family-name { display: flex; align-items: center; gap: 8px; font-size: .88rem; font-weight: 600; line-height: 1.65; white-space: nowrap; }
+.footer-family-description { display: block; color: var(--muted); font-size: .88rem; font-weight: 400; line-height: 1.65; white-space: nowrap; }
 .footer-family a[aria-current="page"] .footer-family-name { color: var(--primary); }
 .social { display: flex; gap: 12px; }
 .social a { display: grid; width: 44px; height: 44px; place-items: center; border: 1px solid rgba(24,32,52,.14); border-radius: 10px; }

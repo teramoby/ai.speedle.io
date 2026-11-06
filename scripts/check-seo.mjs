@@ -1,13 +1,12 @@
 #!/usr/bin/env node
-// Checks the hand-maintained SEO/GEO files: robots.txt, sitemap.xml, llms.txt,
-// llms-full.txt and the page metadata in index.html.
+// Checks the hand-maintained SEO/GEO files and both localized home pages.
 //
 // No dependencies. Run from anywhere:
 //   node scripts/check-seo.mjs
 //
-// It verifies the sitemap and llms link targets resolve to files in this
-// repository, that hreflang alternates agree with the page, and that the
-// JSON-LD blocks parse and match the visible FAQ.
+// It verifies sitemap and llms link targets, hreflang alternates, page metadata,
+// JSON-LD and visible FAQs, the language switch, Cloudflare Web Analytics, and
+// byte-identical SPDL examples across the English and Chinese pages.
 
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -30,7 +29,7 @@ function read(name) {
 }
 
 // Map https://ai.speedle.io/<path> to a file in this repository and, for
-// fragment URLs, to an id in that file.
+// fragment URLs, to an id in that file. Directory URLs map to their index.html.
 const pages = new Map();
 function localTarget(url) {
   let parsed;
@@ -41,7 +40,10 @@ function localTarget(url) {
   }
   if (parsed.origin !== origin) return null;
   const path = decodeURIComponent(parsed.pathname);
-  const file = path === '/' || path === '' ? 'index.html' : path.replace(/^\//, '');
+  let file;
+  if (path === '/' || path === '') file = 'index.html';
+  else if (path.endsWith('/')) file = `${path.replace(/^\//, '')}index.html`;
+  else file = path.replace(/^\//, '');
   return { file, hash: parsed.hash.slice(1) };
 }
 
@@ -90,49 +92,174 @@ const sitemap = read('sitemap.xml');
 check(sitemap.trimStart().startsWith('<?xml'), 'sitemap.xml must start with an XML declaration');
 check(/<urlset\s[^>]*xmlns="http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9"/.test(sitemap), 'sitemap.xml must use the sitemap 0.9 namespace');
 check(/xmlns:xhtml="http:\/\/www\.w3\.org\/1999\/xhtml"/.test(sitemap), 'sitemap.xml must declare the xhtml namespace for hreflang');
-const locations = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]);
-check(locations.length > 0, 'sitemap.xml must contain at least one <loc>');
-for (const loc of locations) {
+const sitemapEntries = new Map();
+for (const match of sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)) {
+  const block = match[1];
+  const loc = (block.match(/<loc>([^<]+)<\/loc>/) || [])[1];
+  if (!loc) {
+    check(false, 'sitemap.xml contains a <url> without a <loc>');
+    continue;
+  }
+  const alternates = [...block.matchAll(/<xhtml:link rel="alternate" hreflang="([^"]+)" href="([^"]+)"\/>/g)]
+    .map(alt => ({ lang: alt[1], href: alt[2] }));
+  sitemapEntries.set(loc, { block, alternates });
+}
+const locations = [...sitemapEntries.keys()];
+check(locations.length === 2, `sitemap.xml must contain the English and Chinese URLs (found ${locations.length})`);
+for (const path of ['/', '/zh/']) {
+  check(sitemapEntries.has(`${origin}${path}`), `sitemap.xml must contain ${origin}${path}`);
+}
+for (const [loc, { block, alternates }] of sitemapEntries) {
   check(loc.startsWith(`${origin}/`), `sitemap.xml: ${loc} must be on ${origin}`);
   const target = localTarget(loc);
   check(target !== null && htmlFor(target.file) !== '', `sitemap.xml: ${loc} has no local page`);
-  const entry = sitemap.slice(sitemap.indexOf(`<loc>${loc}</loc>`));
-  const block = entry.slice(0, entry.indexOf('</url>'));
   check(/<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/.test(block), `sitemap.xml: ${loc} needs a <lastmod>`);
+  check(alternates.length === 3, `sitemap.xml: ${loc} must have exactly three hreflang alternates`);
+  for (const alt of alternates) checkInternalUrl(alt.href, 'sitemap.xml hreflang');
 }
-const sitemapAlternates = [...sitemap.matchAll(/<xhtml:link rel="alternate" hreflang="([^"]+)" href="([^"]+)"\/>/g)]
-  .map(match => ({ lang: match[1], href: match[2] }));
-for (const alt of sitemapAlternates) checkInternalUrl(alt.href, 'sitemap.xml hreflang');
+const sitemapAlternates = [...sitemapEntries.values()].flatMap(entry => entry.alternates);
 
-// --- page metadata --------------------------------------------------------
+// --- localized page metadata, JSON-LD and visible FAQs --------------------
 
-const html = read('index.html');
-const title = (html.match(/<title>([^<]*)<\/title>/) || [])[1] || '';
-const description = (html.match(/<meta name="description" content="([^"]*)"/) || [])[1] || '';
-check(title.length > 0 && title.length <= 60, `title must be 1-60 characters (is ${title.length})`);
-check(description.length > 0 && description.length <= 155, `meta description must be 1-155 characters (is ${description.length})`);
-check(/<link rel="canonical" href="https:\/\/ai\.speedle\.io\/">/.test(html), 'canonical URL must be https://ai.speedle.io/');
-const pageAlternates = [...html.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="([^"]+)">/g)]
-  .map(match => ({ lang: match[1], href: match[2] }));
-for (const lang of ['en', 'x-default']) {
-  const pageAlt = pageAlternates.find(alt => alt.lang === lang);
-  const mapAlt = sitemapAlternates.find(alt => alt.lang === lang);
-  check(pageAlt !== undefined, `index.html must declare hreflang="${lang}"`);
-  check(mapAlt !== undefined, `sitemap.xml must declare hreflang="${lang}"`);
-  check(pageAlt && mapAlt && pageAlt.href === mapAlt.href, `hreflang="${lang}" must match between index.html and sitemap.xml`);
+const expectedAlternates = {
+  en: `${origin}/`,
+  'zh-CN': `${origin}/zh/`,
+  'x-default': `${origin}/`
+};
+const pageDefinitions = [
+  {
+    file: 'index.html',
+    canonical: `${origin}/`,
+    language: 'en',
+    languageSwitch: '<a href="/zh/" lang="zh-CN" hreflang="zh-CN" aria-label="切换到中文">中文</a>',
+    faq: true
+  },
+  {
+    file: 'zh/index.html',
+    canonical: `${origin}/zh/`,
+    language: 'zh-CN',
+    languageSwitch: '<a href="/" lang="en" hreflang="en" aria-label="Switch to English">English</a>',
+    faq: false
+  }
+];
+const pageReports = [];
+
+function visibleTextFor(html) {
+  return html
+    .replace(/<script[\s\S]*?<\/script>/g, ' ')
+    .replace(/<style[\s\S]*?<\/style>/g, ' ')
+    .replace(/<\/(?:a|code|strong|span)>/gi, '')
+    .replace(/<(?:a|code|strong|span)\b[^>]*>/gi, '')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+    .replace(/\s+/g, ' ')
+    .replace(/\s+([,.;:!?])/g, '$1')
+    .trim();
 }
-check((html.match(/<h1[\s>]/g) || []).length === 1, 'index.html must have exactly one <h1>');
-// Cloudflare Web Analytics: the public site token, cookieless, before </body>.
-check(
-  /<script defer src="https:\/\/static\.cloudflareinsights\.com\/beacon\.min\.js" data-cf-beacon='\{"token": "3b49dd9a82634bba833340481ce6ccbe"\}'><\/script>/.test(html),
-  'index.html must load the Cloudflare Web Analytics beacon with the ai.speedle.io token'
-);
-check(
-  html.lastIndexOf('cloudflareinsights.com/beacon.min.js') < html.lastIndexOf('</body>'),
-  'the Cloudflare Web Analytics beacon must be inside the page body'
-);
-check(/<meta property="og:image" content="https:\/\/ai\.speedle\.io\/assets\/og-image\.png">/.test(html), 'og:image must point at the share image');
-check(/<meta name="twitter:card" content="summary_large_image">/.test(html), 'twitter:card must be summary_large_image');
+
+function checkPage(definition) {
+  const { file, canonical, language, languageSwitch, faq: hasFaq } = definition;
+  const html = read(file);
+  const title = (html.match(/<title>([^<]*)<\/title>/) || [])[1] || '';
+  const description = (html.match(/<meta name="description" content="([^"]*)"/) || [])[1] || '';
+  check(title.length > 0 && title.length <= 60, `${file}: title must be 1-60 characters (is ${title.length})`);
+  check(description.length > 0 && description.length <= 155, `${file}: meta description must be 1-155 characters (is ${description.length})`);
+  check(html.includes(`<html lang="${language}">`), `${file}: <html> must declare lang="${language}"`);
+  check(html.includes(`<link rel="canonical" href="${canonical}">`), `${file}: canonical URL must be ${canonical}`);
+  check(html.includes(`<meta property="og:url" content="${canonical}">`), `${file}: og:url must be ${canonical}`);
+  check(html.includes(`<meta property="og:title" content="${title}">`), `${file}: og:title must match the page title`);
+  check(html.includes(`<meta name="twitter:title" content="${title}">`), `${file}: twitter:title must match the page title`);
+
+  const pageAlternates = [...html.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="([^"]+)">/g)]
+    .map(match => ({ lang: match[1], href: match[2] }));
+  check(pageAlternates.length === 3, `${file}: must have exactly three hreflang alternates`);
+  const sitemapEntry = sitemapEntries.get(canonical);
+  check(sitemapEntry !== undefined, `${file}: canonical URL must have a sitemap entry`);
+  for (const [lang, href] of Object.entries(expectedAlternates)) {
+    const pageAlt = pageAlternates.find(alt => alt.lang === lang);
+    const mapAlt = sitemapEntry && sitemapEntry.alternates.find(alt => alt.lang === lang);
+    check(pageAlt !== undefined, `${file}: must declare hreflang="${lang}"`);
+    check(mapAlt !== undefined, `sitemap.xml: ${canonical} must declare hreflang="${lang}"`);
+    check(pageAlt && pageAlt.href === href, `${file}: hreflang="${lang}" must point to ${href}`);
+    check(mapAlt && mapAlt.href === href, `sitemap.xml: ${canonical} hreflang="${lang}" must point to ${href}`);
+  }
+  check((html.match(/<h1[\s>]/g) || []).length === 1, `${file}: must have exactly one <h1>`);
+  check(html.includes(languageSwitch), `${file}: missing the correct language-switch link`);
+  check(new RegExp(`${languageSwitch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*</nav>`).test(html), `${file}: language switch must be the last navigation item`);
+  const siteNav = (html.match(/<nav id="site-nav"[\s\S]*?<\/nav>/) || [])[0] || '';
+  for (const href of ['https://engine.speedle.io/', 'https://engine.speedle.io/zh/', 'https://cloud.speedle.io/', 'https://cloud.speedle.io/zh-CN/']) {
+    const product = href.includes('engine') ? 'Engine' : 'Cloud';
+    check(!siteNav.includes(`<a href="${href}">Speedle ${product}</a>`), `${file}: header must not contain a standalone Speedle ${product} link`);
+  }
+
+  // Cloudflare Web Analytics: the public site token, cookieless, before </body>.
+  check(
+    /<script defer src="https:\/\/static\.cloudflareinsights\.com\/beacon\.min\.js" data-cf-beacon='\{"token": "3b49dd9a82634bba833340481ce6ccbe"\}'><\/script>/.test(html),
+    `${file}: must load the Cloudflare Web Analytics beacon with the ai.speedle.io token`
+  );
+  check(
+    html.lastIndexOf('cloudflareinsights.com/beacon.min.js') < html.lastIndexOf('</body>'),
+    `${file}: Cloudflare Web Analytics beacon must be inside the page body`
+  );
+  check(/<meta property="og:image" content="https:\/\/ai\.speedle\.io\/assets\/og-image\.png">/.test(html), `${file}: og:image must point at the share image`);
+  check(/<meta name="twitter:card" content="summary_large_image">/.test(html), `${file}: twitter:card must be summary_large_image`);
+
+  const jsonLdBlocks = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map(match => match[1]);
+  check(jsonLdBlocks.length > 0, `${file}: must contain JSON-LD`);
+  const graph = [];
+  for (const block of jsonLdBlocks) {
+    try {
+      const data = JSON.parse(block);
+      if (Array.isArray(data['@graph'])) graph.push(...data['@graph']);
+      else graph.push(data);
+    } catch (error) {
+      check(false, `${file}: JSON-LD does not parse: ${error.message}`);
+    }
+  }
+  const requiredTypes = ['Organization', 'WebSite', 'SoftwareApplication'];
+  if (hasFaq) requiredTypes.push('FAQPage');
+  for (const type of requiredTypes) {
+    check(graph.some(node => node['@type'] === type), `${file}: JSON-LD must include a ${type}`);
+  }
+  const website = graph.find(node => node['@type'] === 'WebSite');
+  const software = graph.find(node => node['@type'] === 'SoftwareApplication');
+  const faq = graph.find(node => node['@type'] === 'FAQPage');
+  check(website && website.url === canonical && website.inLanguage === language, `${file}: WebSite URL and inLanguage must match the page`);
+  check(software && software.url === canonical, `${file}: SoftwareApplication URL must match the page`);
+  if (language === 'zh-CN') {
+    check(software && software.inLanguage === 'zh-CN', `${file}: SoftwareApplication must declare inLanguage="zh-CN"`);
+  }
+
+  let faqEntries = [];
+  if (hasFaq) {
+    check(faq && faq.url === `${canonical}#faq` && faq.inLanguage === language, `${file}: FAQPage URL and inLanguage must match the page`);
+    faqEntries = faq && Array.isArray(faq.mainEntity) ? faq.mainEntity : [];
+    check(faqEntries.length > 0, `${file}: FAQPage must contain Question entries`);
+    const visibleText = visibleTextFor(html);
+    for (const entry of faqEntries) {
+      check(entry['@type'] === 'Question' && typeof entry.name === 'string', `${file}: FAQPage entries must be Questions with a name`);
+      check(entry.acceptedAnswer && entry.acceptedAnswer['@type'] === 'Answer' && typeof entry.acceptedAnswer.text === 'string', `${file}: FAQPage question "${entry.name}" needs an Answer`);
+      if (!entry.acceptedAnswer) continue;
+      check(visibleText.includes(entry.name), `${file}: visible FAQ is missing the question "${entry.name}"`);
+      check(visibleText.includes(entry.acceptedAnswer.text), `${file}: visible FAQ text does not match the JSON-LD answer for "${entry.name}"`);
+    }
+  } else {
+    // The Chinese home has no FAQ: no FAQPage data and no visible FAQ section.
+    check(faq === undefined, `${file}: must not include FAQPage JSON-LD without a visible FAQ`);
+    check(!html.includes('<section id="faq"'), `${file}: must not have a visible FAQ section`);
+  }
+  pageReports.push({ file, titleLength: title.length, descriptionLength: description.length, nodes: graph.length, faqEntries: faqEntries.length });
+  return html;
+}
+
+const englishHtml = checkPage(pageDefinitions[0]);
+const chineseHtml = checkPage(pageDefinitions[1]);
+
 const ogImage = join(root, 'assets/og-image.png');
 check(existsSync(ogImage), 'assets/og-image.png is missing');
 if (existsSync(ogImage)) {
@@ -142,49 +269,27 @@ if (existsSync(ogImage)) {
   check(width === 1200 && height === 630, `assets/og-image.png must be 1200x630 (is ${width}x${height})`);
 }
 
-// --- JSON-LD --------------------------------------------------------------
-
-const jsonLdBlocks = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map(match => match[1]);
-check(jsonLdBlocks.length > 0, 'index.html must contain JSON-LD');
-const graph = [];
-for (const block of jsonLdBlocks) {
-  try {
-    const data = JSON.parse(block);
-    if (Array.isArray(data['@graph'])) graph.push(...data['@graph']);
-    else graph.push(data);
-  } catch (error) {
-    check(false, `JSON-LD does not parse: ${error.message}`);
-  }
+// The tested SPDL sources, including their comments, must not diverge in translation.
+function spdlBlocks(html) {
+  return new Map([...html.matchAll(/<pre\b[^>]*data-spdl="([^"]+)"[^>]*><code>([\s\S]*?)<\/code><\/pre>/g)]
+    .map(match => [match[1], match[2]]));
 }
-for (const type of ['Organization', 'WebSite', 'SoftwareApplication', 'FAQPage']) {
-  check(graph.some(node => node['@type'] === type), `JSON-LD must include a ${type}`);
+const englishSpdl = spdlBlocks(englishHtml);
+const chineseSpdl = spdlBlocks(chineseHtml);
+check(englishSpdl.size === 6, `index.html must contain six SPDL examples (found ${englishSpdl.size})`);
+check(chineseSpdl.size === englishSpdl.size, 'zh/index.html must contain the same number of SPDL examples');
+for (const [name, source] of englishSpdl) {
+  check(chineseSpdl.has(name), `zh/index.html is missing the ${name} SPDL example`);
+  check(chineseSpdl.get(name) === source, `zh/index.html ${name} SPDL must be byte-identical, including comments`);
 }
-const faq = graph.find(node => node['@type'] === 'FAQPage');
-const faqEntries = faq && Array.isArray(faq.mainEntity) ? faq.mainEntity : [];
-check(faqEntries.length > 0, 'FAQPage must contain Question entries');
-for (const entry of faqEntries) {
-  check(entry['@type'] === 'Question' && typeof entry.name === 'string', 'FAQPage entries must be Questions with a name');
-  check(entry.acceptedAnswer && entry.acceptedAnswer['@type'] === 'Answer' && typeof entry.acceptedAnswer.text === 'string', `FAQPage question "${entry.name}" needs an Answer`);
+for (const label of ['身份输入', '构建', '运行', '策略决策点', '审计与解释输出', '边界', '数据与训练', '模型发布']) {
+  check(chineseHtml.includes(`>${label}</text>`), `zh/index.html concept diagram is missing the Chinese label "${label}"`);
 }
-
-// The visible FAQ must contain the same questions and answers as the JSON-LD.
-const visibleText = html
-  .replace(/<script[\s\S]*?<\/script>/g, ' ')
-  .replace(/<style[\s\S]*?<\/style>/g, ' ')
-  .replace(/<[^>]+>/g, ' ')
-  .replace(/&amp;/g, '&')
-  .replace(/&lt;/g, '<')
-  .replace(/&gt;/g, '>')
-  .replace(/&quot;/g, '"')
-  .replace(/&#39;/g, "'")
-  .replace(/&nbsp;/g, ' ')
-  .replace(/\s+/g, ' ')
-  .replace(/\s+([,.;:!?])/g, '$1')
-  .trim();
-for (const entry of faqEntries) {
-  check(visibleText.includes(entry.name), `visible FAQ is missing the question "${entry.name}"`);
-  check(visibleText.includes(entry.acceptedAnswer.text), `visible FAQ text does not match the JSON-LD answer for "${entry.name}"`);
+for (const keyword of ['AI 智能体授权', 'AI 访问控制', 'MCP 授权', 'RAG 权限控制', '大模型应用权限管理', '智能体最小权限']) {
+  check(chineseHtml.includes(keyword), `zh/index.html must naturally include the Chinese keyword "${keyword}"`);
 }
+check(chineseHtml.includes('>产品<svg class="products-chevron"'), 'zh/index.html header must use the Chinese 产品 label');
+check(chineseHtml.includes('<h2 id="footer-family-title">Speedle 产品</h2>'), 'zh/index.html footer must use the Speedle 产品 label');
 
 // --- llms.txt and llms-full.txt ------------------------------------------
 
@@ -192,6 +297,7 @@ const llms = read('llms.txt');
 check(/^# .+/m.test(llms), 'llms.txt must start with an H1');
 check(/^> .+/m.test(llms), 'llms.txt must have a blockquote summary');
 check(/\n## /.test(llms), 'llms.txt must have link sections');
+check(llms.includes('[中文](https://ai.speedle.io/zh/)'), 'llms.txt must include a 中文 link to the Chinese home page');
 const llmsLinks = [...llms.matchAll(/\]\((https:\/\/ai\.speedle\.io\/[^)\s]*)\)/g)].map(match => match[1]);
 check(llmsLinks.length > 0, 'llms.txt must link to the site');
 for (const link of llmsLinks) checkInternalUrl(link, 'llms.txt');
@@ -214,7 +320,10 @@ if (errors.length > 0) {
   process.exit(1);
 }
 console.log(`PASS: ${checks} SEO/GEO checks passed`);
-console.log(`- sitemap.xml: ${locations.length} URL(s), hreflang ${sitemapAlternates.map(alt => alt.lang).join(', ')}`);
+console.log(`- sitemap.xml: ${locations.length} URLs, hreflang ${[...new Set(sitemapAlternates.map(alt => alt.lang))].join(', ')}`);
 console.log(`- robots.txt: ${robots.split('\n').filter(line => line.startsWith('User-agent:')).length} user-agent groups, sitemap referenced`);
-console.log(`- llms.txt: ${llmsLinks.length} internal link(s); llms-full.txt: ${fullUrls.length} internal URL(s)`);
-console.log(`- index.html: title ${title.length} chars, description ${description.length} chars, ${graph.length} JSON-LD node(s), ${faqEntries.length} FAQ entries`);
+console.log(`- llms.txt: ${llmsLinks.length} internal links; llms-full.txt: ${fullUrls.length} internal URLs`);
+for (const report of pageReports) {
+  console.log(`- ${report.file}: title ${report.titleLength} chars, description ${report.descriptionLength} chars, ${report.nodes} JSON-LD nodes, ${report.faqEntries} FAQ entries`);
+}
+console.log(`- SPDL parity: ${englishSpdl.size} byte-identical examples, comments included`);
