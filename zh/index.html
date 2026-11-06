@@ -137,7 +137,7 @@
       <div class="wrap hero-grid">
         <div class="hero-copy">
           <p class="eyebrow">Speedle AI · 两个相互关联的方向</p>
-          <h1 id="hero-title">AI 智能体授权：用 AI 管理访问，也为 AI 管理访问。</h1>
+          <h1 id="hero-title">AI 智能体授权：用 AI 管理访问，也为 AI 管理访问</h1>
           <p class="hero-lead">既可以用 AI 设计、管理和检查访问策略，也可以将同一套策略用于 AI 自身，覆盖 MCP 授权、RAG 权限控制与智能体最小权限。两个方向都建立在清晰、可执行的策略决策之上。</p>
           <p class="definition"><strong>什么是 Speedle AI？</strong>Speedle AI 展示如何基于开源 Speedle 策略引擎实施 AI 访问控制，为 AI 智能体及其应用提供授权方案。内容覆盖大模型应用权限管理的完整生命周期：训练数据与模型发布、推理与 RAG 权限控制、MCP 授权以及智能体间（A2A）授权。</p>
           <p class="hero-note"><span aria-hidden="true"></span>基于开源 Speedle 策略引擎构建。</p>
@@ -164,13 +164,13 @@
       <div class="wrap">
         <header class="part-header">
           <span class="part-number" aria-hidden="true">01</span>
-          <div class="part-heading"><p class="eyebrow">AI 辅助访问管理</p><h2 id="ai-for-access-title">让 AI 助力访问策略管理。</h2></div>
+          <div class="part-heading"><p class="eyebrow">AI 辅助访问管理</p><h2 id="ai-for-access-title">让 AI 助力访问策略管理</h2></div>
           <p class="part-summary">让 AI 帮助人们管理访问：通过 Speedle MCP 设计、管理和检查策略（上线预览）；正在构建的 AI 风险检测则从更广阔的上下文识别风险，同时保留策略的最终否决权。</p>
         </header>
 
         <div id="mcp" class="mcp">
           <div class="section-head mcp-intro">
-            <div><p class="eyebrow">Speedle MCP · 即将上线</p><h3 id="mcp-title">Speedle MCP：一个软件包，两种刻意分离的模式。</h3></div>
+            <div><p class="eyebrow">Speedle MCP · 即将上线</p><h3 id="mcp-title">Speedle MCP：一个软件包，两种刻意分离的模式</h3></div>
             <div class="mcp-lead">
               <p><code>@speedle/mcp</code> 计划以单个 npm 软件包发布，其中的 <code>speedle-mcp</code> 可执行文件作为本地 stdio MCP 服务器运行。该软件包尚未发布到 npm。</p>
               <a class="button button-outline" href="https://github.com/teramoby/speedle-mcp">关注代码仓库<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a>
@@ -250,7 +250,7 @@ npx @speedle/mcp manage
 
         <div id="risk-detection" class="subsection protection">
           <div class="section-head">
-            <div><p class="eyebrow">基于 AI 的风险检测 · 正在构建</p><h3 id="risk-title">AI 风险检测看得更广，策略保留最终否决权。</h3></div>
+            <div><p class="eyebrow">基于 AI 的风险检测 · 正在构建</p><h3 id="risk-title">AI 风险检测看得更广，策略保留最终否决权</h3></div>
             <p>AI 可以跨更多维度和关系发现单条规则无法识别的风险。确定性策略仍负责作出决策并保留最终否决权：策略拒绝的访问，AI 绝不会放行。这是一个探索方向，不是已发布功能。</p>
           </div>
 
@@ -273,7 +273,7 @@ npx @speedle/mcp manage
 
           <section class="decision-architecture" aria-labelledby="decision-flow-title">
             <div class="architecture-head">
-              <div><p class="eyebrow">概念性目标流程</p><h3 id="decision-flow-title">策略先行，风险信号随后，否决权不变。</h3></div>
+              <div><p class="eyebrow">概念性目标流程</p><h3 id="decision-flow-title">策略先行，风险信号随后，否决权不变</h3></div>
               <span class="architecture-badge">AI 风险检测 · 尚未发布</span>
             </div>
             <ol class="decision-flow">
@@ -292,13 +292,13 @@ npx @speedle/mcp manage
       <div class="wrap">
         <header class="part-header">
           <span class="part-number" aria-hidden="true">02</span>
-          <div class="part-heading"><p class="eyebrow">面向 AI 的访问管理</p><h2 id="access-for-ai-title">在 AI 构建与运行全流程中实施访问治理。</h2></div>
+          <div class="part-heading"><p class="eyebrow">面向 AI 的访问管理</p><h2 id="access-for-ai-title">在 AI 构建与运行全流程中实施访问治理</h2></div>
           <p class="part-summary">在 AI 系统接触数据、模型、工具和其他智能体的每个环节应用 Speedle 策略引擎：构建阶段覆盖模型提供服务之前，运行阶段覆盖模型提供服务并执行操作之时。这些是解决方案模式，不是与任何机器学习或智能体平台的已发布集成。</p>
         </header>
 
         <div id="lifecycle" class="concept">
           <div class="section-head">
-            <div><p class="eyebrow">概念</p><h3 id="concept-title">构建和运行 AI，共用一个决策点。</h3></div>
+            <div><p class="eyebrow">概念</p><h3 id="concept-title">构建和运行 AI，共用一个决策点</h3></div>
             <p>每个区域都在应用中设有策略执行点。执行操作前先向 Speedle 请求决策，并执行返回结果。身份信息来自您的 IdP；决策及其解释则写入审计记录。</p>
           </div>
           <figure class="concept-figure">
@@ -576,7 +576,7 @@ npx @speedle/mcp manage
           <section id="build" class="phase" aria-labelledby="build-title">
             <div class="phase-head phase-build">
               <p class="phase-tag">构建</p>
-              <h3 id="build-title">模型提供服务之前：数据、训练与发布。</h3>
+              <h3 id="build-title">模型提供服务之前：数据、训练与发布</h3>
             </div>
             <article id="lc-data" class="area" aria-labelledby="lc-data-title">
               <div class="area-copy">
@@ -635,12 +635,12 @@ grant user dana release-manager</code></pre>
           <section id="run" class="phase" aria-labelledby="run-title">
             <div class="phase-head phase-run">
               <p class="phase-tag">运行</p>
-              <h3 id="run-title">AI 提供服务和执行操作时：检索、智能体、工具与其他智能体。</h3>
+              <h3 id="run-title">AI 提供服务和执行操作时：检索、智能体、工具与其他智能体</h3>
             </div>
             <article id="lc-rag" class="area area-feature" aria-labelledby="lc-rag-title">
               <div class="area-copy">
                 <p class="area-step">03 / 推理与 RAG</p>
-                <h4 id="lc-rag-title">只有用户有权阅读的内容才能进入提示词。</h4>
+                <h4 id="lc-rag-title">只有用户有权阅读的内容才能进入提示词</h4>
                 <p class="area-lead">用户、应用和租户都会调用模型。对于权限感知的 RAG（检索增强生成），检索器会在内容进入提示词之前，逐文档或逐集合向 Speedle 请求授权，确保模型只能看到请求发起者有权阅读的内容，从而实现 RAG 权限控制。</p>
                 <ol class="rag-flow" aria-label="权限感知检索">
                   <li><span>1</span>检索器查找候选文档。</li>
@@ -749,23 +749,23 @@ grant entity researcher-1 researcher-agent</code></pre>
 
         <div id="cross-cutting" class="crosscut">
           <div class="section-head">
-            <div><p class="eyebrow">贯穿全流程</p><h3 id="crosscut-title">输入身份信息，输出决策与解释。</h3></div>
+            <div><p class="eyebrow">贯穿全流程</p><h3 id="crosscut-title">输入身份信息，输出决策与解释</h3></div>
             <p>以下三个关注点适用于构建和运行阶段的每个区域。</p>
           </div>
           <div class="crosscut-grid">
             <article class="crosscut-card">
               <p class="crosscut-tag">身份集成</p>
-              <h4>Speedle 负责授权决策，IdP 负责身份认证。</h4>
+              <h4>Speedle 负责授权决策，IdP 负责身份认证</h4>
               <p>Speedle 是授权决策点。用户和智能体的身份认证来自您的 IdP 或 OAuth 授权服务器，MCP 授权基于 OAuth。应用将已验证的身份映射为主体（用户、用户组、实体），Speedle 基于收到的主体进行决策。</p>
             </article>
             <article class="crosscut-card">
               <p class="crosscut-tag">审计与可解释性</p>
-              <h4>每项决策都可以解释。</h4>
+              <h4>每项决策都可以解释</h4>
               <p>Speedle 的<a href="https://engine.speedle.io/zh/docs/pms/diagnosis/">诊断 API</a> 返回决策、原因、生效角色和已检查的策略，包括匹配了哪条策略及其原因。应用记录每项决策以及智能体和发起委托的用户。诊断接口会暴露策略和请求详情，因此只应向可信运维人员开放。</p>
             </article>
             <article class="crosscut-card">
               <p class="crosscut-tag">风险映射</p>
-              <h4>对应 OWASP LLM06:2025 过度代理。</h4>
+              <h4>对应 OWASP LLM06:2025 过度代理</h4>
               <p><a href="https://genai.owasp.org/llmrisk/llm062025-excessive-agency/">OWASP 2025 年大模型应用十大风险</a>列出了过度代理：智能体拥有的功能、权限或自主性超出任务所需。按智能体划分角色、按工具检查、将委托绑定到任务和时限，以及对高风险操作进行人工审批，可以分别收敛这三类风险。</p>
             </article>
           </div>
@@ -781,7 +781,7 @@ grant entity researcher-1 researcher-agent</code></pre>
 
         <div id="playground" class="subsection">
           <div class="section-head">
-            <div><p class="eyebrow">交互示例 · 仅涉及策略</p><h3 id="playground-title">一个请求，一个清晰的策略决策。</h3></div>
+            <div><p class="eyebrow">交互示例 · 仅涉及策略</p><h3 id="playground-title">一个请求，一个清晰的策略决策</h3></div>
             <p>切换智能体、操作和数据范围，查看一小组确定性规则如何改变示例结果。</p>
           </div>
 
@@ -852,7 +852,7 @@ grant entity researcher-1 researcher-agent</code></pre>
 
         <div id="approach" class="subsection">
           <div class="section-head">
-            <div><p class="eyebrow">集成方式</p><h3 id="approach-title">从智能体意图到可执行的授权决策。</h3></div>
+            <div><p class="eyebrow">集成方式</p><h3 id="approach-title">从智能体意图到可执行的授权决策</h3></div>
             <p>应用在访问数据或执行工具之前请求授权，然后执行返回的决策。</p>
           </div>
           <ol class="steps">
@@ -863,7 +863,7 @@ grant entity researcher-1 researcher-agent</code></pre>
           </ol>
 
           <div class="ecosystem" aria-labelledby="ecosystem-title">
-            <div class="ecosystem-head"><p class="eyebrow">生态系统</p><h3 id="ecosystem-title">从 Speedle 基础组件开始。</h3></div>
+            <div class="ecosystem-head"><p class="eyebrow">生态系统</p><h3 id="ecosystem-title">从 Speedle 基础组件开始</h3></div>
             <div class="resource-grid">
               <a class="resource-card" href="https://engine.speedle.io/zh/"><span>开源</span><strong>Speedle Engine<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>开源授权引擎和清晰易读的 SPDL 策略语言。</p></a>
               <a class="resource-card" href="https://cloud.speedle.io/zh-CN/"><span>托管服务</span><strong><span class="resource-name">Speedle Cloud<span class="coming-soon">即将上线</span></span><svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>基于 Speedle 策略引擎构建，面向开发者的托管授权服务。</p></a>
@@ -877,7 +877,7 @@ grant entity researcher-1 researcher-agent</code></pre>
     <section id="about" class="section about" aria-labelledby="about-title">
       <div class="wrap">
         <div class="cta">
-          <div class="cta-copy"><p class="eyebrow">开源 · 开放探索</p><h2 id="about-title">分享一个真实的 AI 授权场景。</h2><p>帮助我们完善后续示例，分享您的应用需要保护的数据集、模型、工具或智能体工作流。</p></div>
+          <div class="cta-copy"><p class="eyebrow">开源 · 开放探索</p><h2 id="about-title">分享一个真实的 AI 授权场景</h2><p>帮助我们完善后续示例，分享您的应用需要保护的数据集、模型、工具或智能体工作流。</p></div>
           <div class="actions"><a class="button button-primary" href="https://github.com/teramoby/ai.speedle.io/issues">分享您的场景<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a><a class="button button-secondary" href="https://github.com/teramoby/speedle-plus">探索 Speedle</a></div>
         </div>
         <p class="provenance">Speedle 源自 <a href="https://github.com/oracle/speedle">Oracle Speedle</a>，由原开发者继续维护，并采用 Universal Permissive License（UPL）1.0 授权。<a href="https://engine.speedle.io/zh/about/">了解项目历程</a>。</p>
