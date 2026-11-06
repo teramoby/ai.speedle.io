@@ -5,6 +5,9 @@ Standalone public exploration website: https://ai.speedle.io
 Potential applications: agent tool calls, knowledge access, and multi-agent
 authorization. The interactive example uses simplified browser-local rules.
 It is not a Speedle engine, MCP integration, RAG adapter, or production service.
+The Speedle MCP section is a launch preview: `@speedle/mcp` is not published
+on npm, and its install and client configuration snippets are marked as
+available at launch. MCP facts come from teramoby/speedle-mcp issues #1 and #2.
 The visual language and colour tokens follow speedle.io and cloud.speedle.io.
 Like those references, the site uses a light theme with dark-purple brand bands.
 
