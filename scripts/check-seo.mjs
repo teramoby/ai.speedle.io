@@ -5,8 +5,8 @@
 //   node scripts/check-seo.mjs
 //
 // It verifies sitemap and llms link targets, hreflang alternates, page metadata,
-// JSON-LD and visible FAQs, the language switch, Cloudflare Web Analytics, and
-// byte-identical SPDL examples across the English and Chinese pages.
+// JSON-LD and the absence of FAQ content, the language switch, Cloudflare Web
+// Analytics, and byte-identical SPDL examples across the English and Chinese pages.
 
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -119,7 +119,7 @@ for (const [loc, { block, alternates }] of sitemapEntries) {
 }
 const sitemapAlternates = [...sitemapEntries.values()].flatMap(entry => entry.alternates);
 
-// --- localized page metadata, JSON-LD and visible FAQs --------------------
+// --- localized page metadata and JSON-LD ----------------------------------
 
 const expectedAlternates = {
   en: `${origin}/`,
@@ -131,39 +131,19 @@ const pageDefinitions = [
     file: 'index.html',
     canonical: `${origin}/`,
     language: 'en',
-    languageSwitch: '<a href="/zh/" lang="zh-CN" hreflang="zh-CN" aria-label="切换到中文">中文</a>',
-    faq: true
+    languageSwitch: '<a href="/zh/" lang="zh-CN" hreflang="zh-CN" aria-label="切换到中文">中文</a>'
   },
   {
     file: 'zh/index.html',
     canonical: `${origin}/zh/`,
     language: 'zh-CN',
-    languageSwitch: '<a href="/" lang="en" hreflang="en" aria-label="Switch to English">English</a>',
-    faq: false
+    languageSwitch: '<a href="/" lang="en" hreflang="en" aria-label="Switch to English">English</a>'
   }
 ];
 const pageReports = [];
 
-function visibleTextFor(html) {
-  return html
-    .replace(/<script[\s\S]*?<\/script>/g, ' ')
-    .replace(/<style[\s\S]*?<\/style>/g, ' ')
-    .replace(/<\/(?:a|code|strong|span)>/gi, '')
-    .replace(/<(?:a|code|strong|span)\b[^>]*>/gi, '')
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&nbsp;/g, ' ')
-    .replace(/\s+/g, ' ')
-    .replace(/\s+([,.;:!?])/g, '$1')
-    .trim();
-}
-
 function checkPage(definition) {
-  const { file, canonical, language, languageSwitch, faq: hasFaq } = definition;
+  const { file, canonical, language, languageSwitch } = definition;
   const html = read(file);
   const title = (html.match(/<title>([^<]*)<\/title>/) || [])[1] || '';
   const description = (html.match(/<meta name="description" content="([^"]*)"/) || [])[1] || '';
@@ -222,38 +202,21 @@ function checkPage(definition) {
     }
   }
   const requiredTypes = ['Organization', 'WebSite', 'SoftwareApplication'];
-  if (hasFaq) requiredTypes.push('FAQPage');
   for (const type of requiredTypes) {
     check(graph.some(node => node['@type'] === type), `${file}: JSON-LD must include a ${type}`);
   }
   const website = graph.find(node => node['@type'] === 'WebSite');
   const software = graph.find(node => node['@type'] === 'SoftwareApplication');
-  const faq = graph.find(node => node['@type'] === 'FAQPage');
   check(website && website.url === canonical && website.inLanguage === language, `${file}: WebSite URL and inLanguage must match the page`);
   check(software && software.url === canonical, `${file}: SoftwareApplication URL must match the page`);
   if (language === 'zh-CN') {
     check(software && software.inLanguage === 'zh-CN', `${file}: SoftwareApplication must declare inLanguage="zh-CN"`);
   }
 
-  let faqEntries = [];
-  if (hasFaq) {
-    check(faq && faq.url === `${canonical}#faq` && faq.inLanguage === language, `${file}: FAQPage URL and inLanguage must match the page`);
-    faqEntries = faq && Array.isArray(faq.mainEntity) ? faq.mainEntity : [];
-    check(faqEntries.length > 0, `${file}: FAQPage must contain Question entries`);
-    const visibleText = visibleTextFor(html);
-    for (const entry of faqEntries) {
-      check(entry['@type'] === 'Question' && typeof entry.name === 'string', `${file}: FAQPage entries must be Questions with a name`);
-      check(entry.acceptedAnswer && entry.acceptedAnswer['@type'] === 'Answer' && typeof entry.acceptedAnswer.text === 'string', `${file}: FAQPage question "${entry.name}" needs an Answer`);
-      if (!entry.acceptedAnswer) continue;
-      check(visibleText.includes(entry.name), `${file}: visible FAQ is missing the question "${entry.name}"`);
-      check(visibleText.includes(entry.acceptedAnswer.text), `${file}: visible FAQ text does not match the JSON-LD answer for "${entry.name}"`);
-    }
-  } else {
-    // The Chinese home has no FAQ: no FAQPage data and no visible FAQ section.
-    check(faq === undefined, `${file}: must not include FAQPage JSON-LD without a visible FAQ`);
-    check(!html.includes('<section id="faq"'), `${file}: must not have a visible FAQ section`);
-  }
-  pageReports.push({ file, titleLength: title.length, descriptionLength: description.length, nodes: graph.length, faqEntries: faqEntries.length });
+  // Neither localized home has a FAQ or structured data for one.
+  check(!graph.some(node => node['@type'] === 'FAQPage'), `${file}: must not include FAQPage JSON-LD`);
+  check(!/<section\b[^>]*\bid=["']faq["']/.test(html), `${file}: must not have a visible FAQ section`);
+  pageReports.push({ file, titleLength: title.length, descriptionLength: description.length, nodes: graph.length });
   return html;
 }
 
@@ -324,6 +287,6 @@ console.log(`- sitemap.xml: ${locations.length} URLs, hreflang ${[...new Set(sit
 console.log(`- robots.txt: ${robots.split('\n').filter(line => line.startsWith('User-agent:')).length} user-agent groups, sitemap referenced`);
 console.log(`- llms.txt: ${llmsLinks.length} internal links; llms-full.txt: ${fullUrls.length} internal URLs`);
 for (const report of pageReports) {
-  console.log(`- ${report.file}: title ${report.titleLength} chars, description ${report.descriptionLength} chars, ${report.nodes} JSON-LD nodes, ${report.faqEntries} FAQ entries`);
+  console.log(`- ${report.file}: title ${report.titleLength} chars, description ${report.descriptionLength} chars, ${report.nodes} JSON-LD nodes`);
 }
 console.log(`- SPDL parity: ${englishSpdl.size} byte-identical examples, comments included`);
