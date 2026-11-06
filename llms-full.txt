@@ -102,10 +102,6 @@ A runnable local sample with PMS, ADS and the custom function, including the ato
 
 Speedle does not detect prompt injection, filter model input or output, or verify model and dataset supply chains; use dedicated controls for those. It bounds what a compromised or misled agent can do: Speedle answers deny to any request outside policy, whatever the prompt said.
 
-## Interactive example
-
-The page has a simplified browser-local demo: choose an executing agent, an action and a data scope, and fixed policy rules run locally in the browser to show an allow or deny decision. It is not a Speedle engine, MCP integration or production service, connects to no agent, data or service, and does not simulate AI risk detection.
-
 ## Related links
 
 - Speedle Engine: https://engine.speedle.io/
@@ -114,4 +110,3 @@ The page has a simplified browser-local demo: choose an executing agent, an acti
 - Speedle MCP: https://github.com/teramoby/speedle-mcp
 - Speedle SDK: https://github.com/teramoby/speedle-sdk
 - Speedle documentation: https://speedle.io/docs/
-- Interactive example, source: https://ai.speedle.io/#playground
