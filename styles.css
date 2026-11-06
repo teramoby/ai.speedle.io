@@ -302,8 +302,6 @@ header.site-header:lang(zh) {
 .hero .eyebrow { padding: 4px 8px; color: var(--primary-dark); background: var(--tint-strong); }
 h1 { max-width: 650px; margin: 22px 0 26px; font-size: clamp(3.15rem, 5.25vw, 4.75rem); font-weight: 750; letter-spacing: -.055em; line-height: 1.03; }
 .hero-lead { max-width: 610px; margin: 0; color: var(--muted); font-size: 1.13rem; line-height: 1.75; }
-.definition { max-width: 610px; margin: 22px 0 0; padding-left: 16px; border-left: 2px solid var(--primary); color: var(--muted); font-size: .93rem; line-height: 1.7; }
-.definition strong { color: var(--ink); }
 .hero-note { display: flex; align-items: center; gap: 10px; margin: 28px 0 0; color: var(--muted); font-size: .88rem; }
 .hero-note > span { width: 9px; height: 9px; flex: none; border-radius: 50%; background: var(--primary); box-shadow: 0 0 0 6px rgba(var(--primary-rgb), .12); }
 .hero-paths { min-width: 0; display: grid; gap: 16px; }
