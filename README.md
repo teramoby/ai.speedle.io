@@ -100,3 +100,7 @@ Speedle continues Oracle Speedle and is maintained by the original developers.
 Speedle is licensed under UPL 1.0. Contact: contact@speedle.io.
 
 To report a security issue, see [SECURITY.md](SECURITY.md).
+
+## Contributing
+
+Contributions are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md).
