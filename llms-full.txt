@@ -78,17 +78,18 @@ Users, apps and tenants call models. For permission-aware RAG (retrieval-augment
 
 ### Run: agents acting for users
 
-The agent has its own identity, and the user's delegation is proven by a signed delegation token, not by claims in the request. The enforcement point verifies the token, then asks Speedle twice and allows only if both checks pass: the agent within the token's scope, and the delegating user with their own permissions now. If the user loses a permission after the token was issued, the agent loses it at the next request.
+The agent has its own identity, and the user's delegation is proven by a signed delegation token, not by claims in the request. The enforcement point verifies the token, then asks Speedle twice and allows only if both checks pass: the agent within the token's scope, and the delegating user with their own permissions now. If the user loses a permission after the token was issued, the agent loses it at the next request. A refund above 100 also needs a recorded human approval by someone other than the user.
 
 1. Verify the token: signature, issuer, expiry, and that it was issued to this agent.
 2. Agent scope: ask Speedle with the agent as subject and the token's scope as attributes.
 3. Delegator now: ask Speedle with the delegating user, named by the token's `sub` claim, as subject.
 
 - Subjects: the agent as an entity for the scope check; the delegating user, taken from the verified token, for the second check.
-- Resources and actions: tickets `read` and `update`, limited to the actions and tickets in the token's scope.
+- Resources and actions: tickets `read` and `update`; orders `refund`, with the amount as an attribute. All limited to the actions and resources in the token's scope.
 - Enforcement point: the agent runtime or the application backend before the action reaches the business system. It verifies the token and passes only verified claims to Speedle.
-- Self-hosted option: one check, with the token and the delegator evaluated by custom functions such as `DelegationValid(...) && DelegatorAllowed(...)`. Speedle Cloud does not run custom functions.
-- SPDL example rules: the agent's grant matches only when the action and ticket are in the token's scope and the token has not expired; the delegator's grant asks about the user alone, so revoking the user's role denies the agent at the next request.
+- Human approval: the enforcement point verifies the signed approval record for the refund and passes its approver as `approved_by` in the second check. The approver must not be the user.
+- Self-hosted option: one check, with the token and the delegator evaluated by the custom functions `DelegationValid` and `DelegatorAllowed`. Speedle Cloud does not run custom functions.
+- SPDL example rules: the agent gets its role in three steps (token not expired, action listed, resource listed), so it holds only within the token's scope; the delegator's grants ask about the user alone, so revoking the user's role denies the agent at the next request; a refund above 100 is granted only with an approver other than the user.
 
 A runnable local sample of both patterns, with a demo token issuer, the enforcement point and the custom-function server, is in the repository: https://github.com/teramoby/ai.speedle.io/tree/main/samples/delegation
 

@@ -11,7 +11,7 @@
 //     action on the resource now.
 //
 // DelegatorAllowed calls back into ADS from inside an evaluation. The inner
-// request has a user subject, which the delegated-agent grant cannot match, so
+// request has a user subject, which the token-valid role grant cannot match, so
 // it does not recurse into these functions again.
 //
 // DEMO ONLY. demoKey is a fixed, public signing key shared with pep.py; anyone
@@ -64,12 +64,13 @@ type funcResponse struct {
 }
 
 type claims struct {
-	Iss string `json:"iss"`
-	Aud string `json:"aud"`
-	Sub string `json:"sub"`
-	Iat *int64 `json:"iat"`
-	Exp *int64 `json:"exp"`
-	Act struct {
+	Iss  string `json:"iss"`
+	Aud  string `json:"aud"`
+	Kind string `json:"kind"`
+	Sub  string `json:"sub"`
+	Iat  *int64 `json:"iat"`
+	Exp  *int64 `json:"exp"`
+	Act  struct {
 		Sub string `json:"sub"`
 	} `json:"act"`
 	Scope struct {
@@ -109,6 +110,8 @@ func verify(token string, now int64) (*claims, error) {
 		return nil, errors.New("wrong issuer")
 	case c.Aud != audience:
 		return nil, errors.New("wrong audience")
+	case c.Kind != "delegation":
+		return nil, errors.New("not a delegation token")
 	case c.Exp == nil || c.Iat == nil:
 		return nil, errors.New("missing exp or iat")
 	case now >= *c.Exp:

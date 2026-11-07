@@ -721,7 +721,7 @@ grant entity acme-helpdesk tenant-app</code></pre>
               <div class="area-copy">
                 <p class="area-step">04 / 智能体代用户操作</p>
                 <h4 id="lc-agents-title">AI 智能体能代用户做什么？</h4>
-                <p class="area-lead">智能体有自己的身份；用户的委托由签名的委托令牌证明，而不是靠请求里的声明。策略执行点先验证令牌，再向 Speedle 查询两次，两次都通过才放行：一次查智能体是否在令牌范围内，一次查委托用户此刻本人是否有这项权限。令牌签发后，用户一旦失去某项权限，智能体在下一次请求时也会随之失去。</p>
+                <p class="area-lead">智能体有自己的身份；用户的委托由签名的委托令牌证明，而不是靠请求里的声明。策略执行点先验证令牌，再向 Speedle 查询两次，两次都通过才放行：一次查智能体是否在令牌范围内，一次查委托用户此刻本人是否有这项权限。令牌签发后，用户一旦失去某项权限，智能体在下一次请求时也会随之失去。超过 100 的退款还需要一条由用户以外的人做出的审批记录。</p>
                 <ol class="rag-flow" aria-label="委托智能体检查">
                   <li><span>1</span>验证令牌：签名、签发方、有效期，以及令牌是否签发给这个智能体。</li>
                   <li><span>2</span>智能体范围：以智能体为主体查询 Speedle，令牌范围作为属性传入。</li>
@@ -729,23 +729,35 @@ grant entity acme-helpdesk tenant-app</code></pre>
                 </ol>
                 <dl class="area-facts">
                   <div><dt>主体</dt><dd>范围检查以智能体（实体）为主体；第二次检查以委托用户为主体，用户取自已验证的令牌。</dd></div>
-                  <div><dt>资源与操作</dt><dd>工单：<code>read</code>、<code>update</code>，并且仅限令牌范围内的操作和工单。</dd></div>
+                  <div><dt>资源与操作</dt><dd>工单：<code>read</code>、<code>update</code>；订单：<code>refund</code>，金额作为属性传入。都仅限令牌范围内的操作和资源。</dd></div>
                   <div><dt>策略执行点</dt><dd>智能体运行时或应用后端在操作到达业务系统前检查。它负责验证令牌，只把验证过的声明传给 Speedle。</dd></div>
-                  <div><dt>自托管选项</dt><dd>也可以只查一次，由自定义函数（如 <code>DelegationValid(…) &amp;&amp; DelegatorAllowed(…)</code>）评估令牌和委托用户。Speedle Cloud 不支持自定义函数。</dd></div>
+                  <div><dt>人工审批</dt><dd>策略执行点验证这笔退款的签名审批记录，并在第二次检查中把审批人作为 <code>approved_by</code> 传入。审批人不能是用户本人。</dd></div>
+                  <div><dt>自托管选项</dt><dd>也可以只查一次，由自定义函数 <code>DelegationValid</code> 和 <code>DelegatorAllowed</code> 评估令牌和委托用户。Speedle Cloud 不支持自定义函数。</dd></div>
                 </dl>
               </div>
               <figure class="spdl-card">
                 <figcaption><span>agents.spdl</span><span>SPDL 示例</span></figcaption>
                 <pre tabindex="0" data-spdl="agents" aria-label="SPDL 示例：智能体代表用户操作"><code>[service.crm]
 [policy]
-# Check 1: the agent, inside the scope of its verified delegation token
-grant role delegated-agent read, update expr:^/tickets/ if request_action in token_actions &amp;&amp; request_resource in token_resources &amp;&amp; request_time &lt; token_expires
-# Check 2: the delegator from the token's sub, with their own permissions now
-grant role support-staff read, update expr:^/tickets/
+# Check 1: the agent, only while its verified token covers the request
+grant role in-scope read, update expr:^/tickets/
+grant role in-scope refund expr:^/orders/
+# Check 2: the delegating user (the token's sub), with their roles now
+grant role support read, update expr:^/tickets/
+grant role support refund expr:^/orders/ if amount &lt;= 100
+# Larger refunds: a verified approval by someone other than the user
+grant role support refund expr:^/orders/ if approved_by != request_user
 [rolepolicy]
-grant entity triage-agent delegated-agent
-grant user alice support-staff</code></pre>
-                <p class="spdl-caption">检查 1 只在令牌限定的操作、工单和有效期内匹配。检查 2 只看用户本人，所以撤销用户的角色后，智能体在下一次请求时就会被拒绝。</p>
+# Check 1 in three steps, each role needing the one before:
+# the token has not expired,
+grant entity triage-agent in-time if request_time &lt; token_expires
+# it lists this action,
+grant role in-time in-action if request_action in token_actions
+# and it lists this resource
+grant role in-action in-scope if request_resource in token_resources
+# Check 2: the user's own role
+grant user alice support</code></pre>
+                <p class="spdl-caption">检查 1 分三步授予智能体角色，所以只在令牌过期前、且只对令牌列出的操作和资源成立。检查 2 只看用户本人，所以撤销用户的角色后，智能体在下一次请求时就会被拒绝。超过 100 的退款只有在审批人不是用户本人时才能通过检查 2。</p>
                 <p class="spdl-caption zsp-sample"><a href="https://github.com/teramoby/ai.speedle.io/tree/main/samples/delegation">GitHub 上两种模式的可运行示例</a></p>
               </figure>
             </article>

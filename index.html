@@ -720,7 +720,7 @@ grant entity acme-helpdesk tenant-app</code></pre>
               <div class="area-copy">
                 <p class="area-step">04 / Agents acting for users</p>
                 <h4 id="lc-agents-title">What may an AI agent do on behalf of a user?</h4>
-                <p class="area-lead">The agent has its own identity, and the user’s delegation is proven by a signed delegation token, not by claims in the request. The enforcement point verifies the token, then asks Speedle twice and allows only if both checks pass: the agent within the token’s scope, and the delegating user with their own permissions now. If the user loses a permission after the token was issued, the agent loses it at the next request.</p>
+                <p class="area-lead">The agent has its own identity, and the user’s delegation is proven by a signed delegation token, not by claims in the request. The enforcement point verifies the token, then asks Speedle twice and allows only if both checks pass: the agent within the token’s scope, and the delegating user with their own permissions now. If the user loses a permission after the token was issued, the agent loses it at the next request. A refund above 100 also needs a recorded human approval by someone other than the user.</p>
                 <ol class="rag-flow" aria-label="Delegated agent check">
                   <li><span>1</span>Verify the token: signature, issuer, expiry, and that it was issued to this agent.</li>
                   <li><span>2</span>Agent scope: ask Speedle with the agent as subject and the token’s scope as attributes.</li>
@@ -728,23 +728,35 @@ grant entity acme-helpdesk tenant-app</code></pre>
                 </ol>
                 <dl class="area-facts">
                   <div><dt>Subjects</dt><dd>The agent as an entity for the scope check; the delegating user, taken from the verified token, for the second check.</dd></div>
-                  <div><dt>Resources and actions</dt><dd>Tickets: <code>read</code>, <code>update</code>, limited to the actions and tickets in the token’s scope.</dd></div>
+                  <div><dt>Resources and actions</dt><dd>Tickets: <code>read</code>, <code>update</code>; orders: <code>refund</code>, with the amount as an attribute. All limited to the actions and resources in the token’s scope.</dd></div>
                   <div><dt>Enforcement point</dt><dd>The agent runtime or the application backend, before the action reaches the business system. It verifies the token and passes only verified claims to Speedle.</dd></div>
-                  <div><dt>Self-hosted option</dt><dd>One check, with the token and the delegator evaluated by custom functions such as <code>DelegationValid(…) &amp;&amp; DelegatorAllowed(…)</code>. Speedle Cloud does not run custom functions.</dd></div>
+                  <div><dt>Human approval</dt><dd>The enforcement point verifies the signed approval record for the refund and passes its approver as <code>approved_by</code> in the second check. The approver must not be the user.</dd></div>
+                  <div><dt>Self-hosted option</dt><dd>One check, with the token and the delegator evaluated by the custom functions <code>DelegationValid</code> and <code>DelegatorAllowed</code>. Speedle Cloud does not run custom functions.</dd></div>
                 </dl>
               </div>
               <figure class="spdl-card">
                 <figcaption><span>agents.spdl</span><span>SPDL example</span></figcaption>
                 <pre tabindex="0" data-spdl="agents" aria-label="SPDL example: Agents acting for users"><code>[service.crm]
 [policy]
-# Check 1: the agent, inside the scope of its verified delegation token
-grant role delegated-agent read, update expr:^/tickets/ if request_action in token_actions &amp;&amp; request_resource in token_resources &amp;&amp; request_time &lt; token_expires
-# Check 2: the delegator from the token's sub, with their own permissions now
-grant role support-staff read, update expr:^/tickets/
+# Check 1: the agent, only while its verified token covers the request
+grant role in-scope read, update expr:^/tickets/
+grant role in-scope refund expr:^/orders/
+# Check 2: the delegating user (the token's sub), with their roles now
+grant role support read, update expr:^/tickets/
+grant role support refund expr:^/orders/ if amount &lt;= 100
+# Larger refunds: a verified approval by someone other than the user
+grant role support refund expr:^/orders/ if approved_by != request_user
 [rolepolicy]
-grant entity triage-agent delegated-agent
-grant user alice support-staff</code></pre>
-                <p class="spdl-caption">Check 1 matches only within the token’s actions, tickets and expiry. Check 2 asks about the user alone, so revoking the user’s role denies the agent at the next request.</p>
+# Check 1 in three steps, each role needing the one before:
+# the token has not expired,
+grant entity triage-agent in-time if request_time &lt; token_expires
+# it lists this action,
+grant role in-time in-action if request_action in token_actions
+# and it lists this resource
+grant role in-action in-scope if request_resource in token_resources
+# Check 2: the user's own role
+grant user alice support</code></pre>
+                <p class="spdl-caption">Check 1 gives the agent its role in three steps, so it holds only before the token expires and only for the token’s actions and resources. Check 2 asks about the user alone, so revoking the user’s role denies the agent at the next request. A refund above 100 passes check 2 only with an approver other than the user.</p>
                 <p class="spdl-caption zsp-sample"><a href="https://github.com/teramoby/ai.speedle.io/tree/main/samples/delegation">Runnable sample of both patterns on GitHub</a></p>
               </figure>
             </article>

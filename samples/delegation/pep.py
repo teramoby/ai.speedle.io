@@ -2,15 +2,18 @@
 """Demo issuer and policy enforcement point (PEP) for delegated agents.
 
 An AI agent acts for a user. The user's delegation is proven by a signed
-delegation token, not by request claims. This script plays two parts:
+delegation token, not by request claims. This script plays three parts:
 
   issue   a demo token issuer: signs a delegation token for an agent;
+  approve a demo approval system: signs a human approval record;
   check   the PEP in front of the business system.
 
 Pattern 1 (`check --pattern 1`, the default): the PEP verifies the token, then
 makes two is-allowed calls and allows only if both pass:
   1. the agent, with the verified token scope as attributes;
-  2. the delegator (the token `sub`), with their own permissions now.
+  2. the delegator (the token `sub`), with their own permissions now. For a
+     refund it also passes the amount and, from a verified approval record,
+     the approver as `approved_by`.
 
 Pattern 2 (`check --pattern 2`, self-hosted only): the PEP makes one is-allowed
 call and passes the raw token; custom functions verify it and ask about the
@@ -59,8 +62,8 @@ def sign(claims: dict) -> str:
     return f"{header}.{payload}.{signature}"
 
 
-def verify(token: str, agent: str, now: int) -> dict:
-    """Return the verified claims, or raise ValueError with the reason."""
+def verify_signed(token: str, now: int) -> dict:
+    """Check signature, issuer, audience and lifetime; return the claims."""
     parts = token.split(".")
     if len(parts) != 3:
         raise ValueError("malformed token")
@@ -84,6 +87,14 @@ def verify(token: str, agent: str, now: int) -> dict:
         raise ValueError("token expired")
     if iat > now + CLOCK_SKEW:
         raise ValueError("token issued in the future")
+    return claims
+
+
+def verify(token: str, agent: str, now: int) -> dict:
+    """Return the verified delegation claims, or raise ValueError with the reason."""
+    claims = verify_signed(token, now)
+    if claims.get("kind") != "delegation":
+        raise ValueError("not a delegation token")
     if (claims.get("act") or {}).get("sub") != agent:
         raise ValueError("token was not issued to this agent")
     if not isinstance(claims.get("sub"), str) or not claims["sub"]:
@@ -94,6 +105,21 @@ def verify(token: str, agent: str, now: int) -> dict:
         if not isinstance(values, list) or not values or not all(isinstance(v, str) for v in values):
             raise ValueError(f"scope.{key} must be a non-empty list of strings")
     return claims
+
+
+def verify_approval(record: str, action: str, resource: str, amount: float, now: int) -> str:
+    """Return the approver of a signed approval record that covers this request."""
+    claims = verify_signed(record, now)
+    if claims.get("kind") != "approval":
+        raise ValueError("not an approval record")
+    if claims.get("action") != action or claims.get("resource") != resource:
+        raise ValueError("approval is for another action or resource")
+    approved = claims.get("amount")
+    if not isinstance(approved, (int, float)) or approved < amount:
+        raise ValueError("approval does not cover the amount")
+    if not isinstance(claims.get("sub"), str) or not claims["sub"]:
+        raise ValueError("missing approver")
+    return claims["sub"]
 
 
 def is_allowed(body: dict) -> dict:
@@ -117,11 +143,31 @@ def cmd_issue(args) -> int:
     claims = {
         "iss": ISSUER,
         "aud": AUDIENCE,
+        "kind": "delegation",
         "sub": args.user,
         "act": {"sub": args.agent},
         "scope": {"actions": args.actions.split(","), "resources": args.resources.split(",")},
         "iat": now + args.offset,
         "exp": now + args.offset + args.ttl,
+    }
+    print(sign(claims))
+    return 0
+
+
+def cmd_approve(args) -> int:
+    # Demo approval step: in production the approval system records a human
+    # decision and signs it; the PEP never takes an approver from the caller.
+    now = int(time.time())
+    claims = {
+        "iss": ISSUER,
+        "aud": AUDIENCE,
+        "kind": "approval",
+        "sub": args.approver,
+        "action": args.action,
+        "resource": args.resource,
+        "amount": args.amount,
+        "iat": now,
+        "exp": now + args.ttl,
     }
     print(sign(claims))
     return 0
@@ -137,6 +183,9 @@ def cmd_check(args) -> int:
     service = SERVICE[args.pattern]
 
     if args.pattern == 2:
+        if args.amount is not None or args.approval:
+            print("--amount and --approval are shown with Pattern 1 only")
+            return 2
         # One check: custom functions in ADS verify the token and ask about the
         # delegator. The PEP passes the raw token and builds every attribute
         # itself, so a caller cannot shadow built-ins such as request_entity.
@@ -180,12 +229,25 @@ def cmd_check(args) -> int:
         return deny("agent scope")
 
     # Step 3: the delegator from the verified sub, with their permissions now.
+    # Request facts (the refund amount) and a verified approver are passed
+    # here, so the delegator's own policy decides how much they may refund.
+    delegator_attributes = []
+    if args.amount is not None:
+        delegator_attributes.append({"name": "amount", "type": "numeric", "value": args.amount})
+    if args.approval:
+        try:
+            approver = verify_approval(args.approval, args.action, args.resource, args.amount or 0, now)
+        except ValueError as error:
+            print(f"verify approval: {error}")
+            return deny("approval not valid")
+        print(f"verify approval: ok (approved_by={approver})")
+        delegator_attributes.append({"name": "approved_by", "type": "string", "value": approver})
     delegator_check = is_allowed({
         "subject": {"principals": [{"type": "user", "name": claims["sub"]}]},
         "serviceName": service,
         "resource": args.resource,
         "action": args.action,
-        "attributes": [],
+        "attributes": delegator_attributes,
     })
     print(f"check 2 delegator now ({claims['sub']}): {json.dumps(delegator_check)}")
     if delegator_check.get("allowed") is not True:
@@ -208,12 +270,22 @@ def main() -> int:
                        help="shift iat by this many seconds, e.g. -600 for an already expired token")
     issue.set_defaults(func=cmd_issue)
 
+    approve = sub.add_parser("approve", help="sign a demo approval record (demo approval system)")
+    approve.add_argument("--approver", required=True, help="the person who approved")
+    approve.add_argument("--action", required=True)
+    approve.add_argument("--resource", required=True)
+    approve.add_argument("--amount", type=float, required=True, help="the largest amount approved")
+    approve.add_argument("--ttl", type=int, default=900, help="lifetime in seconds (default 900)")
+    approve.set_defaults(func=cmd_approve)
+
     check = sub.add_parser("check", help="enforce one agent request")
     check.add_argument("--pattern", type=int, choices=(1, 2), default=1)
     check.add_argument("--agent", required=True, help="the authenticated agent identity")
     check.add_argument("--token", required=True, help="the agent's delegation token")
     check.add_argument("--action", required=True)
     check.add_argument("--resource", required=True)
+    check.add_argument("--amount", type=float, help="the refund amount, passed to check 2")
+    check.add_argument("--approval", help="a signed approval record (Pattern 1)")
     check.set_defaults(func=cmd_check)
 
     args = parser.parse_args()
