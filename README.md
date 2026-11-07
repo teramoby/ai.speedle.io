@@ -13,7 +13,8 @@ Every SPDL example on the page is parsed and evaluated with the Speedle
 file store (`eval.NewFromFile`) before it is published; keep each SPDL block
 byte-identical to what was tested. The Chinese page retains the same seven SPDL
 blocks, including their English comments. The zero standing privileges sample
-runs from `samples/zsp/`; it is not part of the sitemap.
+runs from `samples/zsp/` and the delegated agent sample from
+`samples/delegation/`; neither is part of the sitemap.
 
 The policy modeler skill lives in `skills/speedle-policy-modeler/`. It turns a
 handbook or regulation into SPDL, a design document and executable test cases.

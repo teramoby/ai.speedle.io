@@ -1,0 +1,20 @@
+[service.crm]
+[policy]
+# Check 1: the agent, only while its verified token covers the request
+grant role in-scope read, update expr:^/tickets/
+grant role in-scope refund expr:^/orders/
+# Check 2: the delegating user (the token's sub), with their roles now
+grant role support read, update expr:^/tickets/
+grant role support refund expr:^/orders/ if amount <= 100
+# Larger refunds: a verified approval by someone other than the user
+grant role support refund expr:^/orders/ if approved_by != request_user
+[rolepolicy]
+# Check 1 in three steps, each role needing the one before:
+# the token has not expired,
+grant entity triage-agent in-time if request_time < token_expires
+# it lists this action,
+grant role in-time in-action if request_action in token_actions
+# and it lists this resource
+grant role in-action in-scope if request_resource in token_resources
+# Check 2: the user's own role
+grant user alice support
