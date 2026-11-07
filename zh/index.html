@@ -179,7 +179,7 @@
             <article class="mode-card">
               <div class="mode-top"><span class="mode-label">模式 01 · 上线预览</span><code>check</code></div>
               <h4>授权检查</h4>
-              <p>规划中的 <code>check</code> 模式只注册授权检查工具，只读取 ADS 配置。它只回答授权问题，不会在调用应用中执行访问控制。</p>
+              <p>规划中的 <code>check</code> 模式默认只注册 <code>is_allowed</code>，只读取 ADS 配置。<code>diagnose</code>、<code>all_granted_roles</code> 和 <code>all_granted_permissions</code> 需要分别用 <code>--expose-diagnose</code>、<code>--expose-all-granted-roles</code> 和 <code>--expose-all-granted-permissions</code> 参数显式开启。<code>diagnose</code> 只支持自托管 Speedle，连接 Speedle Cloud 时带上它服务不会启动。它只回答授权问题，不会在调用应用中执行访问控制。</p>
               <ul class="mode-list">
                 <li>通过 Speedle ADS REST API 发起只读授权检查。</li>
                 <li>输入：主体、资源、操作和带类型的属性。</li>
@@ -202,7 +202,7 @@
 
           <aside class="mcp-security" aria-labelledby="mcp-security-title">
             <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
-            <div><h4 id="mcp-security-title">别让受控智能体管理策略</h4><p><strong>不要给受这些策略约束的智能体开放 <code>manage</code> 模式。</strong>如果智能体同时拿到检查和管理工具，提示词可能诱导它给自己开通访问权限。</p><p>没有同时开放两类工具的默认模式。按规划，不指定模式时会打印用法，并以非零状态码退出。</p></div>
+            <div><h4 id="mcp-security-title">别让受控智能体管理策略</h4><p><strong>不要给受这些策略约束的智能体开放 <code>manage</code> 模式。</strong>如果智能体同时拿到检查和管理工具，提示词可能诱导它给自己开通访问权限。</p><p><strong>受控智能体只开放 <code>is_allowed</code>。</strong>这是 <code>check</code> 模式的默认设置。<code>diagnose</code>、<code>all_granted_roles</code> 和 <code>all_granted_permissions</code> 会展示策略、条件和授权，只在给策略编写者和运维人员使用的 check 服务中开启，不要给智能体的服务加 <code>--expose-*</code> 参数。</p><p>没有同时开放两类工具的默认模式。按规划，不指定模式时会打印用法，并以非零状态码退出。</p></div>
           </aside>
 
           <div class="launch-config" aria-labelledby="launch-config-title">
@@ -619,7 +619,7 @@ cp -R ai.speedle.io/skills/speedle-policy-modeler \
         </div>
 
         <div class="areas">
-          <p class="note areas-note"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>以下 SPDL 示例都用 Speedle 文件存储解析并评估过，覆盖允许和拒绝两种用例。名称、路径和属性仅作示例，实际由应用在请求决策时传入。</p>
+          <p class="note areas-note"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>以下 SPDL 示例都用 Speedle 文件存储解析并评估过，覆盖允许和拒绝两种用例。名称、路径和属性仅作示例，实际由应用在请求决策时传入。策略执行点必须传入条件引用的所有属性。</p>
 
           <section id="build" class="phase" aria-labelledby="build-title">
             <div class="phase-head phase-build">
@@ -810,7 +810,8 @@ grant entity researcher-1 researcher-agent</code></pre>
               <pre tabindex="0" data-spdl="zsp" aria-label="SPDL 示例：零常驻权限"><code>[service.zsp]
 [policy]
 # A just-in-time token: positive lifetime up to 600 s, inside its validity window, unused
-# request_time is the ADS server clock; 60 s is the explicit clock-skew allowance
+# request_time defaults to the ADS clock; attributes passed by the enforcement point take precedence
+# 60 s is the explicit clock-skew allowance
 grant role agent-runtime invoke /api/orders if expires_at &gt; issued_at &amp;&amp; expires_at - issued_at &lt;= 600 &amp;&amp; issued_at &lt;= request_time + 60 &amp;&amp; not_before &lt;= request_time + 60 &amp;&amp; request_time &lt; expires_at &amp;&amp; TokenUnused(token_id)
 [rolepolicy]
 grant entity agent-billing-1 agent-runtime</code></pre>

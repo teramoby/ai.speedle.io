@@ -102,8 +102,9 @@ The condition is all of the time checks the pattern needs:
 - `request_time < expires_at`: not expired at decision time;
 - `TokenUnused(token_id)`: a read-only status check, not a consume.
 
-`request_time` is a Speedle built-in: ADS fills it from its own clock when it
-evaluates the request. `not_before` is a customer attribute. A token without a
+`request_time` is a Speedle built-in: it defaults to the ADS clock at decision
+time, and an attribute of the same name passed by the enforcement point takes
+precedence. `not_before` is a customer attribute. A token without a
 not-before claim must be normalized to `not_before = issued_at` by the component
 that verifies the token; if the attribute is missing, the condition does not
 evaluate and the request is denied.

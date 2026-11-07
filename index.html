@@ -178,7 +178,7 @@
             <article class="mode-card">
               <div class="mode-top"><span class="mode-label">Mode 01 · Launch preview</span><code>check</code></div>
               <h4>Authorization checks</h4>
-              <p>The planned <code>check</code> mode registers only the authorization-check tools and reads only ADS configuration. It answers authorization questions; it does not enforce anything in the calling application.</p>
+              <p>The planned <code>check</code> mode registers only <code>is_allowed</code> by default and reads only ADS configuration. <code>diagnose</code>, <code>all_granted_roles</code> and <code>all_granted_permissions</code> are opt-in through the <code>--expose-diagnose</code>, <code>--expose-all-granted-roles</code> and <code>--expose-all-granted-permissions</code> flags. <code>diagnose</code> works only with self-hosted Speedle; the server will not start with it against Speedle Cloud. It answers authorization questions; it does not enforce anything in the calling application.</p>
               <ul class="mode-list">
                 <li>Read-only authorization checks through the Speedle ADS REST API.</li>
                 <li>Subject, resource, action, and typed attributes as inputs.</li>
@@ -201,7 +201,7 @@
 
           <aside class="mcp-security" aria-labelledby="mcp-security-title">
             <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
-            <div><h4 id="mcp-security-title">Keep policy management out of the governed agent</h4><p><strong>Never give <code>manage</code> to an agent that is itself governed by these policies.</strong> An agent holding both check and management tools could be prompted into granting itself access.</p><p>There is no default mode that exposes both. Running with no mode is planned to print usage and exit non-zero.</p></div>
+            <div><h4 id="mcp-security-title">Keep policy management out of the governed agent</h4><p><strong>Never give <code>manage</code> to an agent that is itself governed by these policies.</strong> An agent holding both check and management tools could be prompted into granting itself access.</p><p><strong>Give a governed agent <code>is_allowed</code> only.</strong> That is the <code>check</code> default. <code>diagnose</code>, <code>all_granted_roles</code> and <code>all_granted_permissions</code> show policies, conditions and grants, so turn them on only in a check server for policy authors and operators, and never pass the <code>--expose-*</code> flags to the agent’s server.</p><p>There is no default mode that exposes both. Running with no mode is planned to print usage and exit non-zero.</p></div>
           </aside>
 
           <div class="launch-config" aria-labelledby="launch-config-title">
@@ -618,7 +618,7 @@ cp -R ai.speedle.io/skills/speedle-policy-modeler \
         </div>
 
         <div class="areas">
-          <p class="note areas-note"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>Each SPDL example below was parsed and evaluated with the Speedle file store against allow and deny cases. Names, paths and attributes are illustrative; your application supplies the attributes when it asks for a decision.</p>
+          <p class="note areas-note"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>Each SPDL example below was parsed and evaluated with the Speedle file store against allow and deny cases. Names, paths and attributes are illustrative; your application supplies the attributes when it asks for a decision. The enforcement point must pass every attribute that a condition references.</p>
 
           <section id="build" class="phase" aria-labelledby="build-title">
             <div class="phase-head phase-build">
@@ -809,7 +809,8 @@ grant entity researcher-1 researcher-agent</code></pre>
               <pre tabindex="0" data-spdl="zsp" aria-label="SPDL example: Zero standing privileges"><code>[service.zsp]
 [policy]
 # A just-in-time token: positive lifetime up to 600 s, inside its validity window, unused
-# request_time is the ADS server clock; 60 s is the explicit clock-skew allowance
+# request_time defaults to the ADS clock; attributes passed by the enforcement point take precedence
+# 60 s is the explicit clock-skew allowance
 grant role agent-runtime invoke /api/orders if expires_at &gt; issued_at &amp;&amp; expires_at - issued_at &lt;= 600 &amp;&amp; issued_at &lt;= request_time + 60 &amp;&amp; not_before &lt;= request_time + 60 &amp;&amp; request_time &lt; expires_at &amp;&amp; TokenUnused(token_id)
 [rolepolicy]
 grant entity agent-billing-1 agent-runtime</code></pre>
