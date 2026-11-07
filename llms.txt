@@ -39,7 +39,7 @@ Speedle AI has two parts. AI for access management covers using AI to design, ma
 - [Speedle source on GitHub](https://github.com/teramoby/speedle-plus): Universal Permissive License (UPL) 1.0.
 - [Speedle MCP repository](https://github.com/teramoby/speedle-mcp): check-mode issue #1 and manage-mode issue #2; not published on npm yet.
 - [Speedle SDK](https://github.com/teramoby/speedle-sdk): client integration patterns and guidance.
-- [Speedle documentation](https://speedle.io/docs/): guides, SPDL and the diagnose API.
+- [Speedle documentation](https://engine.speedle.io/docs/): guides, SPDL and the diagnose API.
 
 ## Optional
 

@@ -132,4 +132,4 @@ Speedle does not detect prompt injection, filter model input or output, or verif
 - Speedle source code (UPL 1.0): https://github.com/teramoby/speedle-plus
 - Speedle MCP: https://github.com/teramoby/speedle-mcp
 - Speedle SDK: https://github.com/teramoby/speedle-sdk
-- Speedle documentation: https://speedle.io/docs/
+- Speedle documentation: https://engine.speedle.io/docs/
