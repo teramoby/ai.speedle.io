@@ -97,3 +97,5 @@ assets/Google-Groups-NOTICE.txt and assets/Material-Icons-LICENSE.txt.
 
 Speedle continues Oracle Speedle and is maintained by the original developers.
 Speedle is licensed under UPL 1.0. Contact: contact@speedle.io.
+
+To report a security issue, see [SECURITY.md](SECURITY.md).
