@@ -23,7 +23,7 @@ Speedle AI has two parts. AI for access management covers using AI to design, ma
 - [Build: data and training](https://ai.speedle.io/#lc-data): consent, region and restricted-data rules for datasets, training jobs and checkpoints.
 - [Build: model release](https://ai.speedle.io/#lc-release): separation of duties for register, approve, promote and rollback.
 - [Run: permission-aware RAG](https://ai.speedle.io/#lc-rag): the retriever asks per document or collection before content enters the prompt.
-- [Run: agents acting for users](https://ai.speedle.io/#lc-agents): delegated requests go to a service whose grants all name both the agent role and the user role.
+- [Run: agents acting for users](https://ai.speedle.io/#lc-agents): both the agent and the delegating user must be allowed.
 - [Run: tool calls over MCP](https://ai.speedle.io/#lc-mcp): the tool, the call and its arguments are checked before the tool runs.
 - [Run: agent-to-agent (A2A) authorization](https://ai.speedle.io/#lc-a2a): each hop is checked and delegation only narrows permissions.
 - [Run: zero standing privileges (ZSP)](https://ai.speedle.io/#zsp): just-in-time, short-lived, narrowly scoped credentials support a ZSP pattern when issuance and controls are in place; the example checks lifetime, not-before and token status, and production verifies token binding and consumes single-use tokens atomically.

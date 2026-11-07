@@ -720,19 +720,18 @@ grant entity acme-helpdesk tenant-app</code></pre>
               <div class="area-copy">
                 <p class="area-step">04 / Agents acting for users</p>
                 <h4 id="lc-agents-title">What may an AI agent do on behalf of a user?</h4>
-                <p class="area-lead">The agent has its own identity. On behalf of a user, the request carries both the user and the agent as principals. Speedle allows a request when any grant that matches its principals allows it, and that includes the user’s own grants. So the enforcement point sends delegated requests to a service that holds only grants naming both roles; there, the agent can do only what those grants allow. Scope is bound to the task and its expiry, and high-risk actions need a human approval.</p>
+                <p class="area-lead">The agent has its own identity. On behalf of a user, the request carries both the user and the agent as principals, and every grant names both roles, so the agent gets only what both may do. Scope is bound to the task and its expiry, and high-risk actions need a human approval.</p>
                 <dl class="area-facts">
-                  <div><dt>Subjects</dt><dd>The agent as an entity plus the delegating user. In <code>crm-delegated</code>, the agent alone or the user alone matches no grant, as long as only agent entities hold <code>ticket-agent</code>, including through role policies in the global service.</dd></div>
+                  <div><dt>Subjects</dt><dd>The agent as an entity plus the delegating user. The agent alone, or the user without the agent, matches no grant here.</dd></div>
                   <div><dt>Resources and actions</dt><dd>Tickets: <code>read</code>, <code>update</code>. Orders: <code>refund</code>, a high-risk action.</dd></div>
-                  <div><dt>Enforcement point</dt><dd>The agent runtime or the application backend, before the action reaches the business system. It sends delegated requests to <code>crm-delegated</code>, never to a service where the user has grants of their own. The approval step records a human approval and the application passes it as <code>approved_amount</code>.</dd></div>
+                  <div><dt>Enforcement point</dt><dd>The agent runtime or the application backend, before the action reaches the business system. The approval step records a human approval and the application passes it as <code>approved_amount</code>.</dd></div>
                 </dl>
               </div>
               <figure class="spdl-card">
                 <figcaption><span>agents.spdl</span><span>SPDL example</span></figcaption>
-                <pre tabindex="0" data-spdl="agents" aria-label="SPDL example: Agents acting for users"><code>[service.crm-delegated]
+                <pre tabindex="0" data-spdl="agents" aria-label="SPDL example: Agents acting for users"><code>[service.crm]
 [policy]
-# Only delegated requests come to this service, and every grant names the agent role and the user role
-# Read and update only the task's tickets, until the task expires
+# On behalf of a user: agent and user roles are both required, for the task's tickets, until it expires
 grant (role ticket-agent, role support-staff) read, update expr:^/tickets/ if request_resource in task_tickets &amp;&amp; request_time &lt; task_expires
 # High risk: a refund also needs a human approval that covers the amount
 grant (role ticket-agent, role support-staff) refund expr:^/orders/ if approved_amount &gt;= amount

@@ -78,11 +78,11 @@ Users, apps and tenants call models. For permission-aware RAG (retrieval-augment
 
 ### Run: agents acting for users
 
-The agent has its own identity. On behalf of a user, the request carries both the user and the agent as principals. Speedle allows a request when any grant that matches its principals allows it, and that includes the user's own grants. So the enforcement point sends delegated requests to a service (`crm-delegated` in the example) that holds only grants naming both the agent role and the user role; there, the agent can do only what those grants allow. Scope is bound to the task and its expiry, and high-risk actions need a human approval.
+The agent has its own identity. On behalf of a user, the request carries both the user and the agent as principals, and every grant names both roles, so the agent gets only what both may do. Scope is bound to the task and its expiry, and high-risk actions need a human approval.
 
-- Subjects: the agent as an entity plus the delegating user. In `crm-delegated`, the agent alone or the user alone matches no grant, as long as only agent entities hold the agent role, including through role policies in the global service.
+- Subjects: the agent as an entity plus the delegating user. The agent alone, or the user without the agent, matches no grant.
 - Resources and actions: tickets `read` and `update`; orders `refund`, a high-risk action.
-- Enforcement point: the agent runtime or the application backend before the action reaches the business system. It sends delegated requests to `crm-delegated`, never to a service where the user has grants of their own. The approval step records a human approval and the application passes it as `approved_amount`.
+- Enforcement point: the agent runtime or the application backend before the action reaches the business system. The approval step records a human approval and the application passes it as `approved_amount`.
 
 ### Run: tool calls over MCP
 
