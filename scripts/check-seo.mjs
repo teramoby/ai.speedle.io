@@ -6,8 +6,8 @@
 //
 // It verifies sitemap and llms link targets, hreflang alternates, page metadata,
 // JSON-LD and the absence of FAQ content, the language switch, Cloudflare Web
-// Analytics, headline punctuation, and byte-identical SPDL examples across the
-// English and Chinese pages.
+// Analytics, headline punctuation, byte-identical SPDL examples across the
+// English and Chinese pages, and the shared 404 page.
 
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -32,10 +32,10 @@ function read(name) {
 // Map https://ai.speedle.io/<path> to a file in this repository and, for
 // fragment URLs, to an id in that file. Directory URLs map to their index.html.
 const pages = new Map();
-function localTarget(url) {
+function localTarget(url, base = `${origin}/`) {
   let parsed;
   try {
-    parsed = new URL(url);
+    parsed = new URL(url, base);
   } catch {
     return null;
   }
@@ -56,8 +56,8 @@ function htmlFor(file) {
   return pages.get(file);
 }
 
-function checkInternalUrl(url, source) {
-  const target = localTarget(url);
+function checkInternalUrl(url, source, base = `${origin}/`) {
+  const target = localTarget(url, base);
   if (target) {
     const html = htmlFor(target.file);
     check(html !== '', `${source}: ${url} has no local file (${target.file})`);
@@ -69,7 +69,7 @@ function checkInternalUrl(url, source) {
   }
   let parsed;
   try {
-    parsed = new URL(url);
+    parsed = new URL(url, base);
   } catch {
     return;
   }
@@ -226,6 +226,46 @@ function checkPage(definition) {
 
 const englishHtml = checkPage(pageDefinitions[0]);
 const chineseHtml = checkPage(pageDefinitions[1]);
+
+// --- 404 page -------------------------------------------------------------
+
+const notFound = read('404.html');
+
+function block(html, pattern) {
+  return (html.match(pattern) || [])[0] || '';
+}
+
+// The 404 page reuses the shared header and footer; its home-page section
+// links must be root-relative because the page is served for arbitrary paths.
+const siteHeader = block(englishHtml, /<header class="site-header">[\s\S]*?<\/header>/);
+const siteFooter = block(englishHtml, /<footer class="site-footer">[\s\S]*?<\/footer>/);
+const sharedHeaderForNotFound = siteHeader
+  .replaceAll('href="#ai-for-access"', 'href="/#ai-for-access"')
+  .replaceAll('href="#access-for-ai"', 'href="/#access-for-ai"');
+const notFoundHeader = block(notFound, /<header class="site-header">[\s\S]*?<\/header>/);
+const notFoundFooter = block(notFound, /<footer class="site-footer">[\s\S]*?<\/footer>/);
+check(siteHeader !== '' && notFoundHeader === sharedHeaderForNotFound, '404.html: header must match the shared header on index.html');
+check(siteFooter !== '' && notFoundFooter === siteFooter, '404.html: footer must match the shared footer on index.html');
+
+const notFoundTitle = (notFound.match(/<title>([^<]*)<\/title>/) || [])[1] || '';
+const notFoundDescription = (notFound.match(/<meta name="description" content="([^"]*)"/) || [])[1] || '';
+check(notFoundTitle.length > 0 && notFoundTitle.length <= 60, `404.html: title must be 1-60 characters (is ${notFoundTitle.length})`);
+check(!/[.。]\s*$/.test(notFoundTitle), '404.html: title must not end with a full stop');
+check(notFoundDescription.length > 0 && notFoundDescription.length <= 155, `404.html: meta description must be 1-155 characters (is ${notFoundDescription.length})`);
+check(notFound.includes('<meta name="robots" content="noindex">'), '404.html: must be noindex');
+check((notFound.match(/<h1[\s>]/g) || []).length === 1, '404.html: must have exactly one <h1>');
+for (const heading of notFound.matchAll(/<h([1-4])\b[^>]*>([\s\S]*?)<\/h\1>/g)) {
+  check(!/[.。]\s*$/.test(heading[2]), `404.html: <h${heading[1]}> must not end with a full stop: ${heading[2].trim()}`);
+}
+check(notFound.includes('<a class="button button-primary" href="/" lang="en" hreflang="en">English home</a>'), '404.html: must link the English home page');
+check(notFound.includes('<a class="button button-secondary" href="/zh/" lang="zh-CN" hreflang="zh-CN">中文首页</a>'), '404.html: must link the Chinese home page');
+check(
+  /<script defer src="https:\/\/static\.cloudflareinsights\.com\/beacon\.min\.js" data-cf-beacon='\{"token": "3b49dd9a82634bba833340481ce6ccbe"\}'><\/script>/.test(notFound),
+  '404.html: must load the Cloudflare Web Analytics beacon with the ai.speedle.io token'
+);
+for (const link of notFound.matchAll(/<a\b[^>]*\bhref="([^"]+)"/g)) {
+  checkInternalUrl(link[1], '404.html', `${origin}/404.html`);
+}
 
 const ogImage = join(root, 'assets/og-image.png');
 check(existsSync(ogImage), 'assets/og-image.png is missing');
