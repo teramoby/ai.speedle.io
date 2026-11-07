@@ -536,7 +536,7 @@ h1 { max-width: 650px; margin: 22px 0 26px; font-size: clamp(3.15rem, 5.25vw, 4.
 .cta { position: relative; isolation: isolate; overflow: hidden; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 32px 48px; padding: 58px 60px; border: 1px solid var(--line-purple); border-radius: 28px; color: var(--ink); background: linear-gradient(125deg, var(--tint-light), var(--tint-strong)); }
 .cta::after { content: ""; position: absolute; z-index: -1; top: -170px; right: -120px; width: 300px; height: 300px; border: 70px solid rgba(var(--primary-rgb), .07); border-radius: 50%; }
 .cta .eyebrow { padding: 4px 8px; color: var(--primary-dark); background: var(--white); }
-.cta h2 { max-width: 650px; margin: 14px 0; font-size: clamp(2rem, 4vw, 3rem); letter-spacing: -.035em; line-height: 1.1; }
+.cta h1, .cta h2 { max-width: 650px; margin: 14px 0; font-size: clamp(2rem, 4vw, 3rem); letter-spacing: -.035em; line-height: 1.1; }
 .cta-copy > p:last-child { max-width: 620px; margin: 0; color: var(--muted); }
 .cta .actions { flex-direction: column; align-items: stretch; margin: 0; }
 .provenance { max-width: 900px; margin: 26px auto 0; color: var(--muted); font-size: .85rem; text-align: center; }

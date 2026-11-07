@@ -45,5 +45,8 @@ jobs:
       - name: Check site files
         run: node scripts/check-seo.mjs
 
+      - name: Assemble the published site
+        run: bash scripts/build-site.sh _site
+
       - name: Validate page SPDL examples
         run: PATH="$RUNNER_TEMP/speedle-bin:$PATH" samples/page-examples/validate.sh
