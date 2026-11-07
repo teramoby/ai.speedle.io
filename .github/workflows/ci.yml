@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out site
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - name: Check out Speedle tools
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          repository: teramoby/speedle-plus
+          ref: 46a4f90a6338332352006c328371d04fc5b6106f
+          path: speedle-plus
+          persist-credentials: false
+
+      - name: Set up Go
+        uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5.6.0
+        with:
+          go-version: '1.27.3'
+          cache: false
+
+      - name: Build Speedle tools
+        working-directory: speedle-plus
+        run: |
+          mkdir -p "$RUNNER_TEMP/speedle-bin"
+          go build -o "$RUNNER_TEMP/speedle-bin/" ./cmd/spctl ./cmd/speedle-pms ./cmd/speedle-ads
+
+      - name: Build ZSP demo
+        working-directory: samples/zsp
+        run: go build -o "$RUNNER_TEMP/speedle-bin/zsp-demo" .
+
+      - name: Check site files
+        run: node scripts/check-seo.mjs
+
+      - name: Validate page SPDL examples
+        run: PATH="$RUNNER_TEMP/speedle-bin:$PATH" samples/page-examples/validate.sh

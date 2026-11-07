@@ -1,0 +1,11 @@
+[service.ml-training]
+[policy]
+# Pipelines read only consented data from their own region
+grant role training-pipeline read expr:^/datasets/ if consent == true && data_region == job_region
+# Restricted datasets never enter training
+deny role training-pipeline read expr:^/datasets/restricted/
+grant role ml-engineer start /jobs/training if gpu_hours <= 64
+grant role ml-engineer export expr:^/checkpoints/
+[rolepolicy]
+grant entity pipeline-churn training-pipeline
+grant group ml-team ml-engineer

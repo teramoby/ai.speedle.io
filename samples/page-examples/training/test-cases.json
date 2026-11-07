@@ -1,0 +1,82 @@
+{
+  "service": "ml-training",
+  "cases": [
+    {
+      "id": "TR01",
+      "description": "A pipeline reads consented data in its own region",
+      "subject": {"principals": [{"type": "entity", "name": "pipeline-churn"}]},
+      "resource": "/datasets/customers/daily",
+      "action": "read",
+      "attributes": [
+        {"name": "consent", "type": "bool", "value": true},
+        {"name": "data_region", "type": "string", "value": "eu-west"},
+        {"name": "job_region", "type": "string", "value": "eu-west"}
+      ],
+      "expect": {"allowed": true, "reason": 0}
+    },
+    {
+      "id": "TR02",
+      "description": "The explicit restricted-dataset deny overrides the pipeline grant",
+      "subject": {"principals": [{"type": "entity", "name": "pipeline-churn"}]},
+      "resource": "/datasets/restricted/health",
+      "action": "read",
+      "attributes": [
+        {"name": "consent", "type": "bool", "value": true},
+        {"name": "data_region", "type": "string", "value": "eu-west"},
+        {"name": "job_region", "type": "string", "value": "eu-west"}
+      ],
+      "expect": {"allowed": false, "reason": 1}
+    },
+    {
+      "id": "TR03",
+      "description": "A pipeline cannot read data from another region",
+      "subject": {"principals": [{"type": "entity", "name": "pipeline-churn"}]},
+      "resource": "/datasets/customers/daily",
+      "action": "read",
+      "attributes": [
+        {"name": "consent", "type": "bool", "value": true},
+        {"name": "data_region", "type": "string", "value": "us-east"},
+        {"name": "job_region", "type": "string", "value": "eu-west"}
+      ],
+      "expect": {"allowed": false, "reason": 3}
+    },
+    {
+      "id": "TR04",
+      "description": "A read without the required consent attribute does not match the grant",
+      "subject": {"principals": [{"type": "entity", "name": "pipeline-churn"}]},
+      "resource": "/datasets/customers/daily",
+      "action": "read",
+      "attributes": [
+        {"name": "data_region", "type": "string", "value": "eu-west"},
+        {"name": "job_region", "type": "string", "value": "eu-west"}
+      ],
+      "expect": {"allowed": false, "reason": 3}
+    },
+    {
+      "id": "TR05",
+      "description": "An ML engineer starts a job at the 64 GPU-hour boundary",
+      "subject": {"principals": [{"type": "user", "name": "erin"}, {"type": "group", "name": "ml-team"}]},
+      "resource": "/jobs/training",
+      "action": "start",
+      "attributes": [{"name": "gpu_hours", "type": "numeric", "value": 64}],
+      "expect": {"allowed": true, "reason": 0}
+    },
+    {
+      "id": "TR06",
+      "description": "An ML engineer cannot start a job above the GPU-hour limit",
+      "subject": {"principals": [{"type": "user", "name": "erin"}, {"type": "group", "name": "ml-team"}]},
+      "resource": "/jobs/training",
+      "action": "start",
+      "attributes": [{"name": "gpu_hours", "type": "numeric", "value": 65}],
+      "expect": {"allowed": false, "reason": 3}
+    },
+    {
+      "id": "TR07",
+      "description": "An ML engineer exports a checkpoint",
+      "subject": {"principals": [{"type": "user", "name": "erin"}, {"type": "group", "name": "ml-team"}]},
+      "resource": "/checkpoints/churn/v3",
+      "action": "export",
+      "expect": {"allowed": true, "reason": 0}
+    }
+  ]
+}

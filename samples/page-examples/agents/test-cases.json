@@ -1,0 +1,111 @@
+{
+  "service": "crm",
+  "cases": [
+    {
+      "id": "AG01",
+      "description": "The agent scope check passes before expiry inside the token action and resource scope",
+      "subject": {"principals": [{"type": "entity", "name": "triage-agent"}]},
+      "resource": "/tickets/42",
+      "action": "update",
+      "attributes": [
+        {"name": "request_time", "type": "datetime", "value": "2026-01-01T00:00:00Z"},
+        {"name": "token_expires", "type": "datetime", "value": "2026-01-01T00:05:00Z"},
+        {"name": "token_actions", "type": "string", "value": ["read", "update"]},
+        {"name": "token_resources", "type": "string", "value": ["/tickets/42"]}
+      ],
+      "expect": {"allowed": true, "reason": 0}
+    },
+    {
+      "id": "AG02",
+      "description": "The agent scope check denies an expired token",
+      "subject": {"principals": [{"type": "entity", "name": "triage-agent"}]},
+      "resource": "/tickets/42",
+      "action": "update",
+      "attributes": [
+        {"name": "request_time", "type": "datetime", "value": "2026-01-01T00:05:00Z"},
+        {"name": "token_expires", "type": "datetime", "value": "2026-01-01T00:05:00Z"},
+        {"name": "token_actions", "type": "string", "value": ["read", "update"]},
+        {"name": "token_resources", "type": "string", "value": ["/tickets/42"]}
+      ],
+      "expect": {"allowed": false, "reason": 3}
+    },
+    {
+      "id": "AG03",
+      "description": "The agent scope check denies an action absent from the token",
+      "subject": {"principals": [{"type": "entity", "name": "triage-agent"}]},
+      "resource": "/tickets/42",
+      "action": "update",
+      "attributes": [
+        {"name": "request_time", "type": "datetime", "value": "2026-01-01T00:00:00Z"},
+        {"name": "token_expires", "type": "datetime", "value": "2026-01-01T00:05:00Z"},
+        {"name": "token_actions", "type": "string", "value": ["read"]},
+        {"name": "token_resources", "type": "string", "value": ["/tickets/42"]}
+      ],
+      "expect": {"allowed": false, "reason": 3}
+    },
+    {
+      "id": "AG04",
+      "description": "The agent scope check denies a resource absent from the token",
+      "subject": {"principals": [{"type": "entity", "name": "triage-agent"}]},
+      "resource": "/tickets/42",
+      "action": "update",
+      "attributes": [
+        {"name": "request_time", "type": "datetime", "value": "2026-01-01T00:00:00Z"},
+        {"name": "token_expires", "type": "datetime", "value": "2026-01-01T00:05:00Z"},
+        {"name": "token_actions", "type": "string", "value": ["read", "update"]},
+        {"name": "token_resources", "type": "string", "value": ["/tickets/other"]}
+      ],
+      "expect": {"allowed": false, "reason": 3}
+    },
+    {
+      "id": "AG05",
+      "description": "The delegating user reads a ticket with their current support role",
+      "subject": {"principals": [{"type": "user", "name": "alice"}]},
+      "resource": "/tickets/42",
+      "action": "read",
+      "expect": {"allowed": true, "reason": 0}
+    },
+    {
+      "id": "AG06",
+      "description": "The delegating user makes a refund at the 100 boundary",
+      "subject": {"principals": [{"type": "user", "name": "alice"}]},
+      "resource": "/orders/84",
+      "action": "refund",
+      "attributes": [{"name": "amount", "type": "numeric", "value": 100}],
+      "expect": {"allowed": true, "reason": 0}
+    },
+    {
+      "id": "AG07",
+      "description": "A refund above 100 passes with another person's verified approval",
+      "subject": {"principals": [{"type": "user", "name": "alice"}]},
+      "resource": "/orders/84",
+      "action": "refund",
+      "attributes": [
+        {"name": "amount", "type": "numeric", "value": 250},
+        {"name": "approved_by", "type": "string", "value": "bob"}
+      ],
+      "expect": {"allowed": true, "reason": 0}
+    },
+    {
+      "id": "AG08",
+      "description": "A refund above 100 cannot be approved by the requesting user",
+      "subject": {"principals": [{"type": "user", "name": "alice"}]},
+      "resource": "/orders/84",
+      "action": "refund",
+      "attributes": [
+        {"name": "amount", "type": "numeric", "value": 250},
+        {"name": "approved_by", "type": "string", "value": "alice"}
+      ],
+      "expect": {"allowed": false, "reason": 3}
+    },
+    {
+      "id": "AG09",
+      "description": "A refund above 100 without approved_by does not match either grant",
+      "subject": {"principals": [{"type": "user", "name": "alice"}]},
+      "resource": "/orders/84",
+      "action": "refund",
+      "attributes": [{"name": "amount", "type": "numeric", "value": 250}],
+      "expect": {"allowed": false, "reason": 3}
+    }
+  ]
+}

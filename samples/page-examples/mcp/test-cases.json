@@ -1,0 +1,66 @@
+{
+  "service": "mcp-gateway",
+  "cases": [
+    {
+      "id": "MC01",
+      "description": "The research agent calls web search",
+      "subject": {"principals": [{"type": "entity", "name": "agent-research-1"}]},
+      "resource": "/tools/web-search",
+      "action": "call",
+      "expect": {"allowed": true, "reason": 0}
+    },
+    {
+      "id": "MC02",
+      "description": "The explicit deny keeps admin tools away from the research agent",
+      "subject": {"principals": [{"type": "entity", "name": "agent-research-1"}]},
+      "resource": "/tools/admin/restart",
+      "action": "call",
+      "expect": {"allowed": false, "reason": 1}
+    },
+    {
+      "id": "MC03",
+      "description": "The billing agent issues a verified-customer refund at the 100 boundary",
+      "subject": {"principals": [{"type": "entity", "name": "agent-billing-1"}]},
+      "resource": "/tools/issue-refund",
+      "action": "call",
+      "attributes": [
+        {"name": "amount", "type": "numeric", "value": 100},
+        {"name": "customer_verified", "type": "bool", "value": true}
+      ],
+      "expect": {"allowed": true, "reason": 0}
+    },
+    {
+      "id": "MC04",
+      "description": "The billing agent cannot issue a refund above 100",
+      "subject": {"principals": [{"type": "entity", "name": "agent-billing-1"}]},
+      "resource": "/tools/issue-refund",
+      "action": "call",
+      "attributes": [
+        {"name": "amount", "type": "numeric", "value": 100.01},
+        {"name": "customer_verified", "type": "bool", "value": true}
+      ],
+      "expect": {"allowed": false, "reason": 3}
+    },
+    {
+      "id": "MC05",
+      "description": "The billing agent cannot refund an unverified customer",
+      "subject": {"principals": [{"type": "entity", "name": "agent-billing-1"}]},
+      "resource": "/tools/issue-refund",
+      "action": "call",
+      "attributes": [
+        {"name": "amount", "type": "numeric", "value": 50},
+        {"name": "customer_verified", "type": "bool", "value": false}
+      ],
+      "expect": {"allowed": false, "reason": 3}
+    },
+    {
+      "id": "MC06",
+      "description": "A refund without the amount attribute does not match the grant",
+      "subject": {"principals": [{"type": "entity", "name": "agent-billing-1"}]},
+      "resource": "/tools/issue-refund",
+      "action": "call",
+      "attributes": [{"name": "customer_verified", "type": "bool", "value": true}],
+      "expect": {"allowed": false, "reason": 3}
+    }
+  ]
+}

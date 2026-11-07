@@ -251,14 +251,23 @@ for (const [name, source] of englishSpdl) {
   check(chineseSpdl.get(name) === source, `zh/index.html ${name} SPDL must be byte-identical, including comments`);
 }
 
+function decodeSpdl(source) {
+  return source
+    .replaceAll('&lt;', '<')
+    .replaceAll('&gt;', '>')
+    .replaceAll('&quot;', '"')
+    .replaceAll('&amp;', '&');
+}
+for (const [name, source] of englishSpdl) {
+  const samplePath = `samples/page-examples/${name}/${name}.spdl`;
+  const pageExample = read(samplePath).replace(/\n$/, '');
+  check(pageExample === decodeSpdl(source), `${samplePath} must be byte-identical to the ${name} SPDL example on index.html`);
+}
+
 // The ZSP example must cover the complete time checks and the read-only status
 // function, and its comments must use "#" only. The source is HTML-escaped
 // inside <code>, so decode the entities before checking.
-const zspSource = (englishSpdl.get('zsp') || '')
-  .replaceAll('&lt;', '<')
-  .replaceAll('&gt;', '>')
-  .replaceAll('&amp;', '&')
-  .replaceAll('&quot;', '"');
+const zspSource = decodeSpdl(englishSpdl.get('zsp') || '');
 for (const fragment of [
   'expires_at > issued_at',
   'expires_at - issued_at <= 600',

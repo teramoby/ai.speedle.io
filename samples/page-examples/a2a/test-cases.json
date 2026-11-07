@@ -1,0 +1,70 @@
+{
+  "service": "a2a",
+  "cases": [
+    {
+      "id": "AA01",
+      "description": "The planner delegates a subset of its scopes at the two-hop boundary",
+      "subject": {"principals": [{"type": "entity", "name": "planner-1"}]},
+      "resource": "/agents/researcher",
+      "action": "call",
+      "attributes": [
+        {"name": "requested_scopes", "type": "string", "value": ["search"]},
+        {"name": "caller_scopes", "type": "string", "value": ["search", "summarize"]},
+        {"name": "hops", "type": "numeric", "value": 2}
+      ],
+      "expect": {"allowed": true, "reason": 0}
+    },
+    {
+      "id": "AA02",
+      "description": "The planner cannot delegate a scope it does not hold",
+      "subject": {"principals": [{"type": "entity", "name": "planner-1"}]},
+      "resource": "/agents/researcher",
+      "action": "call",
+      "attributes": [
+        {"name": "requested_scopes", "type": "string", "value": ["search", "admin"]},
+        {"name": "caller_scopes", "type": "string", "value": ["search", "summarize"]},
+        {"name": "hops", "type": "numeric", "value": 1}
+      ],
+      "expect": {"allowed": false, "reason": 3}
+    },
+    {
+      "id": "AA03",
+      "description": "The planner cannot delegate beyond two hops",
+      "subject": {"principals": [{"type": "entity", "name": "planner-1"}]},
+      "resource": "/agents/researcher",
+      "action": "call",
+      "attributes": [
+        {"name": "requested_scopes", "type": "string", "value": ["search"]},
+        {"name": "caller_scopes", "type": "string", "value": ["search", "summarize"]},
+        {"name": "hops", "type": "numeric", "value": 3}
+      ],
+      "expect": {"allowed": false, "reason": 3}
+    },
+    {
+      "id": "AA04",
+      "description": "The researcher calls the writer with a subset of its scopes",
+      "subject": {"principals": [{"type": "entity", "name": "researcher-1"}]},
+      "resource": "/agents/writer",
+      "action": "call",
+      "attributes": [
+        {"name": "requested_scopes", "type": "string", "value": ["draft"]},
+        {"name": "caller_scopes", "type": "string", "value": ["draft", "cite"]},
+        {"name": "hops", "type": "numeric", "value": 1}
+      ],
+      "expect": {"allowed": true, "reason": 0}
+    },
+    {
+      "id": "AA05",
+      "description": "The planner has no grant to call the writer directly",
+      "subject": {"principals": [{"type": "entity", "name": "planner-1"}]},
+      "resource": "/agents/writer",
+      "action": "call",
+      "attributes": [
+        {"name": "requested_scopes", "type": "string", "value": ["draft"]},
+        {"name": "caller_scopes", "type": "string", "value": ["draft", "search"]},
+        {"name": "hops", "type": "numeric", "value": 1}
+      ],
+      "expect": {"allowed": false, "reason": 3}
+    }
+  ]
+}
