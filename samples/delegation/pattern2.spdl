@@ -1,0 +1,9 @@
+[service.crm-fn]
+[policy]
+# One check: custom functions verify the token and ask ADS about the delegator now
+grant role delegated-agent read, update expr:^/tickets/ if DelegationValid(delegation_token, request_entity, request_action, request_resource) && DelegatorAllowed(delegation_token, request_action, request_resource)
+# The delegator's own permissions, asked by DelegatorAllowed
+grant role support-staff read, update expr:^/tickets/
+[rolepolicy]
+grant entity triage-agent delegated-agent
+grant user alice support-staff

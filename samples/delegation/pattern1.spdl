@@ -1,0 +1,9 @@
+[service.crm]
+[policy]
+# Check 1: the agent, inside the scope of its verified delegation token
+grant role delegated-agent read, update expr:^/tickets/ if request_action in token_actions && request_resource in token_resources && request_time < token_expires
+# Check 2: the delegator from the token's sub, with their own permissions now
+grant role support-staff read, update expr:^/tickets/
+[rolepolicy]
+grant entity triage-agent delegated-agent
+grant user alice support-staff

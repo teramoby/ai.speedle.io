@@ -352,7 +352,7 @@ cp -R ai.speedle.io/skills/speedle-policy-modeler \
           <figure class="concept-figure">
             <svg class="cd cd-wide" viewBox="0 0 1080 688" role="img" aria-labelledby="cdw-title cdw-desc">
               <title id="cdw-title">概念：AI 构建与运行共用 Speedle 策略决策点</title>
-              <desc id="cdw-desc">顶部是身份区：你的 IdP 和 OAuth 负责认证用户与智能体，MCP 授权基于 OAuth，主体信息再传给 Speedle。左侧构建区包括数据与训练、模型发布：前者的请求来自数据加载器和任务调度器，后者来自模型注册表和发布流水线。右侧运行区包括推理与 RAG、智能体代用户操作、MCP 工具调用和智能体间调用：检索器逐文档检查，API 网关发起请求；智能体运行时将用户和智能体作为主体；MCP 宿主或网关检查工具调用；调用方或接收方智能体检查 A2A 调用。各区域的策略执行点都向中央的 Speedle 策略决策点请求允许或拒绝。底部的审计与解释区记录决策和原因：诊断 API 说明匹配了哪条策略、为什么匹配，应用同时记录智能体和委托用户。边界：Speedle 限制遭攻陷或受误导的智能体能做什么，但不检测提示词注入、不过滤内容，也不验证模型和数据集供应链。</desc>
+              <desc id="cdw-desc">顶部是身份区：你的 IdP 和 OAuth 负责认证用户与智能体，MCP 授权基于 OAuth，主体信息再传给 Speedle。左侧构建区包括数据与训练、模型发布：前者的请求来自数据加载器和任务调度器，后者来自模型注册表和发布流水线。右侧运行区包括推理与 RAG、智能体代用户操作、MCP 工具调用和智能体间调用：检索器逐文档检查，API 网关发起请求；智能体运行时先查智能体的令牌范围，再查委托用户；MCP 宿主或网关检查工具调用；调用方或接收方智能体检查 A2A 调用。各区域的策略执行点都向中央的 Speedle 策略决策点请求允许或拒绝。底部的审计与解释区记录决策和原因：诊断 API 说明匹配了哪条策略、为什么匹配，应用同时记录智能体和委托用户。边界：Speedle 限制遭攻陷或受误导的智能体能做什么，但不检测提示词注入、不过滤内容，也不验证模型和数据集供应链。</desc>
               <defs>
                 <linearGradient id="cdw-pdp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4f0fb"/><stop offset="1" stop-color="#e9e1f8"/></linearGradient>
                 <filter id="cdw-lift" x="-8%" y="-8%" width="116%" height="130%"><feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#2e1c58" flood-opacity=".09"/></filter>
@@ -485,7 +485,7 @@ cp -R ai.speedle.io/skills/speedle-policy-modeler \
             </svg>
             <svg class="cd cd-stack" viewBox="0 0 360 1384" role="img" aria-labelledby="cds-title cds-desc">
               <title id="cds-title">概念：AI 构建与运行共用 Speedle 策略决策点</title>
-              <desc id="cds-desc">内容自上而下排列。身份输入：你的 IdP 和 OAuth 负责认证用户与智能体，MCP 授权基于 OAuth，Speedle 根据收到的主体作出决策。Speedle 策略决策点评估 SPDL 策略，返回允许或拒绝，每个区域的策略执行点都向其发起请求。构建区：数据与训练的请求来自数据加载器和任务调度器，模型发布的请求来自模型注册表和发布流水线。运行区：推理与 RAG 由检索器逐文档检查，API 网关发起请求；智能体运行时将用户和智能体作为主体；MCP 宿主或网关逐次检查工具调用；调用方或接收方智能体检查 A2A 调用。审计与解释输出：诊断 API 说明匹配了哪条策略、为什么匹配，应用记录每项决策、相关智能体和委托用户。边界：Speedle 限制遭攻陷或受误导的智能体能做什么，但不检测提示词注入、不过滤内容，也不验证模型和数据集供应链。</desc>
+              <desc id="cds-desc">内容自上而下排列。身份输入：你的 IdP 和 OAuth 负责认证用户与智能体，MCP 授权基于 OAuth，Speedle 根据收到的主体作出决策。Speedle 策略决策点评估 SPDL 策略，返回允许或拒绝，每个区域的策略执行点都向其发起请求。构建区：数据与训练的请求来自数据加载器和任务调度器，模型发布的请求来自模型注册表和发布流水线。运行区：推理与 RAG 由检索器逐文档检查，API 网关发起请求；智能体运行时先查智能体的令牌范围，再查委托用户；MCP 宿主或网关逐次检查工具调用；调用方或接收方智能体检查 A2A 调用。审计与解释输出：诊断 API 说明匹配了哪条策略、为什么匹配，应用记录每项决策、相关智能体和委托用户。边界：Speedle 限制遭攻陷或受误导的智能体能做什么，但不检测提示词注入、不过滤内容，也不验证模型和数据集供应链。</desc>
               <defs>
                 <linearGradient id="cds-pdp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4f0fb"/><stop offset="1" stop-color="#e9e1f8"/></linearGradient>
                 <filter id="cds-lift" x="-8%" y="-10%" width="116%" height="140%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#2e1c58" flood-opacity=".09"/></filter>
@@ -721,25 +721,32 @@ grant entity acme-helpdesk tenant-app</code></pre>
               <div class="area-copy">
                 <p class="area-step">04 / 智能体代用户操作</p>
                 <h4 id="lc-agents-title">AI 智能体能代用户做什么？</h4>
-                <p class="area-lead">智能体有自己的身份。代用户操作时，请求同时带上用户和智能体两个主体，每条授权也都指定双方角色，所以智能体只能做双方都获准的事。权限范围绑定任务和有效期，高风险操作还要人工审批。</p>
+                <p class="area-lead">智能体有自己的身份；用户的委托由签名的委托令牌证明，而不是靠请求里的声明。策略执行点先验证令牌，再向 Speedle 查询两次，两次都通过才放行：一次查智能体是否在令牌范围内，一次查委托用户此刻本人是否有这项权限。令牌签发后，用户一旦失去某项权限，智能体在下一次请求时也会随之失去。</p>
+                <ol class="rag-flow" aria-label="委托智能体检查">
+                  <li><span>1</span>验证令牌：签名、签发方、有效期，以及令牌是否签发给这个智能体。</li>
+                  <li><span>2</span>智能体范围：以智能体为主体查询 Speedle，令牌范围作为属性传入。</li>
+                  <li><span>3</span>委托用户当下的权限：以令牌 sub 声明中的用户为主体查询 Speedle。</li>
+                </ol>
                 <dl class="area-facts">
-                  <div><dt>主体</dt><dd>智能体（实体）和发起委托的用户。只有智能体，或只有用户，都匹配不到这里的授权。</dd></div>
-                  <div><dt>资源与操作</dt><dd>工单：<code>read</code>、<code>update</code>。订单：<code>refund</code>，属于高风险操作。</dd></div>
-                  <div><dt>策略执行点</dt><dd>智能体运行时或应用后端在操作到达业务系统前检查；人工审批后，应用把审批结果作为 <code>approved_amount</code> 传入。</dd></div>
+                  <div><dt>主体</dt><dd>范围检查以智能体（实体）为主体；第二次检查以委托用户为主体，用户取自已验证的令牌。</dd></div>
+                  <div><dt>资源与操作</dt><dd>工单：<code>read</code>、<code>update</code>，并且仅限令牌范围内的操作和工单。</dd></div>
+                  <div><dt>策略执行点</dt><dd>智能体运行时或应用后端在操作到达业务系统前检查。它负责验证令牌，只把验证过的声明传给 Speedle。</dd></div>
+                  <div><dt>自托管选项</dt><dd>也可以只查一次，由自定义函数（如 <code>DelegationValid(…) &amp;&amp; DelegatorAllowed(…)</code>）评估令牌和委托用户。Speedle Cloud 不支持自定义函数。</dd></div>
                 </dl>
               </div>
               <figure class="spdl-card">
                 <figcaption><span>agents.spdl</span><span>SPDL 示例</span></figcaption>
                 <pre tabindex="0" data-spdl="agents" aria-label="SPDL 示例：智能体代表用户操作"><code>[service.crm]
 [policy]
-# On behalf of a user: agent and user roles are both required, for the task's tickets, until it expires
-grant (role ticket-agent, role support-staff) read, update expr:^/tickets/ if request_resource in task_tickets &amp;&amp; request_time &lt; task_expires
-# High risk: a refund also needs a human approval that covers the amount
-grant (role ticket-agent, role support-staff) refund expr:^/orders/ if approved_amount &gt;= amount
+# Check 1: the agent, inside the scope of its verified delegation token
+grant role delegated-agent read, update expr:^/tickets/ if request_action in token_actions &amp;&amp; request_resource in token_resources &amp;&amp; request_time &lt; token_expires
+# Check 2: the delegator from the token's sub, with their own permissions now
+grant role support-staff read, update expr:^/tickets/
 [rolepolicy]
-grant entity triage-agent ticket-agent
-grant group support support-staff</code></pre>
-                <p class="spdl-caption">两个主体缺一不可。<code>approved_amount</code> 不足以覆盖退款金额时，没有授权可匹配，应用会拒绝退款。</p>
+grant entity triage-agent delegated-agent
+grant user alice support-staff</code></pre>
+                <p class="spdl-caption">检查 1 只在令牌限定的操作、工单和有效期内匹配。检查 2 只看用户本人，所以撤销用户的角色后，智能体在下一次请求时就会被拒绝。</p>
+                <p class="spdl-caption zsp-sample"><a href="https://github.com/teramoby/ai.speedle.io/tree/main/samples/delegation">GitHub 上两种模式的可运行示例</a></p>
               </figure>
             </article>
             <article id="lc-mcp" class="area" aria-labelledby="lc-mcp-title">
