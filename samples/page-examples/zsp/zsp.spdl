@@ -1,0 +1,8 @@
+[service.zsp]
+[policy]
+# A just-in-time token: positive lifetime up to 600 s, inside its validity window, unused
+# request_time defaults to the ADS clock; attributes passed by the enforcement point take precedence
+# 60 s is the explicit clock-skew allowance
+grant role agent-runtime invoke /api/orders if expires_at > issued_at && expires_at - issued_at <= 600 && issued_at <= request_time + 60 && not_before <= request_time + 60 && request_time < expires_at && TokenUnused(token_id)
+[rolepolicy]
+grant entity agent-billing-1 agent-runtime

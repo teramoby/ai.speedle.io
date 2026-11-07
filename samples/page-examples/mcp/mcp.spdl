@@ -1,0 +1,10 @@
+[service.mcp-gateway]
+[policy]
+# Tool arguments arrive as attributes and are checked before the tool runs
+grant role research-agent call /tools/web-search
+grant role billing-agent call /tools/issue-refund if amount <= 100 && customer_verified == true
+# Admin tools stay out of reach for research agents
+deny role research-agent call expr:^/tools/admin/
+[rolepolicy]
+grant entity agent-research-1 research-agent
+grant entity agent-billing-1 billing-agent

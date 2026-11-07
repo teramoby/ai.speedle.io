@@ -1,0 +1,8 @@
+[service.a2a]
+[policy]
+# A callee gets only scopes the caller already holds, within two hops
+grant role planner-agent call /agents/researcher if IsSubSet(requested_scopes, caller_scopes) && hops <= 2
+grant role researcher-agent call /agents/writer if IsSubSet(requested_scopes, caller_scopes) && hops <= 2
+[rolepolicy]
+grant entity planner-1 planner-agent
+grant entity researcher-1 researcher-agent

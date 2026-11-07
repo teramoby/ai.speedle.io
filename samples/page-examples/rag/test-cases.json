@@ -1,0 +1,85 @@
+{
+  "service": "rag",
+  "cases": [
+    {
+      "id": "RA01",
+      "description": "A user retrieves a document in their tenant at a cleared label",
+      "subject": {"principals": [{"type": "user", "name": "alice"}, {"type": "group", "name": "acme-staff"}]},
+      "resource": "/collections/support/doc-42",
+      "action": "retrieve",
+      "attributes": [
+        {"name": "doc_tenant", "type": "string", "value": "acme"},
+        {"name": "user_tenant", "type": "string", "value": "acme"},
+        {"name": "doc_label", "type": "string", "value": "internal"},
+        {"name": "user_clearances", "type": "string", "value": ["public", "internal"]}
+      ],
+      "expect": {"allowed": true, "reason": 0}
+    },
+    {
+      "id": "RA02",
+      "description": "A user cannot retrieve a document from another tenant",
+      "subject": {"principals": [{"type": "user", "name": "alice"}, {"type": "group", "name": "acme-staff"}]},
+      "resource": "/collections/support/doc-42",
+      "action": "retrieve",
+      "attributes": [
+        {"name": "doc_tenant", "type": "string", "value": "other"},
+        {"name": "user_tenant", "type": "string", "value": "acme"},
+        {"name": "doc_label", "type": "string", "value": "internal"},
+        {"name": "user_clearances", "type": "string", "value": ["public", "internal"]}
+      ],
+      "expect": {"allowed": false, "reason": 3}
+    },
+    {
+      "id": "RA03",
+      "description": "A user cannot retrieve a document above their clearances",
+      "subject": {"principals": [{"type": "user", "name": "alice"}, {"type": "group", "name": "acme-staff"}]},
+      "resource": "/collections/support/doc-42",
+      "action": "retrieve",
+      "attributes": [
+        {"name": "doc_tenant", "type": "string", "value": "acme"},
+        {"name": "user_tenant", "type": "string", "value": "acme"},
+        {"name": "doc_label", "type": "string", "value": "confidential"},
+        {"name": "user_clearances", "type": "string", "value": ["public", "internal"]}
+      ],
+      "expect": {"allowed": false, "reason": 3}
+    },
+    {
+      "id": "RA04",
+      "description": "The legal-hold deny overrides an otherwise matching retrieval grant",
+      "subject": {"principals": [{"type": "user", "name": "alice"}, {"type": "group", "name": "acme-staff"}]},
+      "resource": "/collections/legal-hold/case-7",
+      "action": "retrieve",
+      "attributes": [
+        {"name": "doc_tenant", "type": "string", "value": "acme"},
+        {"name": "user_tenant", "type": "string", "value": "acme"},
+        {"name": "doc_label", "type": "string", "value": "internal"},
+        {"name": "user_clearances", "type": "string", "value": ["public", "internal"]}
+      ],
+      "expect": {"allowed": false, "reason": 1}
+    },
+    {
+      "id": "RA05",
+      "description": "An app invokes a model tier included in its tenant plan",
+      "subject": {"principals": [{"type": "entity", "name": "acme-helpdesk"}]},
+      "resource": "/models/support-standard",
+      "action": "invoke",
+      "attributes": [
+        {"name": "model_tier", "type": "string", "value": "standard"},
+        {"name": "plan_tiers", "type": "string", "value": ["basic", "standard"]}
+      ],
+      "expect": {"allowed": true, "reason": 0}
+    },
+    {
+      "id": "RA06",
+      "description": "An app cannot invoke a model tier outside its tenant plan",
+      "subject": {"principals": [{"type": "entity", "name": "acme-helpdesk"}]},
+      "resource": "/models/support-premium",
+      "action": "invoke",
+      "attributes": [
+        {"name": "model_tier", "type": "string", "value": "premium"},
+        {"name": "plan_tiers", "type": "string", "value": ["basic", "standard"]}
+      ],
+      "expect": {"allowed": false, "reason": 3}
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "service": "model-registry",
+  "cases": [
+    {
+      "id": "RE01",
+      "description": "An ML engineer registers a model",
+      "subject": {"principals": [{"type": "user", "name": "erin"}, {"type": "group", "name": "ml-team"}]},
+      "resource": "/models/churn",
+      "action": "register",
+      "expect": {"allowed": true, "reason": 0}
+    },
+    {
+      "id": "RE02",
+      "description": "An ML engineer cannot promote a model",
+      "subject": {"principals": [{"type": "user", "name": "erin"}, {"type": "group", "name": "ml-team"}]},
+      "resource": "/models/churn",
+      "action": "promote",
+      "expect": {"allowed": false, "reason": 3}
+    },
+    {
+      "id": "RE03",
+      "description": "A release manager approves a model trained by someone else",
+      "subject": {"principals": [{"type": "user", "name": "dana"}]},
+      "resource": "/models/churn",
+      "action": "approve",
+      "attributes": [{"name": "trained_by", "type": "string", "value": "erin"}],
+      "expect": {"allowed": true, "reason": 0}
+    },
+    {
+      "id": "RE04",
+      "description": "The separation-of-duties deny blocks approval of a self-trained model",
+      "subject": {"principals": [{"type": "user", "name": "dana"}]},
+      "resource": "/models/churn",
+      "action": "approve",
+      "attributes": [{"name": "trained_by", "type": "string", "value": "dana"}],
+      "expect": {"allowed": false, "reason": 1}
+    },
+    {
+      "id": "RE05",
+      "description": "A release manager rolls back a model",
+      "subject": {"principals": [{"type": "user", "name": "dana"}]},
+      "resource": "/models/churn",
+      "action": "rollback",
+      "expect": {"allowed": true, "reason": 0}
+    },
+    {
+      "id": "RE06",
+      "description": "A PEP request_user attribute overrides the built-in during evaluation",
+      "subject": {"principals": [{"type": "user", "name": "dana"}]},
+      "resource": "/models/churn",
+      "action": "approve",
+      "attributes": [
+        {"name": "trained_by", "type": "string", "value": "dana"},
+        {"name": "request_user", "type": "string", "value": "erin"}
+      ],
+      "expect": {"allowed": true, "reason": 0}
+    }
+  ]
+}

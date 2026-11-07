@@ -1,0 +1,11 @@
+[service.rag]
+[policy]
+# The retriever asks per document, before its content enters the prompt
+grant role tenant-user retrieve expr:^/collections/ if doc_tenant == user_tenant && doc_label in user_clearances
+# Documents on legal hold never reach a prompt
+deny role tenant-user retrieve expr:^/collections/legal-hold/
+# Apps call only the model tiers in their tenant's plan
+grant role tenant-app invoke expr:^/models/ if model_tier in plan_tiers
+[rolepolicy]
+grant group acme-staff tenant-user
+grant entity acme-helpdesk tenant-app

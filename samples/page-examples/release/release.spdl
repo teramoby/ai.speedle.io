@@ -1,0 +1,9 @@
+[service.model-registry]
+[policy]
+grant role ml-engineer register expr:^/models/
+grant role release-manager approve, promote, rollback expr:^/models/
+# Separation of duties: nobody approves a model they trained
+deny role release-manager approve expr:^/models/ if trained_by == request_user
+[rolepolicy]
+grant group ml-team ml-engineer
+grant user dana release-manager

@@ -1,0 +1,124 @@
+{
+  "service": "zsp",
+  "cases": [
+    {
+      "id": "ZS01",
+      "description": "A fresh unused token with a 600-second lifetime is allowed",
+      "subject": {"principals": [{"type": "entity", "name": "agent-billing-1"}]},
+      "resource": "/api/orders",
+      "action": "invoke",
+      "attributes": [
+        {"name": "request_time", "type": "datetime", "value": "2026-01-01T00:05:00Z"},
+        {"name": "issued_at", "type": "datetime", "value": "2026-01-01T00:00:00Z"},
+        {"name": "expires_at", "type": "datetime", "value": "2026-01-01T00:10:00Z"},
+        {"name": "not_before", "type": "datetime", "value": "2026-01-01T00:00:00Z"},
+        {"name": "token_id", "type": "string", "value": "tok-fresh"}
+      ],
+      "expect": {"allowed": true, "reason": 0}
+    },
+    {
+      "id": "ZS02",
+      "description": "A token lifetime above 600 seconds is denied",
+      "subject": {"principals": [{"type": "entity", "name": "agent-billing-1"}]},
+      "resource": "/api/orders",
+      "action": "invoke",
+      "attributes": [
+        {"name": "request_time", "type": "datetime", "value": "2026-01-01T00:05:00Z"},
+        {"name": "issued_at", "type": "datetime", "value": "2026-01-01T00:00:00Z"},
+        {"name": "expires_at", "type": "datetime", "value": "2026-01-01T00:20:00Z"},
+        {"name": "not_before", "type": "datetime", "value": "2026-01-01T00:00:00Z"},
+        {"name": "token_id", "type": "string", "value": "tok-long-lived"}
+      ],
+      "expect": {"allowed": false, "reason": 3}
+    },
+    {
+      "id": "ZS03",
+      "description": "An expired token is denied",
+      "subject": {"principals": [{"type": "entity", "name": "agent-billing-1"}]},
+      "resource": "/api/orders",
+      "action": "invoke",
+      "attributes": [
+        {"name": "request_time", "type": "datetime", "value": "2026-01-01T00:05:00Z"},
+        {"name": "issued_at", "type": "datetime", "value": "2026-01-01T00:00:00Z"},
+        {"name": "expires_at", "type": "datetime", "value": "2026-01-01T00:04:00Z"},
+        {"name": "not_before", "type": "datetime", "value": "2026-01-01T00:00:00Z"},
+        {"name": "token_id", "type": "string", "value": "tok-expired"}
+      ],
+      "expect": {"allowed": false, "reason": 3}
+    },
+    {
+      "id": "ZS04",
+      "description": "A used token is denied even inside its validity window",
+      "subject": {"principals": [{"type": "entity", "name": "agent-billing-1"}]},
+      "resource": "/api/orders",
+      "action": "invoke",
+      "attributes": [
+        {"name": "request_time", "type": "datetime", "value": "2026-01-01T00:05:00Z"},
+        {"name": "issued_at", "type": "datetime", "value": "2026-01-01T00:00:00Z"},
+        {"name": "expires_at", "type": "datetime", "value": "2026-01-01T00:10:00Z"},
+        {"name": "not_before", "type": "datetime", "value": "2026-01-01T00:00:00Z"},
+        {"name": "token_id", "type": "string", "value": "tok-used"}
+      ],
+      "expect": {"allowed": false, "reason": 3}
+    },
+    {
+      "id": "ZS05",
+      "description": "A token issued beyond the 60-second clock-skew allowance is denied",
+      "subject": {"principals": [{"type": "entity", "name": "agent-billing-1"}]},
+      "resource": "/api/orders",
+      "action": "invoke",
+      "attributes": [
+        {"name": "request_time", "type": "datetime", "value": "2026-01-01T00:05:00Z"},
+        {"name": "issued_at", "type": "datetime", "value": "2026-01-01T00:06:01Z"},
+        {"name": "expires_at", "type": "datetime", "value": "2026-01-01T00:16:01Z"},
+        {"name": "not_before", "type": "datetime", "value": "2026-01-01T00:06:01Z"},
+        {"name": "token_id", "type": "string", "value": "tok-future"}
+      ],
+      "expect": {"allowed": false, "reason": 3}
+    },
+    {
+      "id": "ZS06",
+      "description": "A token whose not-before time exceeds the clock-skew allowance is denied",
+      "subject": {"principals": [{"type": "entity", "name": "agent-billing-1"}]},
+      "resource": "/api/orders",
+      "action": "invoke",
+      "attributes": [
+        {"name": "request_time", "type": "datetime", "value": "2026-01-01T00:05:00Z"},
+        {"name": "issued_at", "type": "datetime", "value": "2026-01-01T00:00:00Z"},
+        {"name": "expires_at", "type": "datetime", "value": "2026-01-01T00:10:00Z"},
+        {"name": "not_before", "type": "datetime", "value": "2026-01-01T00:06:01Z"},
+        {"name": "token_id", "type": "string", "value": "tok-nbf-future"}
+      ],
+      "expect": {"allowed": false, "reason": 3}
+    },
+    {
+      "id": "ZS07",
+      "description": "The 60-second clock-skew boundary is allowed",
+      "subject": {"principals": [{"type": "entity", "name": "agent-billing-1"}]},
+      "resource": "/api/orders",
+      "action": "invoke",
+      "attributes": [
+        {"name": "request_time", "type": "datetime", "value": "2026-01-01T00:05:00Z"},
+        {"name": "issued_at", "type": "datetime", "value": "2026-01-01T00:06:00Z"},
+        {"name": "expires_at", "type": "datetime", "value": "2026-01-01T00:16:00Z"},
+        {"name": "not_before", "type": "datetime", "value": "2026-01-01T00:06:00Z"},
+        {"name": "token_id", "type": "string", "value": "tok-fresh"}
+      ],
+      "expect": {"allowed": true, "reason": 0}
+    },
+    {
+      "id": "ZS08",
+      "description": "A request without not_before does not match the grant",
+      "subject": {"principals": [{"type": "entity", "name": "agent-billing-1"}]},
+      "resource": "/api/orders",
+      "action": "invoke",
+      "attributes": [
+        {"name": "request_time", "type": "datetime", "value": "2026-01-01T00:05:00Z"},
+        {"name": "issued_at", "type": "datetime", "value": "2026-01-01T00:00:00Z"},
+        {"name": "expires_at", "type": "datetime", "value": "2026-01-01T00:10:00Z"},
+        {"name": "token_id", "type": "string", "value": "tok-fresh"}
+      ],
+      "expect": {"allowed": false, "reason": 3}
+    }
+  ]
+}
