@@ -178,7 +178,7 @@
             <article class="mode-card">
               <div class="mode-top"><span class="mode-label">Mode 01 · Launch preview</span><code>check</code></div>
               <h4>Authorization checks</h4>
-              <p>The planned <code>check</code> mode registers only the authorization-check tools (<code>is_allowed</code>, <code>diagnose</code>, <code>all_granted_roles</code>, <code>all_granted_permissions</code>) and reads only ADS configuration. It answers authorization questions; it does not enforce anything in the calling application.</p>
+              <p>The planned <code>check</code> mode registers only <code>is_allowed</code> by default and reads only ADS configuration. <code>diagnose</code>, <code>all_granted_roles</code> and <code>all_granted_permissions</code> are opt-in through the <code>--expose-diagnose</code>, <code>--expose-all-granted-roles</code> and <code>--expose-all-granted-permissions</code> flags. <code>diagnose</code> works only with self-hosted Speedle; the server will not start with it against Speedle Cloud. It answers authorization questions; it does not enforce anything in the calling application.</p>
               <ul class="mode-list">
                 <li>Read-only authorization checks through the Speedle ADS REST API.</li>
                 <li>Subject, resource, action, and typed attributes as inputs.</li>
@@ -201,7 +201,7 @@
 
           <aside class="mcp-security" aria-labelledby="mcp-security-title">
             <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
-            <div><h4 id="mcp-security-title">Keep policy management out of the governed agent</h4><p><strong>Never give <code>manage</code> to an agent that is itself governed by these policies.</strong> An agent holding both check and management tools could be prompted into granting itself access.</p><p><strong>Give a governed agent <code>is_allowed</code> only.</strong> <code>diagnose</code>, <code>all_granted_roles</code> and <code>all_granted_permissions</code> show policies, conditions and grants, so keep them for policy authors and operators and turn them off in the agent’s MCP client.</p><p>There is no default mode that exposes both. Running with no mode is planned to print usage and exit non-zero.</p></div>
+            <div><h4 id="mcp-security-title">Keep policy management out of the governed agent</h4><p><strong>Never give <code>manage</code> to an agent that is itself governed by these policies.</strong> An agent holding both check and management tools could be prompted into granting itself access.</p><p><strong>Give a governed agent <code>is_allowed</code> only.</strong> That is the <code>check</code> default. <code>diagnose</code>, <code>all_granted_roles</code> and <code>all_granted_permissions</code> show policies, conditions and grants, so turn them on only in a check server for policy authors and operators, and never pass the <code>--expose-*</code> flags to the agent’s server.</p><p>There is no default mode that exposes both. Running with no mode is planned to print usage and exit non-zero.</p></div>
           </aside>
 
           <div class="launch-config" aria-labelledby="launch-config-title">
