@@ -707,16 +707,20 @@ intentionally out of scope.
 ## 12. Import and operation
 
 ```bash
+# Use the Speedle build, not macOS /usr/sbin/spctl
+export SPEEDLE_SPCTL=/path/to/speedle-plus/bin/spctl
+
 # Validate the SPDL and its conditions without a server
-spctl check -f policies.spdl
+"$SPEEDLE_SPCTL" check -f policies.spdl
 
 # Load the same file into a local PMS and ADS and run every case
 ../../scripts/validate-model.sh policies.spdl test-cases.json
 ```
 
 `validate-model.sh` starts PMS and ADS on free loopback ports and stops both when it exits.
-If the binaries are not on `PATH`, pass `--spctl`, `--pms` and `--ads`. On macOS,
-`/usr/sbin/spctl` is not Speedle's CLI; use the Speedle `bin/spctl`.
+It reads `SPEEDLE_SPCTL`, `SPEEDLE_PMS` and `SPEEDLE_ADS`; the corresponding `--spctl`, `--pms`
+and `--ads` flags override them. On macOS, `/usr/sbin/spctl` is Apple's Gatekeeper tool, so
+set `SPEEDLE_SPCTL` to the Speedle `bin/spctl` explicitly.
 
 The target is the self-hosted `.spdl` file store. That file is a read-only import path:
 PMS rewrites a managed store as JSON, so do not run `spctl create` or `spctl delete` against

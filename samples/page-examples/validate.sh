@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 # Validate every SPDL block published on the English and Chinese patterns pages.
 # Put spctl, speedle-pms, speedle-ads and the samples/zsp demo binary (zsp-demo)
-# on PATH, or set SPCTL, SPEEDLE_PMS, SPEEDLE_ADS and ZSP_DEMO to their paths.
+# on PATH, or set SPEEDLE_SPCTL, SPEEDLE_PMS, SPEEDLE_ADS and ZSP_DEMO to their paths.
+# On macOS, set SPEEDLE_SPCTL explicitly: /usr/sbin/spctl is Apple's Gatekeeper tool.
 
 set -euo pipefail
 
 ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 VALIDATE="$ROOT/../../skills/speedle-policy-modeler/scripts/validate-model.sh"
-SPCTL_BIN=${SPCTL:-spctl}
+SPCTL_BIN=${SPEEDLE_SPCTL:-spctl}
 PMS_BIN=${SPEEDLE_PMS:-speedle-pms}
 ADS_BIN=${SPEEDLE_ADS:-speedle-ads}
 ZSP_DEMO_BIN=${ZSP_DEMO:-zsp-demo}

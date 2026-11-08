@@ -10,15 +10,19 @@ Speedle 源码：`teramoby/speedle-plus` master，提交
 ## 命令
 
 ```bash
-# 在本目录执行
-spctl check -f policies.spdl
+# 在本目录执行；使用 Speedle 构建产物，不要使用 macOS 的 /usr/sbin/spctl
+export SPEEDLE_SPCTL=/path/to/speedle-plus/bin/spctl
+export SPEEDLE_PMS=/path/to/speedle-plus/bin/speedle-pms
+export SPEEDLE_ADS=/path/to/speedle-plus/bin/speedle-ads
+
+"$SPEEDLE_SPCTL" check -f policies.spdl
 
 # 在空闲回环端口启动 PMS 和 ADS，运行全部用例，然后停止两个服务
-../../scripts/validate-model.sh policies.spdl test-cases.json \
-  --spctl /path/to/speedle-plus/bin/spctl \
-  --pms /path/to/speedle-plus/bin/speedle-pms \
-  --ads /path/to/speedle-plus/bin/speedle-ads
+../../scripts/validate-model.sh policies.spdl test-cases.json
 ```
+
+macOS 自带的 `/usr/sbin/spctl` 是 Apple 的 Gatekeeper 工具。必须将 `SPEEDLE_SPCTL` 显式设置为
+Speedle CLI 的路径；验证脚本会拒绝 `PATH` 中非 Speedle 的候选程序。
 
 验证脚本只读取 `.spdl` 文件。这是文件存储导入，不是管理写入。脚本退出时通过 trap
 停止两个服务器；没有遗留进程。

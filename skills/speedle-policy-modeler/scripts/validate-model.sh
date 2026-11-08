@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # Validate a Speedle SPDL model end to end:
-#   1. spctl check -f MODEL
+#   1. "$SPEEDLE_SPCTL" check -f MODEL
 #   2. start PMS and ADS against the same .spdl file on free loopback ports
 #   3. run every case in CASES against ADS
 #   4. stop both servers and print the logs if anything failed
@@ -19,14 +19,15 @@ usage() {
 Usage: validate-model.sh MODEL.spdl CASES.json [options]
 
 Options:
-  --spctl PATH   Speedle spctl binary (default: ./bin/spctl, then spctl on PATH)
+  --spctl PATH   Speedle spctl binary (default: SPEEDLE_SPCTL, ./bin/spctl,
+                 then spctl on PATH after verifying its help output)
   --pms PATH     speedle-pms binary (default: ./bin/speedle-pms, then PATH)
   --ads PATH     speedle-ads binary (default: ./bin/speedle-ads, then PATH)
   -h, --help     show this help
 
-Environment variables SPCTL, SPEEDLE_PMS and SPEEDLE_ADS are used when the
-corresponding flag is absent. On macOS, /usr/sbin/spctl is the system security
-tool, not Speedle's CLI; pass --spctl or build Speedle's bin/spctl.
+Environment variables SPEEDLE_SPCTL, SPEEDLE_PMS and SPEEDLE_ADS are used when
+the corresponding flag is absent. On macOS, /usr/sbin/spctl is Apple's
+Gatekeeper tool, not Speedle's CLI; set SPEEDLE_SPCTL to the Speedle binary path.
 USAGE
 }
 
@@ -62,7 +63,7 @@ resolve_tool() {
 
 MODEL=""
 CASES=""
-SPCTL_ARG="${SPCTL:-}"
+SPCTL_ARG="${SPEEDLE_SPCTL:-}"
 PMS_ARG="${SPEEDLE_PMS:-}"
 ADS_ARG="${SPEEDLE_ADS:-}"
 
@@ -106,19 +107,20 @@ command -v python3 >/dev/null 2>&1 || { echo "error: python3 is required" >&2; e
 command -v curl >/dev/null 2>&1 || { echo "error: curl is required" >&2; exit 2; }
 
 SPCTL_BIN=$(resolve_tool spctl "$SPCTL_ARG" ./bin/spctl spctl)
-PMS_BIN=$(resolve_tool pms "$PMS_ARG" ./bin/speedle-pms speedle-pms)
-ADS_BIN=$(resolve_tool ads "$ADS_ARG" ./bin/speedle-ads speedle-ads)
-
 SPCTL_HELP=$("$SPCTL_BIN" check --help 2>&1 || true)
 case "$SPCTL_HELP" in
     *"valid SPDL"*) ;;
     *)
         echo "error: $SPCTL_BIN is not Speedle's spctl." >&2
-        echo "       On macOS, /usr/sbin/spctl is the system security tool." >&2
-        echo "       Pass --spctl /path/to/speedle-plus/bin/spctl." >&2
+        echo "       On macOS, /usr/sbin/spctl is Apple's Gatekeeper tool." >&2
+        echo "       Set SPEEDLE_SPCTL to the Speedle CLI path, for example:" >&2
+        echo "       export SPEEDLE_SPCTL=/path/to/speedle-plus/bin/spctl" >&2
         exit 2
         ;;
 esac
+
+PMS_BIN=$(resolve_tool pms "$PMS_ARG" ./bin/speedle-pms speedle-pms)
+ADS_BIN=$(resolve_tool ads "$ADS_ARG" ./bin/speedle-ads speedle-ads)
 
 echo "==> spctl check -f $MODEL"
 if ! "$SPCTL_BIN" check -f "$MODEL"; then

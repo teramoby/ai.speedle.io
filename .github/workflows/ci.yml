@@ -26,6 +26,9 @@ jobs:
           path: speedle-plus
           persist-credentials: false
 
+      - name: Test policy modeler CLI selection
+        run: skills/speedle-policy-modeler/tests/validate-model-test.sh
+
       - name: Set up Go
         uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5.6.0
         with:

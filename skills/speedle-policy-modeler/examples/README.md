@@ -42,12 +42,17 @@ go build -o ./bin/ ./cmd/spctl ./cmd/speedle-pms ./cmd/speedle-ads
 From either example directory:
 
 ```bash
-spctl check -f policies.spdl
-../../scripts/validate-model.sh policies.spdl test-cases.json \
-  --spctl /path/to/speedle-plus/bin/spctl \
-  --pms /path/to/speedle-plus/bin/speedle-pms \
-  --ads /path/to/speedle-plus/bin/speedle-ads
+export SPEEDLE_SPCTL=/path/to/speedle-plus/bin/spctl
+export SPEEDLE_PMS=/path/to/speedle-plus/bin/speedle-pms
+export SPEEDLE_ADS=/path/to/speedle-plus/bin/speedle-ads
+
+"$SPEEDLE_SPCTL" check -f policies.spdl
+../../scripts/validate-model.sh policies.spdl test-cases.json
 ```
+
+Set `SPEEDLE_SPCTL` explicitly on macOS: `/usr/sbin/spctl` is Apple's Gatekeeper tool, not
+the Speedle CLI. Without an explicit path, the validator checks the PATH candidate's help
+output before using it.
 
 The script picks free loopback ports, starts PMS and ADS against the same `.spdl` file, runs
 every case, and stops both servers on exit. It never writes to the model.

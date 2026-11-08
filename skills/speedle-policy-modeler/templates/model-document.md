@@ -181,12 +181,18 @@ role, every condition branch, every boundary, every explicit deny and every prin
 ## 12. Import and operation
 
 ```bash
+# Set this to the Speedle build, not macOS /usr/sbin/spctl
+export SPEEDLE_SPCTL=/path/to/speedle-plus/bin/spctl
+
 # Validate SPDL and conditions without a server
-spctl check -f policies.spdl
+"$SPEEDLE_SPCTL" check -f policies.spdl
 
 # Load the same file into a local PMS and ADS and run every test case
 scripts/validate-model.sh policies.spdl test-cases.json
 ```
+
+On macOS, `/usr/sbin/spctl` is Apple's Gatekeeper tool. Always set `SPEEDLE_SPCTL` to the
+Speedle CLI path; the validator rejects a PATH `spctl` whose help output is not Speedle's.
 
 {{State the target store type. If it is the `.spdl` file store, repeat that it is read-only:
 PMS rewrites the file as JSON on a management write, so change the SPDL and restart/reload.
