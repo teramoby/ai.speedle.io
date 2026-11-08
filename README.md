@@ -50,7 +50,11 @@ cover Organization, WebSite and SoftwareApplication, and that no page has a
 visible FAQ section or FAQPage data. It also checks the language-switch links,
 Chinese metadata and diagram labels, Cloudflare Web Analytics on every page, the
 shared header and footer, and byte-identical SPDL blocks on the patterns pages,
-including comments. No dependencies.
+including comments. For `llms.txt` and `llms-full.txt` it checks every external
+link for a direct 200 without a redirect, and keeps the canonical Speedle
+definition and the status claims (SDK version, npm, risk detection, example
+results) in sync with the page copy. No dependencies; the link check needs
+network access.
 
 Every public page loads the cookieless Cloudflare Web Analytics beacon before
 `</body>`; the site has no signed-in pages or API responses.
