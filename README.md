@@ -25,8 +25,8 @@ The interactive example uses simplified
 browser-local policy rules and does not simulate AI risk detection. It is
 not a Speedle engine, MCP integration, RAG adapter, or production service.
 The Speedle MCP section is a launch preview: `@speedle/mcp` is not published
-on npm, and its install and client configuration snippets are marked as
-available at launch. MCP facts come from teramoby/speedle-mcp issues #1 and #2.
+on npm, and its install and client configuration snippets are marked as a
+preview. MCP facts come from teramoby/speedle-mcp issues #1 and #2.
 Speedle AI uses white backgrounds with light-purple accents; the header,
 Products navigation, sphere favicons and footer follow the shared three-site
 format of speedle.io.

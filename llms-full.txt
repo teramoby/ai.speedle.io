@@ -38,7 +38,7 @@ Install: copy `skills/speedle-policy-modeler/` to `~/.claude/skills/` for a pers
 
 Security rule: never give the manage mode to an agent that is itself governed by these policies. An agent holding both check and management tools could be prompted into granting itself access. Give a governed agent `is_allowed` only, which is the check-mode default: `diagnose`, `all_granted_roles` and `all_granted_permissions` show policies, conditions and grants, so turn them on only in a check server for policy authors and operators, and never pass the `--expose-*` flags to the agent's server. There is no default mode that exposes both; running with no mode is planned to print usage and exit non-zero.
 
-Install and MCP client configuration snippets on the site are future launch examples, marked "Available at launch". They do not work today.
+Install and MCP client configuration snippets on the site are future launch examples, marked "Preview". They do not work today.
 
 ### AI-based risk detection (being built)
 
