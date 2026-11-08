@@ -408,7 +408,7 @@ h1 { max-width: 760px; margin: 20px 0 24px; font-size: clamp(3.1rem, 6vw, 5.6rem
 .flow-node p { flex: 1; margin: 0 0 18px; color: var(--muted); font-size: .88rem; line-height: 1.65; }
 .flow-tag { align-self: flex-start; margin-top: auto; padding: 4px 7px; border-radius: 5px; color: var(--primary-dark); background: var(--tint); font: 700 .75rem/1.5 var(--mono); letter-spacing: .025em; }
 .flow-tag-deny { color: #8f1732; background: var(--danger-soft); }
-.flow-tag-building { color: var(--white); background: var(--primary); }
+.flow-tag-planned { color: var(--white); background: var(--primary); }
 .flow-note { margin: 28px 0 0; padding-top: 22px; border-top: 1px solid var(--line-purple); color: var(--muted); font-size: .88rem; }
 .flow-note strong { color: var(--ink); }
 
