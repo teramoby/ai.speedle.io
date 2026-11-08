@@ -1,19 +1,75 @@
 # Speedle AI — AI agent authorization and access control
 
-> Speedle AI — AI for access control, access control for AI. It shows how to apply the open-source Speedle policy engine to authorization for AI agents: MCP tool calls, permission-aware RAG, agent-to-agent (A2A) calls, zero standing privileges (ZSP) and the AI lifecycle from training data to model release. It also previews Speedle MCP for designing, managing and checking policies with AI, and an AI-based risk-detection approach that is being built. Everything here is a solution pattern on the Speedle policy engine; none of it is a shipped integration with an ML or agent platform.
+> Speedle is an open-source (UPL-1.0) authorization engine with the SPDL policy language. It consists of ADS (decisions) and PMS (policy management), SDKs in six languages, Speedle Cloud (hosted), and Speedle AI (authorization for and with AI agents, an MCP server, and the policy-modeler skill).
 
 Source: https://ai.speedle.io/
+Chinese: https://ai.speedle.io/zh/
 
-The home page summarizes each pattern with one sentence and one representative rule. The full SPDL examples, longer explanations and the target AI risk-detection flow are on https://ai.speedle.io/patterns/ (Chinese: https://ai.speedle.io/zh/patterns/).
+Speedle AI — AI for access control, access control for AI — applies the engine to authorization for AI agents: MCP tool calls, permission-aware RAG, agent-to-agent (A2A) calls, zero standing privileges (ZSP) and the AI lifecycle from training data to model release. Everything here is a solution pattern on the Speedle policy engine; none of it is a shipped integration with an ML or agent platform.
 
-## What is Speedle AI?
+## What Speedle is
 
-Speedle AI has two connected directions.
+Speedle is an open-source authorization engine, written in Go, for externalizing fine-grained access-control decisions. It evaluates RBAC and ABAC policies and keeps authorization logic outside application code. It is licensed under the Universal Permissive License (UPL) 1.0.
 
-- **Use AI to manage access:** AI helping people design, manage and check access policies with the open-source Speedle policy modeler skill and Speedle MCP, plus an AI-based risk-detection approach being built.
+- **PMS (Policy Management Service):** the policy administration point; stores and serves policies.
+- **ADS (Authorization Decision Service):** the policy decision point; answers `isAllowed` requests.
+- **SPDL (Speedle Policy Definition Language):** the human-readable policy language.
+- **SDKs in six languages:** Python, Java, Go, C#/.NET, Rust and Node.js/TypeScript.
+- **Speedle Cloud:** hosted authorization for developers; sign-in on cloud.speedle.io opens soon.
+- **Speedle AI:** authorization for and with AI agents, the planned Speedle MCP server and the speedle-policy-modeler skill.
+
+Links: [documentation](https://engine.speedle.io/docs/), [SPDL reference](https://engine.speedle.io/docs/spdl/), [getting started](https://engine.speedle.io/quick-start/), [SDKs](https://engine.speedle.io/docs/sdks/), [Playground](https://engine.speedle.io/playground/), [Speedle Cloud docs](https://engine.speedle.io/docs/cloud/).
+
+### Current SDK versions
+
+All published SDKs are at 0.2.0: `speedle` on PyPI, `io.speedle:speedle-sdk` on Maven Central, `github.com/teramoby/speedle-sdk/go` for Go, `Speedle.Sdk` on NuGet and `speedle` on crates.io. The npm packages `@speedle/sdk` and `@speedle/mcp` are not published yet.
+
+## SPDL in brief
+
+The full grammar, every built-in function and the complete syntax are in the [SPDL reference](https://engine.speedle.io/docs/spdl/). This section summarizes what the AI patterns use.
+
+A policy is an effect, a subject, one or more actions, a resource and an optional condition. A role policy assigns a role or grants a role an action:
+
+```
+POLICY     = (grant | deny) SUBJECT ACTION RESOURCE [if CONDITION]
+ROLEPOLICY = (grant | deny) SUBJECT ROLE [on RESOURCE] [if CONDITION]
+```
+
+- **Effect:** `grant` allows; `deny` overrides every grant. A request with no applicable grant is denied (default deny).
+- **Subject:** one or more principals of type `user`, `group`, `entity` or `role`, optionally with `from IDD` to name an identity domain. An AND group `(principal, principal)` requires every listed principal; separate groups are alternatives.
+- **Actions and resources:** comma-separated action names and one resource, where the `expr:` prefix introduces a Go regular expression.
+- **Role policies:** assigning a role alone does not create permissions; a policy must grant the role an action. `grant role manager employee` makes the manager role inherit the employee role.
+- **Conditions:** boolean expressions over attributes, constants, operators and functions. Types are string, numeric, bool, datetime and arrays; operators include `==`, `!=`, `>`, `>=`, `<`, `<=`, `=~`, `in`, `&&`, `||` and `!`.
+- **Attributes:** ADS provides built-ins such as `request_user`, `request_groups`, `request_entity`, `request_resource`, `request_action`, `request_time`, `request_year`, `request_month`, `request_day`, `request_hour` and `request_weekday`. The PEP supplies customer attributes such as tenant, clearance, amount or token claims.
+- **Functions:** built-ins `Sqrt`, `Max`, `Min`, `Sum`, `Avg` and `IsSubSet`; custom functions call an external REST endpoint on self-hosted Speedle. Speedle Cloud does not run custom functions.
+
+Examples:
+
+```spdl
+# Role inheritance: a manager also holds the employee role
+grant role manager employee
+
+# Deny over grant: employees may read docs, but not the finance subtree
+grant role employee read,list expr:^/docs/
+deny role employee read expr:^/docs/finance
+
+# An AND group: both roles are required
+grant (role designer, role dba) update db_design_doc
+
+# A condition over a customer attribute and a built-in
+grant role analyst read expr:^/reports/ if region == user_region && request_time < deadline
+```
+
+By design: a condition on an attribute missing from the request does not match, because the policy enforcement point (PEP) must supply every attribute a policy references. Attributes supplied by the PEP also take priority over built-ins such as `request_time`, `request_user` and `request_resource`.
+
+## Speedle AI
+
+Speedle AI has two connected directions:
+
+- **Use AI to manage access:** AI helping people design, manage and check access policies with the open-source policy modeler skill, the planned Speedle MCP server and an AI-based risk-detection approach being built.
 - **Control what AI can access:** policy patterns that govern what AI systems and agents may do while they are built and while they run.
 
-Both directions rest on clear, enforceable policy decisions. Speedle decides; the application enforces the decision. The home page gives one sentence and one representative SPDL rule per area; the full examples are on the patterns page.
+Both rest on enforceable policy decisions. Speedle decides; the application enforces the decision. The home page gives one sentence and one representative SPDL rule per area; the full examples are on the patterns page.
 
 ## Use AI to manage access
 
@@ -21,9 +77,9 @@ Both directions rest on clear, enforceable policy decisions. Speedle decides; th
 
 An open-source Agent Skill for Claude Code at `skills/speedle-policy-modeler/` in teramoby/ai.speedle.io. It reads a company regulation, employee handbook or access matrix; asks the document owner to clarify missing org structure, roles, resources, attributes, exceptions and approval chains in small prioritized batches; and writes an RBAC + ABAC model.
 
-Outputs: `policies.spdl` in the Speedle file-store format, a `model.md` design document with a Mermaid role-inheritance diagram and a rationale for every policy, a `test-cases.json` suite, and `results.md`. The skill refuses to guess an authorization rule; every policy cites a handbook clause or a confirmed answer.
+Outputs: `policies.spdl` in the Speedle file-store format, a `model.md` design document with a Mermaid role-inheritance diagram and a rationale for every policy, a `test-cases.json` suite, `results.md`, and `clarifications.md`. The skill refuses to guess an authorization rule; every policy cites a handbook clause or a confirmed answer.
 
-Example runs: English and Chinese synthetic handbooks. Both pass `spctl check` and 37 of 37 authorization cases against a local PMS and ADS. The SPDL uses exact or prefix resource expressions only, so the evaluator uses hash-map and radix-tree lookups.
+Example runs: English and Chinese synthetic handbooks. Both pass `spctl check` and all 37 authorization cases against a local PMS and ADS. The SPDL uses exact or prefix resource expressions only, so the evaluator uses hash-map and radix-tree lookups.
 
 Install: copy `skills/speedle-policy-modeler/` to `~/.claude/skills/` for a personal skill or `.claude/skills/` for a project skill, then run `/speedle-policy-modeler ./employee-handbook.md`. The `SKILL.md` frontmatter follows the Agent Skills format with `name` and `description`.
 
@@ -33,9 +89,9 @@ Install: copy `skills/speedle-policy-modeler/` to `~/.claude/skills/` for a pers
 
 ### Speedle MCP (launch preview)
 
-`@speedle/mcp` is planned as one npm package with a `speedle-mcp` binary that runs as a local stdio MCP server. It is an MCP server for authorization work, with two deliberately separate modes. It is not published on npm yet.
+`@speedle/mcp` is planned as one npm package with a `speedle-mcp` binary that runs as a local stdio MCP server for authorization work, with two deliberately separate modes. It is not published on npm yet.
 
-- **check mode:** registers only `is_allowed` by default and reads only ADS configuration. `diagnose`, `all_granted_roles` and `all_granted_permissions` are opt-in through the `--expose-diagnose`, `--expose-all-granted-roles` and `--expose-all-granted-permissions` flags (or the matching `SPEEDLE_EXPOSE_*` environment variables). `diagnose` works only with self-hosted Speedle; the server will not start with it against Speedle Cloud. It answers authorization questions through the Speedle ADS REST API using subject, resource, action and typed attributes; it does not enforce anything in the calling application.
+- **check mode:** registers only `is_allowed` by default and reads only ADS configuration. `diagnose`, `all_granted_roles` and `all_granted_permissions` are opt-in through the `--expose-diagnose`, `--expose-all-granted-roles` and `--expose-all-granted-permissions` flags. `diagnose` works only with self-hosted Speedle; the server will not start with it against Speedle Cloud. It answers authorization questions through the Speedle ADS REST API using subject, resource, action and typed attributes; it does not enforce anything in the calling application.
 - **manage mode:** registers only the management tools and reads only PMS configuration for designing and managing Speedle policies through the PMS REST API: services, authorization policies, role policies, SPDL validation and effective-policy explanation helpers. A read-only option exists and destructive deletes require explicit target confirmation.
 
 Security rule: never give the manage mode to an agent that is itself governed by these policies. An agent holding both check and management tools could be prompted into granting itself access. Give a governed agent `is_allowed` only, which is the check-mode default: `diagnose`, `all_granted_roles` and `all_granted_permissions` show policies, conditions and grants, so turn them on only in a check server for policy authors and operators, and never pass the `--expose-*` flags to the agent's server. There is no default mode that exposes both; running with no mode is planned to print usage and exit non-zero.
@@ -95,7 +151,6 @@ The agent has its own identity, and the user's delegation is proven by a signed 
 - Human approval: the enforcement point verifies the signed approval record for the refund and passes its approver as `approved_by` in the second check. The approver must not be the user.
 - Self-hosted option: one check, with the token and the delegator evaluated by the custom functions `DelegationValid` and `DelegatorAllowed`. Speedle Cloud does not run custom functions.
 - SPDL example rules: the agent gets its role in three steps (token not expired, action listed, resource listed), so it holds only within the token's scope; the delegator's grants ask about the user alone, so revoking the user's role denies the agent at the next request; a refund above 100 is granted only with an approver other than the user.
-
 - Full example: https://ai.speedle.io/patterns/#lc-agents
 
 A runnable local sample of both patterns, with a demo token issuer, the enforcement point and the custom-function server, is in the repository: https://github.com/teramoby/ai.speedle.io/tree/main/samples/delegation
@@ -120,7 +175,7 @@ Each hop in a delegation chain is checked. The callee may receive only scopes th
 
 ### Run: zero standing privileges (ZSP)
 
-Just-in-time, short-lived, narrowly scoped credentials can support a zero standing privileges (ZSP) pattern when token issuance and other controls are in place. On self-hosted Speedle Engine, the policy checks a positive and short lifetime, that the token is not issued or valid in the future beyond a 60-second clock-skew allowance, that it has not expired, and, through a read-only custom function, that it is unused in the issuer's store. (Speedle Cloud does not support custom external functions.) The application or enforcement layer then consumes a single-use token atomically before the operation; production also verifies the token's signature, issuer, audience and binding before its claims reach the policy.
+Just-in-time, short-lived, narrowly scoped credentials can support a zero standing privileges (ZSP) pattern when token issuance and other controls are in place. On self-hosted Speedle Engine, the policy checks a positive and short lifetime, that the token is not issued or valid in the future beyond a 60-second clock-skew allowance, that it has not expired, and, through a read-only custom function, that it is unused in the issuer's store. (Speedle Cloud does not support custom external functions.) The application or enforcement layer then consumes a single-use token atomically before the operation; production also needs a trusted component that verifies the token and binds its claims to the subject, resource, action and task scope before its claims reach the policy.
 
 - Full example: https://ai.speedle.io/patterns/#zsp
 
@@ -133,13 +188,27 @@ A runnable local sample with PMS, ADS and the custom function, including the ato
 - **Risk mapping:** the patterns map to OWASP LLM06:2025 Excessive Agency: an agent with more functionality, permission or autonomy than its task needs. Per-agent roles, per-tool checks, task- and time-bound delegation and human approval for high-risk actions narrow each of the three.
 - **Boundary:** Speedle does not detect prompt injection, filter model input or output, or verify model and dataset supply chains; use dedicated controls for those. It bounds what a compromised or misled agent can do: Speedle answers deny to any request outside policy, whatever the prompt said.
 
+## Where things are
+
+- [Speedle AI home](https://ai.speedle.io/) and [中文首页](https://ai.speedle.io/zh/)
+- [AI patterns](https://ai.speedle.io/patterns/) and [中文模式](https://ai.speedle.io/zh/patterns/): the full SPDL examples for all seven areas.
+- [Documentation](https://engine.speedle.io/docs/) and [文档](https://engine.speedle.io/zh/docs/): concepts, deployment, APIs and operations.
+- [SPDL reference](https://engine.speedle.io/docs/spdl/) and [SPDL 参考](https://engine.speedle.io/zh/docs/spdl/): grammar, attributes, built-in functions and custom functions.
+- [Getting started](https://engine.speedle.io/quick-start/) and [快速开始](https://engine.speedle.io/zh/quick-start/): run Speedle and make a first authorization decision.
+- [SDKs](https://engine.speedle.io/docs/sdks/) and [SDK](https://engine.speedle.io/zh/docs/sdks/): the six language clients.
+- [Playground](https://engine.speedle.io/playground/) and [策略实验室](https://engine.speedle.io/zh/playground/): try SPDL and authorization requests in the browser.
+- [Speedle Cloud docs](https://engine.speedle.io/docs/cloud/) and [Speedle Cloud 文档](https://engine.speedle.io/zh/docs/cloud/): the hosted service documentation hub.
+- [Speedle Cloud](https://cloud.speedle.io/) and [中文首页](https://cloud.speedle.io/zh-CN/): hosted authorization for developers; sign-in opens soon.
+- [Speedle MCP](https://github.com/teramoby/speedle-mcp): the planned server, with check-mode issue #1 and manage-mode issue #2.
+- [Speedle policy modeler skill](https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler): the open-source Agent Skill.
+
 ## Related links
 
-- Speedle AI patterns: https://ai.speedle.io/patterns/
-- Speedle AI patterns (Chinese): https://ai.speedle.io/zh/patterns/
-- Speedle Engine: https://engine.speedle.io/
-- Speedle Cloud (coming soon): https://cloud.speedle.io/
+- Speedle Engine llms.txt: https://engine.speedle.io/llms.txt
+- Speedle Cloud llms.txt: https://cloud.speedle.io/llms.txt
+- Speedle Engine: https://engine.speedle.io/ (Chinese: https://engine.speedle.io/zh/)
+- Speedle Cloud (sign-in opens soon): https://cloud.speedle.io/
 - Speedle source code (UPL 1.0): https://github.com/teramoby/speedle-plus
-- Speedle MCP: https://github.com/teramoby/speedle-mcp
 - Speedle SDK: https://github.com/teramoby/speedle-sdk
+- Speedle MCP: https://github.com/teramoby/speedle-mcp
 - Speedle documentation: https://engine.speedle.io/docs/

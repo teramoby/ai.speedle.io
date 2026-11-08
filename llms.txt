@@ -1,49 +1,60 @@
 # Speedle AI
 
-> Speedle AI — AI for access control, access control for AI. It shows how to apply the open-source Speedle policy engine to AI agent authorization and access control: MCP authorization, permission-aware RAG, agent-to-agent (A2A) calls, zero standing privileges (ZSP) and least privilege for LLM applications. It also ships an open-source Agent Skill that turns policy documents into SPDL models, previews Speedle MCP, an MCP server for authorization checks and policy management, and describes an AI-based risk-detection approach that is being built.
+> Speedle is an open-source (UPL-1.0) authorization engine with the SPDL policy language. It consists of ADS (decisions) and PMS (policy management), SDKs in six languages, Speedle Cloud (hosted), and Speedle AI (authorization for and with AI agents, an MCP server, and the policy-modeler skill). Speedle AI — AI for access control, access control for AI — applies the engine to AI agent authorization: MCP tool calls, permission-aware RAG, agent-to-agent (A2A) calls, zero standing privileges (ZSP) and the AI lifecycle from training data to model release.
 
-Speedle AI has two parts. **Use AI to manage access** shows how AI helps design, manage and check policies. **Control what AI can access** presents policy patterns across the AI lifecycle, from data and training to inference, agents, tool calls and other agents. The home page gives one sentence and one representative rule for each pattern; the full SPDL examples, longer explanations and the target AI risk-detection flow are on the patterns page. All of this is built on the open-source Speedle policy engine; the SPDL examples are solution patterns, not shipped platform integrations.
+Speedle AI has two parts. **Use AI to manage access** shows how AI helps design, manage and check policies. **Control what AI can access** presents policy patterns across the AI lifecycle, from data and training to inference, agents, tool calls and other agents. The home page gives one sentence and one representative rule for each pattern; the full SPDL examples, longer explanations and the target AI risk-detection flow are on the patterns page. The SPDL examples are solution patterns on the open-source Speedle policy engine, not shipped integrations with an ML or agent platform.
 
-## Home
+## Start here
 
-- [Speedle AI home](https://ai.speedle.io/): What Speedle AI is and the two parts.
-- [中文](https://ai.speedle.io/zh/): Speedle AI 中文首页：用 AI 管权限，用策略约束 AI，涵盖 AI 智能体授权、AI 访问控制、MCP 授权、RAG 权限控制和智能体最小权限。
-- [Patterns](https://ai.speedle.io/patterns/): the full SPDL examples for every area in Build and Run, with subjects, resources, actions and enforcement points.
+- [Speedle AI home](https://ai.speedle.io/): what Speedle AI is, the two parts, and one representative SPDL rule per pattern.
+- [Patterns](https://ai.speedle.io/patterns/): the full SPDL examples for building and running AI, with subjects, resources, actions and enforcement points.
+- [中文首页](https://ai.speedle.io/zh/): Speedle AI 中文首页，涵盖 AI 智能体授权、AI 访问控制、MCP 授权、RAG 权限控制和智能体最小权限。
 - [中文模式](https://ai.speedle.io/zh/patterns/): 构建和运行 AI 的完整 SPDL 示例，涵盖数据与训练、模型发布、推理与 RAG、委托智能体、MCP 工具调用、A2A 调用和零常驻权限。
 
 ## Use AI to manage access
 
 - [Speedle policy modeler skill](https://ai.speedle.io/#policy-modeler): an open-source Agent Skill for Claude Code that turns employee handbooks and regulations into RBAC + ABAC SPDL models, with a design document, a Mermaid role-inheritance diagram and executable test cases.
-- [Speedle MCP launch preview](https://ai.speedle.io/#mcp): `@speedle/mcp` is planned as one npm package with separate check and manage modes; it is not published on npm yet.
-- [AI-based risk detection being built](https://ai.speedle.io/#risk-detection): policy keeps the veto; AI risk signals never grant access that policy denies.
 - [Policy modeler skill folder](https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler): SKILL.md, references, scripts, templates and English/Chinese example runs.
-- [Policy modeler sample](https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/en/model.md): a full English model with role inheritance, ABAC conditions and test results.
+- [Policy modeler English sample](https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/en/model.md): a full English model with role inheritance, ABAC conditions and all 37 authorization cases passing.
+- [Policy modeler Chinese sample](https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/zh/model.md): the Chinese run of the same synthetic handbook workflow.
+- [Speedle MCP preview](https://ai.speedle.io/#mcp): `@speedle/mcp` is planned as one npm package with separate check and manage modes; it is not published on npm yet.
+- [Speedle MCP repository](https://github.com/teramoby/speedle-mcp): check-mode issue #1 and manage-mode issue #2.
+- [AI-based risk detection being built](https://ai.speedle.io/#risk-detection): a planned direction, not a shipped feature; policy keeps the veto and a risk signal never turns a deny into an allow.
 
 ## Control what AI can access
 
 - [Concept: one decision point](https://ai.speedle.io/#lifecycle): identity in, allow or deny out, audit and explain out, with the boundary.
-- [Patterns: Build and Run](https://ai.speedle.io/patterns/): the full examples and explanations that the home page summarizes.
 - [Build: data and training](https://ai.speedle.io/patterns/#lc-data): consent, region and restricted-data rules for datasets, training jobs and checkpoints.
 - [Build: model release](https://ai.speedle.io/patterns/#lc-release): separation of duties for register, approve, promote and rollback.
-- [Run: permission-aware RAG](https://ai.speedle.io/patterns/#lc-rag): the retriever asks per document or collection before content enters the prompt.
-- [Run: agents acting for users](https://ai.speedle.io/patterns/#lc-agents): the enforcement point verifies the delegation token, then checks the agent within the token scope and the delegating user's current permission.
+- [Run: inference and permission-aware RAG](https://ai.speedle.io/patterns/#lc-rag): the retriever asks per document or collection before content enters the prompt.
+- [Run: agents acting for users](https://ai.speedle.io/patterns/#lc-agents): verify the delegation token, then check the agent within the token scope and the delegating user's current permission.
 - [Run: tool calls over MCP](https://ai.speedle.io/patterns/#lc-mcp): the tool, the call and its arguments are checked before the tool runs.
 - [Run: agent-to-agent (A2A) authorization](https://ai.speedle.io/patterns/#lc-a2a): each hop is checked and delegation only narrows permissions.
-- [Run: zero standing privileges (ZSP)](https://ai.speedle.io/patterns/#zsp): just-in-time, short-lived, narrowly scoped credentials support a ZSP pattern when issuance and controls are in place; the example checks lifetime, not-before and token status, and production verifies token binding and consumes single-use tokens atomically.
-- [ZSP sample](https://github.com/teramoby/ai.speedle.io/tree/main/samples/zsp): a local PMS + ADS + custom function demo with the atomic consume step; its in-memory state and admin endpoints are demo only.
-- [Delegated agent sample](https://github.com/teramoby/ai.speedle.io/tree/main/samples/delegation): both patterns with a local PMS + ADS; the token key and the custom-function server are demo only.
-- [AI risk-detection target flow](https://ai.speedle.io/patterns/#risk-detection): the conceptual flow being built; a risk signal cannot turn a policy deny into an allow.
+- [Run: zero standing privileges (ZSP)](https://ai.speedle.io/patterns/#zsp): a self-hosted pattern where a policy checks token lifetime, validity window and status; production adds token binding and an atomic consume.
+- [ZSP sample](https://github.com/teramoby/ai.speedle.io/tree/main/samples/zsp): a local PMS + ADS + custom function demo with the atomic consume step.
+- [Delegated agent sample](https://github.com/teramoby/ai.speedle.io/tree/main/samples/delegation): both delegation patterns with a local PMS + ADS.
+- [AI risk-detection target flow](https://ai.speedle.io/patterns/#risk-detection): the conceptual flow being built; a policy deny is final.
 - [Cross-cutting concerns](https://ai.speedle.io/#cross-cutting): identity, audit and explainability, OWASP LLM06:2025 Excessive Agency, and the boundary.
 - [Where Speedle stops](https://ai.speedle.io/#boundary): it does not detect prompt injection, filter content or verify model and dataset supply chains.
 
+## SPDL and the Speedle platform
+
+- [SPDL reference](https://engine.speedle.io/docs/spdl/): the Speedle Policy Definition Language — the grammar of policies and role policies (grant and deny, user/group/entity/role principals, AND groups, `on RESOURCE`, conditions), attributes, built-in functions and custom functions. Chinese: [SPDL 参考](https://engine.speedle.io/zh/docs/spdl/).
+- [AI pattern SPDL examples](https://ai.speedle.io/patterns/): role inheritance, deny over grant, conditions and custom functions across the seven AI areas. Chinese: [中文示例](https://ai.speedle.io/zh/patterns/).
+- [Documentation](https://engine.speedle.io/docs/): concepts, deployment, APIs and operations. Chinese: [文档](https://engine.speedle.io/zh/docs/).
+- [Getting started](https://engine.speedle.io/quick-start/): run Speedle and make a first authorization decision. Chinese: [快速开始](https://engine.speedle.io/zh/quick-start/).
+- [SDKs](https://engine.speedle.io/docs/sdks/): client libraries for the decision API at 0.2.0 on PyPI (`speedle`), Maven Central (`io.speedle:speedle-sdk`), Go (`github.com/teramoby/speedle-sdk/go`), NuGet (`Speedle.Sdk`) and crates.io (`speedle`); `@speedle/sdk` is not published on npm yet. Chinese: [SDK](https://engine.speedle.io/zh/docs/sdks/).
+- [Playground](https://engine.speedle.io/playground/): try SPDL and authorization requests in the browser. Chinese: [策略实验室](https://engine.speedle.io/zh/playground/).
+- [Speedle Cloud docs](https://engine.speedle.io/docs/cloud/): the documentation hub for hosted Speedle Cloud; sign-in on cloud.speedle.io opens soon. Chinese: [Speedle Cloud 文档](https://engine.speedle.io/zh/docs/cloud/).
+- [Speedle Cloud](https://cloud.speedle.io/): hosted authorization for developers, built on the Speedle policy engine; sign-in opens soon. Chinese: [中文首页](https://cloud.speedle.io/zh-CN/).
+
 ## Related Speedle sites
 
-- [Speedle Engine](https://engine.speedle.io/): the open-source authorization engine and SPDL policy language.
-- [Speedle Cloud](https://cloud.speedle.io/): hosted authorization for developers; coming soon.
+- [Speedle Engine](https://engine.speedle.io/): the open-source authorization engine and the SPDL policy language. Chinese: [中文首页](https://engine.speedle.io/zh/).
+- [Speedle Engine llms.txt](https://engine.speedle.io/llms.txt): the engine site's guide for AI models, including SPDL details.
+- [Speedle Cloud llms.txt](https://cloud.speedle.io/llms.txt): the hosted service's guide for AI models.
 - [Speedle source on GitHub](https://github.com/teramoby/speedle-plus): Universal Permissive License (UPL) 1.0.
-- [Speedle MCP repository](https://github.com/teramoby/speedle-mcp): check-mode issue #1 and manage-mode issue #2; not published on npm yet.
-- [Speedle SDK](https://github.com/teramoby/speedle-sdk): client integration patterns and guidance.
-- [Speedle documentation](https://engine.speedle.io/docs/): guides, SPDL and the diagnose API.
+- [Speedle SDK repository](https://github.com/teramoby/speedle-sdk): source and reference for the six language clients.
 
 ## Optional
 

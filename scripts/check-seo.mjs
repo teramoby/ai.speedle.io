@@ -87,7 +87,18 @@ check(/^User-agent: \*$/m.test(robots), 'robots.txt must have a "User-agent: *" 
 check(/^Allow: \/$/m.test(robots), 'robots.txt must allow public pages');
 check(/^Sitemap: https:\/\/ai\.speedle\.io\/sitemap\.xml$/m.test(robots), 'robots.txt must reference https://ai.speedle.io/sitemap.xml');
 check(!/^Disallow: \/$/m.test(robots), 'robots.txt must not disallow the whole site');
-for (const bot of ['GPTBot', 'ClaudeBot', 'PerplexityBot', 'Google-Extended', 'CCBot']) {
+for (const bot of [
+  'GPTBot',
+  'OAI-SearchBot',
+  'ChatGPT-User',
+  'ClaudeBot',
+  'Claude-User',
+  'Claude-SearchBot',
+  'PerplexityBot',
+  'Google-Extended',
+  'Applebot-Extended',
+  'CCBot'
+]) {
   check(new RegExp(`^User-agent: ${bot}$`, 'm').test(robots), `robots.txt must name the AI crawler ${bot}`);
 }
 
@@ -522,21 +533,103 @@ for (const keyword of ['SPDL 示例', '数据与训练', '零常驻权限', 'AI 
 
 // --- llms.txt and llms-full.txt ------------------------------------------
 
+// The canonical product definition shared by the three Speedle sites. It must
+// appear verbatim in both files, and the same claims must be true on the page.
+const SPEEDLE_DEFINITION = 'Speedle is an open-source (UPL-1.0) authorization engine with the SPDL policy language. It consists of ADS (decisions) and PMS (policy management), SDKs in six languages, Speedle Cloud (hosted), and Speedle AI (authorization for and with AI agents, an MCP server, and the policy-modeler skill).';
+const SITE_DEFINITION = 'Speedle AI — AI for access control, access control for AI';
+
 const llms = read('llms.txt');
 check(/^# .+/m.test(llms), 'llms.txt must start with an H1');
 check(/^> .+/m.test(llms), 'llms.txt must have a blockquote summary');
+check(llms.startsWith(`# Speedle AI\n\n> ${SPEEDLE_DEFINITION}`), 'llms.txt must open with the canonical Speedle definition in its blockquote');
+check(llms.includes(SITE_DEFINITION), 'llms.txt must state the Speedle AI definition');
+check(englishHtml.includes(SITE_DEFINITION), 'index.html must state the Speedle AI definition used by the llms files');
 check(/\n## /.test(llms), 'llms.txt must have link sections');
-check(llms.includes('[中文](https://ai.speedle.io/zh/)'), 'llms.txt must include a 中文 link to the Chinese home page');
+check(llms.includes('](https://ai.speedle.io/zh/)'), 'llms.txt must include a 中文 link to the Chinese home page');
 check(llms.includes('(https://ai.speedle.io/patterns/)'), 'llms.txt must link the patterns page');
 check(llms.includes('(https://ai.speedle.io/zh/patterns/)'), 'llms.txt must link the Chinese patterns page');
-const llmsLinks = [...llms.matchAll(/\]\((https:\/\/ai\.speedle\.io\/[^)\s]*)\)/g)].map(match => match[1]);
+check(llms.includes('(https://engine.speedle.io/llms.txt)'), 'llms.txt must cross-link the Engine llms.txt');
+check(llms.includes('(https://cloud.speedle.io/llms.txt)'), 'llms.txt must cross-link the Cloud llms.txt');
+const llmsLinks = [...llms.matchAll(/\]\((https:\/\/[^)\s]*)\)/g)].map(match => match[1]);
 check(llmsLinks.length > 0, 'llms.txt must link to the site');
 for (const link of llmsLinks) checkInternalUrl(link, 'llms.txt');
 
 const llmsFull = read('llms-full.txt');
 check(llmsFull.length > 0, 'llms-full.txt must not be empty');
+check(llmsFull.startsWith('# Speedle AI'), 'llms-full.txt must start with the site H1');
+check(llmsFull.includes(SPEEDLE_DEFINITION), 'llms-full.txt must state the canonical Speedle definition');
+check(llmsFull.includes(SITE_DEFINITION), 'llms-full.txt must state the Speedle AI definition');
+check(llmsFull.includes('https://engine.speedle.io/llms.txt'), 'llms-full.txt must cross-link the Engine llms.txt');
+check(llmsFull.includes('https://cloud.speedle.io/llms.txt'), 'llms-full.txt must cross-link the Cloud llms.txt');
 const fullUrls = [...llmsFull.matchAll(/https:\/\/ai\.speedle\.io\/[^\s)"'>]*/g)].map(match => match[0]);
 for (const url of fullUrls) checkInternalUrl(url, 'llms-full.txt');
+
+// Every claim that constrains the files must also hold on the page.
+const syncedClaims = [
+  ['0.2.0', 'the SDK version'],
+  ['not published on npm', 'the Speedle MCP npm status'],
+  ['not a shipped feature', 'the AI risk-detection status'],
+  ['37 authorization cases', 'the policy-modeler example results']
+];
+for (const [claim, label] of syncedClaims) {
+  check(englishHtml.includes(claim), `index.html must support ${label} ("${claim}")`);
+  check(llmsFull.includes(claim), `llms-full.txt must state ${label} ("${claim}")`);
+}
+check(llms.includes('not published on npm'), 'llms.txt must state that @speedle/mcp is not published on npm');
+check(llms.includes('opens soon'), 'llms.txt must state that Speedle Cloud sign-in opens soon');
+check(llmsFull.includes('opens soon'), 'llms-full.txt must state that Speedle Cloud sign-in opens soon');
+
+// Every link in the llms files is absolute and live. Local ai.speedle.io links
+// are already checked against repository files and anchors above; external
+// links are fetched here and must answer 200 without a redirect.
+for (const [file, text] of [['llms.txt', llms], ['llms-full.txt', llmsFull]]) {
+  check(!/\]\((?!https:\/\/)/.test(text), `${file}: every Markdown link must be an absolute https URL`);
+  check(!/http:\/\//.test(text), `${file}: links must use https`);
+}
+const externalUrls = new Set();
+for (const text of [llms, llmsFull]) {
+  for (const match of text.matchAll(/https:\/\/[^\s)\]"'<>]+/g)) {
+    const url = match[0].replace(/[.,;:]+$/, '');
+    let parsed;
+    try {
+      parsed = new URL(url);
+    } catch {
+      check(false, `llms: invalid URL ${url}`);
+      continue;
+    }
+    if (parsed.origin !== origin) externalUrls.add(url);
+  }
+}
+const sleep = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
+async function liveStatus(url) {
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    try {
+      const response = await fetch(url, {
+        redirect: 'manual',
+        signal: AbortSignal.timeout(20000),
+        headers: { 'user-agent': 'Mozilla/5.0 (compatible; ai.speedle.io link check)' }
+      });
+      if (response.body) await response.body.cancel();
+      if (response.status === 429 || response.status >= 500) {
+        await sleep(attempt * 1500);
+        continue;
+      }
+      return response.status;
+    } catch (error) {
+      if (attempt === 3) return `fetch error: ${error.message}`;
+      await sleep(attempt * 1500);
+    }
+  }
+  return 'unreachable';
+}
+const liveUrls = [...externalUrls].sort();
+for (let index = 0; index < liveUrls.length; index += 6) {
+  const batch = liveUrls.slice(index, index + 6);
+  const statuses = await Promise.all(batch.map(liveStatus));
+  statuses.forEach((status, batchIndex) => {
+    check(status === 200, `${batch[batchIndex]} from llms.txt/llms-full.txt must return 200 without a redirect (got ${status})`);
+  });
+}
 
 // Every sitemap location and llms link must use the canonical host.
 for (const url of [...locations, ...llmsLinks]) {
@@ -553,7 +646,7 @@ if (errors.length > 0) {
 console.log(`PASS: ${checks} SEO/GEO checks passed`);
 console.log(`- sitemap.xml: ${locations.length} URLs, hreflang ${[...new Set(sitemapAlternates.map(alt => alt.lang))].join(', ')}`);
 console.log(`- robots.txt: ${robots.split('\n').filter(line => line.startsWith('User-agent:')).length} user-agent groups, sitemap referenced`);
-console.log(`- llms.txt: ${llmsLinks.length} internal links; llms-full.txt: ${fullUrls.length} internal URLs`);
+console.log(`- llms.txt: ${llmsLinks.length} links; llms-full.txt: ${fullUrls.length} internal URLs; ${liveUrls.length} external links live-checked`);
 for (const report of pageReports) {
   console.log(`- ${report.file}: title ${report.titleLength} chars, description ${report.descriptionLength} chars, ${report.nodes} JSON-LD nodes`);
 }
