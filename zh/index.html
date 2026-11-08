@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#ffffff">
   <meta name="color-scheme" content="light">
-  <title>Speedle AI — AI 智能体授权与访问控制</title>
+  <title>Speedle AI — 用 AI 做权限，为 AI 管权限</title>
   <meta name="description" content="Speedle AI 介绍 AI 智能体授权与 AI 访问控制：用策略覆盖 MCP 授权、RAG 权限控制、零常驻权限（ZSP）、大模型应用权限管理和智能体最小权限。">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <link rel="canonical" href="https://ai.speedle.io/zh/">
@@ -15,7 +15,7 @@
   <meta property="og:type" content="website">
   <meta property="og:locale" content="zh_CN">
   <meta property="og:site_name" content="Speedle AI">
-  <meta property="og:title" content="Speedle AI — AI 智能体授权与访问控制">
+  <meta property="og:title" content="Speedle AI — 用 AI 做权限，为 AI 管权限">
   <meta property="og:description" content="用开源 Speedle 策略引擎实现 AI 访问控制：AI 智能体授权、MCP 授权、RAG 权限控制、A2A 调用、零常驻权限（ZSP）与智能体最小权限。">
   <meta property="og:url" content="https://ai.speedle.io/zh/">
   <meta property="og:image" content="https://ai.speedle.io/assets/og-image.png">
@@ -24,7 +24,7 @@
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Speedle AI：AI 智能体授权与访问控制，带有 Speedle 球形标志">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Speedle AI — AI 智能体授权与访问控制">
+  <meta name="twitter:title" content="Speedle AI — 用 AI 做权限，为 AI 管权限">
   <meta name="twitter:description" content="用开源 Speedle 策略引擎实现 AI 访问控制：AI 智能体授权、MCP 授权、RAG 权限控制、A2A 调用、零常驻权限（ZSP）与智能体最小权限。">
   <meta name="twitter:image" content="https://ai.speedle.io/assets/og-image.png">
   <meta name="twitter:image:alt" content="Speedle AI：AI 智能体授权与访问控制，带有 Speedle 球形标志">
@@ -138,13 +138,14 @@
           <p class="eyebrow">Speedle AI · 两个方向，一套策略</p>
           <h1 id="hero-title">AI 智能体授权：用 AI 管权限，用策略约束 AI</h1>
           <p class="hero-lead">用 AI 设计、管理和检查访问策略，也让同一套策略约束 AI 自身，覆盖 MCP 授权、RAG 权限控制和智能体最小权限。两个方向都离不开清晰、可执行的策略决策。</p>
+          <div class="actions"><a class="button button-primary" href="#policy-modeler">试用策略建模技能</a><a class="button button-secondary" href="https://engine.speedle.io/zh/docs/">阅读文档<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a></div>
           <p class="hero-note"><span aria-hidden="true"></span>基于开源 Speedle 策略引擎构建。</p>
         </div>
         <div class="hero-paths" aria-label="了解 Speedle AI 的两个方向">
           <a class="path-card" href="#ai-for-access">
             <div class="path-top"><span class="path-index">第一部分</span><span class="path-icon" aria-hidden="true"><svg class="icon"><use href="#i-terminal"/></svg></span></div>
             <h2>用 AI 管权限</h2>
-            <p>用开源策略建模技能把制度文档变成 SPDL，用 Speedle MCP 设计、管理和检查策略，并了解正在构建的 AI 风险检测方案。</p>
+            <p>用开源策略建模技能把制度文档变成 SPDL，用 Speedle MCP 设计、管理和检查策略，并了解计划中的 AI 风险检测方案。</p>
             <span class="path-link">了解 Speedle MCP<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></span>
           </a>
           <a class="path-card" href="#access-for-ai">
@@ -163,12 +164,12 @@
         <header class="part-header">
           <span class="part-number" aria-hidden="true">01</span>
           <div class="part-heading"><p class="eyebrow">用 AI 管权限</p><h2 id="ai-for-access-title">用 AI 管好访问策略</h2></div>
-          <p class="part-summary">AI 帮人管理访问：开源技能把制度文档变成 SPDL；Speedle MCP 用于设计、管理和检查策略（上线预览）；AI 风险检测方案正在构建。</p>
+          <p class="part-summary">AI 帮人管理访问：开源技能把制度文档变成 SPDL；Speedle MCP 用于设计、管理和检查策略（预览）；AI 风险检测方案已列入计划。</p>
         </header>
 
         <div id="policy-modeler" class="policy-modeler">
           <div class="section-head">
-            <div><p class="eyebrow">Speedle 策略建模技能 · 开源技能</p><h3 id="policy-modeler-title">把制度文档变成可复核的 SPDL</h3></div>
+            <div><p class="eyebrow">Speedle 策略建模技能 · 开源技能<span class="status-badge status-available">可用</span></p><h3 id="policy-modeler-title">把制度文档变成可复核的 SPDL</h3></div>
             <p>面向 Claude Code 的 Agent Skill。它读取员工手册或制度文件，先问清文档没有写明的部分，再生成 RBAC + ABAC 策略，不会凭空猜规则。</p>
           </div>
 
@@ -199,6 +200,15 @@
 
           <p class="launch-note">技能包遵循 Agent Skills 格式：<code>SKILL.md</code> 包含 <code>name</code> 和 <code>description</code> frontmatter，另有参考文档、脚本和示例。安装到 <code>~/.claude/skills/</code> 作为个人技能，或复制到 <code>.claude/skills/</code> 作为项目技能。</p>
 
+          <div class="prerequisites">
+            <h4>前置条件</h4>
+            <ul>
+              <li><code>spctl</code> — 用 <code>spctl check -f policies.spdl</code> 校验生成的 SPDL。</li>
+              <li><code>speedle-pms</code> 和 <code>speedle-ads</code> — 在本地 Speedle 上运行端到端授权用例。</li>
+              <li>Python 3 — 运行 <code>scripts/run-cases.py</code> 中的测试用例。</li>
+            </ul>
+          </div>
+
           <div class="config-grid">
             <figure class="config-card">
               <figcaption><span>安装</span><span>Claude Code</span></figcaption>
@@ -218,7 +228,7 @@ cp -R ai.speedle.io/skills/speedle-policy-modeler \
 
         <div id="mcp" class="subsection mcp">
           <div class="section-head mcp-intro">
-            <div><p class="eyebrow">Speedle MCP · 即将上线</p><h3 id="mcp-title">Speedle MCP：两种独立模式</h3></div>
+            <div><p class="eyebrow">Speedle MCP<span class="status-badge status-preview">预览</span></p><h3 id="mcp-title">Speedle MCP：两种独立模式</h3></div>
             <div class="mcp-lead">
               <p>未来，<code>@speedle/mcp</code> 将作为一个 npm 包发布，附带 <code>speedle-mcp</code> 命令，用于启动本地 stdio MCP 服务器。目前尚未发布。</p>
               <a class="button button-outline" href="https://github.com/teramoby/speedle-mcp">关注开发进展<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a>
@@ -227,7 +237,7 @@ cp -R ai.speedle.io/skills/speedle-policy-modeler \
 
           <div class="mode-grid">
             <article class="mode-card">
-              <div class="mode-top"><span class="mode-label">模式 01 · 上线预览</span><code>check</code></div>
+              <div class="mode-top"><span class="mode-label">模式 01</span><code>check</code></div>
               <h4>授权检查</h4>
               <p>规划中的 <code>check</code> 模式默认只注册 <code>is_allowed</code>，只读取 ADS 配置。<code>diagnose</code>、<code>all_granted_roles</code> 和 <code>all_granted_permissions</code> 需要分别用 <code>--expose-diagnose</code>、<code>--expose-all-granted-roles</code> 和 <code>--expose-all-granted-permissions</code> 参数显式开启。<code>diagnose</code> 只支持自托管 Speedle，连接 Speedle Cloud 时带上它服务不会启动。它只回答授权问题，不会在调用应用中执行访问控制。</p>
               <ul class="mode-list">
@@ -238,7 +248,7 @@ cp -R ai.speedle.io/skills/speedle-policy-modeler \
               <a class="mode-link" href="https://github.com/teramoby/speedle-mcp/issues/1">查看 check 模式 issue<svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg></a>
             </article>
             <article class="mode-card">
-              <div class="mode-top"><span class="mode-label">模式 02 · 上线预览</span><code>manage</code></div>
+              <div class="mode-top"><span class="mode-label">模式 02</span><code>manage</code></div>
               <h4>策略设计与管理</h4>
               <p>规划中的 <code>manage</code> 模式只注册管理工具，只读取 PMS 配置，通过 PMS REST API 设计和管理 Speedle 策略。</p>
               <ul class="mode-list">
@@ -260,7 +270,7 @@ cp -R ai.speedle.io/skills/speedle-policy-modeler \
 
         <div id="risk-detection" class="risk-detection">
           <article class="risk-card" aria-labelledby="risk-title">
-            <div class="risk-card-top"><h3 id="risk-title">AI 风险检测</h3><span class="status-pill">待定</span></div>
+            <div class="risk-card-top"><h3 id="risk-title">AI 风险检测</h3><span class="status-badge status-planned">计划中</span></div>
             <p>AI 能从更多维度和关系中发现单条规则看不到的风险。这是 Speedle 正在探索和构建的方向，尚未发布。策略保留否决权：风险信号可以加强审查或防护，但绝不能把拒绝改成允许。</p>
             <a class="mode-link" href="/zh/patterns/#risk-detection">查看目标流程<svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
           </article>
@@ -617,8 +627,18 @@ cp -R ai.speedle.io/skills/speedle-policy-modeler \
           <div class="resource-grid">
             <a class="resource-card" href="https://engine.speedle.io/zh/"><span>开源</span><strong>Speedle Engine<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>开源授权引擎与易读的 SPDL 策略语言。</p></a>
             <a class="resource-card" href="https://cloud.speedle.io/zh-CN/"><span>托管服务</span><strong><span class="resource-name">Speedle Cloud<span class="coming-soon">即将上线</span></span><svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>基于 Speedle 策略引擎，为开发者提供托管授权服务。</p></a>
-            <a class="resource-card" href="https://github.com/teramoby/speedle-sdk"><span>集成</span><strong>Speedle SDK<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>在 SDK 仓库中查看客户端集成模式和接入指南。</p></a>
+            <a class="resource-card" href="https://engine.speedle.io/zh/docs/sdks/"><span>集成</span><strong>Speedle SDK<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>Python、Go、Java、C# 和 Rust 的决策 API 客户端。</p></a>
           </div>
+          <figure class="config-card sdk-snippet">
+            <figcaption><span>Python SDK · 发起决策请求</span><span>0.2.0</span></figcaption>
+            <pre tabindex="0" aria-label="Python SDK 示例：向 Speedle 请求决策"><code>from speedle import Auth, Client
+
+with Client(backend="speedle", endpoint="http://localhost:6734",
+            auth=Auth.none(), service_name="docs") as speedle:
+    allowed = speedle.is_allowed("alice", "get", "/docs/public")
+    # docs 服务授予 alice get /docs/public 后为 True</code></pre>
+            <p class="sdk-caption">一个简短示例；<a href="https://engine.speedle.io/zh/docs/sdks/">SDK 文档</a>介绍各语言的客户端、请求模型和错误处理。</p>
+          </figure>
         </div>
       </div>
     </section>
