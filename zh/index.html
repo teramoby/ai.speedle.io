@@ -163,90 +163,10 @@
         <header class="part-header">
           <span class="part-number" aria-hidden="true">01</span>
           <div class="part-heading"><p class="eyebrow">AI 助力权限管理</p><h2 id="ai-for-access-title">用 AI 管好访问策略</h2></div>
-          <p class="part-summary">AI 帮人管理访问：开源策略建模技能把制度文档变成 SPDL；Speedle MCP 用于设计、管理和检查策略（上线预览）；正在构建的 AI 风险检测能从更多维度和关系中发现风险，策略仍保留最终否决权。</p>
+          <p class="part-summary">AI 帮人管理访问：开源技能把制度文档变成 SPDL；Speedle MCP 用于设计、管理和检查策略（上线预览）；AI 风险检测方案正在构建。</p>
         </header>
 
-        <div id="mcp" class="mcp">
-          <div class="section-head mcp-intro">
-            <div><p class="eyebrow">Speedle MCP · 即将上线</p><h3 id="mcp-title">Speedle MCP：两种独立模式</h3></div>
-            <div class="mcp-lead">
-              <p>未来，<code>@speedle/mcp</code> 将作为一个 npm 包发布，附带 <code>speedle-mcp</code> 命令，用于启动本地 stdio MCP 服务器。目前尚未发布。</p>
-              <a class="button button-outline" href="https://github.com/teramoby/speedle-mcp">关注开发进展<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a>
-            </div>
-          </div>
-
-          <div class="mode-grid">
-            <article class="mode-card">
-              <div class="mode-top"><span class="mode-label">模式 01 · 上线预览</span><code>check</code></div>
-              <h4>授权检查</h4>
-              <p>规划中的 <code>check</code> 模式默认只注册 <code>is_allowed</code>，只读取 ADS 配置。<code>diagnose</code>、<code>all_granted_roles</code> 和 <code>all_granted_permissions</code> 需要分别用 <code>--expose-diagnose</code>、<code>--expose-all-granted-roles</code> 和 <code>--expose-all-granted-permissions</code> 参数显式开启。<code>diagnose</code> 只支持自托管 Speedle，连接 Speedle Cloud 时带上它服务不会启动。它只回答授权问题，不会在调用应用中执行访问控制。</p>
-              <ul class="mode-list">
-                <li>通过 Speedle ADS REST API 发起只读授权检查。</li>
-                <li>输入：主体、资源、操作和带类型的属性。</li>
-                <li>从环境变量读取 ADS 基础 URL、服务名和可选的 bearer 令牌。</li>
-              </ul>
-              <a class="mode-link" href="https://github.com/teramoby/speedle-mcp/issues/1">查看 check 模式 issue<svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg></a>
-            </article>
-            <article class="mode-card">
-              <div class="mode-top"><span class="mode-label">模式 02 · 上线预览</span><code>manage</code></div>
-              <h4>策略设计与管理</h4>
-              <p>规划中的 <code>manage</code> 模式只注册管理工具，只读取 PMS 配置，通过 PMS REST API 设计和管理 Speedle 策略。</p>
-              <ul class="mode-list">
-                <li>管理服务、授权策略和角色策略。</li>
-                <li>提供 SPDL 校验和生效策略解释工具。</li>
-                <li>支持只读选项；执行删除前必须明确确认目标。</li>
-              </ul>
-              <a class="mode-link" href="https://github.com/teramoby/speedle-mcp/issues/2">查看 manage 模式 issue<svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg></a>
-            </article>
-          </div>
-
-          <aside class="mcp-security" aria-labelledby="mcp-security-title">
-            <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
-            <div><h4 id="mcp-security-title">别让受控智能体管理策略</h4><p><strong>不要给受这些策略约束的智能体开放 <code>manage</code> 模式。</strong>如果智能体同时拿到检查和管理工具，提示词可能诱导它给自己开通访问权限。</p><p><strong>受控智能体只开放 <code>is_allowed</code>。</strong>这是 <code>check</code> 模式的默认设置。<code>diagnose</code>、<code>all_granted_roles</code> 和 <code>all_granted_permissions</code> 会展示策略、条件和授权，只在给策略编写者和运维人员使用的 check 服务中开启，不要给智能体的服务加 <code>--expose-*</code> 参数。</p><p>没有同时开放两类工具的默认模式。按规划，不指定模式时会打印用法，并以非零状态码退出。</p></div>
-          </aside>
-
-          <div class="launch-config" aria-labelledby="launch-config-title">
-            <div class="launch-heading">
-              <div><p class="eyebrow">安装与 MCP 客户端配置</p><h4 id="launch-config-title">配置预览</h4></div>
-              <span class="launch-badge">上线后可用</span>
-            </div>
-            <p class="launch-note"><strong><code>@speedle/mcp</code> 尚未发布到 npm。</strong>以下命令和客户端配置仅演示上线后的用法，目前还不能用于安装。</p>
-            <div class="config-grid">
-              <figure class="config-card">
-                <figcaption><span>check 模式</span><span>上线后可用</span></figcaption>
-                <pre tabindex="0" aria-label="check 模式上线后的安装命令和 MCP 客户端配置"><code># @speedle/mcp 发布后
-npx @speedle/mcp check
-
-{
-  "mcpServers": {
-    "speedle-check": {
-      "command": "npx",
-      "args": ["@speedle/mcp", "check"]
-    }
-  }
-}</code></pre>
-              </figure>
-              <figure class="config-card">
-                <figcaption><span>manage 模式</span><span>上线后可用</span></figcaption>
-                <pre tabindex="0" aria-label="manage 模式上线后的安装命令和 MCP 客户端配置"><code># @speedle/mcp 发布后
-npx @speedle/mcp manage
-
-{
-  "mcpServers": {
-    "speedle-manage": {
-      "command": "npx",
-      "args": ["@speedle/mcp", "manage"]
-    }
-  }
-}</code></pre>
-              </figure>
-            </div>
-          </div>
-
-          <div class="mcp-resources"><span>源码与相关项目</span><a href="https://github.com/teramoby/speedle-mcp">Speedle MCP</a><a href="https://github.com/teramoby/speedle-plus">Speedle</a><a href="https://cloud.speedle.io/zh-CN/">Speedle Cloud</a><a href="https://github.com/teramoby/speedle-sdk">Speedle SDK</a></div>
-        </div>
-
-        <div id="policy-modeler" class="subsection policy-modeler">
+        <div id="policy-modeler" class="policy-modeler">
           <div class="section-head">
             <div><p class="eyebrow">Speedle 策略建模技能 · 开源技能</p><h3 id="policy-modeler-title">把制度文档变成可复核的 SPDL</h3></div>
             <p>面向 Claude Code 的 Agent Skill。它读取员工手册或制度文件，先问清文档没有写明的部分，再生成 RBAC + ABAC 策略，不会凭空猜规则。</p>
@@ -296,42 +216,54 @@ cp -R ai.speedle.io/skills/speedle-policy-modeler \
           <div class="mcp-resources"><span>技能与示例</span><a href="https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler">技能目录</a><a href="https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/zh/model.md">中文示例</a><a href="https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/en/model.md">英文示例</a><a href="https://code.claude.com/docs/en/skills">Claude Code 技能文档</a></div>
         </div>
 
-        <div id="risk-detection" class="subsection protection">
-          <div class="section-head">
-            <div><p class="eyebrow">AI 风险检测 · 正在构建</p><h3 id="risk-title">AI 看得更广，策略仍有否决权</h3></div>
-            <p>AI 能从更多维度和关系中发现单条规则看不到的风险。确定性策略仍负责决策，也握有最终否决权：策略拒绝，AI 绝不能放行。</p>
-          </div>
-
-          <div class="protection-grid">
-            <article class="protection-card policy-card">
-              <div class="protection-top"><span class="protection-icon" aria-hidden="true"><svg class="icon"><use href="#i-shield"/></svg></span><span class="status-pill">确定性策略底座</span></div>
-              <h4>基于策略的访问控制</h4>
-              <p>策略根据明确的请求给出精确、可解释的决策，并保留最终否决权：<strong>只要策略拒绝，结果就是拒绝。</strong></p>
-              <ul class="protection-points"><li>按主体、资源和操作定义规则。</li><li>结果确定，原因清楚。</li><li>AI 风险信号无法推翻策略的拒绝决定。</li></ul>
-              <p class="veto-note"><span aria-hidden="true">拒绝</span>策略拒绝，不得放行。</p>
-            </article>
-            <article class="protection-card risk-card">
-              <div class="protection-top"><span class="protection-icon" aria-hidden="true"><svg class="icon"><use href="#i-signals"/></svg></span><span class="status-pill">正在构建</span></div>
-              <h4>AI 风险检测</h4>
-              <p>Speedle 正在探索和构建这项能力，目前尚未发布。它会从更多维度和关系中查找风险，例如智能体、用户、数据和任务上下文之间的异常组合。</p>
-              <ul class="protection-points"><li>不只看单个请求属性。</li><li>结合更完整的上下文检查关系。</li><li>在策略之上，再加一层防护。</li></ul>
-              <p class="risk-note"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>策略已拒绝，它绝不会放行。</p>
-            </article>
-          </div>
-
-          <section class="decision-architecture" aria-labelledby="decision-flow-title">
-            <div class="architecture-head">
-              <div><p class="eyebrow">目标流程示意</p><h3 id="decision-flow-title">策略先行，风险后查</h3></div>
-              <span class="architecture-badge">AI 风险检测 · 待定</span>
+        <div id="mcp" class="subsection mcp">
+          <div class="section-head mcp-intro">
+            <div><p class="eyebrow">Speedle MCP · 即将上线</p><h3 id="mcp-title">Speedle MCP：两种独立模式</h3></div>
+            <div class="mcp-lead">
+              <p>未来，<code>@speedle/mcp</code> 将作为一个 npm 包发布，附带 <code>speedle-mcp</code> 命令，用于启动本地 stdio MCP 服务器。目前尚未发布。</p>
+              <a class="button button-outline" href="https://github.com/teramoby/speedle-mcp">关注开发进展<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a>
             </div>
-            <ol class="decision-flow">
-              <li class="flow-node"><span class="flow-step">01 / 请求</span><h4>明确操作</h4><p>请求包含智能体、用户、数据、操作和任务上下文。</p><span class="flow-tag">执行前</span></li>
-              <li class="flow-node"><span class="flow-step">02 / 策略决策</span><h4>策略划定边界</h4><p>策略给出明确结果：拒绝就停在这里，允许才能继续。</p><span class="flow-tag flow-tag-deny">否决权 · 拒绝不可推翻</span></li>
-              <li class="flow-node"><span class="flow-step">03 / AI 风险信号</span><h4>排查更多关联</h4><p>正在构建的方案会从更多维度和关联中发现其他风险。</p><span class="flow-tag flow-tag-building">正在构建</span></li>
-              <li class="flow-node"><span class="flow-step">04 / 最终决策</span><h4>只增强防护，不增加权限</h4><p>风险信号可加强审查或防护；策略结果和否决权始终不变。</p><span class="flow-tag">策略否决权不变</span></li>
-            </ol>
-            <p class="flow-note"><strong>风险信号不能把策略的拒绝改成允许。</strong>此图仅示意正在构建的方案，AI 风险检测尚未发布。</p>
-          </section>
+          </div>
+
+          <div class="mode-grid">
+            <article class="mode-card">
+              <div class="mode-top"><span class="mode-label">模式 01 · 上线预览</span><code>check</code></div>
+              <h4>授权检查</h4>
+              <p>规划中的 <code>check</code> 模式默认只注册 <code>is_allowed</code>，只读取 ADS 配置。<code>diagnose</code>、<code>all_granted_roles</code> 和 <code>all_granted_permissions</code> 需要分别用 <code>--expose-diagnose</code>、<code>--expose-all-granted-roles</code> 和 <code>--expose-all-granted-permissions</code> 参数显式开启。<code>diagnose</code> 只支持自托管 Speedle，连接 Speedle Cloud 时带上它服务不会启动。它只回答授权问题，不会在调用应用中执行访问控制。</p>
+              <ul class="mode-list">
+                <li>通过 Speedle ADS REST API 发起只读授权检查。</li>
+                <li>输入：主体、资源、操作和带类型的属性。</li>
+                <li>从环境变量读取 ADS 基础 URL、服务名和可选的 bearer 令牌。</li>
+              </ul>
+              <a class="mode-link" href="https://github.com/teramoby/speedle-mcp/issues/1">查看 check 模式 issue<svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg></a>
+            </article>
+            <article class="mode-card">
+              <div class="mode-top"><span class="mode-label">模式 02 · 上线预览</span><code>manage</code></div>
+              <h4>策略设计与管理</h4>
+              <p>规划中的 <code>manage</code> 模式只注册管理工具，只读取 PMS 配置，通过 PMS REST API 设计和管理 Speedle 策略。</p>
+              <ul class="mode-list">
+                <li>管理服务、授权策略和角色策略。</li>
+                <li>提供 SPDL 校验和生效策略解释工具。</li>
+                <li>支持只读选项；执行删除前必须明确确认目标。</li>
+              </ul>
+              <a class="mode-link" href="https://github.com/teramoby/speedle-mcp/issues/2">查看 manage 模式 issue<svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg></a>
+            </article>
+          </div>
+
+          <aside class="mcp-security" aria-labelledby="mcp-security-title">
+            <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
+            <div><h4 id="mcp-security-title">别让受控智能体管理策略</h4><p><strong>不要给受这些策略约束的智能体开放 <code>manage</code> 模式。</strong>如果智能体同时拿到检查和管理工具，提示词可能诱导它给自己开通访问权限。</p><p><strong>受控智能体只开放 <code>is_allowed</code>。</strong>这是 <code>check</code> 模式的默认设置。<code>diagnose</code>、<code>all_granted_roles</code> 和 <code>all_granted_permissions</code> 会展示策略、条件和授权，只在给策略编写者和运维人员使用的 check 服务中开启，不要给智能体的服务加 <code>--expose-*</code> 参数。</p><p>没有同时开放两类工具的默认模式。按规划，不指定模式时会打印用法，并以非零状态码退出。</p></div>
+          </aside>
+
+          <div class="mcp-resources"><span>源码与相关项目</span><a href="https://github.com/teramoby/speedle-mcp">Speedle MCP</a><a href="https://github.com/teramoby/speedle-plus">Speedle</a><a href="https://cloud.speedle.io/zh-CN/">Speedle Cloud</a><a href="https://github.com/teramoby/speedle-sdk">Speedle SDK</a></div>
+        </div>
+
+        <div id="risk-detection" class="risk-detection">
+          <article class="risk-card" aria-labelledby="risk-title">
+            <div class="risk-card-top"><h3 id="risk-title">AI 风险检测</h3><span class="status-pill">待定</span></div>
+            <p>AI 能从更多维度和关系中发现单条规则看不到的风险。这是 Speedle 正在探索和构建的方向，尚未发布。策略保留否决权：风险信号可以加强审查或防护，但绝不能把拒绝改成允许。</p>
+            <a class="mode-link" href="/zh/patterns/#risk-detection">查看目标流程<svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          </article>
         </div>
       </div>
     </section>
@@ -347,12 +279,12 @@ cp -R ai.speedle.io/skills/speedle-policy-modeler \
         <div id="lifecycle" class="concept">
           <div class="section-head">
             <div><p class="eyebrow">概念</p><h3 id="concept-title">AI 构建与运行，共用一个决策点</h3></div>
-            <p>每个区域都在应用里设有策略执行点：操作前先问 Speedle，再按结果放行或拒绝。身份来自你的 IdP，决策和原因写入审计记录。</p>
+            <p>每个区域都在应用里设有策略执行点：操作前先问 Speedle，再按结果放行或拒绝。</p>
           </div>
           <figure class="concept-figure">
-            <svg class="cd cd-wide" viewBox="0 0 1080 688" role="img" aria-labelledby="cdw-title cdw-desc">
+            <svg class="cd cd-wide" viewBox="0 0 1080 616" role="img" aria-labelledby="cdw-title cdw-desc">
               <title id="cdw-title">概念：AI 构建与运行共用 Speedle 策略决策点</title>
-              <desc id="cdw-desc">顶部是身份区：你的 IdP 和 OAuth 负责认证用户与智能体，MCP 授权基于 OAuth，主体信息再传给 Speedle。左侧构建区包括数据与训练、模型发布：前者的请求来自数据加载器和任务调度器，后者来自模型注册表和发布流水线。右侧运行区包括推理与 RAG、智能体代用户操作、MCP 工具调用和智能体间调用：检索器逐文档检查，API 网关发起请求；智能体运行时先查智能体的令牌范围，再查委托用户；MCP 宿主或网关检查工具调用；调用方或接收方智能体检查 A2A 调用。各区域的策略执行点都向中央的 Speedle 策略决策点请求允许或拒绝。底部的审计与解释区记录决策和原因：诊断 API 说明匹配了哪条策略、为什么匹配，应用同时记录智能体和委托用户。边界：Speedle 限制遭攻陷或受误导的智能体能做什么，但不检测提示词注入、不过滤内容，也不验证模型和数据集供应链。</desc>
+              <desc id="cdw-desc">顶部是身份区：你的 IdP 和 OAuth 负责认证用户与智能体，MCP 授权基于 OAuth，主体信息再传给 Speedle。左侧构建区包括数据与训练、模型发布：前者的请求来自数据加载器和任务调度器，后者来自模型注册表和发布流水线。右侧运行区包括推理与 RAG、智能体代用户操作、MCP 工具调用和智能体间调用：检索器逐文档检查，API 网关发起请求；智能体运行时先查智能体的令牌范围，再查委托用户；MCP 宿主或网关检查工具调用；调用方或接收方智能体检查 A2A 调用。各区域的策略执行点都向中央的 Speedle 策略决策点请求允许或拒绝。底部的审计与解释区记录决策和原因：诊断 API 说明匹配了哪条策略、为什么匹配，应用同时记录智能体和委托用户。</desc>
               <defs>
                 <linearGradient id="cdw-pdp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4f0fb"/><stop offset="1" stop-color="#e9e1f8"/></linearGradient>
                 <filter id="cdw-lift" x="-8%" y="-8%" width="116%" height="130%"><feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#2e1c58" flood-opacity=".09"/></filter>
@@ -474,18 +406,10 @@ cp -R ai.speedle.io/skills/speedle-policy-modeler \
                 <text class="cd-text" x="260" y="583">应用记录决策、智能体和发起委托的用户。</text>
               </g>
 
-              <g class="cd-band cd-boundary">
-                <rect x="0.5" y="616.5" width="1079" height="71" rx="14"/>
-                <text class="cd-label cd-ink" x="24" y="649">边界</text>
-                <text class="cd-sub" x="24" y="671">Speedle 之外</text>
-                <line class="cd-divider" x1="236" y1="632" x2="236" y2="672"/>
-                <text class="cd-strong" x="260" y="649">Speedle 限制遭攻陷或受误导的智能体能做什么。</text>
-                <text class="cd-text" x="260" y="671">它不检测提示词注入，不过滤内容，也不验证模型和数据集供应链。</text>
-              </g>
             </svg>
-            <svg class="cd cd-stack" viewBox="0 0 360 1384" role="img" aria-labelledby="cds-title cds-desc">
+            <svg class="cd cd-stack" viewBox="0 0 360 1220" role="img" aria-labelledby="cds-title cds-desc">
               <title id="cds-title">概念：AI 构建与运行共用 Speedle 策略决策点</title>
-              <desc id="cds-desc">内容自上而下排列。身份输入：你的 IdP 和 OAuth 负责认证用户与智能体，MCP 授权基于 OAuth，Speedle 根据收到的主体作出决策。Speedle 策略决策点评估 SPDL 策略，返回允许或拒绝，每个区域的策略执行点都向其发起请求。构建区：数据与训练的请求来自数据加载器和任务调度器，模型发布的请求来自模型注册表和发布流水线。运行区：推理与 RAG 由检索器逐文档检查，API 网关发起请求；智能体运行时先查智能体的令牌范围，再查委托用户；MCP 宿主或网关逐次检查工具调用；调用方或接收方智能体检查 A2A 调用。审计与解释输出：诊断 API 说明匹配了哪条策略、为什么匹配，应用记录每项决策、相关智能体和委托用户。边界：Speedle 限制遭攻陷或受误导的智能体能做什么，但不检测提示词注入、不过滤内容，也不验证模型和数据集供应链。</desc>
+              <desc id="cds-desc">内容自上而下排列。身份输入：你的 IdP 和 OAuth 负责认证用户与智能体，MCP 授权基于 OAuth，Speedle 根据收到的主体作出决策。Speedle 策略决策点评估 SPDL 策略，返回允许或拒绝，每个区域的策略执行点都向其发起请求。构建区：数据与训练的请求来自数据加载器和任务调度器，模型发布的请求来自模型注册表和发布流水线。运行区：推理与 RAG 由检索器逐文档检查，API 网关发起请求；智能体运行时先查智能体的令牌范围，再查委托用户；MCP 宿主或网关逐次检查工具调用；调用方或接收方智能体检查 A2A 调用。审计与解释输出：诊断 API 说明匹配了哪条策略、为什么匹配，应用记录每项决策、相关智能体和委托用户。</desc>
               <defs>
                 <linearGradient id="cds-pdp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4f0fb"/><stop offset="1" stop-color="#e9e1f8"/></linearGradient>
                 <filter id="cds-lift" x="-8%" y="-10%" width="116%" height="140%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#2e1c58" flood-opacity=".09"/></filter>
@@ -599,17 +523,6 @@ cp -R ai.speedle.io/skills/speedle-policy-modeler \
                 <text class="cd-text" x="18" y="1165">执行操作的智能体和</text>
                 <text class="cd-text" x="18" y="1185">发起委托的用户。</text>
               </g>
-
-              <g class="cd-band cd-boundary">
-                <rect x="0.5" y="1220.5" width="359" height="163" rx="14"/>
-                <text class="cd-label cd-ink" x="18" y="1251">边界</text>
-                <text class="cd-sub cd-end" x="342" y="1251">Speedle 之外</text>
-                <text class="cd-strong" x="18" y="1279">Speedle 限制遭攻陷或</text>
-                <text class="cd-strong" x="18" y="1299">受误导的智能体能做什么。</text>
-                <text class="cd-text" x="18" y="1325">它不检测提示词注入，</text>
-                <text class="cd-text" x="18" y="1345">不过滤内容，也不验证</text>
-                <text class="cd-text" x="18" y="1365">模型和数据集供应链。</text>
-              </g>
             </svg>
             <figcaption class="concept-legend">
               <span><svg viewBox="0 0 40 10" aria-hidden="true"><line x1="1" y1="5" x2="32" y2="5" stroke="#5229ad" stroke-width="2"/><path d="M30 1 39 5 30 9z" fill="#5229ad"/></svg>策略执行点向 Speedle 提供主体、操作、资源和属性，请求授权。</span>
@@ -618,241 +531,72 @@ cp -R ai.speedle.io/skills/speedle-policy-modeler \
           </figure>
         </div>
 
-        <div class="areas">
-          <p class="note areas-note"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>以下 SPDL 示例都用 Speedle 文件存储解析并评估过，覆盖允许和拒绝两种用例。名称、路径和属性仅作示例，实际由应用在请求决策时传入。策略执行点必须传入条件引用的所有属性。</p>
-
-          <section id="build" class="phase" aria-labelledby="build-title">
-            <div class="phase-head phase-build">
-              <p class="phase-tag">构建</p>
-              <h3 id="build-title">数据、训练、发布</h3>
-            </div>
-            <article id="lc-data" class="area" aria-labelledby="lc-data-title">
-              <div class="area-copy">
-                <p class="area-step">01 / 数据与训练</p>
-                <h4 id="lc-data-title">哪些流水线能用哪些数据训练？</h4>
-                <p class="area-lead">训练任务要读数据集、用算力、写检查点。每次读取数据集、启动任务或导出检查点前，应用都会先请求授权，并传入数据敏感度、租户、同意状态和区域等属性。</p>
-                <dl class="area-facts">
-                  <div><dt>主体</dt><dd>训练流水线（实体）、机器学习工程师及其团队。</dd></div>
-                  <div><dt>资源与操作</dt><dd>数据集：<code>read</code>。训练任务：<code>start</code>。检查点：<code>export</code>。</dd></div>
-                  <div><dt>策略执行点</dt><dd>数据加载器打开数据集前、任务调度器分配算力前，以及制品库导出前。</dd></div>
-                </dl>
-              </div>
-              <figure class="spdl-card">
-                <figcaption><span>training.spdl</span><span>SPDL 示例</span></figcaption>
-                <pre tabindex="0" data-spdl="training" aria-label="SPDL 示例：数据与训练"><code>[service.ml-training]
-[policy]
-# Pipelines read only consented data from their own region
-grant role training-pipeline read expr:^/datasets/ if consent == true &amp;&amp; data_region == job_region
-# Restricted datasets never enter training
-deny role training-pipeline read expr:^/datasets/restricted/
-grant role ml-engineer start /jobs/training if gpu_hours &lt;= 64
-grant role ml-engineer export expr:^/checkpoints/
-[rolepolicy]
-grant entity pipeline-churn training-pipeline
-grant group ml-team ml-engineer</code></pre>
-                <p class="spdl-caption">逐数据集检查同意状态和区域，直接拒绝受限数据；启动任务时还会检查 GPU 小时数上限。</p>
-              </figure>
-            </article>
-            <article id="lc-release" class="area" aria-labelledby="lc-release-title">
-              <div class="area-copy">
-                <p class="area-step">02 / 模型发布</p>
-                <h4 id="lc-release-title">谁可以发布模型？</h4>
-                <p class="area-lead">模型注册、审批、晋升和回滚分开授权，各由不同角色负责。职责分离后，训练模型的人不能审批同一个模型。</p>
-                <dl class="area-facts">
-                  <div><dt>主体</dt><dd>机器学习工程师、发布经理和发布流水线的服务身份。</dd></div>
-                  <div><dt>资源与操作</dt><dd>模型和端点：<code>register</code>、<code>approve</code>、<code>promote</code>、<code>rollback</code>。</dd></div>
-                  <div><dt>策略执行点</dt><dd>模型注册表和发布流水线会在每次更改模型或端点状态前检查。</dd></div>
-                </dl>
-              </div>
-              <figure class="spdl-card">
-                <figcaption><span>release.spdl</span><span>SPDL 示例</span></figcaption>
-                <pre tabindex="0" data-spdl="release" aria-label="SPDL 示例：模型发布"><code>[service.model-registry]
-[policy]
-grant role ml-engineer register expr:^/models/
-grant role release-manager approve, promote, rollback expr:^/models/
-# Separation of duties: nobody approves a model they trained
-deny role release-manager approve expr:^/models/ if trained_by == request_user
-[rolepolicy]
-grant group ml-team ml-engineer
-grant user dana release-manager</code></pre>
-                <p class="spdl-caption">工程师可以注册，但不能晋升模型；<code>trained_by</code> 与请求用户相同时，发布经理不能审批该模型。</p>
-              </figure>
-            </article>
-          </section>
-
-          <section id="run" class="phase" aria-labelledby="run-title">
-            <div class="phase-head phase-run">
-              <p class="phase-tag">运行</p>
-              <h3 id="run-title">AI 运行：检索与各类调用</h3>
-            </div>
-            <article id="lc-rag" class="area area-feature" aria-labelledby="lc-rag-title">
-              <div class="area-copy">
-                <p class="area-step">03 / 推理与 RAG</p>
-                <h4 id="lc-rag-title">提示词只放用户可读内容</h4>
-                <p class="area-lead">用户、应用和租户都会调用模型。要实现权限感知的 RAG（检索增强生成），检索器会在内容进入提示词前，逐文档或逐集合向 Speedle 请求授权，让模型只看到请求用户有权阅读的内容。</p>
-                <ol class="rag-flow" aria-label="权限感知检索">
-                  <li><span>1</span>检索器查找候选文档。</li>
-                  <li><span>2</span>检索器带上用户的租户和许可级别，逐文档或逐集合向 Speedle 请求授权。</li>
-                  <li><span>3</span>获准内容才能进入提示词。</li>
-                </ol>
-                <dl class="area-facts">
-                  <div><dt>主体</dt><dd>发起请求的用户及其用户组；客户端应用和租户作为实体。</dd></div>
-                  <div><dt>资源与操作</dt><dd>集合和文档：<code>retrieve</code>。模型：<code>invoke</code>。</dd></div>
-                  <div><dt>策略执行点</dt><dd>检索器在文档进入提示词前检查；API 网关或推理服务在路由请求前检查。</dd></div>
-                </dl>
-              </div>
-              <figure class="spdl-card">
-                <figcaption><span>rag.spdl</span><span>SPDL 示例</span></figcaption>
-                <pre tabindex="0" data-spdl="rag" aria-label="SPDL 示例：推理与 RAG"><code>[service.rag]
-[policy]
-# The retriever asks per document, before its content enters the prompt
-grant role tenant-user retrieve expr:^/collections/ if doc_tenant == user_tenant &amp;&amp; doc_label in user_clearances
-# Documents on legal hold never reach a prompt
-deny role tenant-user retrieve expr:^/collections/legal-hold/
-# Apps call only the model tiers in their tenant's plan
-grant role tenant-app invoke expr:^/models/ if model_tier in plan_tiers
-[rolepolicy]
-grant group acme-staff tenant-user
-grant entity acme-helpdesk tenant-app</code></pre>
-                <p class="spdl-caption">只有文档属于用户所在租户、标签也在用户许可范围内，才允许检索；法律保全文档直接拒绝，应用也只能调用套餐内的模型层级。</p>
-              </figure>
-            </article>
-            <article id="lc-agents" class="area" aria-labelledby="lc-agents-title">
-              <div class="area-copy">
-                <p class="area-step">04 / 智能体代用户操作</p>
-                <h4 id="lc-agents-title">AI 智能体能代用户做什么？</h4>
-                <p class="area-lead">智能体有自己的身份；用户的委托由签名的委托令牌证明，而不是靠请求里的声明。策略执行点先验证令牌，再向 Speedle 查询两次，两次都通过才放行：一次查智能体是否在令牌范围内，一次查委托用户此刻本人是否有这项权限。令牌签发后，用户一旦失去某项权限，智能体在下一次请求时也会随之失去。超过 100 的退款还需要一条由用户以外的人做出的审批记录。</p>
-                <ol class="rag-flow" aria-label="委托智能体检查">
-                  <li><span>1</span>验证令牌：签名、签发方、有效期，以及令牌是否签发给这个智能体。</li>
-                  <li><span>2</span>智能体范围：以智能体为主体查询 Speedle，令牌范围作为属性传入。</li>
-                  <li><span>3</span>委托用户当下的权限：以令牌 sub 声明中的用户为主体查询 Speedle。</li>
-                </ol>
-                <dl class="area-facts">
-                  <div><dt>主体</dt><dd>范围检查以智能体（实体）为主体；第二次检查以委托用户为主体，用户取自已验证的令牌。</dd></div>
-                  <div><dt>资源与操作</dt><dd>工单：<code>read</code>、<code>update</code>；订单：<code>refund</code>，金额作为属性传入。都仅限令牌范围内的操作和资源。</dd></div>
-                  <div><dt>策略执行点</dt><dd>智能体运行时或应用后端在操作到达业务系统前检查。它负责验证令牌，只把验证过的声明传给 Speedle。</dd></div>
-                  <div><dt>人工审批</dt><dd>策略执行点验证这笔退款的签名审批记录，并在第二次检查中把审批人作为 <code>approved_by</code> 传入。审批人不能是用户本人。</dd></div>
-                  <div><dt>自托管选项</dt><dd>也可以只查一次，由自定义函数 <code>DelegationValid</code> 和 <code>DelegatorAllowed</code> 评估令牌和委托用户。Speedle Cloud 不支持自定义函数。</dd></div>
-                </dl>
-              </div>
-              <figure class="spdl-card">
-                <figcaption><span>agents.spdl</span><span>SPDL 示例</span></figcaption>
-                <pre tabindex="0" data-spdl="agents" aria-label="SPDL 示例：智能体代表用户操作"><code>[service.crm]
-[policy]
-# Check 1: the agent, only while its verified token covers the request
-grant role in-scope read, update expr:^/tickets/
-grant role in-scope refund expr:^/orders/
-# Check 2: the delegating user (the token's sub), with their roles now
-grant role support read, update expr:^/tickets/
-grant role support refund expr:^/orders/ if amount &lt;= 100
-# Larger refunds: a verified approval by someone other than the user
-grant role support refund expr:^/orders/ if approved_by != request_user
-[rolepolicy]
-# Check 1 in three steps, each role needing the one before:
-# the token has not expired,
-grant entity triage-agent in-time if request_time &lt; token_expires
-# it lists this action,
-grant role in-time in-action if request_action in token_actions
-# and it lists this resource
-grant role in-action in-scope if request_resource in token_resources
-# Check 2: the user's own role
-grant user alice support</code></pre>
-                <p class="spdl-caption">检查 1 分三步授予智能体角色，所以只在令牌过期前、且只对令牌列出的操作和资源成立。检查 2 只看用户本人，所以撤销用户的角色后，智能体在下一次请求时就会被拒绝。超过 100 的退款只有在审批人不是用户本人时才能通过检查 2。</p>
-                <p class="spdl-caption zsp-sample"><a href="https://github.com/teramoby/ai.speedle.io/tree/main/samples/delegation">GitHub 上两种模式的可运行示例</a></p>
-              </figure>
-            </article>
-            <article id="lc-mcp" class="area" aria-labelledby="lc-mcp-title">
-              <div class="area-copy">
-                <p class="area-step">05 / 工具调用（MCP）</p>
-                <h4 id="lc-mcp-title">MCP 工具能这样调用吗？</h4>
-                <p class="area-lead">每次调用工具，都要先检查再执行。工具是资源，调用是操作，参数则变成属性，退款金额上限等规则就能直接写进策略。</p>
-                <dl class="area-facts">
-                  <div><dt>主体</dt><dd>每个智能体都有独立的实体身份和角色，权限可以按智能体、按工具分别控制。</dd></div>
-                  <div><dt>资源与操作</dt><dd>工具：<code>call</code>，工具参数作为属性。</dd></div>
-                  <div><dt>策略执行点</dt><dd>MCP 客户端宿主，或 MCP 服务器前的网关，在工具执行前检查。</dd></div>
-                </dl>
-              </div>
-              <figure class="spdl-card">
-                <figcaption><span>mcp.spdl</span><span>SPDL 示例</span></figcaption>
-                <pre tabindex="0" data-spdl="mcp" aria-label="SPDL 示例：通过 MCP 调用工具"><code>[service.mcp-gateway]
-[policy]
-# Tool arguments arrive as attributes and are checked before the tool runs
-grant role research-agent call /tools/web-search
-grant role billing-agent call /tools/issue-refund if amount &lt;= 100 &amp;&amp; customer_verified == true
-# Admin tools stay out of reach for research agents
-deny role research-agent call expr:^/tools/admin/
-[rolepolicy]
-grant entity agent-research-1 research-agent
-grant entity agent-billing-1 billing-agent</code></pre>
-                <p class="spdl-caption">研究智能体可以用网页搜索，但不能用管理工具；计费智能体只能为已验证客户办理不超过 100 的退款。</p>
-              </figure>
-            </article>
-            <article id="lc-a2a" class="area" aria-labelledby="lc-a2a-title">
-              <div class="area-copy">
-                <p class="area-step">06 / 智能体间调用（A2A）</p>
-                <h4 id="lc-a2a-title">A2A 授权：谁能调用谁？</h4>
-                <p class="area-lead">委托链每一跳都要检查。接收方只能拿到调用方已有的权限范围，跳数也有上限，因此每次委托都只会收窄权限。</p>
-                <dl class="area-facts">
-                  <div><dt>主体</dt><dd>调用方智能体，以实体标识。</dd></div>
-                  <div><dt>资源与操作</dt><dd>其他智能体及其技能：<code>call</code>。属性包括请求权限范围、调用方权限范围和跳数。</dd></div>
-                  <div><dt>策略执行点</dt><dd>调用方发送任务前，或接收方接受任务前，由对应的智能体检查。应用根据收到的委托确定调用方的权限范围。</dd></div>
-                </dl>
-              </div>
-              <figure class="spdl-card">
-                <figcaption><span>a2a.spdl</span><span>SPDL 示例</span></figcaption>
-                <pre tabindex="0" data-spdl="a2a" aria-label="SPDL 示例：智能体间调用"><code>[service.a2a]
-[policy]
-# A callee gets only scopes the caller already holds, within two hops
-grant role planner-agent call /agents/researcher if IsSubSet(requested_scopes, caller_scopes) &amp;&amp; hops &lt;= 2
-grant role researcher-agent call /agents/writer if IsSubSet(requested_scopes, caller_scopes) &amp;&amp; hops &lt;= 2
-[rolepolicy]
-grant entity planner-1 planner-agent
-grant entity researcher-1 researcher-agent</code></pre>
-                <p class="spdl-caption"><code>IsSubSet</code> 会拒绝调用方没有的请求权限范围，第三跳同样不允许。</p>
-              </figure>
-            </article>
-          </section>
-        </div>
-
-        <section id="zsp" class="subsection" aria-labelledby="zsp-title">
+        <div id="patterns" class="subsection patterns-summary">
           <div class="section-head">
-            <div><p class="eyebrow">解决方案模式 · 自托管 Speedle</p><h3 id="zsp-title">零常驻权限（ZSP）</h3></div>
+            <div><p class="eyebrow">解决方案模式</p><h3 id="patterns-title">每个区域一条策略模式</h3></div>
+            <p>每个区域一句话、一条代表性规则。完整 SPDL 示例和每次检查需要的属性，都在模式页面。</p>
           </div>
-          <article id="lc-zsp" class="area" aria-labelledby="lc-zsp-title">
-            <div class="area-copy">
-              <p class="area-step">07 / 零常驻权限</p>
-              <h4 id="lc-zsp-title">即时令牌支撑零常驻权限模式</h4>
-              <p class="area-lead">签发和管控到位时，即时签发、短期有效、范围受限的授权凭证，结合 Speedle 的策略决策和应用侧执行控制，可以构建零常驻权限模式。示例检查有效期、生效时间和令牌状态；生产环境还需要可信组件验证令牌，把声明绑定到主体、资源、操作和任务范围，并原子消费单次使用的凭证。</p>
-            </div>
-            <figure class="spdl-card">
-              <figcaption><span>zsp.spdl</span><span>SPDL 示例</span></figcaption>
-              <pre tabindex="0" data-spdl="zsp" aria-label="SPDL 示例：零常驻权限"><code>[service.zsp]
-[policy]
-# A just-in-time token: positive lifetime up to 600 s, inside its validity window, unused
-# request_time defaults to the ADS clock; attributes passed by the enforcement point take precedence
-# 60 s is the explicit clock-skew allowance
-grant role agent-runtime invoke /api/orders if expires_at &gt; issued_at &amp;&amp; expires_at - issued_at &lt;= 600 &amp;&amp; issued_at &lt;= request_time + 60 &amp;&amp; not_before &lt;= request_time + 60 &amp;&amp; request_time &lt; expires_at &amp;&amp; TokenUnused(token_id)
-[rolepolicy]
-grant entity agent-billing-1 agent-runtime</code></pre>
-              <p class="spdl-caption zsp-sample"><a href="https://github.com/teramoby/ai.speedle.io/tree/main/samples/zsp">GitHub 上的完整可运行示例</a></p>
-            </figure>
-          </article>
-        </section>
+          <div class="pattern-grid">
+            <article id="lc-data" class="pattern-card">
+              <p class="pattern-step">构建 · 01 数据与训练</p>
+              <h4><a href="/zh/patterns/#lc-data">数据与训练</a></h4>
+              <p>训练任务读取数据集并写入检查点；同意状态和区域逐数据集检查，受限数据不会进入训练。</p>
+              <code class="pattern-rule">grant role training-pipeline read expr:^/datasets/ if consent == true &amp;&amp; data_region == job_region</code>
+            </article>
+            <article id="lc-release" class="pattern-card">
+              <p class="pattern-step">构建 · 02 模型发布</p>
+              <h4><a href="/zh/patterns/#lc-release">模型发布</a></h4>
+              <p>模型注册、审批、晋升和回滚是分开的操作，训练模型的人不能审批同一个模型。</p>
+              <code class="pattern-rule">deny role release-manager approve expr:^/models/ if trained_by == request_user</code>
+            </article>
+            <article id="lc-rag" class="pattern-card">
+              <p class="pattern-step">运行 · 03 推理与 RAG</p>
+              <h4><a href="/zh/patterns/#lc-rag">推理与 RAG</a></h4>
+              <p>检索器在文档内容进入提示词前逐篇请求授权，模型只看到用户有权阅读的内容。</p>
+              <code class="pattern-rule">grant role tenant-user retrieve expr:^/collections/ if doc_tenant == user_tenant &amp;&amp; doc_label in user_clearances</code>
+            </article>
+            <article id="lc-agents" class="pattern-card">
+              <p class="pattern-step">运行 · 04 智能体代用户操作</p>
+              <h4><a href="/zh/patterns/#lc-agents">智能体代用户操作</a></h4>
+              <p>先检查智能体是否在委托令牌的范围内，再检查委托用户此刻本人的权限。</p>
+              <code class="pattern-rule">grant entity triage-agent in-time if request_time &lt; token_expires</code>
+            </article>
+            <article id="lc-mcp" class="pattern-card">
+              <p class="pattern-step">运行 · 05 工具调用（MCP）</p>
+              <h4><a href="/zh/patterns/#lc-mcp">MCP 工具调用</a></h4>
+              <p>每次工具调用都在执行前检查，参数作为属性，交给策略限制。</p>
+              <code class="pattern-rule">grant role billing-agent call /tools/issue-refund if amount &lt;= 100 &amp;&amp; customer_verified == true</code>
+            </article>
+            <article id="lc-a2a" class="pattern-card">
+              <p class="pattern-step">运行 · 06 智能体间调用（A2A）</p>
+              <h4><a href="/zh/patterns/#lc-a2a">智能体间调用</a></h4>
+              <p>委托链每一跳都要检查，接收方只能拿到调用方已有的权限范围。</p>
+              <code class="pattern-rule">grant role planner-agent call /agents/researcher if IsSubSet(requested_scopes, caller_scopes) &amp;&amp; hops &lt;= 2</code>
+            </article>
+            <article id="zsp" class="pattern-card">
+              <p class="pattern-step">运行 · 07 零常驻权限 · 自托管</p>
+              <h4><a href="/zh/patterns/#zsp">零常驻权限</a></h4>
+              <p>签发和管控到位时，即时签发、短期有效的令牌可以支撑零常驻权限模式。</p>
+              <code class="pattern-rule">grant role agent-runtime invoke /api/orders if expires_at &gt; issued_at &amp;&amp; expires_at - issued_at &lt;= 600 &amp;&amp; issued_at &lt;= request_time + 60 &amp;&amp; not_before &lt;= request_time + 60 &amp;&amp; request_time &lt; expires_at &amp;&amp; TokenUnused(token_id)</code>
+            </article>
+          </div>
+          <p class="patterns-more"><a class="button button-secondary" href="/zh/patterns/">查看完整模式与 SPDL 示例<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
+        </div>
 
         <div id="cross-cutting" class="crosscut">
           <div class="section-head">
-            <div><p class="eyebrow">贯穿全流程</p><h3 id="crosscut-title">输入身份信息，输出决策与解释</h3></div>
-            <p>这三件事贯穿构建和运行的每个区域。</p>
+            <div><p class="eyebrow">贯穿全流程</p><h3 id="crosscut-title">每个区域共有的四件事</h3></div>
+            <p>身份、审计、风险映射和能力边界贯穿构建和运行的每个区域。</p>
           </div>
           <div class="crosscut-grid">
             <article class="crosscut-card">
               <p class="crosscut-tag">身份集成</p>
               <h4>Speedle 管授权，IdP 管认证</h4>
-              <p>Speedle 是授权决策点，用户和智能体则由你的 IdP 或 OAuth 授权服务器认证，MCP 授权基于 OAuth。应用把验证过的身份映射为主体（用户、用户组、实体），Speedle 根据这些主体作出决策。</p>
+              <p>Speedle 是授权决策点，用户和智能体则由你的 IdP 或 OAuth 授权服务器认证，MCP 授权基于 OAuth。应用先把验证过的身份映射为主体（用户、用户组、实体），再向 Speedle 请求决策。</p>
             </article>
             <article class="crosscut-card">
               <p class="crosscut-tag">审计与可解释性</p>
-              <h4>每项决策都说得清</h4>
+              <h4>诊断与审计日志</h4>
               <p>Speedle 的<a href="https://engine.speedle.io/zh/docs/pms/diagnosis/">诊断 API</a> 返回决策、原因、生效角色和检查过的策略，说清匹配了哪条策略、为什么。应用记录每项决策、相关智能体和发起委托的用户。诊断接口会暴露策略和请求详情，只向可信运维人员开放。</p>
             </article>
             <article class="crosscut-card">
@@ -860,36 +604,20 @@ grant entity agent-billing-1 agent-runtime</code></pre>
               <h4>对应 OWASP LLM06:2025 过度代理</h4>
               <p><a href="https://genai.owasp.org/llmrisk/llm062025-excessive-agency/">OWASP 2025 年大模型应用十大风险</a>提到的过度代理，是指智能体的功能、权限或自主性超出任务需要。按智能体划分角色、按工具检查、让委托绑定任务和时限，再对高风险操作做人工审批，可以分别收敛这三类风险。</p>
             </article>
+            <article id="boundary" class="crosscut-card">
+              <p class="crosscut-tag">边界</p>
+              <h4>Speedle 的能力边界</h4>
+              <p>Speedle 不检测提示词注入，不过滤模型输入或输出，也不验证模型和数据集供应链，这些需要专门的控制措施。<strong>它能限制遭攻陷或受误导的智能体做什么：</strong>无论提示词怎么写，只要请求不符合策略，Speedle 就拒绝。</p>
+            </article>
           </div>
         </div>
 
-        <aside id="boundary" class="boundary" aria-labelledby="boundary-title">
-          <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
-          <div>
-            <h3 id="boundary-title">Speedle 的能力边界</h3>
-            <p>Speedle 不检测提示词注入，不过滤模型输入或输出，也不验证模型和数据集供应链，这些需要专门的控制措施。<strong>它能限制遭攻陷或受误导的智能体做什么：</strong>无论提示词怎么写，只要请求不符合策略，Speedle 就拒绝。</p>
-          </div>
-        </aside>
-
-        <div id="approach" class="subsection">
-          <div class="section-head">
-            <div><p class="eyebrow">集成方式</p><h3 id="approach-title">从智能体意图到应用执行决策</h3></div>
-            <p>应用访问数据或调用工具前先请求授权，再按返回结果放行或拦截。</p>
-          </div>
-          <ol class="steps">
-            <li class="step"><span class="step-num">01</span><h4>明确身份和上下文</h4><p>说明谁发起请求、哪个智能体在执行，以及相关的用户、角色和租户。</p><code>subject</code></li>
-            <li class="step"><span class="step-num">02</span><h4>映射资源和操作</h4><p>把工具、文档或业务对象映射为资源，把要执行的操作映射为动作。</p><code>resource · action</code></li>
-            <li class="step"><span class="step-num">03</span><h4>向 Speedle 请求决策</h4><p>用清晰、可维护的策略写清访问规则，再向 Speedle 请求决策。</p><code>is-allowed</code></li>
-            <li class="step"><span class="step-num">04</span><h4>在应用中执行决策</h4><p>放行允许的操作，拦截拒绝的操作，并记录应用自己的执行结果。</p><code>allowed: true | false</code></li>
-          </ol>
-
-          <div class="ecosystem" aria-labelledby="ecosystem-title">
-            <div class="ecosystem-head"><p class="eyebrow">Speedle 生态</p><h3 id="ecosystem-title">从 Speedle 基础组件入手</h3></div>
-            <div class="resource-grid">
-              <a class="resource-card" href="https://engine.speedle.io/zh/"><span>开源</span><strong>Speedle Engine<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>开源授权引擎与易读的 SPDL 策略语言。</p></a>
-              <a class="resource-card" href="https://cloud.speedle.io/zh-CN/"><span>托管服务</span><strong><span class="resource-name">Speedle Cloud<span class="coming-soon">即将上线</span></span><svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>基于 Speedle 策略引擎，为开发者提供托管授权服务。</p></a>
-              <a class="resource-card" href="https://github.com/teramoby/speedle-sdk"><span>集成</span><strong>Speedle SDK<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>在 SDK 仓库中查看客户端集成模式和接入指南。</p></a>
-            </div>
+        <div id="ecosystem" class="ecosystem" aria-labelledby="ecosystem-title">
+          <div class="ecosystem-head"><p class="eyebrow">Speedle 生态</p><h3 id="ecosystem-title">从 Speedle 基础组件入手</h3></div>
+          <div class="resource-grid">
+            <a class="resource-card" href="https://engine.speedle.io/zh/"><span>开源</span><strong>Speedle Engine<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>开源授权引擎与易读的 SPDL 策略语言。</p></a>
+            <a class="resource-card" href="https://cloud.speedle.io/zh-CN/"><span>托管服务</span><strong><span class="resource-name">Speedle Cloud<span class="coming-soon">即将上线</span></span><svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>基于 Speedle 策略引擎，为开发者提供托管授权服务。</p></a>
+            <a class="resource-card" href="https://github.com/teramoby/speedle-sdk"><span>集成</span><strong>Speedle SDK<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>在 SDK 仓库中查看客户端集成模式和接入指南。</p></a>
           </div>
         </div>
       </div>
