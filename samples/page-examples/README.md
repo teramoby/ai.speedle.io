@@ -1,10 +1,12 @@
-# Home page SPDL examples
+# Patterns page SPDL examples
 
-This directory contains the seven SPDL blocks shown on the [English](https://ai.speedle.io/)
-and [Chinese](https://ai.speedle.io/zh/) home pages. Each `<name>/<name>.spdl`
-file is byte-identical to its decoded `<pre data-spdl="<name>">` block, apart
-from the file's final newline. `node scripts/check-seo.mjs` checks the files
-against the English page and checks that both pages carry identical blocks.
+This directory contains the seven SPDL blocks shown on the [English](https://ai.speedle.io/patterns/)
+and [Chinese](https://ai.speedle.io/zh/patterns/) patterns pages. Each
+`<name>/<name>.spdl` file is byte-identical to its decoded
+`<pre data-spdl="<name>">` block, apart from the file's final newline.
+`node scripts/check-seo.mjs` checks the files against the English patterns page
+and checks that both patterns pages carry identical blocks. The home pages link
+the full examples here and keep one representative rule per area.
 
 | Example | Service | Cases |
 | --- | --- | ---: |
