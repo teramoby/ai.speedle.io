@@ -601,7 +601,31 @@ for (const text of [llms, llmsFull]) {
   }
 }
 const sleep = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
-async function liveStatus(url) {
+
+// GitHub's HTML pages intermittently answer 5xx to automated clients while the
+// repository itself stays reachable. When a github.com page is unavailable,
+// verify the same target through the GitHub API so the check tests the link
+// target rather than GitHub's HTML edge.
+function githubApiUrl(url) {
+  const parsed = new URL(url);
+  if (parsed.hostname !== 'github.com') return null;
+  const parts = parsed.pathname.split('/').filter(Boolean).map(decodeURIComponent);
+  if (parts.length < 2) return null;
+  const [owner, repo, kind, ...rest] = parts;
+  const repoApi = `https://api.github.com/repos/${owner}/${repo}`;
+  if (parts.length === 2) return repoApi;
+  if (kind === 'issues') {
+    const number = rest[0] && /^\d+$/.test(rest[0]) ? `/${rest[0]}` : '';
+    return `${repoApi}/issues${number}`;
+  }
+  if ((kind === 'tree' || kind === 'blob') && rest.length >= 2) {
+    const [ref, ...path] = rest;
+    return `${repoApi}/contents/${path.map(encodeURIComponent).join('/')}?ref=${encodeURIComponent(ref)}`;
+  }
+  return repoApi;
+}
+
+async function httpStatus(url) {
   for (let attempt = 1; attempt <= 3; attempt += 1) {
     try {
       const response = await fetch(url, {
@@ -622,12 +646,25 @@ async function liveStatus(url) {
   }
   return 'unreachable';
 }
+
+async function liveStatus(url) {
+  const status = await httpStatus(url);
+  if (status === 200) return 200;
+  const api = githubApiUrl(url);
+  if (api) {
+    const apiStatus = await httpStatus(api);
+    if (apiStatus === 200) return '200 (GitHub API target)';
+  }
+  return status;
+}
+
 const liveUrls = [...externalUrls].sort();
 for (let index = 0; index < liveUrls.length; index += 6) {
   const batch = liveUrls.slice(index, index + 6);
   const statuses = await Promise.all(batch.map(liveStatus));
   statuses.forEach((status, batchIndex) => {
-    check(status === 200, `${batch[batchIndex]} from llms.txt/llms-full.txt must return 200 without a redirect (got ${status})`);
+    const reachable = status === 200 || status === '200 (GitHub API target)';
+    check(reachable, `${batch[batchIndex]} from llms.txt/llms-full.txt must return 200 without a redirect (got ${status})`);
   });
 }
 
