@@ -1,17 +1,17 @@
 # Speedle AI
 
-> Speedle AI is the Speedle site for access management for AI. It shows how to apply the open-source Speedle policy engine to AI agent authorization and access control: MCP authorization, permission-aware RAG, agent-to-agent (A2A) calls, zero standing privileges (ZSP) and least privilege for LLM applications. It also ships an open-source Agent Skill that turns policy documents into SPDL models, previews Speedle MCP, an MCP server for authorization checks and policy management, and describes an AI-based risk-detection approach that is being built.
+> Speedle AI — AI for access control, access control for AI. It shows how to apply the open-source Speedle policy engine to AI agent authorization and access control: MCP authorization, permission-aware RAG, agent-to-agent (A2A) calls, zero standing privileges (ZSP) and least privilege for LLM applications. It also ships an open-source Agent Skill that turns policy documents into SPDL models, previews Speedle MCP, an MCP server for authorization checks and policy management, and describes an AI-based risk-detection approach that is being built.
 
-Speedle AI has two parts. AI for access management covers using AI to design, manage and check policies. Access management for AI covers policy patterns across the AI lifecycle, from data and training to inference, agents, tool calls and other agents. The home page gives one sentence and one representative rule for each pattern; the full SPDL examples, longer explanations and the target AI risk-detection flow are on the patterns page. All of this is built on the open-source Speedle policy engine; the SPDL examples are solution patterns, not shipped platform integrations.
+Speedle AI has two parts. **Use AI to manage access** shows how AI helps design, manage and check policies. **Control what AI can access** presents policy patterns across the AI lifecycle, from data and training to inference, agents, tool calls and other agents. The home page gives one sentence and one representative rule for each pattern; the full SPDL examples, longer explanations and the target AI risk-detection flow are on the patterns page. All of this is built on the open-source Speedle policy engine; the SPDL examples are solution patterns, not shipped platform integrations.
 
 ## Home
 
 - [Speedle AI home](https://ai.speedle.io/): What Speedle AI is and the two parts.
-- [中文](https://ai.speedle.io/zh/): Speedle AI 中文首页：用 AI 管理权限，用策略约束 AI，涵盖 AI 智能体授权、AI 访问控制、MCP 授权、RAG 权限控制和智能体最小权限。
+- [中文](https://ai.speedle.io/zh/): Speedle AI 中文首页：用 AI 管权限，用策略约束 AI，涵盖 AI 智能体授权、AI 访问控制、MCP 授权、RAG 权限控制和智能体最小权限。
 - [Patterns](https://ai.speedle.io/patterns/): the full SPDL examples for every area in Build and Run, with subjects, resources, actions and enforcement points.
 - [中文模式](https://ai.speedle.io/zh/patterns/): 构建和运行 AI 的完整 SPDL 示例，涵盖数据与训练、模型发布、推理与 RAG、委托智能体、MCP 工具调用、A2A 调用和零常驻权限。
 
-## AI for access management
+## Use AI to manage access
 
 - [Speedle policy modeler skill](https://ai.speedle.io/#policy-modeler): an open-source Agent Skill for Claude Code that turns employee handbooks and regulations into RBAC + ABAC SPDL models, with a design document, a Mermaid role-inheritance diagram and executable test cases.
 - [Speedle MCP launch preview](https://ai.speedle.io/#mcp): `@speedle/mcp` is planned as one npm package with separate check and manage modes; it is not published on npm yet.
@@ -19,7 +19,7 @@ Speedle AI has two parts. AI for access management covers using AI to design, ma
 - [Policy modeler skill folder](https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler): SKILL.md, references, scripts, templates and English/Chinese example runs.
 - [Policy modeler sample](https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/en/model.md): a full English model with role inheritance, ABAC conditions and test results.
 
-## Access management for AI
+## Control what AI can access
 
 - [Concept: one decision point](https://ai.speedle.io/#lifecycle): identity in, allow or deny out, audit and explain out, with the boundary.
 - [Patterns: Build and Run](https://ai.speedle.io/patterns/): the full examples and explanations that the home page summarizes.
