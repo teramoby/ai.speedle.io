@@ -162,90 +162,10 @@
         <header class="part-header">
           <span class="part-number" aria-hidden="true">01</span>
           <div class="part-heading"><p class="eyebrow">Use AI to manage access</p><h2 id="ai-for-access-title">Put AI to work on your access policies</h2></div>
-          <p class="part-summary">AI helping people manage access: the open-source policy modeler skill for turning documents into SPDL, Speedle MCP for designing, managing and checking policies (launch preview), and AI-based risk detection that looks wider while policy keeps the veto (being built).</p>
+          <p class="part-summary">AI helping people manage access: an open-source skill that turns policy documents into SPDL, a preview of Speedle MCP for designing, managing and checking policies, and an AI risk-detection approach that is being built.</p>
         </header>
 
-        <div id="mcp" class="mcp">
-          <div class="section-head mcp-intro">
-            <div><p class="eyebrow">Speedle MCP · Coming soon</p><h3 id="mcp-title">Speedle MCP: one package, two deliberately separate modes</h3></div>
-            <div class="mcp-lead">
-              <p><code>@speedle/mcp</code> is planned as one npm package with a <code>speedle-mcp</code> binary that runs as a local stdio MCP server. It is not published on npm yet.</p>
-              <a class="button button-outline" href="https://github.com/teramoby/speedle-mcp">Follow the repository<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a>
-            </div>
-          </div>
-
-          <div class="mode-grid">
-            <article class="mode-card">
-              <div class="mode-top"><span class="mode-label">Mode 01 · Launch preview</span><code>check</code></div>
-              <h4>Authorization checks</h4>
-              <p>The planned <code>check</code> mode registers only <code>is_allowed</code> by default and reads only ADS configuration. <code>diagnose</code>, <code>all_granted_roles</code> and <code>all_granted_permissions</code> are opt-in through the <code>--expose-diagnose</code>, <code>--expose-all-granted-roles</code> and <code>--expose-all-granted-permissions</code> flags. <code>diagnose</code> works only with self-hosted Speedle; the server will not start with it against Speedle Cloud. It answers authorization questions; it does not enforce anything in the calling application.</p>
-              <ul class="mode-list">
-                <li>Read-only authorization checks through the Speedle ADS REST API.</li>
-                <li>Subject, resource, action, and typed attributes as inputs.</li>
-                <li>ADS base URL, service name, and optional bearer token from environment variables.</li>
-              </ul>
-              <a class="mode-link" href="https://github.com/teramoby/speedle-mcp/issues/1">Read the check-mode issue<svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg></a>
-            </article>
-            <article class="mode-card">
-              <div class="mode-top"><span class="mode-label">Mode 02 · Launch preview</span><code>manage</code></div>
-              <h4>Policy design and management</h4>
-              <p>The planned <code>manage</code> mode registers only the management tools and reads only PMS configuration for designing and managing Speedle policies through the PMS REST API.</p>
-              <ul class="mode-list">
-                <li>Services, authorization policies, and role policies.</li>
-                <li>SPDL validation and effective-policy explanation helpers.</li>
-                <li>A read-only option; destructive deletes require explicit target confirmation.</li>
-              </ul>
-              <a class="mode-link" href="https://github.com/teramoby/speedle-mcp/issues/2">Read the manage-mode issue<svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg></a>
-            </article>
-          </div>
-
-          <aside class="mcp-security" aria-labelledby="mcp-security-title">
-            <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
-            <div><h4 id="mcp-security-title">Keep policy management out of the governed agent</h4><p><strong>Never give <code>manage</code> to an agent that is itself governed by these policies.</strong> An agent holding both check and management tools could be prompted into granting itself access.</p><p><strong>Give a governed agent <code>is_allowed</code> only.</strong> That is the <code>check</code> default. <code>diagnose</code>, <code>all_granted_roles</code> and <code>all_granted_permissions</code> show policies, conditions and grants, so turn them on only in a check server for policy authors and operators, and never pass the <code>--expose-*</code> flags to the agent’s server.</p><p>There is no default mode that exposes both. Running with no mode is planned to print usage and exit non-zero.</p></div>
-          </aside>
-
-          <div class="launch-config" aria-labelledby="launch-config-title">
-            <div class="launch-heading">
-              <div><p class="eyebrow">Install &amp; MCP client configuration</p><h4 id="launch-config-title">Configuration preview</h4></div>
-              <span class="launch-badge">Available at launch</span>
-            </div>
-            <p class="launch-note"><strong><code>@speedle/mcp</code> is not published on npm yet.</strong> The commands and client entries below are future launch examples, not working install instructions today.</p>
-            <div class="config-grid">
-              <figure class="config-card">
-                <figcaption><span>check mode</span><span>Available at launch</span></figcaption>
-                <pre tabindex="0" aria-label="Future check-mode install and MCP client configuration"><code># After @speedle/mcp is published
-npx @speedle/mcp check
-
-{
-  "mcpServers": {
-    "speedle-check": {
-      "command": "npx",
-      "args": ["@speedle/mcp", "check"]
-    }
-  }
-}</code></pre>
-              </figure>
-              <figure class="config-card">
-                <figcaption><span>manage mode</span><span>Available at launch</span></figcaption>
-                <pre tabindex="0" aria-label="Future manage-mode install and MCP client configuration"><code># After @speedle/mcp is published
-npx @speedle/mcp manage
-
-{
-  "mcpServers": {
-    "speedle-manage": {
-      "command": "npx",
-      "args": ["@speedle/mcp", "manage"]
-    }
-  }
-}</code></pre>
-              </figure>
-            </div>
-          </div>
-
-          <div class="mcp-resources"><span>Source and foundations</span><a href="https://github.com/teramoby/speedle-mcp">Speedle MCP</a><a href="https://github.com/teramoby/speedle-plus">Speedle</a><a href="https://cloud.speedle.io/">Speedle Cloud</a><a href="https://github.com/teramoby/speedle-sdk">Speedle SDK</a></div>
-        </div>
-
-        <div id="policy-modeler" class="subsection policy-modeler">
+        <div id="policy-modeler" class="policy-modeler">
           <div class="section-head">
             <div><p class="eyebrow">Speedle policy modeler · Open source skill</p><h3 id="policy-modeler-title">Turn policy documents into reviewable SPDL</h3></div>
             <p>An Agent Skill for Claude Code that reads an employee handbook or regulation, asks about what the document leaves open, and models the result as RBAC + ABAC policies. It never guesses a rule.</p>
@@ -295,42 +215,54 @@ cp -R ai.speedle.io/skills/speedle-policy-modeler \
           <div class="mcp-resources"><span>Skill and samples</span><a href="https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler">Skill folder</a><a href="https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/en/model.md">English sample</a><a href="https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/zh/model.md">Chinese sample</a><a href="https://code.claude.com/docs/en/skills">Claude Code skills docs</a></div>
         </div>
 
-        <div id="risk-detection" class="subsection protection">
-          <div class="section-head">
-            <div><p class="eyebrow">AI-based risk detection · Being built</p><h3 id="risk-title">AI risk detection looks wider. Policy keeps the veto</h3></div>
-            <p>AI can look across more dimensions and relationships to find risk that a single rule does not see. Deterministic policy still makes the decision and holds the veto: AI never grants what policy denies.</p>
-          </div>
-
-          <div class="protection-grid">
-            <article class="protection-card policy-card">
-              <div class="protection-top"><span class="protection-icon" aria-hidden="true"><svg class="icon"><use href="#i-shield"/></svg></span><span class="status-pill">Deterministic foundation</span></div>
-              <h4>Policy-based access control</h4>
-              <p>Policy evaluates a defined request and returns a precise, explainable decision. It holds the veto: <strong>when policy denies, the answer is deny.</strong></p>
-              <ul class="protection-points"><li>Explicit rules for subjects, resources and actions.</li><li>Deterministic outcomes that can be explained.</li><li>A policy denial that no AI risk signal can overturn.</li></ul>
-              <p class="veto-note"><span aria-hidden="true">DENY</span>Policy denial is final.</p>
-            </article>
-            <article class="protection-card risk-card">
-              <div class="protection-top"><span class="protection-icon" aria-hidden="true"><svg class="icon"><use href="#i-signals"/></svg></span><span class="status-pill">Approach being built</span></div>
-              <h4>AI-based risk detection</h4>
-              <p>This is a direction Speedle is exploring and building, not a shipped feature. The approach examines risk across more dimensions and relationships—such as unusual combinations of agent, user, data and task context.</p>
-              <ul class="protection-points"><li>Looks beyond a single request attribute.</li><li>Examines relationships across the wider context.</li><li>Adds a further layer of protection on top of policy.</li></ul>
-              <p class="risk-note"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>It never grants access that policy denies.</p>
-            </article>
-          </div>
-
-          <section class="decision-architecture" aria-labelledby="decision-flow-title">
-            <div class="architecture-head">
-              <div><p class="eyebrow">Conceptual target flow</p><h3 id="decision-flow-title">Policy first. Risk signals second. Veto intact</h3></div>
-              <span class="architecture-badge">AI risk detection · TBD</span>
+        <div id="mcp" class="subsection mcp">
+          <div class="section-head mcp-intro">
+            <div><p class="eyebrow">Speedle MCP · Coming soon</p><h3 id="mcp-title">Speedle MCP: one package, two deliberately separate modes</h3></div>
+            <div class="mcp-lead">
+              <p><code>@speedle/mcp</code> is planned as one npm package with a <code>speedle-mcp</code> binary that runs as a local stdio MCP server. It is not published on npm yet.</p>
+              <a class="button button-outline" href="https://github.com/teramoby/speedle-mcp">Follow the repository<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a>
             </div>
-            <ol class="decision-flow">
-              <li class="flow-node"><span class="flow-step">01 / REQUEST</span><h4>Describe the action</h4><p>Agent, user, data, action and task context form the request.</p><span class="flow-tag">Before anything executes</span></li>
-              <li class="flow-node"><span class="flow-step">02 / POLICY DECISION</span><h4>Apply the deterministic boundary</h4><p>Policy returns the precise decision. Deny stops here; only an allow can continue.</p><span class="flow-tag flow-tag-deny">VETO · DENY IS FINAL</span></li>
-              <li class="flow-node"><span class="flow-step">03 / AI RISK SIGNALS</span><h4>Examine wider relationships</h4><p>The approach being built looks across more dimensions and relationships for additional risk.</p><span class="flow-tag flow-tag-building">APPROACH BEING BUILT</span></li>
-              <li class="flow-node"><span class="flow-step">04 / FINAL DECISION</span><h4>Add protection, never access</h4><p>Risk signals can add scrutiny or protection. The policy outcome and its veto remain intact.</p><span class="flow-tag">POLICY VETO PRESERVED</span></li>
-            </ol>
-            <p class="flow-note"><strong>A risk signal cannot turn a policy deny into an allow.</strong> This diagram shows the approach being built; it does not represent a shipped AI risk-detection capability.</p>
-          </section>
+          </div>
+
+          <div class="mode-grid">
+            <article class="mode-card">
+              <div class="mode-top"><span class="mode-label">Mode 01 · Launch preview</span><code>check</code></div>
+              <h4>Authorization checks</h4>
+              <p>The planned <code>check</code> mode registers only <code>is_allowed</code> by default and reads only ADS configuration. <code>diagnose</code>, <code>all_granted_roles</code> and <code>all_granted_permissions</code> are opt-in through the <code>--expose-diagnose</code>, <code>--expose-all-granted-roles</code> and <code>--expose-all-granted-permissions</code> flags. <code>diagnose</code> works only with self-hosted Speedle; the server will not start with it against Speedle Cloud. It answers authorization questions; it does not enforce anything in the calling application.</p>
+              <ul class="mode-list">
+                <li>Read-only authorization checks through the Speedle ADS REST API.</li>
+                <li>Subject, resource, action, and typed attributes as inputs.</li>
+                <li>ADS base URL, service name, and optional bearer token from environment variables.</li>
+              </ul>
+              <a class="mode-link" href="https://github.com/teramoby/speedle-mcp/issues/1">Read the check-mode issue<svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg></a>
+            </article>
+            <article class="mode-card">
+              <div class="mode-top"><span class="mode-label">Mode 02 · Launch preview</span><code>manage</code></div>
+              <h4>Policy design and management</h4>
+              <p>The planned <code>manage</code> mode registers only the management tools and reads only PMS configuration for designing and managing Speedle policies through the PMS REST API.</p>
+              <ul class="mode-list">
+                <li>Services, authorization policies, and role policies.</li>
+                <li>SPDL validation and effective-policy explanation helpers.</li>
+                <li>A read-only option; destructive deletes require explicit target confirmation.</li>
+              </ul>
+              <a class="mode-link" href="https://github.com/teramoby/speedle-mcp/issues/2">Read the manage-mode issue<svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg></a>
+            </article>
+          </div>
+
+          <aside class="mcp-security" aria-labelledby="mcp-security-title">
+            <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
+            <div><h4 id="mcp-security-title">Keep policy management out of the governed agent</h4><p><strong>Never give <code>manage</code> to an agent that is itself governed by these policies.</strong> An agent holding both check and management tools could be prompted into granting itself access.</p><p><strong>Give a governed agent <code>is_allowed</code> only.</strong> That is the <code>check</code> default. <code>diagnose</code>, <code>all_granted_roles</code> and <code>all_granted_permissions</code> show policies, conditions and grants, so turn them on only in a check server for policy authors and operators, and never pass the <code>--expose-*</code> flags to the agent’s server.</p><p>There is no default mode that exposes both. Running with no mode is planned to print usage and exit non-zero.</p></div>
+          </aside>
+
+          <div class="mcp-resources"><span>Source and foundations</span><a href="https://github.com/teramoby/speedle-mcp">Speedle MCP</a><a href="https://github.com/teramoby/speedle-plus">Speedle</a><a href="https://cloud.speedle.io/">Speedle Cloud</a><a href="https://github.com/teramoby/speedle-sdk">Speedle SDK</a></div>
+        </div>
+
+        <div id="risk-detection" class="risk-detection">
+          <article class="risk-card" aria-labelledby="risk-title">
+            <div class="risk-card-top"><h3 id="risk-title">AI risk detection</h3><span class="status-pill">TBD</span></div>
+            <p>AI can look across more dimensions and relationships to find risk that a single rule does not see. This is a direction Speedle is exploring and building, not a shipped feature. Policy keeps the veto: a risk signal can add scrutiny or protection, but it never turns a deny into an allow.</p>
+            <a class="mode-link" href="/patterns/#risk-detection">See the target flow<svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          </article>
         </div>
       </div>
     </section>
@@ -346,12 +278,12 @@ cp -R ai.speedle.io/skills/speedle-policy-modeler \
         <div id="lifecycle" class="concept">
           <div class="section-head">
             <div><p class="eyebrow">Concept</p><h3 id="concept-title">One decision point for building and running AI</h3></div>
-            <p>Each area has an enforcement point in your application. It asks Speedle before it acts and enforces the answer. Identity comes in from your IdP; decisions and their explanations go out to your audit trail.</p>
+            <p>Each area has an enforcement point in your application. It asks Speedle before it acts and enforces the answer.</p>
           </div>
           <figure class="concept-figure">
-            <svg class="cd cd-wide" viewBox="0 0 1080 688" role="img" aria-labelledby="cdw-title cdw-desc">
+            <svg class="cd cd-wide" viewBox="0 0 1080 616" role="img" aria-labelledby="cdw-title cdw-desc">
               <title id="cdw-title">Concept: Speedle as the decision point for building and running AI</title>
-              <desc id="cdw-desc">An identity band at the top: your IdP and OAuth authenticate users and agents, MCP authorization builds on OAuth, and the principals flow into Speedle. On the left, the Build lane has two areas: data and training, asked by the data loader and job scheduler; and model release, asked by the model registry and release pipeline. On the right, the Run lane has four areas: inference and RAG, asked by the retriever per document and the API gateway; agents acting for users, asked by the agent runtime about the agent’s token scope and then the delegating user; tool calls over MCP, asked by the MCP host or gateway; and agent-to-agent calls, asked by the calling or receiving agent. Every area's enforcement point sends a request to Speedle's policy decision point in the centre and receives allow or deny. From Speedle, decisions and their explanations flow into the audit and explain band at the bottom: the diagnose API shows which policy matched and why, and applications log each decision with the agent and the delegating human. A boundary note: Speedle bounds what a compromised or misled agent can do; it does not detect prompt injection, filter content or verify model and dataset supply chains.</desc>
+              <desc id="cdw-desc">An identity band at the top: your IdP and OAuth authenticate users and agents, MCP authorization builds on OAuth, and the principals flow into Speedle. On the left, the Build lane has two areas: data and training, asked by the data loader and job scheduler; and model release, asked by the model registry and release pipeline. On the right, the Run lane has four areas: inference and RAG, asked by the retriever per document and the API gateway; agents acting for users, asked by the agent runtime about the agent’s token scope and then the delegating user; tool calls over MCP, asked by the MCP host or gateway; and agent-to-agent calls, asked by the calling or receiving agent. Every area's enforcement point sends a request to Speedle's policy decision point in the centre and receives allow or deny. From Speedle, decisions and their explanations flow into the audit and explain band at the bottom: the diagnose API shows which policy matched and why, and applications log each decision with the agent and the delegating human.</desc>
               <defs>
                 <linearGradient id="cdw-pdp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4f0fb"/><stop offset="1" stop-color="#e9e1f8"/></linearGradient>
                 <filter id="cdw-lift" x="-8%" y="-8%" width="116%" height="130%"><feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#2e1c58" flood-opacity=".09"/></filter>
@@ -473,18 +405,10 @@ cp -R ai.speedle.io/skills/speedle-policy-modeler \
                 <text class="cd-text" x="260" y="583">Applications log each decision with the agent and the delegating human.</text>
               </g>
 
-              <g class="cd-band cd-boundary">
-                <rect x="0.5" y="616.5" width="1079" height="71" rx="14"/>
-                <text class="cd-label cd-ink" x="24" y="649">BOUNDARY</text>
-                <text class="cd-sub" x="24" y="671">Outside Speedle</text>
-                <line class="cd-divider" x1="236" y1="632" x2="236" y2="672"/>
-                <text class="cd-strong" x="260" y="649">Speedle bounds what a compromised or misled agent can do.</text>
-                <text class="cd-text" x="260" y="671">It does not detect prompt injection, filter content or verify model and dataset supply chains.</text>
-              </g>
             </svg>
-            <svg class="cd cd-stack" viewBox="0 0 360 1384" role="img" aria-labelledby="cds-title cds-desc">
+            <svg class="cd cd-stack" viewBox="0 0 360 1220" role="img" aria-labelledby="cds-title cds-desc">
               <title id="cds-title">Concept: Speedle as the decision point for building and running AI</title>
-              <desc id="cds-desc">Stacked from top to bottom. Identity in: your IdP and OAuth authenticate users and agents, MCP authorization builds on OAuth, and Speedle decides on the principals it is given. Speedle's policy decision point evaluates SPDL policy and answers allow or deny. Every area's enforcement point asks it. Build lane: data and training, asked by the data loader and job scheduler; model release, asked by the model registry and release pipeline. Run lane: inference and RAG, asked by the retriever per document and the API gateway; agents acting for users, asked by the agent runtime about the agent’s token scope and then the delegating user; tool calls over MCP, asked by the MCP host or gateway per call; agent-to-agent calls, asked by the calling or receiving agent. Audit and explain out: the diagnose API shows which policy matched and why, and applications log each decision with the agent and the delegating human. Boundary: Speedle bounds what a compromised or misled agent can do; it does not detect prompt injection, filter content or verify model and dataset supply chains.</desc>
+              <desc id="cds-desc">Stacked from top to bottom. Identity in: your IdP and OAuth authenticate users and agents, MCP authorization builds on OAuth, and the application passes the principals to Speedle. Speedle's policy decision point evaluates SPDL policy and answers allow or deny. Every area's enforcement point asks it. Build lane: data and training, asked by the data loader and job scheduler; model release, asked by the model registry and release pipeline. Run lane: inference and RAG, asked by the retriever per document and the API gateway; agents acting for users, asked by the agent runtime about the agent’s token scope and then the delegating user; tool calls over MCP, asked by the MCP host or gateway per call; agent-to-agent calls, asked by the calling or receiving agent. Audit and explain out: the diagnose API shows which policy matched and why, and applications log each decision with the agent and the delegating human.</desc>
               <defs>
                 <linearGradient id="cds-pdp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4f0fb"/><stop offset="1" stop-color="#e9e1f8"/></linearGradient>
                 <filter id="cds-lift" x="-8%" y="-10%" width="116%" height="140%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#2e1c58" flood-opacity=".09"/></filter>
@@ -598,17 +522,6 @@ cp -R ai.speedle.io/skills/speedle-policy-modeler \
                 <text class="cd-text" x="18" y="1165">log each decision with the agent</text>
                 <text class="cd-text" x="18" y="1185">and the delegating human.</text>
               </g>
-
-              <g class="cd-band cd-boundary">
-                <rect x="0.5" y="1220.5" width="359" height="163" rx="14"/>
-                <text class="cd-label cd-ink" x="18" y="1251">BOUNDARY</text>
-                <text class="cd-sub cd-end" x="342" y="1251">Outside Speedle</text>
-                <text class="cd-strong" x="18" y="1279">Speedle bounds what a compromised</text>
-                <text class="cd-strong" x="18" y="1299">or misled agent can do.</text>
-                <text class="cd-text" x="18" y="1325">It does not detect prompt injection,</text>
-                <text class="cd-text" x="18" y="1345">filter content or verify model and</text>
-                <text class="cd-text" x="18" y="1365">dataset supply chains.</text>
-              </g>
             </svg>
             <figcaption class="concept-legend">
               <span><svg viewBox="0 0 40 10" aria-hidden="true"><line x1="1" y1="5" x2="32" y2="5" stroke="#5229ad" stroke-width="2"/><path d="M30 1 39 5 30 9z" fill="#5229ad"/></svg>The enforcement point asks Speedle: subject, action, resource, attributes.</span>
@@ -617,241 +530,72 @@ cp -R ai.speedle.io/skills/speedle-policy-modeler \
           </figure>
         </div>
 
-        <div class="areas">
-          <p class="note areas-note"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>Each SPDL example below was parsed and evaluated with the Speedle file store against allow and deny cases. Names, paths and attributes are illustrative; your application supplies the attributes when it asks for a decision. The enforcement point must pass every attribute that a condition references.</p>
-
-          <section id="build" class="phase" aria-labelledby="build-title">
-            <div class="phase-head phase-build">
-              <p class="phase-tag">Build</p>
-              <h3 id="build-title">Before a model serves: data, training and release</h3>
-            </div>
-            <article id="lc-data" class="area" aria-labelledby="lc-data-title">
-              <div class="area-copy">
-                <p class="area-step">01 / Data &amp; training</p>
-                <h4 id="lc-data-title">Which pipelines may train on which data?</h4>
-                <p class="area-lead">Training jobs read datasets, use compute and write checkpoints. The application asks before each dataset read, job start and checkpoint export, passing sensitivity, tenant, consent and region as attributes.</p>
-                <dl class="area-facts">
-                  <div><dt>Subjects</dt><dd>Training pipelines as entities; ML engineers and their teams.</dd></div>
-                  <div><dt>Resources and actions</dt><dd>Datasets: <code>read</code>. Training jobs: <code>start</code>. Checkpoints: <code>export</code>.</dd></div>
-                  <div><dt>Enforcement point</dt><dd>The data loader before it opens a dataset, the job scheduler before it allocates compute, and the artifact store before an export.</dd></div>
-                </dl>
-              </div>
-              <figure class="spdl-card">
-                <figcaption><span>training.spdl</span><span>SPDL example</span></figcaption>
-                <pre tabindex="0" data-spdl="training" aria-label="SPDL example: Data and training"><code>[service.ml-training]
-[policy]
-# Pipelines read only consented data from their own region
-grant role training-pipeline read expr:^/datasets/ if consent == true &amp;&amp; data_region == job_region
-# Restricted datasets never enter training
-deny role training-pipeline read expr:^/datasets/restricted/
-grant role ml-engineer start /jobs/training if gpu_hours &lt;= 64
-grant role ml-engineer export expr:^/checkpoints/
-[rolepolicy]
-grant entity pipeline-churn training-pipeline
-grant group ml-team ml-engineer</code></pre>
-                <p class="spdl-caption">Consent and region checked per dataset, restricted data denied outright, and a GPU-hour limit on job start.</p>
-              </figure>
-            </article>
-            <article id="lc-release" class="area" aria-labelledby="lc-release-title">
-              <div class="area-copy">
-                <p class="area-step">02 / Model release</p>
-                <h4 id="lc-release-title">Who may release a model?</h4>
-                <p class="area-lead">Registering, approving, promoting and rolling back models are separate actions with separate owners. Separation of duties keeps the person who trained a model from approving it.</p>
-                <dl class="area-facts">
-                  <div><dt>Subjects</dt><dd>ML engineers, release managers and the service identities of release pipelines.</dd></div>
-                  <div><dt>Resources and actions</dt><dd>Models and endpoints: <code>register</code>, <code>approve</code>, <code>promote</code>, <code>rollback</code>.</dd></div>
-                  <div><dt>Enforcement point</dt><dd>The model registry and the release pipeline, before each change of model or endpoint state.</dd></div>
-                </dl>
-              </div>
-              <figure class="spdl-card">
-                <figcaption><span>release.spdl</span><span>SPDL example</span></figcaption>
-                <pre tabindex="0" data-spdl="release" aria-label="SPDL example: Model release"><code>[service.model-registry]
-[policy]
-grant role ml-engineer register expr:^/models/
-grant role release-manager approve, promote, rollback expr:^/models/
-# Separation of duties: nobody approves a model they trained
-deny role release-manager approve expr:^/models/ if trained_by == request_user
-[rolepolicy]
-grant group ml-team ml-engineer
-grant user dana release-manager</code></pre>
-                <p class="spdl-caption">Engineers register but cannot promote; a release manager cannot approve a model whose <code>trained_by</code> is the requesting user.</p>
-              </figure>
-            </article>
-          </section>
-
-          <section id="run" class="phase" aria-labelledby="run-title">
-            <div class="phase-head phase-run">
-              <p class="phase-tag">Run</p>
-              <h3 id="run-title">While AI serves and acts: retrieval, agents, tools and other agents</h3>
-            </div>
-            <article id="lc-rag" class="area area-feature" aria-labelledby="lc-rag-title">
-              <div class="area-copy">
-                <p class="area-step">03 / Inference &amp; RAG</p>
-                <h4 id="lc-rag-title">Only what the user may read enters the prompt</h4>
-                <p class="area-lead">Users, apps and tenants call models. For permission-aware RAG (retrieval-augmented generation), the retriever asks Speedle about each document or collection before its content enters the prompt, so the model only sees what the person behind the request may read.</p>
-                <ol class="rag-flow" aria-label="Permission-aware retrieval">
-                  <li><span>1</span>The retriever finds candidate documents.</li>
-                  <li><span>2</span>It asks Speedle per document or collection, with the user’s tenant and clearances.</li>
-                  <li><span>3</span>Only allowed content goes into the prompt.</li>
-                </ol>
-                <dl class="area-facts">
-                  <div><dt>Subjects</dt><dd>The user behind the request, with their groups; client applications and tenants as entities.</dd></div>
-                  <div><dt>Resources and actions</dt><dd>Collections and documents: <code>retrieve</code>. Models: <code>invoke</code>.</dd></div>
-                  <div><dt>Enforcement point</dt><dd>The retriever before a document enters the prompt, and the API gateway or inference service before it routes a request.</dd></div>
-                </dl>
-              </div>
-              <figure class="spdl-card">
-                <figcaption><span>rag.spdl</span><span>SPDL example</span></figcaption>
-                <pre tabindex="0" data-spdl="rag" aria-label="SPDL example: Inference and RAG"><code>[service.rag]
-[policy]
-# The retriever asks per document, before its content enters the prompt
-grant role tenant-user retrieve expr:^/collections/ if doc_tenant == user_tenant &amp;&amp; doc_label in user_clearances
-# Documents on legal hold never reach a prompt
-deny role tenant-user retrieve expr:^/collections/legal-hold/
-# Apps call only the model tiers in their tenant's plan
-grant role tenant-app invoke expr:^/models/ if model_tier in plan_tiers
-[rolepolicy]
-grant group acme-staff tenant-user
-grant entity acme-helpdesk tenant-app</code></pre>
-                <p class="spdl-caption">A document is retrieved only inside the user’s tenant and at a label the user is cleared for; legal-hold documents are denied, and apps call only the model tiers in their plan.</p>
-              </figure>
-            </article>
-            <article id="lc-agents" class="area" aria-labelledby="lc-agents-title">
-              <div class="area-copy">
-                <p class="area-step">04 / Agents acting for users</p>
-                <h4 id="lc-agents-title">What may an AI agent do on behalf of a user?</h4>
-                <p class="area-lead">The agent has its own identity, and the user’s delegation is proven by a signed delegation token, not by claims in the request. The enforcement point verifies the token, then asks Speedle twice and allows only if both checks pass: the agent within the token’s scope, and the delegating user with their own permissions now. If the user loses a permission after the token was issued, the agent loses it at the next request. A refund above 100 also needs a recorded human approval by someone other than the user.</p>
-                <ol class="rag-flow" aria-label="Delegated agent check">
-                  <li><span>1</span>Verify the token: signature, issuer, expiry, and that it was issued to this agent.</li>
-                  <li><span>2</span>Agent scope: ask Speedle with the agent as subject and the token’s scope as attributes.</li>
-                  <li><span>3</span>Delegator now: ask Speedle with the delegating user, named by the token’s sub claim, as subject.</li>
-                </ol>
-                <dl class="area-facts">
-                  <div><dt>Subjects</dt><dd>The agent as an entity for the scope check; the delegating user, taken from the verified token, for the second check.</dd></div>
-                  <div><dt>Resources and actions</dt><dd>Tickets: <code>read</code>, <code>update</code>; orders: <code>refund</code>, with the amount as an attribute. All limited to the actions and resources in the token’s scope.</dd></div>
-                  <div><dt>Enforcement point</dt><dd>The agent runtime or the application backend, before the action reaches the business system. It verifies the token and passes only verified claims to Speedle.</dd></div>
-                  <div><dt>Human approval</dt><dd>The enforcement point verifies the signed approval record for the refund and passes its approver as <code>approved_by</code> in the second check. The approver must not be the user.</dd></div>
-                  <div><dt>Self-hosted option</dt><dd>One check, with the token and the delegator evaluated by the custom functions <code>DelegationValid</code> and <code>DelegatorAllowed</code>. Speedle Cloud does not run custom functions.</dd></div>
-                </dl>
-              </div>
-              <figure class="spdl-card">
-                <figcaption><span>agents.spdl</span><span>SPDL example</span></figcaption>
-                <pre tabindex="0" data-spdl="agents" aria-label="SPDL example: Agents acting for users"><code>[service.crm]
-[policy]
-# Check 1: the agent, only while its verified token covers the request
-grant role in-scope read, update expr:^/tickets/
-grant role in-scope refund expr:^/orders/
-# Check 2: the delegating user (the token's sub), with their roles now
-grant role support read, update expr:^/tickets/
-grant role support refund expr:^/orders/ if amount &lt;= 100
-# Larger refunds: a verified approval by someone other than the user
-grant role support refund expr:^/orders/ if approved_by != request_user
-[rolepolicy]
-# Check 1 in three steps, each role needing the one before:
-# the token has not expired,
-grant entity triage-agent in-time if request_time &lt; token_expires
-# it lists this action,
-grant role in-time in-action if request_action in token_actions
-# and it lists this resource
-grant role in-action in-scope if request_resource in token_resources
-# Check 2: the user's own role
-grant user alice support</code></pre>
-                <p class="spdl-caption">Check 1 gives the agent its role in three steps, so it holds only before the token expires and only for the token’s actions and resources. Check 2 asks about the user alone, so revoking the user’s role denies the agent at the next request. A refund above 100 passes check 2 only with an approver other than the user.</p>
-                <p class="spdl-caption zsp-sample"><a href="https://github.com/teramoby/ai.speedle.io/tree/main/samples/delegation">Runnable sample of both patterns on GitHub</a></p>
-              </figure>
-            </article>
-            <article id="lc-mcp" class="area" aria-labelledby="lc-mcp-title">
-              <div class="area-copy">
-                <p class="area-step">05 / Tool calls (MCP)</p>
-                <h4 id="lc-mcp-title">May this AI agent call this MCP tool, with these arguments?</h4>
-                <p class="area-lead">Every tool call is checked before it runs. The tool is the resource, the call is the action, and the arguments become attributes, so limits such as a refund amount are part of the policy.</p>
-                <dl class="area-facts">
-                  <div><dt>Subjects</dt><dd>Agents, each with its own entity identity and role, so privileges stay per agent and per tool.</dd></div>
-                  <div><dt>Resources and actions</dt><dd>Tools: <code>call</code>, with the tool arguments as attributes.</dd></div>
-                  <div><dt>Enforcement point</dt><dd>The MCP client host, or a gateway in front of MCP servers, before the tool executes.</dd></div>
-                </dl>
-              </div>
-              <figure class="spdl-card">
-                <figcaption><span>mcp.spdl</span><span>SPDL example</span></figcaption>
-                <pre tabindex="0" data-spdl="mcp" aria-label="SPDL example: Tool calls over MCP"><code>[service.mcp-gateway]
-[policy]
-# Tool arguments arrive as attributes and are checked before the tool runs
-grant role research-agent call /tools/web-search
-grant role billing-agent call /tools/issue-refund if amount &lt;= 100 &amp;&amp; customer_verified == true
-# Admin tools stay out of reach for research agents
-deny role research-agent call expr:^/tools/admin/
-[rolepolicy]
-grant entity agent-research-1 research-agent
-grant entity agent-billing-1 billing-agent</code></pre>
-                <p class="spdl-caption">Web search for the research agent, refunds up to 100 for verified customers for the billing agent, and admin tools denied to the research agent.</p>
-              </figure>
-            </article>
-            <article id="lc-a2a" class="area" aria-labelledby="lc-a2a-title">
-              <div class="area-copy">
-                <p class="area-step">06 / Agent-to-agent (A2A)</p>
-                <h4 id="lc-a2a-title">Which agent may call which agent for A2A authorization?</h4>
-                <p class="area-lead">Each hop in a delegation chain is checked. The callee may receive only scopes the caller already holds, and the chain has a hop limit, so delegation only narrows permissions.</p>
-                <dl class="area-facts">
-                  <div><dt>Subjects</dt><dd>Calling agents, identified as entities.</dd></div>
-                  <div><dt>Resources and actions</dt><dd>Other agents and their skills: <code>call</code>, with the requested scopes, the caller’s scopes and the hop count as attributes.</dd></div>
-                  <div><dt>Enforcement point</dt><dd>The calling agent before it sends a task, or the receiving agent before it accepts one. The application derives the caller’s scopes from the delegation it received.</dd></div>
-                </dl>
-              </div>
-              <figure class="spdl-card">
-                <figcaption><span>a2a.spdl</span><span>SPDL example</span></figcaption>
-                <pre tabindex="0" data-spdl="a2a" aria-label="SPDL example: Agent-to-agent"><code>[service.a2a]
-[policy]
-# A callee gets only scopes the caller already holds, within two hops
-grant role planner-agent call /agents/researcher if IsSubSet(requested_scopes, caller_scopes) &amp;&amp; hops &lt;= 2
-grant role researcher-agent call /agents/writer if IsSubSet(requested_scopes, caller_scopes) &amp;&amp; hops &lt;= 2
-[rolepolicy]
-grant entity planner-1 planner-agent
-grant entity researcher-1 researcher-agent</code></pre>
-                <p class="spdl-caption"><code>IsSubSet</code> rejects any requested scope the caller does not hold, and a third hop is denied.</p>
-              </figure>
-            </article>
-          </section>
-        </div>
-
-        <section id="zsp" class="subsection" aria-labelledby="zsp-title">
+        <div id="patterns" class="subsection patterns-summary">
           <div class="section-head">
-            <div><p class="eyebrow">Solution pattern · Self-hosted Speedle</p><h3 id="zsp-title">Zero standing privileges (ZSP)</h3></div>
+            <div><p class="eyebrow">Solution patterns</p><h3 id="patterns-title">One policy pattern per area</h3></div>
+            <p>One sentence and one representative rule per area. The full SPDL examples, with the attributes each check needs, are on the patterns page.</p>
           </div>
-          <article id="lc-zsp" class="area" aria-labelledby="lc-zsp-title">
-            <div class="area-copy">
-              <p class="area-step">07 / Zero standing privileges</p>
-              <h4 id="lc-zsp-title">Just-in-time tokens support a zero standing privileges pattern</h4>
-              <p class="area-lead">Under the right issuance and control conditions, just-in-time, short-lived, narrowly scoped credentials, combined with Speedle’s policy decisions and application-side enforcement, can support a zero standing privileges pattern. The example checks lifetime, not-before and token status; production also needs a trusted component that verifies the token, binds its claims to the subject, resource, action and task scope, and an atomic consume for single-use credentials.</p>
-            </div>
-            <figure class="spdl-card">
-              <figcaption><span>zsp.spdl</span><span>SPDL example</span></figcaption>
-              <pre tabindex="0" data-spdl="zsp" aria-label="SPDL example: Zero standing privileges"><code>[service.zsp]
-[policy]
-# A just-in-time token: positive lifetime up to 600 s, inside its validity window, unused
-# request_time defaults to the ADS clock; attributes passed by the enforcement point take precedence
-# 60 s is the explicit clock-skew allowance
-grant role agent-runtime invoke /api/orders if expires_at &gt; issued_at &amp;&amp; expires_at - issued_at &lt;= 600 &amp;&amp; issued_at &lt;= request_time + 60 &amp;&amp; not_before &lt;= request_time + 60 &amp;&amp; request_time &lt; expires_at &amp;&amp; TokenUnused(token_id)
-[rolepolicy]
-grant entity agent-billing-1 agent-runtime</code></pre>
-              <p class="spdl-caption zsp-sample"><a href="https://github.com/teramoby/ai.speedle.io/tree/main/samples/zsp">Full runnable sample on GitHub</a></p>
-            </figure>
-          </article>
-        </section>
+          <div class="pattern-grid">
+            <article id="lc-data" class="pattern-card">
+              <p class="pattern-step">Build · 01 Data &amp; training</p>
+              <h4><a href="/patterns/#lc-data">Data and training</a></h4>
+              <p>Training jobs read datasets and write checkpoints; consent and region are checked per dataset, and restricted data never enters training.</p>
+              <code class="pattern-rule">grant role training-pipeline read expr:^/datasets/ if consent == true &amp;&amp; data_region == job_region</code>
+            </article>
+            <article id="lc-release" class="pattern-card">
+              <p class="pattern-step">Build · 02 Model release</p>
+              <h4><a href="/patterns/#lc-release">Model release</a></h4>
+              <p>Registering, approving, promoting and rolling back are separate actions, and nobody approves a model they trained.</p>
+              <code class="pattern-rule">deny role release-manager approve expr:^/models/ if trained_by == request_user</code>
+            </article>
+            <article id="lc-rag" class="pattern-card">
+              <p class="pattern-step">Run · 03 Inference &amp; RAG</p>
+              <h4><a href="/patterns/#lc-rag">Inference and RAG</a></h4>
+              <p>The retriever asks about each document before its content enters the prompt, so the model only sees what the user may read.</p>
+              <code class="pattern-rule">grant role tenant-user retrieve expr:^/collections/ if doc_tenant == user_tenant &amp;&amp; doc_label in user_clearances</code>
+            </article>
+            <article id="lc-agents" class="pattern-card">
+              <p class="pattern-step">Run · 04 Agents acting for users</p>
+              <h4><a href="/patterns/#lc-agents">Agents acting for users</a></h4>
+              <p>The agent is checked within its delegation token’s scope, then the delegating user is checked with their current permissions.</p>
+              <code class="pattern-rule">grant entity triage-agent in-time if request_time &lt; token_expires</code>
+            </article>
+            <article id="lc-mcp" class="pattern-card">
+              <p class="pattern-step">Run · 05 Tool calls (MCP)</p>
+              <h4><a href="/patterns/#lc-mcp">Tool calls over MCP</a></h4>
+              <p>Every tool call is checked before it runs, and the arguments become attributes the policy can limit.</p>
+              <code class="pattern-rule">grant role billing-agent call /tools/issue-refund if amount &lt;= 100 &amp;&amp; customer_verified == true</code>
+            </article>
+            <article id="lc-a2a" class="pattern-card">
+              <p class="pattern-step">Run · 06 Agent-to-agent (A2A)</p>
+              <h4><a href="/patterns/#lc-a2a">Agent-to-agent calls</a></h4>
+              <p>Each hop is checked, and the callee may receive only scopes the caller already holds.</p>
+              <code class="pattern-rule">grant role planner-agent call /agents/researcher if IsSubSet(requested_scopes, caller_scopes) &amp;&amp; hops &lt;= 2</code>
+            </article>
+            <article id="zsp" class="pattern-card">
+              <p class="pattern-step">Run · 07 Zero standing privileges · Self-hosted</p>
+              <h4><a href="/patterns/#zsp">Zero standing privileges</a></h4>
+              <p>Just-in-time, short-lived tokens can support zero standing privileges when issuance and controls are in place.</p>
+              <code class="pattern-rule">grant role agent-runtime invoke /api/orders if expires_at &gt; issued_at &amp;&amp; expires_at - issued_at &lt;= 600 &amp;&amp; issued_at &lt;= request_time + 60 &amp;&amp; not_before &lt;= request_time + 60 &amp;&amp; request_time &lt; expires_at &amp;&amp; TokenUnused(token_id)</code>
+            </article>
+          </div>
+          <p class="patterns-more"><a class="button button-secondary" href="/patterns/">See the full patterns and SPDL examples<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
+        </div>
 
         <div id="cross-cutting" class="crosscut">
           <div class="section-head">
-            <div><p class="eyebrow">Cross-cutting</p><h3 id="crosscut-title">Identity in. Decisions and explanations out</h3></div>
-            <p>The same three concerns apply to every area in Build and Run.</p>
+            <div><p class="eyebrow">Cross-cutting</p><h3 id="crosscut-title">What every area has in common</h3></div>
+            <p>Identity, audit, risk mapping and the boundary apply to every area in Build and Run.</p>
           </div>
           <div class="crosscut-grid">
             <article class="crosscut-card">
               <p class="crosscut-tag">Identity integration</p>
               <h4>Speedle decides; your IdP authenticates</h4>
-              <p>Speedle is the authorization decision point. Authentication comes from your IdP or OAuth authorization server, for users and for agents; MCP authorization builds on OAuth. The application maps verified identities to principals (user, groups, entity), and Speedle decides on the principals it is given.</p>
+              <p>Speedle is the authorization decision point. Authentication comes from your IdP or OAuth authorization server, for users and for agents; MCP authorization builds on OAuth. The application maps verified identities to principals (user, groups, entity) before it asks Speedle.</p>
             </article>
             <article class="crosscut-card">
               <p class="crosscut-tag">Audit &amp; explainability</p>
-              <h4>Every decision can be explained</h4>
+              <h4>Diagnose and audit logs</h4>
               <p>Speedle’s <a href="https://engine.speedle.io/docs/pms/diagnosis/">diagnose API</a> returns the decision, the reason, the effective roles and the policies examined, including which one matched and why. Applications log each decision with the agent and the delegating human. Diagnose exposes policy and request details, so keep it to trusted operators.</p>
             </article>
             <article class="crosscut-card">
@@ -859,36 +603,20 @@ grant entity agent-billing-1 agent-runtime</code></pre>
               <h4>Maps to OWASP LLM06:2025 Excessive Agency</h4>
               <p>The <a href="https://genai.owasp.org/llmrisk/llm062025-excessive-agency/">OWASP Top 10 for LLM Applications 2025</a> names Excessive Agency: an agent with more functionality, permission or autonomy than its task needs. Per-agent roles, per-tool checks, task- and time-bound delegation and human approval for high-risk actions narrow each of the three.</p>
             </article>
+            <article id="boundary" class="crosscut-card">
+              <p class="crosscut-tag">Boundary</p>
+              <h4>Where Speedle stops</h4>
+              <p>Speedle does not detect prompt injection, filter model input or output, or verify model and dataset supply chains; use dedicated controls for those. <strong>It bounds what a compromised or misled agent can do:</strong> Speedle answers deny to any request outside policy, whatever the prompt said.</p>
+            </article>
           </div>
         </div>
 
-        <aside id="boundary" class="boundary" aria-labelledby="boundary-title">
-          <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
-          <div>
-            <h3 id="boundary-title">Where Speedle stops</h3>
-            <p>Speedle does not detect prompt injection, filter model input or output, or verify model and dataset supply chains; use dedicated controls for those. <strong>It bounds what a compromised or misled agent can do:</strong> Speedle answers deny to any request outside policy, whatever the prompt said.</p>
-          </div>
-        </aside>
-
-        <div id="approach" class="subsection">
-          <div class="section-head">
-            <div><p class="eyebrow">Integration approach</p><h3 id="approach-title">From agent intent to an enforced decision</h3></div>
-            <p>An application asks for authorization before accessing data or executing a tool, then applies the returned decision.</p>
-          </div>
-          <ol class="steps">
-            <li class="step"><span class="step-num">01</span><h4>Describe identity and context</h4><p>Identify who initiated the request, which agent is acting, and the relevant user, role, and tenant.</p><code>subject</code></li>
-            <li class="step"><span class="step-num">02</span><h4>Map resource and action</h4><p>Map a tool, document, or business object to a resource, and the intended operation to an action.</p><code>resource · action</code></li>
-            <li class="step"><span class="step-num">03</span><h4>Request a policy decision</h4><p>Ask Speedle for a decision using readable, maintainable policies that describe the access rules.</p><code>is-allowed</code></li>
-            <li class="step"><span class="step-num">04</span><h4>Enforce it in the application</h4><p>Execute allowed operations, block denied ones, and record the application’s own execution result.</p><code>allowed: true | false</code></li>
-          </ol>
-
-          <div class="ecosystem" aria-labelledby="ecosystem-title">
-            <div class="ecosystem-head"><p class="eyebrow">Ecosystem</p><h3 id="ecosystem-title">Start with the Speedle building blocks</h3></div>
-            <div class="resource-grid">
-              <a class="resource-card" href="https://engine.speedle.io/"><span>OPEN SOURCE</span><strong>Speedle Engine<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>The open-source authorization engine and readable SPDL policy language.</p></a>
-              <a class="resource-card" href="https://cloud.speedle.io/"><span>HOSTED</span><strong><span class="resource-name">Speedle Cloud<span class="coming-soon">Coming soon</span></span><svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>Hosted authorization for developers, built on the Speedle policy engine.</p></a>
-              <a class="resource-card" href="https://github.com/teramoby/speedle-sdk"><span>INTEGRATE</span><strong>Speedle SDK<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>Explore the SDK repository for client integration patterns and guidance.</p></a>
-            </div>
+        <div id="ecosystem" class="ecosystem" aria-labelledby="ecosystem-title">
+          <div class="ecosystem-head"><p class="eyebrow">Ecosystem</p><h3 id="ecosystem-title">Start with the Speedle building blocks</h3></div>
+          <div class="resource-grid">
+            <a class="resource-card" href="https://engine.speedle.io/"><span>OPEN SOURCE</span><strong>Speedle Engine<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>The open-source authorization engine and readable SPDL policy language.</p></a>
+            <a class="resource-card" href="https://cloud.speedle.io/"><span>HOSTED</span><strong><span class="resource-name">Speedle Cloud<span class="coming-soon">Coming soon</span></span><svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>Hosted authorization for developers, built on the Speedle policy engine.</p></a>
+            <a class="resource-card" href="https://github.com/teramoby/speedle-sdk"><span>INTEGRATE</span><strong>Speedle SDK<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>Explore the SDK repository for client integration patterns and guidance.</p></a>
           </div>
         </div>
       </div>

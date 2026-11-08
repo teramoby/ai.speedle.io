@@ -2,12 +2,14 @@
 
 > Speedle AI — AI for access control, access control for AI. It shows how to apply the open-source Speedle policy engine to AI agent authorization and access control: MCP authorization, permission-aware RAG, agent-to-agent (A2A) calls, zero standing privileges (ZSP) and least privilege for LLM applications. It also ships an open-source Agent Skill that turns policy documents into SPDL models, previews Speedle MCP, an MCP server for authorization checks and policy management, and describes an AI-based risk-detection approach that is being built.
 
-Speedle AI has two parts. **Use AI to manage access** shows how AI helps design, manage and check policies. **Control what AI can access** presents policy patterns across the AI lifecycle, from data and training to inference, agents, tool calls and other agents. All of this is built on the open-source Speedle policy engine; the SPDL examples on the page are solution patterns, not shipped platform integrations.
+Speedle AI has two parts. **Use AI to manage access** shows how AI helps design, manage and check policies. **Control what AI can access** presents policy patterns across the AI lifecycle, from data and training to inference, agents, tool calls and other agents. The home page gives one sentence and one representative rule for each pattern; the full SPDL examples, longer explanations and the target AI risk-detection flow are on the patterns page. All of this is built on the open-source Speedle policy engine; the SPDL examples are solution patterns, not shipped platform integrations.
 
 ## Home
 
 - [Speedle AI home](https://ai.speedle.io/): What Speedle AI is and the two parts.
 - [中文](https://ai.speedle.io/zh/): Speedle AI 中文首页：用 AI 管权限，用策略约束 AI，涵盖 AI 智能体授权、AI 访问控制、MCP 授权、RAG 权限控制和智能体最小权限。
+- [Patterns](https://ai.speedle.io/patterns/): the full SPDL examples for every area in Build and Run, with subjects, resources, actions and enforcement points.
+- [中文模式](https://ai.speedle.io/zh/patterns/): 构建和运行 AI 的完整 SPDL 示例，涵盖数据与训练、模型发布、推理与 RAG、委托智能体、MCP 工具调用、A2A 调用和零常驻权限。
 
 ## Use AI to manage access
 
@@ -19,17 +21,19 @@ Speedle AI has two parts. **Use AI to manage access** shows how AI helps design,
 
 ## Control what AI can access
 
-- [Concept: one decision point](https://ai.speedle.io/#lifecycle): identity in, allow or deny out, audit and explain out.
-- [Build: data and training](https://ai.speedle.io/#lc-data): consent, region and restricted-data rules for datasets, training jobs and checkpoints.
-- [Build: model release](https://ai.speedle.io/#lc-release): separation of duties for register, approve, promote and rollback.
-- [Run: permission-aware RAG](https://ai.speedle.io/#lc-rag): the retriever asks per document or collection before content enters the prompt.
-- [Run: agents acting for users](https://ai.speedle.io/#lc-agents): the enforcement point verifies the delegation token, then checks the agent within the token scope and the delegating user's current permission.
-- [Run: tool calls over MCP](https://ai.speedle.io/#lc-mcp): the tool, the call and its arguments are checked before the tool runs.
-- [Run: agent-to-agent (A2A) authorization](https://ai.speedle.io/#lc-a2a): each hop is checked and delegation only narrows permissions.
-- [Run: zero standing privileges (ZSP)](https://ai.speedle.io/#zsp): just-in-time, short-lived, narrowly scoped credentials support a ZSP pattern when issuance and controls are in place; the example checks lifetime, not-before and token status, and production verifies token binding and consumes single-use tokens atomically.
+- [Concept: one decision point](https://ai.speedle.io/#lifecycle): identity in, allow or deny out, audit and explain out, with the boundary.
+- [Patterns: Build and Run](https://ai.speedle.io/patterns/): the full examples and explanations that the home page summarizes.
+- [Build: data and training](https://ai.speedle.io/patterns/#lc-data): consent, region and restricted-data rules for datasets, training jobs and checkpoints.
+- [Build: model release](https://ai.speedle.io/patterns/#lc-release): separation of duties for register, approve, promote and rollback.
+- [Run: permission-aware RAG](https://ai.speedle.io/patterns/#lc-rag): the retriever asks per document or collection before content enters the prompt.
+- [Run: agents acting for users](https://ai.speedle.io/patterns/#lc-agents): the enforcement point verifies the delegation token, then checks the agent within the token scope and the delegating user's current permission.
+- [Run: tool calls over MCP](https://ai.speedle.io/patterns/#lc-mcp): the tool, the call and its arguments are checked before the tool runs.
+- [Run: agent-to-agent (A2A) authorization](https://ai.speedle.io/patterns/#lc-a2a): each hop is checked and delegation only narrows permissions.
+- [Run: zero standing privileges (ZSP)](https://ai.speedle.io/patterns/#zsp): just-in-time, short-lived, narrowly scoped credentials support a ZSP pattern when issuance and controls are in place; the example checks lifetime, not-before and token status, and production verifies token binding and consumes single-use tokens atomically.
 - [ZSP sample](https://github.com/teramoby/ai.speedle.io/tree/main/samples/zsp): a local PMS + ADS + custom function demo with the atomic consume step; its in-memory state and admin endpoints are demo only.
 - [Delegated agent sample](https://github.com/teramoby/ai.speedle.io/tree/main/samples/delegation): both patterns with a local PMS + ADS; the token key and the custom-function server are demo only.
-- [Cross-cutting concerns](https://ai.speedle.io/#cross-cutting): identity, audit and explainability, and OWASP LLM06:2025 Excessive Agency.
+- [AI risk-detection target flow](https://ai.speedle.io/patterns/#risk-detection): the conceptual flow being built; a risk signal cannot turn a policy deny into an allow.
+- [Cross-cutting concerns](https://ai.speedle.io/#cross-cutting): identity, audit and explainability, OWASP LLM06:2025 Excessive Agency, and the boundary.
 - [Where Speedle stops](https://ai.speedle.io/#boundary): it does not detect prompt injection, filter content or verify model and dataset supply chains.
 
 ## Related Speedle sites
