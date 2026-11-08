@@ -10,15 +10,19 @@ Cases: `test-cases.json` (37 cases)
 ## Commands
 
 ```bash
-# From this directory
-spctl check -f policies.spdl
+# From this directory; use the Speedle build, not macOS /usr/sbin/spctl
+export SPEEDLE_SPCTL=/path/to/speedle-plus/bin/spctl
+export SPEEDLE_PMS=/path/to/speedle-plus/bin/speedle-pms
+export SPEEDLE_ADS=/path/to/speedle-plus/bin/speedle-ads
+
+"$SPEEDLE_SPCTL" check -f policies.spdl
 
 # Starts PMS and ADS on free loopback ports, runs all cases, stops both servers
-../../scripts/validate-model.sh policies.spdl test-cases.json \
-  --spctl /path/to/speedle-plus/bin/spctl \
-  --pms /path/to/speedle-plus/bin/speedle-pms \
-  --ads /path/to/speedle-plus/bin/speedle-ads
+../../scripts/validate-model.sh policies.spdl test-cases.json
 ```
+
+On macOS, `/usr/sbin/spctl` is Apple's Gatekeeper tool. `SPEEDLE_SPCTL` must point to the
+Speedle CLI explicitly; the validator rejects a non-Speedle PATH candidate.
 
 The validation script only reads the `.spdl` file. It is a file-store import, not a
 management write. Both servers were stopped by the script's exit trap; no process was left

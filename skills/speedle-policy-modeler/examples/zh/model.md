@@ -681,16 +681,20 @@ grant entity payroll_sync read,update expr:^/hr/payroll/.*$
 ## 12. 导入与运行
 
 ```bash
+# 指向 Speedle 构建产物，不要使用 macOS 的 /usr/sbin/spctl
+export SPEEDLE_SPCTL=/path/to/speedle-plus/bin/spctl
+
 # 不启动服务器，校验 SPDL 语法和条件
-spctl check -f policies.spdl
+"$SPEEDLE_SPCTL" check -f policies.spdl
 
 # 把同一份文件加载到本地 PMS 和 ADS，运行全部用例
 ../../scripts/validate-model.sh policies.spdl test-cases.json
 ```
 
-`validate-model.sh` 在空闲的本地回环端口启动 PMS 和 ADS，并在退出时停止两个服务。如果
-二进制不在 `PATH` 中，用 `--spctl`、`--pms` 和 `--ads` 指定路径。macOS 自带的
-`/usr/sbin/spctl` 不是 Speedle 的命令行工具，请使用 Speedle `bin/spctl`。
+`validate-model.sh` 在空闲的本地回环端口启动 PMS 和 ADS，并在退出时停止两个服务。脚本读取
+`SPEEDLE_SPCTL`、`SPEEDLE_PMS` 和 `SPEEDLE_ADS`，对应的 `--spctl`、`--pms` 和 `--ads`
+参数会覆盖环境变量。macOS 自带的 `/usr/sbin/spctl` 是 Apple 的 Gatekeeper 工具，请显式把
+`SPEEDLE_SPCTL` 设置为 Speedle `bin/spctl` 的路径。
 
 目标是自托管的 `.spdl` 文件存储。该文件是只读导入路径：PMS 在管理写入时会把存储改写为
 JSON，因此不要对 `policies.spdl` 执行 `spctl create` 或 `spctl delete`。修改文件后重启

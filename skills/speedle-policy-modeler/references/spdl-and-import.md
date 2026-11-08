@@ -230,7 +230,11 @@ git clone --depth 1 https://github.com/teramoby/speedle-plus.git
 cd speedle-plus
 mkdir -p bin
 go build -o ./bin/ ./cmd/spctl ./cmd/speedle-pms ./cmd/speedle-ads
+export SPEEDLE_SPCTL="$PWD/bin/spctl"
 ```
+
+Use `"$SPEEDLE_SPCTL"` for CLI commands. This explicit path is required on macOS, where
+`/usr/sbin/spctl` is Apple's Gatekeeper tool rather than the Speedle CLI.
 
 Start PMS and ADS against the same file (`docs/hugo/content/quick-start.md:61-70`,
 `:107-116`; use free ports for a scratch run):
