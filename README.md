@@ -2,10 +2,10 @@
 
 Standalone public exploration website: https://ai.speedle.io
 
-The site has two parts. AI for access management covers the open-source
+The site has two parts. **Use AI to manage access** covers the open-source
 Speedle policy modeler skill, the Speedle MCP launch preview and an AI-based
 risk-detection approach being built; risk detection is not presented as a
-shipped feature and never grants access that policy denies. Access management for AI shows policy patterns across
+shipped feature and never grants access that policy denies. **Control what AI can access** shows policy patterns across
 the AI lifecycle: model training, deployment, operations and inference,
 agents, MCP tool calls and agent-to-agent calls. These are solution
 patterns on the Speedle policy engine, not shipped platform integrations.
