@@ -391,7 +391,7 @@ for (const [html, file, tag, title] of [
 for (const keyword of ['zero standing privileges', 'ZSP']) {
   check(englishHtml.includes(keyword), `index.html must naturally include the English keyword "${keyword}"`);
 }
-for (const keyword of ['AI 智能体授权', 'AI 访问控制', 'MCP 授权', 'RAG 权限控制', '大模型应用权限管理', '智能体最小权限', '零常驻权限', 'ZSP', 'AI 智能体授权：用 AI 管权限，用策略约束 AI', 'Speedle MCP：两种独立模式']) {
+for (const keyword of ['AI 智能体授权', 'AI 访问控制', 'MCP 授权', 'RAG 权限控制', '大模型应用权限管理', '智能体最小权限', '零常驻权限', 'ZSP', '用 AI 管权限，用策略约束 AI', 'Speedle MCP：两种独立模式']) {
   check(chineseHtml.includes(keyword), `zh/index.html must naturally include the Chinese keyword "${keyword}"`);
 }
 check(chineseHtml.includes('>产品<svg class="products-chevron"'), 'zh/index.html header must use the Chinese 产品 label');
