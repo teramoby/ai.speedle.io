@@ -31,10 +31,12 @@ site_files=(
   index.html
   llms-full.txt
   llms.txt
+  patterns/index.html
   robots.txt
   sitemap.xml
   styles.css
   zh/index.html
+  zh/patterns/index.html
 )
 
 for file in "${site_files[@]}"; do

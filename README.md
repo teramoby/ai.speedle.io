@@ -9,11 +9,14 @@ shipped feature and never grants access that policy denies. Access management fo
 the AI lifecycle: model training, deployment, operations and inference,
 agents, MCP tool calls and agent-to-agent calls. These are solution
 patterns on the Speedle policy engine, not shipped platform integrations.
-Every SPDL example on the page is parsed and evaluated with the Speedle
-file store (`eval.NewFromFile`) before it is published; keep each SPDL block
-byte-identical to what was tested. The Chinese page retains the same seven SPDL
-blocks, including their English comments. The zero standing privileges sample
-runs from `samples/zsp/` and the delegated agent sample from
+The home page gives one sentence and one representative rule per area. The full
+SPDL examples, the longer explanations and the target AI risk-detection flow are
+on `/patterns/` in English and `/zh/patterns/` in Chinese, linked from the home
+page. Every SPDL example on the patterns pages is parsed and evaluated with the
+Speedle file store (`eval.NewFromFile`) before it is published; keep each SPDL
+block byte-identical to what was tested. The Chinese patterns page retains the
+same seven SPDL blocks, including their English comments. The zero standing
+privileges sample runs from `samples/zsp/` and the delegated agent sample from
 `samples/delegation/`; neither is part of the sitemap.
 
 The policy modeler skill lives in `skills/speedle-policy-modeler/`. It turns a
@@ -36,17 +39,17 @@ format of speedle.io.
 `sitemap.xml`, `robots.txt`, `llms.txt` and `llms-full.txt` at the root are
 hand-maintained; there is no generator. The sitemap and both home pages declare
 `hreflang` alternates for `en`, `zh-CN` and `x-default`. The complete Chinese
-page is at `/zh/`. Every factual claim in these files must already be
-true on the page: `@speedle/mcp` is not on npm, Speedle Cloud is coming soon,
-and AI risk detection is not shipped.
+site is at `/zh/` and `/zh/patterns/`. Every factual claim in these files must
+already be true on the page: `@speedle/mcp` is not on npm, Speedle Cloud is
+coming soon, and AI risk detection is not shipped.
 
 `node scripts/check-seo.mjs` verifies that the sitemap and `llms` link targets
 resolve to files and anchors in this repository, that each sitemap entry's
-`hreflang` entries match its page, that both pages' JSON-LD blocks parse and
-cover Organization, WebSite and SoftwareApplication, and that neither home
-page has a visible FAQ section or FAQPage data. It also checks the
-language-switch links, Chinese metadata and diagram labels,
-Cloudflare Web Analytics on both pages, and byte-identical SPDL blocks
+`hreflang` entries match its page, that every page's JSON-LD blocks parse and
+cover Organization, WebSite and SoftwareApplication, and that no page has a
+visible FAQ section or FAQPage data. It also checks the language-switch links,
+Chinese metadata and diagram labels, Cloudflare Web Analytics on every page, the
+shared header and footer, and byte-identical SPDL blocks on the patterns pages,
 including comments. No dependencies.
 
 Every public page loads the cookieless Cloudflare Web Analytics beacon before

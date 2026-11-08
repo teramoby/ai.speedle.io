@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Validate every SPDL block published on the English and Chinese home pages.
+# Validate every SPDL block published on the English and Chinese patterns pages.
 # Put spctl, speedle-pms, speedle-ads and the samples/zsp demo binary (zsp-demo)
 # on PATH, or set SPCTL, SPEEDLE_PMS, SPEEDLE_ADS and ZSP_DEMO to their paths.
 
