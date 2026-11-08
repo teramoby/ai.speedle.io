@@ -568,6 +568,7 @@ h1 { max-width: 760px; margin: 20px 0 24px; font-size: clamp(3.1rem, 6vw, 5.6rem
 .footer-card[aria-current="page"] .footer-card-name { color: var(--primary-dark); }
 .footer-bar { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; padding: 20px 0; border-top: 1px solid rgba(24,32,52,.14); color: var(--muted); font-size: 13px; line-height: 20px; }
 .footer-legal { margin: 0; }
+.footer-legal span { display: block; }
 
 @media (max-width: 1024px) {
   .footer-brand, .footer-family { grid-column: 1 / -1; }
@@ -670,8 +671,6 @@ h1 { max-width: 760px; margin: 20px 0 24px; font-size: clamp(3.1rem, 6vw, 5.6rem
   .footer-main { padding: 48px 0 32px; }
   .footer-family ul { grid-template-columns: 1fr; }
   .footer-bar { flex-direction: column; }
-  .footer-legal span { display: block; }
-  .footer-legal .footer-sep { display: none; }
   .ecosystem-head { align-items: start; flex-direction: column; }
   .resource-card { display: block; }
   .resource-card strong { margin-top: 10px; }
