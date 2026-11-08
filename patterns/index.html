@@ -353,18 +353,18 @@ grant entity agent-billing-1 agent-runtime</code></pre>
 
         <section id="risk-detection" class="subsection patterns-risk" aria-labelledby="patterns-risk-title">
           <div class="section-head">
-            <div><p class="eyebrow">Part one · Being built</p><h2 id="patterns-risk-title">Target flow for AI risk detection</h2></div>
+            <div><p class="eyebrow">Part one<span class="status-badge status-planned">Planned</span></p><h2 id="patterns-risk-title">Target flow for AI risk detection</h2></div>
             <p>The approach is being explored and built, not shipped. It adds scrutiny on top of the deterministic policy decision, and a risk signal cannot turn a policy deny into an allow.</p>
           </div>
           <section class="decision-architecture" aria-labelledby="decision-flow-title">
             <div class="architecture-head">
               <div><p class="eyebrow">Conceptual target flow</p><h3 id="decision-flow-title">Policy first. Risk signals second. Veto intact</h3></div>
-              <span class="architecture-badge">AI risk detection · TBD</span>
+              <span class="status-badge status-planned">Planned</span>
             </div>
             <ol class="decision-flow">
               <li class="flow-node"><span class="flow-step">01 / REQUEST</span><h4>Describe the action</h4><p>Agent, user, data, action and task context form the request.</p><span class="flow-tag">Before anything executes</span></li>
               <li class="flow-node"><span class="flow-step">02 / POLICY DECISION</span><h4>Apply the deterministic boundary</h4><p>Policy returns the precise decision. Deny stops here; only an allow can continue.</p><span class="flow-tag flow-tag-deny">VETO · DENY IS FINAL</span></li>
-              <li class="flow-node"><span class="flow-step">03 / AI RISK SIGNALS</span><h4>Examine wider relationships</h4><p>The approach being built looks across more dimensions and relationships for additional risk.</p><span class="flow-tag flow-tag-building">APPROACH BEING BUILT</span></li>
+              <li class="flow-node"><span class="flow-step">03 / AI RISK SIGNALS</span><h4>Examine wider relationships</h4><p>The approach being built looks across more dimensions and relationships for additional risk.</p><span class="flow-tag flow-tag-planned">PLANNED</span></li>
               <li class="flow-node"><span class="flow-step">04 / FINAL DECISION</span><h4>Add protection, never access</h4><p>Risk signals can add scrutiny or protection. The policy outcome and its veto remain intact.</p><span class="flow-tag">POLICY VETO PRESERVED</span></li>
             </ol>
             <p class="flow-note"><strong>A risk signal cannot turn a policy deny into an allow.</strong> This diagram shows the approach being built; it does not represent a shipped AI risk-detection capability.</p>

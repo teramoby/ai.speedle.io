@@ -137,13 +137,14 @@
           <p class="eyebrow">Speedle AI · Two connected directions</p>
           <h1 id="hero-title">Use AI to manage access, and control what AI can access</h1>
           <p class="hero-lead">Use AI to design, manage and check access policies — and apply the same policy to AI itself: MCP authorization, permission-aware RAG and least privilege for AI agents. Both directions rest on clear, enforceable policy decisions.</p>
+          <div class="actions"><a class="button button-primary" href="#policy-modeler">Try the policy modeler skill</a><a class="button button-secondary" href="https://engine.speedle.io/docs/">Read the docs<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a></div>
           <p class="hero-note"><span aria-hidden="true"></span>Built on the open-source Speedle policy engine.</p>
         </div>
         <div class="hero-paths" aria-label="Explore the two parts of Speedle for AI">
           <a class="path-card" href="#ai-for-access">
             <div class="path-top"><span class="path-index">PART 01</span><span class="path-icon" aria-hidden="true"><svg class="icon"><use href="#i-terminal"/></svg></span></div>
             <h2>Use AI to manage access</h2>
-            <p>Put AI to work on policy modeling, design, management and checks: turn documents into SPDL with the open-source policy modeler skill, use Speedle MCP, and see the AI-based risk detection being built.</p>
+            <p>Put AI to work on policy modeling, design, management and checks: turn documents into SPDL with the open-source policy modeler skill, use Speedle MCP, and see the planned AI risk-detection approach.</p>
             <span class="path-link">Explore Speedle MCP<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></span>
           </a>
           <a class="path-card" href="#access-for-ai">
@@ -162,12 +163,12 @@
         <header class="part-header">
           <span class="part-number" aria-hidden="true">01</span>
           <div class="part-heading"><p class="eyebrow">Use AI to manage access</p><h2 id="ai-for-access-title">Put AI to work on your access policies</h2></div>
-          <p class="part-summary">AI helping people manage access: an open-source skill that turns policy documents into SPDL, a preview of Speedle MCP for designing, managing and checking policies, and an AI risk-detection approach that is being built.</p>
+          <p class="part-summary">AI helping people manage access: an open-source skill that turns policy documents into SPDL, a preview of Speedle MCP for designing, managing and checking policies, and a planned AI risk-detection approach.</p>
         </header>
 
         <div id="policy-modeler" class="policy-modeler">
           <div class="section-head">
-            <div><p class="eyebrow">Speedle policy modeler · Open source skill</p><h3 id="policy-modeler-title">Turn policy documents into reviewable SPDL</h3></div>
+            <div><p class="eyebrow">Speedle policy modeler · Open source skill<span class="status-badge status-available">Available</span></p><h3 id="policy-modeler-title">Turn policy documents into reviewable SPDL</h3></div>
             <p>An Agent Skill for Claude Code that reads an employee handbook or regulation, asks about what the document leaves open, and models the result as RBAC + ABAC policies. It never guesses a rule.</p>
           </div>
 
@@ -198,6 +199,15 @@
 
           <p class="launch-note">The package follows the Agent Skills format: a <code>SKILL.md</code> with <code>name</code> and <code>description</code> frontmatter, plus references, scripts and examples. Install it as a personal skill in <code>~/.claude/skills/</code>, or copy it to <code>.claude/skills/</code> for a project-scoped install.</p>
 
+          <div class="prerequisites">
+            <h4>Prerequisites</h4>
+            <ul>
+              <li><code>spctl</code> — validates the generated SPDL with <code>spctl check -f policies.spdl</code>.</li>
+              <li><code>speedle-pms</code> and <code>speedle-ads</code> — run the end-to-end authorization cases against a local Speedle.</li>
+              <li>Python 3 — runs the test cases in <code>scripts/run-cases.py</code>.</li>
+            </ul>
+          </div>
+
           <div class="config-grid">
             <figure class="config-card">
               <figcaption><span>install</span><span>Claude Code</span></figcaption>
@@ -217,7 +227,7 @@ cp -R ai.speedle.io/skills/speedle-policy-modeler \
 
         <div id="mcp" class="subsection mcp">
           <div class="section-head mcp-intro">
-            <div><p class="eyebrow">Speedle MCP · Coming soon</p><h3 id="mcp-title">Speedle MCP: one package, two deliberately separate modes</h3></div>
+            <div><p class="eyebrow">Speedle MCP<span class="status-badge status-preview">Preview</span></p><h3 id="mcp-title">Speedle MCP: one package, two deliberately separate modes</h3></div>
             <div class="mcp-lead">
               <p><code>@speedle/mcp</code> is planned as one npm package with a <code>speedle-mcp</code> binary that runs as a local stdio MCP server. It is not published on npm yet.</p>
               <a class="button button-outline" href="https://github.com/teramoby/speedle-mcp">Follow the repository<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a>
@@ -226,7 +236,7 @@ cp -R ai.speedle.io/skills/speedle-policy-modeler \
 
           <div class="mode-grid">
             <article class="mode-card">
-              <div class="mode-top"><span class="mode-label">Mode 01 · Launch preview</span><code>check</code></div>
+              <div class="mode-top"><span class="mode-label">Mode 01</span><code>check</code></div>
               <h4>Authorization checks</h4>
               <p>The planned <code>check</code> mode registers only <code>is_allowed</code> by default and reads only ADS configuration. <code>diagnose</code>, <code>all_granted_roles</code> and <code>all_granted_permissions</code> are opt-in through the <code>--expose-diagnose</code>, <code>--expose-all-granted-roles</code> and <code>--expose-all-granted-permissions</code> flags. <code>diagnose</code> works only with self-hosted Speedle; the server will not start with it against Speedle Cloud. It answers authorization questions; it does not enforce anything in the calling application.</p>
               <ul class="mode-list">
@@ -237,7 +247,7 @@ cp -R ai.speedle.io/skills/speedle-policy-modeler \
               <a class="mode-link" href="https://github.com/teramoby/speedle-mcp/issues/1">Read the check-mode issue<svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg></a>
             </article>
             <article class="mode-card">
-              <div class="mode-top"><span class="mode-label">Mode 02 · Launch preview</span><code>manage</code></div>
+              <div class="mode-top"><span class="mode-label">Mode 02</span><code>manage</code></div>
               <h4>Policy design and management</h4>
               <p>The planned <code>manage</code> mode registers only the management tools and reads only PMS configuration for designing and managing Speedle policies through the PMS REST API.</p>
               <ul class="mode-list">
@@ -259,7 +269,7 @@ cp -R ai.speedle.io/skills/speedle-policy-modeler \
 
         <div id="risk-detection" class="risk-detection">
           <article class="risk-card" aria-labelledby="risk-title">
-            <div class="risk-card-top"><h3 id="risk-title">AI risk detection</h3><span class="status-pill">TBD</span></div>
+            <div class="risk-card-top"><h3 id="risk-title">AI risk detection</h3><span class="status-badge status-planned">Planned</span></div>
             <p>AI can look across more dimensions and relationships to find risk that a single rule does not see. This is a direction Speedle is exploring and building, not a shipped feature. Policy keeps the veto: a risk signal can add scrutiny or protection, but it never turns a deny into an allow.</p>
             <a class="mode-link" href="/patterns/#risk-detection">See the target flow<svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
           </article>
@@ -616,8 +626,18 @@ cp -R ai.speedle.io/skills/speedle-policy-modeler \
           <div class="resource-grid">
             <a class="resource-card" href="https://engine.speedle.io/"><span>OPEN SOURCE</span><strong>Speedle Engine<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>The open-source authorization engine and readable SPDL policy language.</p></a>
             <a class="resource-card" href="https://cloud.speedle.io/"><span>HOSTED</span><strong><span class="resource-name">Speedle Cloud<span class="coming-soon">Coming soon</span></span><svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>Hosted authorization for developers, built on the Speedle policy engine.</p></a>
-            <a class="resource-card" href="https://github.com/teramoby/speedle-sdk"><span>INTEGRATE</span><strong>Speedle SDK<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>Explore the SDK repository for client integration patterns and guidance.</p></a>
+            <a class="resource-card" href="https://engine.speedle.io/docs/sdks/"><span>INTEGRATE</span><strong>Speedle SDK<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>Python, Go, Java, C# and Rust clients for the decision API.</p></a>
           </div>
+          <figure class="config-card sdk-snippet">
+            <figcaption><span>Python SDK · ask for a decision</span><span>0.2.0</span></figcaption>
+            <pre tabindex="0" aria-label="Python SDK example: ask Speedle for a decision"><code>from speedle import Auth, Client
+
+with Client(backend="speedle", endpoint="http://localhost:6734",
+            auth=Auth.none(), service_name="docs") as speedle:
+    allowed = speedle.is_allowed("alice", "get", "/docs/public")
+    # True once the docs service grants alice get /docs/public</code></pre>
+            <p class="sdk-caption">One short example; the <a href="https://engine.speedle.io/docs/sdks/">SDK documentation</a> covers every language client, the request model and error handling.</p>
+          </figure>
         </div>
       </div>
     </section>
