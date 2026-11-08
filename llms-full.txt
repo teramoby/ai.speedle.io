@@ -1,6 +1,6 @@
 # Speedle AI — AI agent authorization and access control
 
-> Speedle AI is the Speedle site for access management for AI. It shows how to apply the open-source Speedle policy engine to authorization for AI agents: MCP tool calls, permission-aware RAG, agent-to-agent (A2A) calls, zero standing privileges (ZSP) and the AI lifecycle from training data to model release. It also previews Speedle MCP for designing, managing and checking policies with AI, and an AI-based risk-detection approach that is being built. Everything here is a solution pattern on the Speedle policy engine; none of it is a shipped integration with an ML or agent platform.
+> Speedle AI — AI for access control, access control for AI. It shows how to apply the open-source Speedle policy engine to authorization for AI agents: MCP tool calls, permission-aware RAG, agent-to-agent (A2A) calls, zero standing privileges (ZSP) and the AI lifecycle from training data to model release. It also previews Speedle MCP for designing, managing and checking policies with AI, and an AI-based risk-detection approach that is being built. Everything here is a solution pattern on the Speedle policy engine; none of it is a shipped integration with an ML or agent platform.
 
 Source: https://ai.speedle.io/
 
@@ -8,12 +8,12 @@ Source: https://ai.speedle.io/
 
 Speedle AI has two connected directions.
 
-- **AI for access management:** AI helping people design, manage and check access policies with the open-source Speedle policy modeler skill and Speedle MCP, plus an AI-based risk-detection approach being built.
-- **Access management for AI:** policy patterns that govern what AI systems and agents may do while they are built and while they run.
+- **Use AI to manage access:** AI helping people design, manage and check access policies with the open-source Speedle policy modeler skill and Speedle MCP, plus an AI-based risk-detection approach being built.
+- **Control what AI can access:** policy patterns that govern what AI systems and agents may do while they are built and while they run.
 
 Both directions rest on clear, enforceable policy decisions. Speedle decides; the application enforces the decision.
 
-## AI for access management
+## Use AI to manage access
 
 ### Speedle policy modeler skill
 
@@ -46,7 +46,7 @@ AI-based risk detection is a direction Speedle is exploring and building, not a 
 
 Policy keeps the veto. The target flow is: request context, then the deterministic policy decision, then AI risk signals, then a final decision. A policy deny stops at the decision step; risk signals can add scrutiny or protection but can never turn a policy deny into an allow.
 
-## Access management for AI
+## Control what AI can access
 
 Speedle's policy engine applied wherever AI systems touch data, models, tools and other agents. Each area has an enforcement point in the application; it asks Speedle before it acts and enforces the answer. Identity comes in from the IdP; decisions and explanations go out to the audit trail. The SPDL examples below are solution patterns, not shipped platform integrations.
 
