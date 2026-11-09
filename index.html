@@ -594,7 +594,7 @@ $speedle-policy-modeler ./employee-handbook.md</code></pre>
             <article id="zsp" class="pattern-card">
               <p class="pattern-step">Run · 07 Zero standing privileges · Self-hosted</p>
               <h4><a href="/patterns/#zsp">Zero standing privileges</a></h4>
-              <p>Just-in-time, short-lived tokens can support zero standing privileges when issuance and controls are in place.</p>
+              <p>Just-in-time, short-lived tokens can support zero standing privileges when issuance and controls are in place. Speedle is where you define your ZSP strategy as policy and enforce it on every request: access exists only within the time window and conditions you write in SPDL.</p>
               <code class="pattern-rule">grant role agent-runtime invoke /api/orders if expires_at &gt; issued_at &amp;&amp; expires_at - issued_at &lt;= 600 &amp;&amp; issued_at &lt;= request_time + 60 &amp;&amp; not_before &lt;= request_time + 60 &amp;&amp; request_time &lt; expires_at &amp;&amp; TokenUnused(token_id)</code>
             </article>
           </div>

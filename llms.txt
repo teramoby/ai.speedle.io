@@ -30,7 +30,7 @@ Speedle AI has two parts. **Use AI to manage access** shows how AI helps design,
 - [Run: agents acting for users](https://ai.speedle.io/patterns/#lc-agents): verify the delegation token, then check the agent within the token scope and the delegating user's current permission.
 - [Run: tool calls over MCP](https://ai.speedle.io/patterns/#lc-mcp): the tool, the call and its arguments are checked before the tool runs.
 - [Run: agent-to-agent (A2A) authorization](https://ai.speedle.io/patterns/#lc-a2a): each hop is checked and delegation only narrows permissions.
-- [Run: zero standing privileges (ZSP)](https://ai.speedle.io/patterns/#zsp): a self-hosted pattern where a policy checks token lifetime, validity window and status; production adds token binding and an atomic consume.
+- [Run: zero standing privileges (ZSP)](https://ai.speedle.io/patterns/#zsp): a self-hosted pattern where a policy checks token lifetime, validity window and status; production adds token binding and an atomic consume. Speedle is where you define your ZSP strategy as policy and enforce it on every request: access exists only within the time window and conditions you write in SPDL.
 - [ZSP sample](https://github.com/teramoby/ai.speedle.io/tree/main/samples/zsp): a local PMS + ADS + custom function demo with the atomic consume step.
 - [Delegated agent sample](https://github.com/teramoby/ai.speedle.io/tree/main/samples/delegation): both delegation patterns with a local PMS + ADS.
 - [AI risk-detection target flow](https://ai.speedle.io/patterns/#risk-detection): the conceptual flow being built; a policy deny is final.

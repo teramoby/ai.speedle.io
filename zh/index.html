@@ -595,7 +595,7 @@ $speedle-policy-modeler ./employee-handbook.md</code></pre>
             <article id="zsp" class="pattern-card">
               <p class="pattern-step">运行 · 07 零常驻权限 · 自托管</p>
               <h4><a href="/zh/patterns/#zsp">零常驻权限</a></h4>
-              <p>签发和管控到位时，即时签发、短期有效的令牌可以支撑零常驻权限模式。</p>
+              <p>签发和管控到位时，即时签发、短期有效的令牌可以支撑零常驻权限模式。在 Speedle 里，你可以把零常驻权限策略写成 SPDL 策略，并在每次请求时强制执行：权限只在你设定的时间窗口和条件内存在。</p>
               <code class="pattern-rule">grant role agent-runtime invoke /api/orders if expires_at &gt; issued_at &amp;&amp; expires_at - issued_at &lt;= 600 &amp;&amp; issued_at &lt;= request_time + 60 &amp;&amp; not_before &lt;= request_time + 60 &amp;&amp; request_time &lt; expires_at &amp;&amp; TokenUnused(token_id)</code>
             </article>
           </div>
