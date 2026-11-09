@@ -13,7 +13,7 @@ Speedle AI has two parts. **Use AI to manage access** shows how AI helps design,
 
 ## Use AI to manage access
 
-- [Speedle policy modeler skill](https://ai.speedle.io/#policy-modeler): an open-source Agent Skill for Claude Code that turns employee handbooks and regulations into RBAC + ABAC SPDL models, with a design document, a Mermaid role-inheritance diagram and executable test cases.
+- [Speedle policy modeler skill](https://ai.speedle.io/#policy-modeler): an open-source Agent Skill for any agent that supports the Agent Skills format. It turns employee handbooks and regulations into RBAC + ABAC SPDL models, with a design document, a Mermaid role-inheritance diagram and executable test cases.
 - [Policy modeler skill folder](https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler): SKILL.md, references, scripts, templates and English/Chinese example runs.
 - [Policy modeler English sample](https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/en/model.md): a full English model with role inheritance, ABAC conditions and all 37 authorization cases passing.
 - [Policy modeler Chinese sample](https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/zh/model.md): the Chinese run of the same synthetic handbook workflow.

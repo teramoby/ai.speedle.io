@@ -168,8 +168,8 @@
 
         <div id="policy-modeler" class="policy-modeler">
           <div class="section-head">
-            <div><p class="eyebrow">Speedle policy modeler · Open source skill<span class="status-badge status-available">Available</span></p><h3 id="policy-modeler-title">Turn policy documents into reviewable SPDL</h3></div>
-            <p>An Agent Skill for Claude Code that reads an employee handbook or regulation, asks about what the document leaves open, and models the result as RBAC + ABAC policies. It never guesses a rule.</p>
+            <div><p class="eyebrow">Speedle policy modeler · Open source Agent Skill<span class="status-badge status-available">Available</span></p><h3 id="policy-modeler-title">Turn policy documents into reviewable SPDL</h3></div>
+            <p>An Agent Skill that reads an employee handbook or regulation, asks about what the document leaves open, and models the result as RBAC + ABAC policies. It never guesses a rule.</p>
           </div>
 
           <div class="mode-grid">
@@ -197,7 +197,7 @@
             </article>
           </div>
 
-          <p class="launch-note">The package follows the Agent Skills format: a <code>SKILL.md</code> with <code>name</code> and <code>description</code> frontmatter, plus references, scripts and examples. Install it as a personal skill in <code>~/.claude/skills/</code>, or copy it to <code>.claude/skills/</code> for a project-scoped install.</p>
+          <p class="launch-note">The package follows the Agent Skills format: a <code>SKILL.md</code> with <code>name</code> and <code>description</code> frontmatter, plus references, scripts and examples. It works with any agent that supports that format. For a generic install, copy the skill folder into your agent's skills directory, then ask the agent to model your handbook. The examples below show two compatible agents.</p>
 
           <div class="prerequisites">
             <h4>Prerequisites</h4>
@@ -210,19 +210,28 @@
 
           <div class="config-grid">
             <figure class="config-card">
-              <figcaption><span>install</span><span>Claude Code</span></figcaption>
-              <pre tabindex="0" aria-label="Install the Speedle policy modeler skill"><code>git clone --depth 1 https://github.com/teramoby/ai.speedle.io.git
+              <figcaption><span>install + use</span><span>Claude Code · example</span></figcaption>
+              <pre tabindex="0" aria-label="Install and use the Speedle policy modeler skill with Claude Code"><code>git clone --depth 1 https://github.com/teramoby/ai.speedle.io.git
 mkdir -p ~/.claude/skills
 cp -R ai.speedle.io/skills/speedle-policy-modeler \
-  ~/.claude/skills/</code></pre>
+  ~/.claude/skills/
+
+# In Claude Code:
+/speedle-policy-modeler ./employee-handbook.md</code></pre>
             </figure>
             <figure class="config-card">
-              <figcaption><span>use</span><span>Claude Code</span></figcaption>
-              <pre tabindex="0" aria-label="Ask the policy modeler skill to model a handbook"><code>/speedle-policy-modeler ./employee-handbook.md</code></pre>
+              <figcaption><span>install + use</span><span>Codex · example</span></figcaption>
+              <pre tabindex="0" aria-label="Install and use the Speedle policy modeler skill with Codex"><code>git clone --depth 1 https://github.com/teramoby/ai.speedle.io.git
+mkdir -p ~/.agents/skills
+cp -R ai.speedle.io/skills/speedle-policy-modeler \
+  ~/.agents/skills/
+
+# In Codex CLI or the IDE extension:
+$speedle-policy-modeler ./employee-handbook.md</code></pre>
             </figure>
           </div>
 
-          <div class="mcp-resources"><span>Skill and samples</span><a href="https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler">Skill folder</a><a href="https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/en/model.md">English sample</a><a href="https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/zh/model.md">Chinese sample</a><a href="https://code.claude.com/docs/en/skills">Claude Code skills docs</a></div>
+          <div class="mcp-resources"><span>Skill and samples</span><a href="https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler">Skill folder</a><a href="https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/en/model.md">English sample</a><a href="https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/zh/model.md">Chinese sample</a><a href="https://code.claude.com/docs/en/skills">Claude Code skills docs</a><a href="https://learn.chatgpt.com/docs/build-skills">ChatGPT / Codex Agent Skills docs</a></div>
         </div>
 
         <div id="mcp" class="subsection mcp">

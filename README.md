@@ -19,10 +19,16 @@ same seven SPDL blocks, including their English comments. The zero standing
 privileges sample runs from `samples/zsp/` and the delegated agent sample from
 `samples/delegation/`; neither is part of the sitemap.
 
-The policy modeler skill lives in `skills/speedle-policy-modeler/`. It turns a
+The policy modeler is an open-source Agent Skill for any agent that supports
+the Agent Skills format. It lives in `skills/speedle-policy-modeler/` and turns a
 handbook or regulation into SPDL, a design document and executable test cases.
 `examples/en/` and `examples/zh/` record two synthetic runs, each validated with
 `spctl check` and 37 authorization cases against a local PMS and ADS.
+
+For a generic install, copy the skill folder into the agent's skills directory.
+The home page provides Claude Code and Codex install/use examples. OpenAI's
+official [Build skills documentation](https://learn.chatgpt.com/docs/build-skills)
+documents Codex's `$HOME/.agents/skills` directory and `$` skill invocation.
 
 The interactive example uses simplified
 browser-local policy rules and does not simulate AI risk detection. It is
