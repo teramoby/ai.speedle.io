@@ -169,8 +169,8 @@
 
         <div id="policy-modeler" class="policy-modeler">
           <div class="section-head">
-            <div><p class="eyebrow">Speedle 策略建模技能 · 开源技能<span class="status-badge status-available">可用</span></p><h3 id="policy-modeler-title">把制度文档变成可复核的 SPDL</h3></div>
-            <p>面向 Claude Code 的 Agent Skill。它读取员工手册或制度文件，先问清文档没有写明的部分，再生成 RBAC + ABAC 策略，不会凭空猜规则。</p>
+            <div><p class="eyebrow">Speedle 策略建模技能 · 开源 Agent Skill<span class="status-badge status-available">可用</span></p><h3 id="policy-modeler-title">把制度文档变成可复核的 SPDL</h3></div>
+            <p>这个 Agent Skill 适用于所有兼容 Agent Skills 格式的 Agent。它读取员工手册或制度文件，先问清文档没有写明的部分，再生成 RBAC + ABAC 策略，不会凭空猜规则。</p>
           </div>
 
           <div class="mode-grid">
@@ -198,7 +198,7 @@
             </article>
           </div>
 
-          <p class="launch-note">技能包遵循 Agent Skills 格式：<code>SKILL.md</code> 包含 <code>name</code> 和 <code>description</code> frontmatter，另有参考文档、脚本和示例。安装到 <code>~/.claude/skills/</code> 作为个人技能，或复制到 <code>.claude/skills/</code> 作为项目技能。</p>
+          <p class="launch-note">技能包遵循 Agent Skills 格式：<code>SKILL.md</code> 包含 <code>name</code> 和 <code>description</code> frontmatter，另有参考文档、脚本和示例，可供任何兼容该格式的 Agent 使用。通用安装方式：把技能文件夹复制到 Agent 的技能目录，再让它读取员工手册并建模。下面分别以 Claude Code 和 Codex 为例。</p>
 
           <div class="prerequisites">
             <h4>前置条件</h4>
@@ -211,19 +211,28 @@
 
           <div class="config-grid">
             <figure class="config-card">
-              <figcaption><span>安装</span><span>Claude Code</span></figcaption>
-              <pre tabindex="0" aria-label="安装 Speedle 策略建模技能"><code>git clone --depth 1 https://github.com/teramoby/ai.speedle.io.git
+              <figcaption><span>安装与使用</span><span>Claude Code · 示例</span></figcaption>
+              <pre tabindex="0" aria-label="在 Claude Code 中安装和使用 Speedle 策略建模技能"><code>git clone --depth 1 https://github.com/teramoby/ai.speedle.io.git
 mkdir -p ~/.claude/skills
 cp -R ai.speedle.io/skills/speedle-policy-modeler \
-  ~/.claude/skills/</code></pre>
+  ~/.claude/skills/
+
+# 在 Claude Code 中：
+/speedle-policy-modeler ./employee-handbook.md</code></pre>
             </figure>
             <figure class="config-card">
-              <figcaption><span>使用</span><span>Claude Code</span></figcaption>
-              <pre tabindex="0" aria-label="让策略建模技能处理员工手册"><code>/speedle-policy-modeler ./employee-handbook.md</code></pre>
+              <figcaption><span>安装与使用</span><span>Codex · 示例</span></figcaption>
+              <pre tabindex="0" aria-label="在 Codex 中安装和使用 Speedle 策略建模技能"><code>git clone --depth 1 https://github.com/teramoby/ai.speedle.io.git
+mkdir -p ~/.agents/skills
+cp -R ai.speedle.io/skills/speedle-policy-modeler \
+  ~/.agents/skills/
+
+# 在 Codex CLI 或 IDE 扩展中：
+$speedle-policy-modeler ./employee-handbook.md</code></pre>
             </figure>
           </div>
 
-          <div class="mcp-resources"><span>技能与示例</span><a href="https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler">技能目录</a><a href="https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/zh/model.md">中文示例</a><a href="https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/en/model.md">英文示例</a><a href="https://code.claude.com/docs/en/skills">Claude Code 技能文档</a></div>
+          <div class="mcp-resources"><span>技能与示例</span><a href="https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler">技能目录</a><a href="https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/zh/model.md">中文示例</a><a href="https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/en/model.md">英文示例</a><a href="https://code.claude.com/docs/en/skills">Claude Code 技能文档</a><a href="https://learn.chatgpt.com/docs/build-skills">ChatGPT / Codex 技能文档</a></div>
         </div>
 
         <div id="mcp" class="subsection mcp">

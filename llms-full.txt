@@ -75,17 +75,21 @@ Both rest on enforceable policy decisions. Speedle decides; the application enfo
 
 ### Speedle policy modeler skill
 
-An open-source Agent Skill for Claude Code at `skills/speedle-policy-modeler/` in teramoby/ai.speedle.io. It reads a company regulation, employee handbook or access matrix; asks the document owner to clarify missing org structure, roles, resources, attributes, exceptions and approval chains in small prioritized batches; and writes an RBAC + ABAC model.
+An open-source Agent Skill at `skills/speedle-policy-modeler/` in teramoby/ai.speedle.io, for any agent that supports the Agent Skills format. It reads a company regulation, employee handbook or access matrix; asks the document owner to clarify missing org structure, roles, resources, attributes, exceptions and approval chains in small prioritized batches; and writes an RBAC + ABAC model.
 
 Outputs: `policies.spdl` in the Speedle file-store format, a `model.md` design document with a Mermaid role-inheritance diagram and a rationale for every policy, a `test-cases.json` suite, `results.md`, and `clarifications.md`. The skill refuses to guess an authorization rule; every policy cites a handbook clause or a confirmed answer.
 
 Example runs: English and Chinese synthetic handbooks. Both pass `spctl check` and all 37 authorization cases against a local PMS and ADS. The SPDL uses exact or prefix resource expressions only, so the evaluator uses hash-map and radix-tree lookups.
 
-Install: copy `skills/speedle-policy-modeler/` to `~/.claude/skills/` for a personal skill or `.claude/skills/` for a project skill, then run `/speedle-policy-modeler ./employee-handbook.md`. The `SKILL.md` frontmatter follows the Agent Skills format with `name` and `description`.
+The `SKILL.md` frontmatter follows the Agent Skills format with `name` and `description`. For a generic install, copy the skill folder into your agent's skills directory, then ask the agent to model `./employee-handbook.md`.
+
+- Claude Code example: copy `skills/speedle-policy-modeler/` to `~/.claude/skills/` for a personal skill or `.claude/skills/` for a project skill, then run `/speedle-policy-modeler ./employee-handbook.md`.
+- Codex CLI or IDE example: copy `skills/speedle-policy-modeler/` to `~/.agents/skills/`, then type `$speedle-policy-modeler ./employee-handbook.md` to mention the skill and provide the handbook.
 
 - Skill folder: https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler
 - English sample: https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/en/model.md
 - Chinese sample: https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/zh/model.md
+- OpenAI Build skills documentation: https://learn.chatgpt.com/docs/build-skills — lists `$HOME/.agents/skills` as the personal Codex skill directory and `$` as explicit skill invocation in Codex CLI or the IDE extension.
 
 ### Speedle MCP (launch preview)
 
