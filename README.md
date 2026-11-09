@@ -77,7 +77,8 @@ CNAME binds ai.speedle.io; .nojekyll disables Jekyll.
 
 DNS: DNS-only CNAME ai → teramoby.github.io.
 GitHub Pages handles the custom-domain certificate and HTTPS enforcement.
-Main site: https://speedle.io, managed in teramoby/speedle-plus separately.
+Engine site: https://engine.speedle.io (speedle.io redirects there), managed in
+teramoby/speedle-plus.
 
 ## Brand provenance
 
