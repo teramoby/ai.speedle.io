@@ -531,6 +531,33 @@ for (const keyword of ['SPDL 示例', '数据与训练', '零常驻权限', 'AI 
   check(chinesePatternsHtml.includes(keyword), `zh/patterns/index.html must naturally include the Chinese keyword "${keyword}"`);
 }
 
+// --- Claude Code plugin installation -------------------------------------
+
+const readme = read('README.md');
+const claudePluginClaims = [
+  'claude plugin marketplace add teramoby/ai.speedle.io',
+  'claude plugin install speedle@speedle',
+  '/plugin configure speedle@speedle',
+  '/speedle:speedle-policy-modeler'
+];
+for (const [text, file] of [
+  [englishHtml, 'index.html'],
+  [chineseHtml, 'zh/index.html'],
+  [readme, 'README.md']
+]) {
+  for (const claim of claudePluginClaims) {
+    check(text.includes(claim), `${file} must include the Claude Code plugin instruction "${claim}"`);
+  }
+}
+for (const claim of [
+  'claude plugin marketplace update speedle',
+  'claude plugin update speedle@speedle',
+  'claude plugin install speedle-manage@speedle',
+  'Third-party marketplaces do not auto-update by default'
+]) {
+  check(readme.includes(claim), `README.md must include the Claude Code plugin instruction "${claim}"`);
+}
+
 // --- llms.txt and llms-full.txt ------------------------------------------
 
 // The canonical product definition shared by the three Speedle sites. It must
@@ -580,10 +607,12 @@ for (const [claim, label] of syncedClaims) {
 check(llms.includes('npm install @speedle/mcp'), 'llms.txt must give the @speedle/mcp install command');
 check(llms.includes('npm install @speedle/sdk'), 'llms.txt must give the @speedle/sdk install command');
 check(llms.includes('published on npm'), 'llms.txt must state that the npm packages are published');
+check(llmsFull.includes('claude plugin marketplace add teramoby/ai.speedle.io'), 'llms-full.txt must include the Claude Code marketplace command');
+check(llmsFull.includes('claude plugin install speedle@speedle'), 'llms-full.txt must include the Claude Code plugin install command');
 check(chineseHtml.includes('npm install @speedle/mcp'), 'zh/index.html must show the @speedle/mcp install command');
 check(chineseHtml.includes('npm install @speedle/sdk'), 'zh/index.html must show the @speedle/sdk install command');
 check(chineseHtml.includes('已在 npm 发布'), 'zh/index.html must state that the npm packages are published');
-for (const [text, file] of [[englishHtml, 'index.html'], [llms, 'llms.txt'], [llmsFull, 'llms-full.txt'], [read('README.md'), 'README.md']]) {
+for (const [text, file] of [[englishHtml, 'index.html'], [llms, 'llms.txt'], [llmsFull, 'llms-full.txt'], [readme, 'README.md']]) {
   check(!text.includes('not published'), `${file} must not say the npm packages are unpublished`);
   check(!text.includes('Available at launch'), `${file} must not mark MCP install examples as future`);
 }

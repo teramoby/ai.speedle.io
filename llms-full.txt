@@ -83,7 +83,7 @@ Example runs: English and Chinese synthetic handbooks. Both pass `spctl check` a
 
 The `SKILL.md` frontmatter follows the Agent Skills format with `name` and `description`. For a generic install, copy the skill folder into your agent's skills directory, then ask the agent to model `./employee-handbook.md`.
 
-- Claude Code example: copy `skills/speedle-policy-modeler/` to `~/.claude/skills/` for a personal skill or `.claude/skills/` for a project skill, then run `/speedle-policy-modeler ./employee-handbook.md`.
+- Claude Code example: run `claude plugin marketplace add teramoby/ai.speedle.io` and `claude plugin install speedle@speedle`, configure it with `/plugin configure speedle@speedle`, then run `/speedle:speedle-policy-modeler ./employee-handbook.md`. The plugin includes both this skill and the check-mode MCP server.
 - Codex CLI or IDE example: copy `skills/speedle-policy-modeler/` to `~/.agents/skills/`, then type `$speedle-policy-modeler ./employee-handbook.md` to mention the skill and provide the handbook.
 
 - Skill folder: https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler
@@ -102,7 +102,7 @@ npx @speedle/mcp check
 npx @speedle/mcp manage
 ```
 
-MCP clients run the binary through `npx -y`. A self-hosted check server sets `command` to `npx` and `args` to `["-y", "@speedle/mcp", "check"]`, plus `SPEEDLE_ENDPOINT` and `SPEEDLE_SERVICE_NAME`. That default registers only `is_allowed`. Opt in to the other read-only tools by adding `--expose-diagnose`, `--expose-all-granted-roles` and `--expose-all-granted-permissions` to `args`. A self-hosted manage server uses `"args": ["-y", "@speedle/mcp", "manage"]` and `SPEEDLE_PMS_ENDPOINT`. The home page has the full client configuration. Running `speedle-mcp` with no mode prints usage and exits non-zero.
+MCP clients run the binary through `npx -y`. A self-hosted check server sets `command` to `npx` and `args` to `["-y", "@speedle/mcp", "check"]`, plus `SPEEDLE_ENDPOINT` and `SPEEDLE_SERVICE_NAME`. That default registers only `is_allowed`. Opt in to the other read-only tools by adding `--expose-diagnose`, `--expose-all-granted-roles` and `--expose-all-granted-permissions` to `args`. A self-hosted manage server uses `"args": ["-y", "@speedle/mcp", "manage"]` and `SPEEDLE_PMS_ENDPOINT`. The home page has the full client configuration. The Claude Code plugins pin `@speedle/mcp@0.2.1` and configure these values through `userConfig`. Running `speedle-mcp` with no mode prints usage and exits non-zero.
 
 - **check mode:** registers only `is_allowed` by default and reads only ADS configuration. `diagnose`, `all_granted_roles` and `all_granted_permissions` are opt-in through the `--expose-diagnose`, `--expose-all-granted-roles` and `--expose-all-granted-permissions` flags. `diagnose` works only with self-hosted Speedle; the server will not start with it against Speedle Cloud. It answers authorization questions through the Speedle ADS REST API using subject, resource, action and typed attributes; it does not enforce anything in the calling application.
 - **manage mode:** registers only the management tools and reads only PMS configuration for designing and managing Speedle policies through the PMS REST API: services, authorization policies and role policies. Effective policies are shown as SPDL, and PMS validates each policy on create. A read-only option exists and destructive deletes require explicit target confirmation.

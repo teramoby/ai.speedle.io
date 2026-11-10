@@ -212,13 +212,12 @@
           <div class="config-grid">
             <figure class="config-card">
               <figcaption><span>安装与使用</span><span>Claude Code · 示例</span></figcaption>
-              <pre tabindex="0" aria-label="在 Claude Code 中安装和使用 Speedle 策略建模技能"><code>git clone --depth 1 https://github.com/teramoby/ai.speedle.io.git
-mkdir -p ~/.claude/skills
-cp -R ai.speedle.io/skills/speedle-policy-modeler \
-  ~/.claude/skills/
+              <pre tabindex="0" aria-label="在 Claude Code 中安装和使用 Speedle 插件"><code>claude plugin marketplace add teramoby/ai.speedle.io
+claude plugin install speedle@speedle
 
 # 在 Claude Code 中：
-/speedle-policy-modeler ./employee-handbook.md</code></pre>
+/plugin configure speedle@speedle
+/speedle:speedle-policy-modeler ./employee-handbook.md</code></pre>
             </figure>
             <figure class="config-card">
               <figcaption><span>安装与使用</span><span>Codex · 示例</span></figcaption>
@@ -274,7 +273,7 @@ $speedle-policy-modeler ./employee-handbook.md</code></pre>
             <div><h4 id="mcp-security-title">别让受控智能体管理策略</h4><p><strong>不要给受这些策略约束的智能体开放 <code>manage</code> 模式。</strong>如果智能体同时拿到检查和管理工具，提示词可能诱导它给自己开通访问权限。</p><p><strong>受控智能体只开放 <code>is_allowed</code>。</strong>这是 <code>check</code> 模式的默认设置。<code>diagnose</code>、<code>all_granted_roles</code> 和 <code>all_granted_permissions</code> 会展示策略、条件和授权，只在给策略编写者和运维人员使用的 check 服务中开启，不要给智能体的服务加 <code>--expose-*</code> 参数。</p><p>没有同时开放两类工具的默认模式。不带模式运行 <code>speedle-mcp</code> 会打印用法，并以非零状态码退出。</p></div>
           </aside>
 
-          <p class="launch-note">需要 Node.js 22 或更高版本。这些示例与已发布的包 README 一致。</p>
+          <p class="launch-note">需要 Node.js 22 或更高版本。这些示例与已发布的包 README 一致。上面的 Claude Code 插件固定使用 <code>@speedle/mcp@0.2.1</code> 版本。</p>
 
           <div class="config-grid">
             <figure class="config-card">

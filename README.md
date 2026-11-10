@@ -30,6 +30,54 @@ The home page provides Claude Code and Codex install/use examples. OpenAI's
 official [Build skills documentation](https://learn.chatgpt.com/docs/build-skills)
 documents Codex's `$HOME/.agents/skills` directory and `$` skill invocation.
 
+## Install in Claude Code
+
+Claude Code and Node.js 22 or later are required. Add this repository as a
+marketplace, then install the `speedle` plugin:
+
+```sh
+claude plugin marketplace add teramoby/ai.speedle.io
+claude plugin install speedle@speedle
+```
+
+In Claude Code, configure the plugin:
+
+```text
+/plugin configure speedle@speedle
+```
+
+Set the ADS endpoint (default `http://127.0.0.1:6734`) and service name. Set a
+bearer token only when the ADS requires one; the token is sensitive
+configuration and is stored in secure storage. The plugin provides the
+`/speedle:speedle-policy-modeler` skill and the `plugin:speedle:check` MCP
+server. The check server runs `npx -y @speedle/mcp@0.2.1 check` and exposes
+only `is_allowed` by default.
+
+Policy management is a separate opt-in plugin:
+
+```sh
+claude plugin install speedle-manage@speedle
+```
+
+Configure it with `/plugin configure speedle-manage@speedle`. It provides only
+the `plugin:speedle-manage:manage` MCP server and runs
+`npx -y @speedle/mcp@0.2.1 manage`. Its PMS endpoint defaults to
+`http://127.0.0.1:6733`; select the `speedle-cloud` backend explicitly when
+using Speedle Cloud. Its token is also sensitive configuration. **Never grant
+`manage` mode to an agent that is itself governed by the policies in that
+Speedle service.** Use this plugin only for human-supervised policy authoring.
+
+Third-party marketplaces do not auto-update by default. Refresh the marketplace
+and update the installed plugin:
+
+```sh
+claude plugin marketplace update speedle
+claude plugin update speedle@speedle
+```
+
+Use `claude plugin update speedle-manage@speedle` to update the management
+plugin after refreshing the marketplace.
+
 The interactive example uses simplified
 browser-local policy rules and does not simulate AI risk detection. It is
 not a Speedle engine, MCP integration, RAG adapter, or production service.

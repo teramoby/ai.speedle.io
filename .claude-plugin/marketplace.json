@@ -1,0 +1,20 @@
+{
+  "name": "speedle",
+  "owner": {
+    "name": "Speedle Authors",
+    "url": "https://ai.speedle.io"
+  },
+  "description": "Speedle policy modeling, authorization checks, and separately installed policy management for Claude Code.",
+  "plugins": [
+    {
+      "name": "speedle",
+      "source": "./",
+      "description": "Turn policy documents into tested SPDL and ask Speedle authorization questions."
+    },
+    {
+      "name": "speedle-manage",
+      "source": "./plugins/speedle-manage",
+      "description": "Human-supervised Speedle policy management through PMS. Never grant manage mode to an agent that is itself governed by the policies in that Speedle service."
+    }
+  ]
+}

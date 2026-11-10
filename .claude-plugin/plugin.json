@@ -1,0 +1,56 @@
+{
+  "name": "speedle",
+  "version": "0.1.0",
+  "description": "Turn policy documents into tested SPDL and ask Speedle authorization questions.",
+  "author": {
+    "name": "Speedle Authors",
+    "email": "contact@speedle.io",
+    "url": "https://ai.speedle.io"
+  },
+  "homepage": "https://ai.speedle.io",
+  "repository": "https://github.com/teramoby/ai.speedle.io",
+  "license": "UPL-1.0",
+  "keywords": [
+    "authorization",
+    "access-control",
+    "spdl",
+    "mcp",
+    "policy"
+  ],
+  "userConfig": {
+    "SPEEDLE_ENDPOINT": {
+      "type": "string",
+      "title": "ADS endpoint",
+      "description": "Speedle ADS base URL. Use the local default or enter your deployment's URL.",
+      "required": true,
+      "default": "http://127.0.0.1:6734"
+    },
+    "SPEEDLE_SERVICE_NAME": {
+      "type": "string",
+      "title": "Service name",
+      "description": "Speedle service name sent with every authorization check.",
+      "required": true
+    },
+    "SPEEDLE_TOKEN": {
+      "type": "string",
+      "title": "ADS bearer token",
+      "description": "Optional bearer token for an ADS deployment that requires authentication. HTTPS is required when a token is used.",
+      "sensitive": true
+    }
+  },
+  "mcpServers": {
+    "check": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@speedle/mcp@0.2.1",
+        "check"
+      ],
+      "env": {
+        "SPEEDLE_ENDPOINT": "${user_config.SPEEDLE_ENDPOINT}",
+        "SPEEDLE_SERVICE_NAME": "${user_config.SPEEDLE_SERVICE_NAME}",
+        "SPEEDLE_TOKEN": "${user_config.SPEEDLE_TOKEN}"
+      }
+    }
+  }
+}

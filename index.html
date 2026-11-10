@@ -211,13 +211,12 @@
           <div class="config-grid">
             <figure class="config-card">
               <figcaption><span>install + use</span><span>Claude Code · example</span></figcaption>
-              <pre tabindex="0" aria-label="Install and use the Speedle policy modeler skill with Claude Code"><code>git clone --depth 1 https://github.com/teramoby/ai.speedle.io.git
-mkdir -p ~/.claude/skills
-cp -R ai.speedle.io/skills/speedle-policy-modeler \
-  ~/.claude/skills/
+              <pre tabindex="0" aria-label="Install and use the Speedle plugin with Claude Code"><code>claude plugin marketplace add teramoby/ai.speedle.io
+claude plugin install speedle@speedle
 
 # In Claude Code:
-/speedle-policy-modeler ./employee-handbook.md</code></pre>
+/plugin configure speedle@speedle
+/speedle:speedle-policy-modeler ./employee-handbook.md</code></pre>
             </figure>
             <figure class="config-card">
               <figcaption><span>install + use</span><span>Codex · example</span></figcaption>
@@ -273,7 +272,7 @@ $speedle-policy-modeler ./employee-handbook.md</code></pre>
             <div><h4 id="mcp-security-title">Keep policy management out of the governed agent</h4><p><strong>Never give <code>manage</code> to an agent that is itself governed by these policies.</strong> An agent holding both check and management tools could be prompted into granting itself access.</p><p><strong>Give a governed agent <code>is_allowed</code> only.</strong> That is the <code>check</code> default. <code>diagnose</code>, <code>all_granted_roles</code> and <code>all_granted_permissions</code> show policies, conditions and grants, so turn them on only in a check server for policy authors and operators, and never pass the <code>--expose-*</code> flags to the agent’s server.</p><p>There is no default mode that exposes both. Running <code>speedle-mcp</code> with no mode prints usage and exits non-zero.</p></div>
           </aside>
 
-          <p class="launch-note">Requires Node.js 22 or later. These examples match the published package README.</p>
+          <p class="launch-note">Requires Node.js 22 or later. These examples match the published package README. The Claude Code plugin above pins <code>@speedle/mcp@0.2.1</code>.</p>
 
           <div class="config-grid">
             <figure class="config-card">
