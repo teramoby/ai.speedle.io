@@ -1,6 +1,6 @@
 {
   "name": "speedle-manage",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Human-supervised Speedle policy management through PMS. Never grant manage mode to an agent that is itself governed by the policies in that Speedle service.",
   "author": {
     "name": "Speedle Authors",

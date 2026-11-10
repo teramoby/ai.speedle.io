@@ -14,7 +14,7 @@
     {
       "name": "speedle-manage",
       "source": "./plugins/speedle-manage",
-      "description": "Human-supervised Speedle policy management through PMS, installed separately from authorization checks."
+      "description": "Human-supervised Speedle policy management through PMS. Never grant manage mode to an agent that is itself governed by the policies in that Speedle service."
     }
   ]
 }
