@@ -48,6 +48,9 @@ jobs:
       - name: Check site files
         run: node scripts/check-seo.mjs
 
+      - name: Check diagram overflow
+        run: node scripts/check-diagrams.mjs
+
       - name: Assemble the published site
         run: bash scripts/build-site.sh _site
 

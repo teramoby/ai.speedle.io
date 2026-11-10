@@ -38,6 +38,22 @@ html:lang(zh-CN) {
 /* Chinese headlines: keep words whole; fall back to emergency breaks only if a run cannot fit. */
 html:lang(zh-CN) h1 { word-break: keep-all; overflow-wrap: anywhere; }
 
+/* Language-specific typographic refinements for CJK and hyphenated languages */
+html:lang(ja) {
+  --sans: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  line-break: strict;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+html:lang(ko) {
+  --sans: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+html:lang(es) {
+  hyphens: auto;
+}
+
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 96px; -webkit-text-size-adjust: 100%; }
 body { margin: 0; color: var(--ink); background: var(--white); font: 400 1rem/1.65 var(--sans); -webkit-font-smoothing: antialiased; }
@@ -242,7 +258,7 @@ header.site-header:lang(zh) {
   font-size: 13px;
   font-weight: 400;
   line-height: 1.4;
-  white-space: nowrap;
+  white-space: normal;
 }
 .site-header .product-check { justify-self: end; color: var(--primary); }
 .coming-soon {
@@ -450,7 +466,7 @@ h1 { max-width: 760px; margin: 20px 0 24px; font-size: clamp(3.1rem, 6vw, 5.6rem
 
 /* Part 01: AI risk detection, one small planned card. */
 .risk-detection { margin-top: 72px; padding-top: 64px; border-top: 1px solid var(--line); scroll-margin-top: 88px; }
-.risk-card { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; padding: 28px 30px; border: 1px solid var(--line-purple); border-left: 4px solid var(--accent-light); border-radius: 16px; background: var(--tint-light); box-shadow: var(--shadow-small); }
+.risk-card { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 14px; padding: 28px 30px; border: 1px solid var(--line-purple); border-left: 4px solid var(--accent-light); border-radius: 16px; background: var(--tint-light); box-shadow: var(--shadow-small); }
 .risk-card-top { display: flex; align-items: center; justify-content: space-between; gap: 18px; width: 100%; }
 .risk-card-top h3 { margin: 0; font-size: 1.3rem; font-weight: 700; letter-spacing: 0; line-height: 1.65; }
 .risk-card p { margin: 0; max-width: 860px; color: var(--muted); font-size: .94rem; }
@@ -488,6 +504,10 @@ h1 { max-width: 760px; margin: 20px 0 24px; font-size: clamp(3.1rem, 6vw, 5.6rem
 .cd { display: block; width: 100%; height: auto; overflow: visible; font-family: var(--sans); }
 .cd-stack { display: none; }
 .cd text { font-size: 15px; }
+:lang(ja) .cd-text, :lang(ja) .cd-sub { font-size: 13.5px; }
+:lang(ko) .cd-text, :lang(ko) .cd-sub { font-size: 14px; }
+:lang(es) .cd-text, :lang(es) .cd-sub { font-size: 13.5px; }
+:lang(es) .cd-res { font-size: 13.5px; }
 .cd-band rect, .cd-lane rect, .cd-card rect:first-child { stroke-width: 1; }
 .cd-band-id rect { fill: var(--run-wash); stroke: var(--line-purple); }
 .cd-band-audit rect { fill: #f6f2fc; stroke: #d8cbe9; }
@@ -559,9 +579,9 @@ h1 { max-width: 760px; margin: 20px 0 24px; font-size: clamp(3.1rem, 6vw, 5.6rem
 .area h3, .area h4 { margin: 10px 0 12px; font-size: 1.3rem; font-weight: 700; letter-spacing: 0; line-height: 1.65; }
 .area-lead { margin: 0; color: var(--muted); font-size: .94rem; }
 .area-facts { display: grid; gap: 14px; margin: 24px 0 0; }
-.area-facts div { display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 12px; padding-top: 14px; border-top: 1px dashed #d5d8e2; }
-.area-facts dt { color: var(--ink); font-size: .75rem; font-weight: 800; letter-spacing: .05em; line-height: 1.6; text-transform: uppercase; }
-.area-facts dd { margin: 0; color: var(--muted); font-size: .94rem; }
+.area-facts div { display: grid; grid-template-columns: minmax(130px, max-content) minmax(0, 1fr); gap: 12px; padding-top: 14px; border-top: 1px dashed #d5d8e2; }
+.area-facts dt { min-width: 0; color: var(--ink); font-size: .75rem; font-weight: 800; letter-spacing: .05em; line-height: 1.6; text-transform: uppercase; overflow-wrap: break-word; hyphens: auto; }
+.area-facts dd { min-width: 0; margin: 0; color: var(--muted); font-size: .94rem; overflow-wrap: break-word; }
 .area-facts code, .spdl-caption code { color: var(--run-dark); font-family: var(--mono); font-size: .9em; }
 .spdl-card { min-width: 0; margin: 0; overflow: hidden; border: 1px solid var(--line-purple); border-left: 4px solid var(--accent-light); border-radius: 14px; background: #fcfbfe; }
 .spdl-card figcaption { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 16px; border-bottom: 1px solid var(--line-purple); color: var(--ink); background: var(--tint-light); font: 600 .76rem/1.4 var(--mono); }
@@ -741,7 +761,7 @@ h1 { max-width: 760px; margin: 20px 0 24px; font-size: clamp(3.1rem, 6vw, 5.6rem
   .mode-grid { grid-template-columns: 1fr; }
   .area { grid-template-columns: 1fr; }
   .resource-grid { grid-template-columns: 1fr; }
-  .resource-card { display: grid; grid-template-columns: 100px minmax(0, .7fr) minmax(0, 1fr); align-items: center; gap: 18px; }
+  .resource-card { display: grid; grid-template-columns: minmax(100px, max-content) minmax(0, .7fr) minmax(0, 1fr); align-items: center; gap: 18px; }
   .resource-card > span, .resource-card strong, .resource-card p { margin: 0; }
   .resource-card strong { justify-content: start; }
   .cta { grid-template-columns: 1fr; align-items: start; padding: 46px; }
