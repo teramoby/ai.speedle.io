@@ -126,10 +126,21 @@ try {
     }
   };
 
-  function sendBrowser(method, params = {}) {
-    return new Promise((resolve) => {
+  function sendBrowser(method, params = {}, timeoutMs = 15000) {
+    return new Promise((resolve, reject) => {
       const id = msgId++;
-      pendingRequests.set(id, resolve);
+      const timer = setTimeout(() => {
+        pendingRequests.delete(id);
+        reject(new Error(`CDP timeout: ${method}`));
+      }, timeoutMs);
+      pendingRequests.set(id, (data) => {
+        clearTimeout(timer);
+        if (data.error) {
+          reject(new Error(`CDP ${method} error: ${data.error.message || JSON.stringify(data.error)}`));
+          return;
+        }
+        resolve(data);
+      });
       browserWs.send(JSON.stringify({ id, method, params }));
     });
   }
@@ -144,20 +155,139 @@ try {
 
   let pageMsgId = 1;
   const pagePendingRequests = new Map();
+  const pageEventWaiters = new Map();
   pageWs.onmessage = (event) => {
-    const data = JSON.parse(event.data);
+    let data;
+    try {
+      data = JSON.parse(event.data);
+    } catch (err) {
+      return;
+    }
     if (data.id && pagePendingRequests.has(data.id)) {
-      pagePendingRequests.get(data.id)(data);
+      const resolve = pagePendingRequests.get(data.id);
       pagePendingRequests.delete(data.id);
+      resolve(data);
+      return;
+    }
+    if (data.method && pageEventWaiters.has(data.method)) {
+      const waiters = pageEventWaiters.get(data.method);
+      pageEventWaiters.delete(data.method);
+      for (const resolve of waiters) resolve(data);
     }
   };
 
-  function sendPage(method, params = {}) {
-    return new Promise((resolve) => {
+  function sendPage(method, params = {}, timeoutMs = 15000) {
+    return new Promise((resolve, reject) => {
       const id = pageMsgId++;
-      pagePendingRequests.set(id, resolve);
+      const timer = setTimeout(() => {
+        pagePendingRequests.delete(id);
+        reject(new Error(`CDP timeout: ${method}`));
+      }, timeoutMs);
+      pagePendingRequests.set(id, (data) => {
+        clearTimeout(timer);
+        if (data.error) {
+          reject(new Error(`CDP ${method} error: ${data.error.message || JSON.stringify(data.error)}`));
+          return;
+        }
+        resolve(data);
+      });
       pageWs.send(JSON.stringify({ id, method, params }));
     });
+  }
+
+  function waitForPageEvent(method, timeoutMs = 15000) {
+    return new Promise((resolve, reject) => {
+      let waiter;
+      const timer = setTimeout(() => {
+        const pending = pageEventWaiters.get(method);
+        if (pending) {
+          const rest = pending.filter((fn) => fn !== waiter);
+          if (rest.length) pageEventWaiters.set(method, rest);
+          else pageEventWaiters.delete(method);
+        }
+        reject(new Error(`Timed out waiting for ${method}`));
+      }, timeoutMs);
+      waiter = (data) => {
+        clearTimeout(timer);
+        resolve(data);
+      };
+      const pending = pageEventWaiters.get(method) || [];
+      pending.push(waiter);
+      pageEventWaiters.set(method, pending);
+    });
+  }
+
+  function sameDocumentUrl(actual, expected) {
+    const a = new URL(actual);
+    const e = new URL(expected);
+    const path = (value) => (value.length > 1 && value.endsWith('/') ? value.slice(0, -1) : value);
+    return a.origin === e.origin && path(a.pathname) === path(e.pathname) && a.search === e.search;
+  }
+
+  async function readDocumentState(label) {
+    const evalResult = await sendPage('Runtime.evaluate', {
+      expression: '({ readyState: document.readyState, href: location.href })',
+      returnByValue: true
+    });
+    if (evalResult.result?.exceptionDetails) {
+      const details = evalResult.result.exceptionDetails;
+      throw new Error(`${label}: ${details.exception?.description || details.text || 'could not read document state'}`);
+    }
+    const value = evalResult.result?.result?.value;
+    if (!value || typeof value.readyState !== 'string' || typeof value.href !== 'string') {
+      throw new Error(`${label}: document state was not returned`);
+    }
+    return value;
+  }
+
+  async function openPage(url) {
+    const loaded = waitForPageEvent('Page.loadEventFired');
+    // A navigate failure must not leave this waiter to reject later.
+    loaded.catch(() => {});
+    const nav = await sendPage('Page.navigate', { url });
+    if (nav.result?.errorText) {
+      throw new Error(`Page.navigate to ${url} failed: ${nav.result.errorText}`);
+    }
+    await loaded;
+    const state = await readDocumentState(url);
+    if (state.readyState !== 'complete') {
+      throw new Error(`Expected document.readyState "complete" for ${url}, got "${state.readyState}"`);
+    }
+    if (!sameDocumentUrl(state.href, url)) {
+      throw new Error(`Expected ${url} but document is ${state.href}`);
+    }
+  }
+
+  async function settleLayout() {
+    const evalResult = await sendPage('Runtime.evaluate', {
+      expression: 'new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve(true))))',
+      awaitPromise: true,
+      returnByValue: true
+    });
+    if (evalResult.result?.exceptionDetails) {
+      const details = evalResult.result.exceptionDetails;
+      throw new Error(`layout wait failed: ${details.exception?.description || details.text || 'exception'}`);
+    }
+    if (evalResult.result?.result?.value !== true) {
+      throw new Error('layout wait did not finish');
+    }
+  }
+
+  function takeIssues(evalResult) {
+    const remote = evalResult.result;
+    if (!remote) throw new Error('missing evaluation result');
+    if (remote.exceptionDetails) {
+      const details = remote.exceptionDetails;
+      throw new Error(details.exception?.description || details.text || 'evaluation exception');
+    }
+    const value = remote.result?.value;
+    if (!value || !Array.isArray(value.issues)) {
+      throw new Error('evaluation did not return an issue array');
+    }
+    if (typeof value.cardsChecked !== 'number' || value.cardsChecked < 1) {
+      throw new Error('no diagram cards were checked');
+    }
+    return value.issues;
   }
 
   await sendPage('Page.enable');
@@ -165,6 +295,7 @@ try {
 
   const checkExpression = `(() => {
     const issues = [];
+    let cardsChecked = 0;
 
     function check2DOverlap(b1, b2) {
       return (
@@ -187,19 +318,36 @@ try {
       cards.forEach((card, idx) => {
         const bgRect = card.querySelector('rect:first-child');
         if (!bgRect) return;
+        cardsChecked += 1;
         const bgBox = bgRect.getBBox();
         const texts = card.querySelectorAll('text');
         texts.forEach(t => {
           const tb = t.getBBox();
-          // Tolerance of 1.5px for antialiasing / subpixel font metrics
-          if (tb.x + tb.width > bgBox.x + bgBox.width + 1.5) {
-            issues.push({
-              variant,
-              type: 'card-text-overflow',
-              cardIndex: idx,
-              text: t.textContent.trim(),
-              overflowPx: Math.round((tb.x + tb.width) - (bgBox.x + bgBox.width))
-            });
+          if (tb.width === 0 && tb.height === 0) return;
+          // 1.5 user units of slack on the horizontal edges absorbs subpixel
+          // font metrics. Vertical slack is smaller: glyph descent that crosses
+          // the card border by about one unit must still fail.
+          const rightOverflow = (tb.x + tb.width) - (bgBox.x + bgBox.width);
+          const leftOverflow = bgBox.x - tb.x;
+          const bottomOverflow = (tb.y + tb.height) - (bgBox.y + bgBox.height);
+          const topOverflow = bgBox.y - tb.y;
+          const edges = [
+            ['right', rightOverflow, 1.5],
+            ['left', leftOverflow, 1.5],
+            ['bottom', bottomOverflow, 0.5],
+            ['top', topOverflow, 0.5]
+          ];
+          for (const [edge, overflow, tolerance] of edges) {
+            if (overflow > tolerance) {
+              issues.push({
+                variant,
+                type: 'card-text-overflow',
+                edge,
+                cardIndex: idx,
+                text: t.textContent.trim(),
+                overflowPx: Math.round(overflow)
+              });
+            }
           }
         });
       });
@@ -274,7 +422,7 @@ try {
       }
     }
 
-    return issues;
+    return { issues, cardsChecked };
   })()`;
 
   const languages = ['en', 'zh', 'ja', 'ko', 'es'];
@@ -284,41 +432,61 @@ try {
   ];
 
   let totalIssues = 0;
+  let checked = 0;
+  const expectedChecks = languages.length * viewports.length;
+  const unchecked = [];
 
   for (const lang of languages) {
     const pagePath = lang === 'en' ? '/' : `/${lang}/`;
-    await sendPage('Page.navigate', { url: `http://127.0.0.1:${port}${pagePath}` });
-    await new Promise(r => setTimeout(r, 400));
+    const url = `http://127.0.0.1:${port}${pagePath}`;
+    try {
+      await openPage(url);
+    } catch (err) {
+      for (const vp of viewports) {
+        unchecked.push(`${lang} at ${vp.label}: ${err.message}`);
+      }
+      continue;
+    }
 
     for (const vp of viewports) {
-      await sendPage('Emulation.setDeviceMetricsOverride', {
-        width: vp.width,
-        height: vp.height,
-        deviceScaleFactor: 1,
-        mobile: vp.mobile
-      });
-      await new Promise(r => setTimeout(r, 200));
-
-      const evalResult = await sendPage('Runtime.evaluate', {
-        expression: checkExpression,
-        returnByValue: true
-      });
-
-      const issues = evalResult.result?.result?.value || [];
-      if (issues.length > 0) {
-        totalIssues += issues.length;
-        console.error(`FAIL: ${lang} at ${vp.label}: ${issues.length} diagram issue(s):`);
-        for (const item of issues) {
-          console.error(`  - [${item.type}] ${JSON.stringify(item)}`);
+      const label = `${lang} at ${vp.label}`;
+      try {
+        await sendPage('Emulation.setDeviceMetricsOverride', {
+          width: vp.width,
+          height: vp.height,
+          deviceScaleFactor: 1,
+          mobile: vp.mobile
+        });
+        await settleLayout();
+        const evalResult = await sendPage('Runtime.evaluate', {
+          expression: checkExpression,
+          returnByValue: true
+        });
+        const issues = takeIssues(evalResult);
+        checked += 1;
+        if (issues.length > 0) {
+          totalIssues += issues.length;
+          console.error(`FAIL: ${label}: ${issues.length} diagram issue(s):`);
+          for (const item of issues) {
+            console.error(`  - [${item.type}] ${JSON.stringify(item)}`);
+          }
         }
+      } catch (err) {
+        unchecked.push(`${label}: ${err.message}`);
       }
     }
   }
 
-  if (totalIssues > 0) {
-    console.error(`\nFAILED: ${totalIssues} diagram text overflow issue(s) detected.`);
+  if (unchecked.length > 0 || checked !== expectedChecks) {
+    console.error(`FAILED: ${unchecked.length} diagram check(s) did not run (${checked}/${expectedChecks} completed).`);
+    for (const item of unchecked) console.error(`  - ${item}`);
     exitCode = 1;
-  } else {
+  }
+  if (totalIssues > 0) {
+    console.error(`FAILED: ${totalIssues} diagram text overflow issue(s) detected.`);
+    exitCode = 1;
+  }
+  if (exitCode === 0) {
     console.log('PASS: diagram text boxes verified across all 5 languages at 1440px and 390px');
   }
 
