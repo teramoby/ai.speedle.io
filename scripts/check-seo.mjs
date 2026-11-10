@@ -567,7 +567,9 @@ for (const url of fullUrls) checkInternalUrl(url, 'llms-full.txt');
 // Every claim that constrains the files must also hold on the page.
 const syncedClaims = [
   ['0.2.0', 'the SDK version'],
-  ['not published on npm', 'the Speedle MCP npm status'],
+  ['published on npm', 'the npm publication status'],
+  ['npm install @speedle/mcp', 'the Speedle MCP install command'],
+  ['npm install @speedle/sdk', 'the Speedle SDK install command'],
   ['not a shipped feature', 'the AI risk-detection status'],
   ['37 authorization cases', 'the policy-modeler example results']
 ];
@@ -575,7 +577,21 @@ for (const [claim, label] of syncedClaims) {
   check(englishHtml.includes(claim), `index.html must support ${label} ("${claim}")`);
   check(llmsFull.includes(claim), `llms-full.txt must state ${label} ("${claim}")`);
 }
-check(llms.includes('not published on npm'), 'llms.txt must state that @speedle/mcp is not published on npm');
+check(llms.includes('npm install @speedle/mcp'), 'llms.txt must give the @speedle/mcp install command');
+check(llms.includes('npm install @speedle/sdk'), 'llms.txt must give the @speedle/sdk install command');
+check(llms.includes('published on npm'), 'llms.txt must state that the npm packages are published');
+check(chineseHtml.includes('npm install @speedle/mcp'), 'zh/index.html must show the @speedle/mcp install command');
+check(chineseHtml.includes('npm install @speedle/sdk'), 'zh/index.html must show the @speedle/sdk install command');
+check(chineseHtml.includes('已在 npm 发布'), 'zh/index.html must state that the npm packages are published');
+for (const [text, file] of [[englishHtml, 'index.html'], [llms, 'llms.txt'], [llmsFull, 'llms-full.txt'], [read('README.md'), 'README.md']]) {
+  check(!text.includes('not published'), `${file} must not say the npm packages are unpublished`);
+  check(!text.includes('Available at launch'), `${file} must not mark MCP install examples as future`);
+}
+check(!chineseHtml.includes('目前尚未发布'), 'zh/index.html must not say @speedle/mcp is unpublished');
+check(!englishHtml.includes('speedle-mcp/issues/1'), 'index.html must not link the closed check-mode issue');
+check(!englishHtml.includes('speedle-mcp/issues/2'), 'index.html must not link the closed manage-mode issue');
+check(!chineseHtml.includes('speedle-mcp/issues/1'), 'zh/index.html must not link the closed check-mode issue');
+check(!chineseHtml.includes('speedle-mcp/issues/2'), 'zh/index.html must not link the closed manage-mode issue');
 check(llms.includes('opens soon'), 'llms.txt must state that Speedle Cloud sign-in opens soon');
 check(llmsFull.includes('opens soon'), 'llms-full.txt must state that Speedle Cloud sign-in opens soon');
 

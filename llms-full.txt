@@ -16,13 +16,13 @@ Speedle is an open-source authorization engine, written in Go, for externalizing
 - **SPDL (Speedle Policy Definition Language):** the human-readable policy language.
 - **SDKs in six languages:** Python, Java, Go, C#/.NET, Rust and Node.js/TypeScript.
 - **Speedle Cloud:** hosted authorization for developers; sign-in on cloud.speedle.io opens soon.
-- **Speedle AI:** authorization for and with AI agents, the planned Speedle MCP server and the speedle-policy-modeler skill.
+- **Speedle AI:** authorization for and with AI agents, the Speedle MCP server and the speedle-policy-modeler skill.
 
 Links: [documentation](https://engine.speedle.io/docs/), [SPDL reference](https://engine.speedle.io/docs/spdl/), [getting started](https://engine.speedle.io/quick-start/), [SDKs](https://engine.speedle.io/docs/sdks/), [Playground](https://engine.speedle.io/playground/), [Speedle Cloud docs](https://engine.speedle.io/docs/cloud/).
 
 ### Current SDK versions
 
-All published SDKs are at 0.2.0: `speedle` on PyPI, `io.speedle:speedle-sdk` on Maven Central, `github.com/teramoby/speedle-sdk/go` for Go, `Speedle.Sdk` on NuGet and `speedle` on crates.io. The npm packages `@speedle/sdk` and `@speedle/mcp` are not published yet.
+Published clients at 0.2.0: `speedle` on PyPI, `io.speedle:speedle-sdk` on Maven Central, `github.com/teramoby/speedle-sdk/go` for Go, `Speedle.Sdk` on NuGet and `speedle` on crates.io. `@speedle/sdk` and `@speedle/mcp` are published on npm: `npm install @speedle/sdk` and `npm install @speedle/mcp`.
 
 ## SPDL in brief
 
@@ -66,7 +66,7 @@ By design: a condition on an attribute missing from the request does not match, 
 
 Speedle AI has two connected directions:
 
-- **Use AI to manage access:** AI helping people design, manage and check access policies with the open-source policy modeler skill, the planned Speedle MCP server and an AI-based risk-detection approach being built.
+- **Use AI to manage access:** AI helping people design, manage and check access policies with the open-source policy modeler skill, the Speedle MCP server and an AI-based risk-detection approach being built.
 - **Control what AI can access:** policy patterns that govern what AI systems and agents may do while they are built and while they run.
 
 Both rest on enforceable policy decisions. Speedle decides; the application enforces the decision. The home page gives one sentence and one representative SPDL rule per area; the full examples are on the patterns page.
@@ -93,14 +93,21 @@ The `SKILL.md` frontmatter follows the Agent Skills format with `name` and `desc
 
 ### Speedle MCP (launch preview)
 
-`@speedle/mcp` is planned as one npm package with a `speedle-mcp` binary that runs as a local stdio MCP server for authorization work, with two deliberately separate modes. It is not published on npm yet.
+`@speedle/mcp` is published on npm. It is one package with a `speedle-mcp` binary that runs as a local stdio MCP server for authorization work, with two deliberately separate modes. It requires Node.js 22 or later.
+
+```
+npm install @speedle/mcp
+
+npx @speedle/mcp check
+npx @speedle/mcp manage
+```
+
+MCP clients run the binary through `npx -y`. A self-hosted check server sets `command` to `npx` and `args` to `["-y", "@speedle/mcp", "check"]`, plus `SPEEDLE_ENDPOINT` and `SPEEDLE_SERVICE_NAME`. That default registers only `is_allowed`. Opt in to the other read-only tools by adding `--expose-diagnose`, `--expose-all-granted-roles` and `--expose-all-granted-permissions` to `args`. A self-hosted manage server uses `"args": ["-y", "@speedle/mcp", "manage"]` and `SPEEDLE_PMS_ENDPOINT`. The home page has the full client configuration. Running `speedle-mcp` with no mode prints usage and exits non-zero.
 
 - **check mode:** registers only `is_allowed` by default and reads only ADS configuration. `diagnose`, `all_granted_roles` and `all_granted_permissions` are opt-in through the `--expose-diagnose`, `--expose-all-granted-roles` and `--expose-all-granted-permissions` flags. `diagnose` works only with self-hosted Speedle; the server will not start with it against Speedle Cloud. It answers authorization questions through the Speedle ADS REST API using subject, resource, action and typed attributes; it does not enforce anything in the calling application.
-- **manage mode:** registers only the management tools and reads only PMS configuration for designing and managing Speedle policies through the PMS REST API: services, authorization policies, role policies, SPDL validation and effective-policy explanation helpers. A read-only option exists and destructive deletes require explicit target confirmation.
+- **manage mode:** registers only the management tools and reads only PMS configuration for designing and managing Speedle policies through the PMS REST API: services, authorization policies and role policies. Effective policies are shown as SPDL, and PMS validates each policy on create. A read-only option exists and destructive deletes require explicit target confirmation.
 
-Security rule: never give the manage mode to an agent that is itself governed by these policies. An agent holding both check and management tools could be prompted into granting itself access. Give a governed agent `is_allowed` only, which is the check-mode default: `diagnose`, `all_granted_roles` and `all_granted_permissions` show policies, conditions and grants, so turn them on only in a check server for policy authors and operators, and never pass the `--expose-*` flags to the agent's server. There is no default mode that exposes both; running with no mode is planned to print usage and exit non-zero.
-
-Install and MCP client configuration snippets on the site are future launch examples, marked "Available at launch". They do not work today.
+Security rule: never give the manage mode to an agent that is itself governed by these policies. An agent holding both check and management tools could be prompted into granting itself access. Give a governed agent `is_allowed` only, which is the check-mode default: `diagnose`, `all_granted_roles` and `all_granted_permissions` show policies, conditions and grants, so turn them on only in a check server for policy authors and operators, and never pass the `--expose-*` flags to the agent's server. There is no default mode that exposes both; running `speedle-mcp` with no mode prints usage and exits non-zero.
 
 ### AI-based risk detection (being built)
 
@@ -203,7 +210,7 @@ A runnable local sample with PMS, ADS and the custom function, including the ato
 - [Playground](https://engine.speedle.io/playground/) and [策略实验室](https://engine.speedle.io/zh/playground/): try SPDL and authorization requests in the browser.
 - [Speedle Cloud docs](https://engine.speedle.io/docs/cloud/) and [Speedle Cloud 文档](https://engine.speedle.io/zh/docs/cloud/): the hosted service documentation hub.
 - [Speedle Cloud](https://cloud.speedle.io/) and [中文首页](https://cloud.speedle.io/zh-CN/): hosted authorization for developers; sign-in opens soon.
-- [Speedle MCP](https://github.com/teramoby/speedle-mcp): the planned server, with check-mode issue #1 and manage-mode issue #2.
+- [Speedle MCP](https://github.com/teramoby/speedle-mcp): the published npm package `@speedle/mcp` and its README. Read it at https://github.com/teramoby/speedle-mcp/blob/main/README.md.
 - [Speedle policy modeler skill](https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler): the open-source Agent Skill.
 
 ## Related links
