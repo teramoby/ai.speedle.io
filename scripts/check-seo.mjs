@@ -531,6 +531,33 @@ for (const keyword of ['SPDL 示例', '数据与训练', '零常驻权限', 'AI 
   check(chinesePatternsHtml.includes(keyword), `zh/patterns/index.html must naturally include the Chinese keyword "${keyword}"`);
 }
 
+// --- Claude Code plugin installation -------------------------------------
+
+const claudePluginClaims = [
+  'claude plugin marketplace add teramoby/ai.speedle.io',
+  'claude plugin install speedle@speedle',
+  '/plugin configure speedle@speedle',
+  '/speedle:speedle-policy-modeler'
+];
+for (const [text, file] of [
+  [englishHtml, 'index.html'],
+  [chineseHtml, 'zh/index.html'],
+  [read('README.md'), 'README.md']
+]) {
+  for (const claim of claudePluginClaims) {
+    check(text.includes(claim), `${file} must include the Claude Code plugin instruction "${claim}"`);
+  }
+}
+const readme = read('README.md');
+for (const claim of [
+  'claude plugin marketplace update speedle',
+  'claude plugin update speedle@speedle',
+  'claude plugin install speedle-manage@speedle',
+  'Third-party marketplaces do not auto-update by default'
+]) {
+  check(readme.includes(claim), `README.md must include the Claude Code plugin instruction "${claim}"`);
+}
+
 // --- llms.txt and llms-full.txt ------------------------------------------
 
 // The canonical product definition shared by the three Speedle sites. It must

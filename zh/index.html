@@ -212,13 +212,12 @@
           <div class="config-grid">
             <figure class="config-card">
               <figcaption><span>安装与使用</span><span>Claude Code · 示例</span></figcaption>
-              <pre tabindex="0" aria-label="在 Claude Code 中安装和使用 Speedle 策略建模技能"><code>git clone --depth 1 https://github.com/teramoby/ai.speedle.io.git
-mkdir -p ~/.claude/skills
-cp -R ai.speedle.io/skills/speedle-policy-modeler \
-  ~/.claude/skills/
+              <pre tabindex="0" aria-label="在 Claude Code 中安装和使用 Speedle 插件"><code>claude plugin marketplace add teramoby/ai.speedle.io
+claude plugin install speedle@speedle
 
 # 在 Claude Code 中：
-/speedle-policy-modeler ./employee-handbook.md</code></pre>
+/plugin configure speedle@speedle
+/speedle:speedle-policy-modeler ./employee-handbook.md</code></pre>
             </figure>
             <figure class="config-card">
               <figcaption><span>安装与使用</span><span>Codex · 示例</span></figcaption>

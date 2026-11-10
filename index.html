@@ -211,13 +211,12 @@
           <div class="config-grid">
             <figure class="config-card">
               <figcaption><span>install + use</span><span>Claude Code · example</span></figcaption>
-              <pre tabindex="0" aria-label="Install and use the Speedle policy modeler skill with Claude Code"><code>git clone --depth 1 https://github.com/teramoby/ai.speedle.io.git
-mkdir -p ~/.claude/skills
-cp -R ai.speedle.io/skills/speedle-policy-modeler \
-  ~/.claude/skills/
+              <pre tabindex="0" aria-label="Install and use the Speedle plugin with Claude Code"><code>claude plugin marketplace add teramoby/ai.speedle.io
+claude plugin install speedle@speedle
 
 # In Claude Code:
-/speedle-policy-modeler ./employee-handbook.md</code></pre>
+/plugin configure speedle@speedle
+/speedle:speedle-policy-modeler ./employee-handbook.md</code></pre>
             </figure>
             <figure class="config-card">
               <figcaption><span>install + use</span><span>Codex · example</span></figcaption>
