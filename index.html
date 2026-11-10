@@ -163,7 +163,7 @@
         <header class="part-header">
           <span class="part-number" aria-hidden="true">01</span>
           <div class="part-heading"><p class="eyebrow">Use AI to manage access</p><h2 id="ai-for-access-title">Put AI to work on your access policies</h2></div>
-          <p class="part-summary">AI helping people manage access: an open-source skill that turns policy documents into SPDL, a preview of Speedle MCP for designing, managing and checking policies, and a planned AI risk-detection approach.</p>
+          <p class="part-summary">AI helping people manage access: an open-source skill that turns policy documents into SPDL, the published Speedle MCP package for designing, managing and checking policies, and a planned AI risk-detection approach.</p>
         </header>
 
         <div id="policy-modeler" class="policy-modeler">
@@ -235,10 +235,10 @@ $speedle-policy-modeler ./employee-handbook.md</code></pre>
 
         <div id="mcp" class="subsection mcp">
           <div class="section-head mcp-intro">
-            <div><p class="eyebrow">Speedle MCP<span class="status-badge status-preview">Preview</span></p><h3 id="mcp-title">Speedle MCP: one package, two deliberately separate modes</h3></div>
+            <div><p class="eyebrow">Speedle MCP<span class="status-badge status-available">Available</span></p><h3 id="mcp-title">Speedle MCP: one package, two deliberately separate modes</h3></div>
             <div class="mcp-lead">
-              <p><code>@speedle/mcp</code> is planned as one npm package with a <code>speedle-mcp</code> binary that runs as a local stdio MCP server. It is not published on npm yet.</p>
-              <a class="button button-outline" href="https://github.com/teramoby/speedle-mcp">Follow the repository<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a>
+              <p><code>@speedle/mcp</code> is published on npm. It is one package with a <code>speedle-mcp</code> binary that runs as a local stdio MCP server.</p>
+              <a class="button button-outline" href="https://github.com/teramoby/speedle-mcp/blob/main/README.md">Read the README<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a>
             </div>
           </div>
 
@@ -246,33 +246,35 @@ $speedle-policy-modeler ./employee-handbook.md</code></pre>
             <article class="mode-card">
               <div class="mode-top"><span class="mode-label">Mode 01</span><code>check</code></div>
               <h4>Authorization checks</h4>
-              <p>The planned <code>check</code> mode registers only <code>is_allowed</code> by default and reads only ADS configuration. <code>diagnose</code>, <code>all_granted_roles</code> and <code>all_granted_permissions</code> are opt-in through the <code>--expose-diagnose</code>, <code>--expose-all-granted-roles</code> and <code>--expose-all-granted-permissions</code> flags. <code>diagnose</code> works only with self-hosted Speedle; the server will not start with it against Speedle Cloud. It answers authorization questions; it does not enforce anything in the calling application.</p>
+              <p>The <code>check</code> mode registers only <code>is_allowed</code> by default and reads only ADS configuration. <code>diagnose</code>, <code>all_granted_roles</code> and <code>all_granted_permissions</code> are opt-in through the <code>--expose-diagnose</code>, <code>--expose-all-granted-roles</code> and <code>--expose-all-granted-permissions</code> flags. <code>diagnose</code> works only with self-hosted Speedle; the server will not start with it against Speedle Cloud. It answers authorization questions; it does not enforce anything in the calling application.</p>
               <ul class="mode-list">
                 <li>Read-only authorization checks through the Speedle ADS REST API.</li>
                 <li>Subject, resource, action, and typed attributes as inputs.</li>
                 <li>ADS base URL, service name, and optional bearer token from environment variables.</li>
               </ul>
-              <a class="mode-link" href="https://github.com/teramoby/speedle-mcp/issues/1">Read the check-mode issue<svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg></a>
+              <a class="mode-link" href="https://github.com/teramoby/speedle-mcp/blob/main/README.md#check-mode--self-hosted-speedle-loopback-or-internal-ads">Read the check-mode setup<svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg></a>
             </article>
             <article class="mode-card">
               <div class="mode-top"><span class="mode-label">Mode 02</span><code>manage</code></div>
               <h4>Policy design and management</h4>
-              <p>The planned <code>manage</code> mode registers only the management tools and reads only PMS configuration for designing and managing Speedle policies through the PMS REST API.</p>
+              <p>The <code>manage</code> mode registers only the management tools and reads only PMS configuration for designing and managing Speedle policies through the PMS REST API.</p>
               <ul class="mode-list">
                 <li>Services, authorization policies, and role policies.</li>
-                <li>SPDL validation and effective-policy explanation helpers.</li>
+                <li>Effective policies as SPDL; PMS validates each policy on create.</li>
                 <li>A read-only option; destructive deletes require explicit target confirmation.</li>
               </ul>
-              <a class="mode-link" href="https://github.com/teramoby/speedle-mcp/issues/2">Read the manage-mode issue<svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg></a>
+              <a class="mode-link" href="https://github.com/teramoby/speedle-mcp/blob/main/README.md#manage-mode--self-hosted-speedle-policy-management-pms">Read the manage-mode setup<svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg></a>
             </article>
           </div>
 
           <aside class="mcp-security" aria-labelledby="mcp-security-title">
             <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
-            <div><h4 id="mcp-security-title">Keep policy management out of the governed agent</h4><p><strong>Never give <code>manage</code> to an agent that is itself governed by these policies.</strong> An agent holding both check and management tools could be prompted into granting itself access.</p><p><strong>Give a governed agent <code>is_allowed</code> only.</strong> That is the <code>check</code> default. <code>diagnose</code>, <code>all_granted_roles</code> and <code>all_granted_permissions</code> show policies, conditions and grants, so turn them on only in a check server for policy authors and operators, and never pass the <code>--expose-*</code> flags to the agent’s server.</p><p>There is no default mode that exposes both. Running with no mode is planned to print usage and exit non-zero.</p></div>
+            <div><h4 id="mcp-security-title">Keep policy management out of the governed agent</h4><p><strong>Never give <code>manage</code> to an agent that is itself governed by these policies.</strong> An agent holding both check and management tools could be prompted into granting itself access.</p><p><strong>Give a governed agent <code>is_allowed</code> only.</strong> That is the <code>check</code> default. <code>diagnose</code>, <code>all_granted_roles</code> and <code>all_granted_permissions</code> show policies, conditions and grants, so turn them on only in a check server for policy authors and operators, and never pass the <code>--expose-*</code> flags to the agent’s server.</p><p>There is no default mode that exposes both. Running <code>speedle-mcp</code> with no mode prints usage and exits non-zero.</p></div>
           </aside>
 
-          <div class="mcp-resources"><span>Source and foundations</span><a href="https://github.com/teramoby/speedle-mcp">Speedle MCP</a><a href="https://github.com/teramoby/speedle-plus">Speedle</a><a href="https://cloud.speedle.io/">Speedle Cloud</a><a href="https://github.com/teramoby/speedle-sdk">Speedle SDK</a></div>
+          <p class="launch-note">Requires Node.js 22 or later. Install with <code>npm install @speedle/mcp</code>; the Claude Code plugin above pins version 0.2.1.</p>
+
+          <div class="mcp-resources"><span>Source and foundations</span><a href="https://github.com/teramoby/speedle-mcp">Speedle MCP</a><a href="https://github.com/teramoby/speedle-mcp/blob/main/README.md">README</a><a href="https://github.com/teramoby/speedle-plus">Speedle</a><a href="https://cloud.speedle.io/">Speedle Cloud</a><a href="https://github.com/teramoby/speedle-sdk">Speedle SDK</a></div>
         </div>
 
         <div id="risk-detection" class="risk-detection">
@@ -634,7 +636,7 @@ $speedle-policy-modeler ./employee-handbook.md</code></pre>
           <div class="resource-grid">
             <a class="resource-card" href="https://engine.speedle.io/"><span>OPEN SOURCE</span><strong>Speedle Engine<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>The open-source authorization engine and readable SPDL policy language.</p></a>
             <a class="resource-card" href="https://cloud.speedle.io/"><span>HOSTED</span><strong><span class="resource-name">Speedle Cloud<span class="coming-soon">Coming soon</span></span><svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>Hosted authorization for developers, built on the Speedle policy engine.</p></a>
-            <a class="resource-card" href="https://engine.speedle.io/docs/sdks/"><span>INTEGRATE</span><strong>Speedle SDK<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>Python, Go, Java, C# and Rust clients for the decision API.</p></a>
+            <a class="resource-card" href="https://engine.speedle.io/docs/sdks/"><span>INTEGRATE</span><strong>Speedle SDK<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>Python, Go, Java, C#, Rust and Node.js clients for the decision API.</p></a>
           </div>
           <figure class="config-card sdk-snippet">
             <figcaption><span>Python SDK · ask for a decision</span><span>0.2.0</span></figcaption>
@@ -644,7 +646,7 @@ with Client(backend="speedle", endpoint="http://localhost:6734",
             auth=Auth.none(), service_name="docs") as speedle:
     allowed = speedle.is_allowed("alice", "get", "/docs/public")
     # True once the docs service grants alice get /docs/public</code></pre>
-            <p class="sdk-caption">One short example; the <a href="https://engine.speedle.io/docs/sdks/">SDK documentation</a> covers every language client, the request model and error handling.</p>
+            <p class="sdk-caption">One short example; the <a href="https://engine.speedle.io/docs/sdks/">SDK documentation</a> covers every language client, the request model and error handling. The Node.js client is published on npm: <code>npm install @speedle/sdk</code>.</p>
           </figure>
         </div>
       </div>
