@@ -115,6 +115,21 @@ Speedle is licensed under UPL 1.0. Contact: contact@speedle.io.
 
 To report a security issue, see [SECURITY.md](SECURITY.md).
 
+## Pull request review
+
+ReviewBot reviews pull requests in this repository. It reads the diff and does
+not run site code. A collaborator with write access can request a review by
+commenting on the pull request:
+
+```text
+@reviewbot review
+@reviewbot recheck
+@reviewbot explain why does this hreflang alternate point at the English URL?
+```
+
+A bare `@reviewbot` mention means `review`. `check` means `recheck`. See
+[.github/REVIEWBOT.md](.github/REVIEWBOT.md) for the commands.
+
 ## Contributing
 
 Contributions are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md).
