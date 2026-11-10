@@ -130,7 +130,7 @@ for (const [loc, { block, alternates }] of sitemapEntries) {
   const target = localTarget(loc);
   check(target !== null && htmlFor(target.file) !== '', `sitemap.xml: ${loc} has no local page`);
   check(/<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/.test(block), `sitemap.xml: ${loc} needs a <lastmod>`);
-  check(alternates.length === 6, `sitemap.xml: ${loc} must have exactly six hreflang alternates`);
+  check(alternates.length === 3, `sitemap.xml: ${loc} must have exactly three hreflang alternates`);
   for (const alt of alternates) checkInternalUrl(alt.href, 'sitemap.xml hreflang');
 }
 const sitemapAlternates = [...sitemapEntries.values()].flatMap(entry => entry.alternates);
@@ -140,17 +140,11 @@ const sitemapAlternates = [...sitemapEntries.values()].flatMap(entry => entry.al
 const homeAlternates = {
   en: `${origin}/`,
   'zh-CN': `${origin}/zh/`,
-  ja: `${origin}/ja/`,
-  ko: `${origin}/ko/`,
-  es: `${origin}/es/`,
   'x-default': `${origin}/`
 };
 const patternsAlternates = {
   en: `${origin}/patterns/`,
   'zh-CN': `${origin}/zh/patterns/`,
-  ja: `${origin}/ja/patterns/`,
-  ko: `${origin}/ko/patterns/`,
-  es: `${origin}/es/patterns/`,
   'x-default': `${origin}/patterns/`
 };
 const pageDefinitions = [
@@ -182,7 +176,7 @@ function checkPage(definition) {
 
   const pageAlternates = [...html.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="([^"]+)">/g)]
     .map(match => ({ lang: match[1], href: match[2] }));
-  check(pageAlternates.length === 6, `${file}: must have exactly six hreflang alternates`);
+  check(pageAlternates.length === 3, `${file}: must have exactly three hreflang alternates`);
   const sitemapEntry = sitemapEntries.get(canonical);
   check(sitemapEntry !== undefined, `${file}: canonical URL must have a sitemap entry`);
   for (const [lang, href] of Object.entries(alternates)) {
