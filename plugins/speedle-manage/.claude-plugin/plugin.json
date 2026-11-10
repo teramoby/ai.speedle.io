@@ -1,0 +1,60 @@
+{
+  "name": "speedle-manage",
+  "version": "0.1.0",
+  "description": "Human-supervised Speedle policy management through PMS. Never grant manage mode to an agent that is itself governed by the policies in that Speedle service.",
+  "author": {
+    "name": "Speedle Authors",
+    "email": "contact@speedle.io",
+    "url": "https://ai.speedle.io"
+  },
+  "homepage": "https://ai.speedle.io",
+  "repository": "https://github.com/teramoby/ai.speedle.io",
+  "license": "UPL-1.0",
+  "keywords": [
+    "authorization",
+    "access-control",
+    "spdl",
+    "mcp",
+    "policy-management"
+  ],
+  "userConfig": {
+    "SPEEDLE_PMS_ENDPOINT": {
+      "type": "string",
+      "title": "PMS endpoint",
+      "description": "Speedle PMS or Cloud base URL. Use the local default or enter your deployment's URL.",
+      "required": true,
+      "default": "http://127.0.0.1:6733"
+    },
+    "SPEEDLE_PMS_BACKEND": {
+      "type": "string",
+      "title": "PMS backend",
+      "description": "Select speedle for self-hosted PMS or speedle-cloud for Speedle Cloud. A token alone does not select Cloud.",
+      "default": "speedle",
+      "options": [
+        "speedle",
+        "speedle-cloud"
+      ]
+    },
+    "SPEEDLE_PMS_TOKEN": {
+      "type": "string",
+      "title": "PMS bearer token",
+      "description": "Bearer token required for Speedle Cloud. Use only the PMS scope needed; HTTPS is required.",
+      "sensitive": true
+    }
+  },
+  "mcpServers": {
+    "manage": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@speedle/mcp@0.2.1",
+        "manage"
+      ],
+      "env": {
+        "SPEEDLE_PMS_ENDPOINT": "${user_config.SPEEDLE_PMS_ENDPOINT}",
+        "SPEEDLE_PMS_BACKEND": "${user_config.SPEEDLE_PMS_BACKEND}",
+        "SPEEDLE_PMS_TOKEN": "${user_config.SPEEDLE_PMS_TOKEN}"
+      }
+    }
+  }
+}
