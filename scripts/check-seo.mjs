@@ -121,8 +121,8 @@ for (const match of sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)) {
   sitemapEntries.set(loc, { block, alternates });
 }
 const locations = [...sitemapEntries.keys()];
-check(locations.length === 4, `sitemap.xml must contain the two home pages and the two patterns pages (found ${locations.length})`);
-for (const path of ['/', '/zh/', '/patterns/', '/zh/patterns/']) {
+check(locations.length === 10, `sitemap.xml must contain all five home pages and five patterns pages (found ${locations.length})`);
+for (const path of ['/', '/zh/', '/ja/', '/ko/', '/es/', '/patterns/', '/zh/patterns/', '/ja/patterns/', '/ko/patterns/', '/es/patterns/']) {
   check(sitemapEntries.has(`${origin}${path}`), `sitemap.xml must contain ${origin}${path}`);
 }
 for (const [loc, { block, alternates }] of sitemapEntries) {
@@ -137,46 +137,32 @@ const sitemapAlternates = [...sitemapEntries.values()].flatMap(entry => entry.al
 
 // --- localized page metadata and JSON-LD ----------------------------------
 
-const homeAlternates = { en: `${origin}/`, 'zh-CN': `${origin}/zh/`, 'x-default': `${origin}/` };
-const patternsAlternates = { en: `${origin}/patterns/`, 'zh-CN': `${origin}/zh/patterns/`, 'x-default': `${origin}/patterns/` };
-const enHomeSwitch = '<a href="/zh/" lang="zh-CN" hreflang="zh-CN" aria-label="切换到中文">中文</a>';
-const zhHomeSwitch = '<a href="/" lang="en" hreflang="en" aria-label="Switch to English">English</a>';
-const enPatternsSwitch = '<a href="/zh/patterns/" lang="zh-CN" hreflang="zh-CN" aria-label="切换到中文">中文</a>';
-const zhPatternsSwitch = '<a href="/patterns/" lang="en" hreflang="en" aria-label="Switch to English">English</a>';
+const homeAlternates = {
+  en: `${origin}/`,
+  'zh-CN': `${origin}/zh/`,
+  'x-default': `${origin}/`
+};
+const patternsAlternates = {
+  en: `${origin}/patterns/`,
+  'zh-CN': `${origin}/zh/patterns/`,
+  'x-default': `${origin}/patterns/`
+};
 const pageDefinitions = [
-  {
-    file: 'index.html',
-    canonical: `${origin}/`,
-    language: 'en',
-    alternates: homeAlternates,
-    languageSwitch: enHomeSwitch
-  },
-  {
-    file: 'zh/index.html',
-    canonical: `${origin}/zh/`,
-    language: 'zh-CN',
-    alternates: homeAlternates,
-    languageSwitch: zhHomeSwitch
-  },
-  {
-    file: 'patterns/index.html',
-    canonical: `${origin}/patterns/`,
-    language: 'en',
-    alternates: patternsAlternates,
-    languageSwitch: enPatternsSwitch
-  },
-  {
-    file: 'zh/patterns/index.html',
-    canonical: `${origin}/zh/patterns/`,
-    language: 'zh-CN',
-    alternates: patternsAlternates,
-    languageSwitch: zhPatternsSwitch
-  }
+  { file: 'index.html', canonical: `${origin}/`, language: 'en', alternates: homeAlternates },
+  { file: 'zh/index.html', canonical: `${origin}/zh/`, language: 'zh-CN', alternates: homeAlternates },
+  { file: 'ja/index.html', canonical: `${origin}/ja/`, language: 'ja', alternates: homeAlternates },
+  { file: 'ko/index.html', canonical: `${origin}/ko/`, language: 'ko', alternates: homeAlternates },
+  { file: 'es/index.html', canonical: `${origin}/es/`, language: 'es', alternates: homeAlternates },
+  { file: 'patterns/index.html', canonical: `${origin}/patterns/`, language: 'en', alternates: patternsAlternates },
+  { file: 'zh/patterns/index.html', canonical: `${origin}/zh/patterns/`, language: 'zh-CN', alternates: patternsAlternates },
+  { file: 'ja/patterns/index.html', canonical: `${origin}/ja/patterns/`, language: 'ja', alternates: patternsAlternates },
+  { file: 'ko/patterns/index.html', canonical: `${origin}/ko/patterns/`, language: 'ko', alternates: patternsAlternates },
+  { file: 'es/patterns/index.html', canonical: `${origin}/es/patterns/`, language: 'es', alternates: patternsAlternates }
 ];
 const pageReports = [];
 
 function checkPage(definition) {
-  const { file, canonical, language, alternates, languageSwitch } = definition;
+  const { file, canonical, language, alternates } = definition;
   const html = read(file);
   const title = (html.match(/<title>([^<]*)<\/title>/) || [])[1] || '';
   const description = (html.match(/<meta name="description" content="([^"]*)"/) || [])[1] || '';
@@ -205,8 +191,20 @@ function checkPage(definition) {
   for (const heading of html.matchAll(/<h([1-4])\b[^>]*>([\s\S]*?)<\/h\1>/g)) {
     check(!/[.。]\s*$/.test(heading[2]), `${file}: <h${heading[1]}> must not end with a full stop: ${heading[2].trim()}`);
   }
-  check(html.includes(languageSwitch), `${file}: missing the correct language-switch link`);
-  check(new RegExp(`${languageSwitch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*</nav>`).test(html), `${file}: language switch must be the last navigation item`);
+  const languagesBlock = block(html, /<div class="languages">[\s\S]*?<\/div>\s*<\/div>/);
+  check(languagesBlock !== '', `${file}: missing .languages dropdown block`);
+  check(new RegExp(`<div class="languages">[\\s\\S]*?<\\/nav>`).test(html), `${file}: languages dropdown must be the last navigation item`);
+  const activeRow = (languagesBlock.match(/<a\b[^>]*\baria-current="page"[^>]*>([\s\S]*?)<\/a>/) || [])[0] || '';
+  check(activeRow !== '', `${file}: languages dropdown must mark current page with aria-current="page"`);
+  check(activeRow.includes(`hreflang="${language}"`), `${file}: aria-current="page" must match page language ${language}`);
+  for (const lang of ['en', 'zh-CN', 'ja', 'ko', 'es']) {
+    check(languagesBlock.includes(`hreflang="${lang}"`), `${file}: languages dropdown must list ${lang}`);
+  }
+  const langOrder = [...languagesBlock.matchAll(/class="language-row"[^>]*hreflang="([^"]+)"/g)].map(m => m[1]);
+  check(
+    JSON.stringify(langOrder) === JSON.stringify(['en', 'ja', 'ko', 'es', 'zh-CN']),
+    `${file}: languages dropdown order must be English, 日本語, 한국어, Español, 中文 (got ${langOrder.join(', ')})`
+  );
   const siteNav = (html.match(/<nav id="site-nav"[\s\S]*?<\/nav>/) || [])[0] || '';
   for (const href of ['https://engine.speedle.io/', 'https://engine.speedle.io/zh/', 'https://cloud.speedle.io/', 'https://cloud.speedle.io/zh-CN/']) {
     const product = href.includes('engine') ? 'Engine' : 'Cloud';
@@ -245,8 +243,8 @@ function checkPage(definition) {
   const software = graph.find(node => node['@type'] === 'SoftwareApplication');
   check(website && website.url === canonical && website.inLanguage === language, `${file}: WebSite URL and inLanguage must match the page`);
   check(software && software.url === canonical, `${file}: SoftwareApplication URL must match the page`);
-  if (language === 'zh-CN') {
-    check(software && software.inLanguage === 'zh-CN', `${file}: SoftwareApplication must declare inLanguage="zh-CN"`);
+  if (['zh-CN', 'ja', 'ko', 'es'].includes(language)) {
+    check(software && software.inLanguage === language, `${file}: SoftwareApplication must declare inLanguage="${language}"`);
   }
 
   // No page has a FAQ or structured data for one.
@@ -258,16 +256,28 @@ function checkPage(definition) {
 
 const englishHtml = checkPage(pageDefinitions[0]);
 const chineseHtml = checkPage(pageDefinitions[1]);
-const englishPatternsHtml = checkPage(pageDefinitions[2]);
-const chinesePatternsHtml = checkPage(pageDefinitions[3]);
+const japaneseHtml = checkPage(pageDefinitions[2]);
+const koreanHtml = checkPage(pageDefinitions[3]);
+const spanishHtml = checkPage(pageDefinitions[4]);
+const englishPatternsHtml = checkPage(pageDefinitions[5]);
+const chinesePatternsHtml = checkPage(pageDefinitions[6]);
+const japanesePatternsHtml = checkPage(pageDefinitions[7]);
+const koreanPatternsHtml = checkPage(pageDefinitions[8]);
+const spanishPatternsHtml = checkPage(pageDefinitions[9]);
 
 // Every link on every page resolves to a local file and fragment, or is a
 // well-formed external URL.
 for (const [html, base] of [
   [englishHtml, `${origin}/`],
   [chineseHtml, `${origin}/zh/`],
+  [japaneseHtml, `${origin}/ja/`],
+  [koreanHtml, `${origin}/ko/`],
+  [spanishHtml, `${origin}/es/`],
   [englishPatternsHtml, `${origin}/patterns/`],
-  [chinesePatternsHtml, `${origin}/zh/patterns/`]
+  [chinesePatternsHtml, `${origin}/zh/patterns/`],
+  [japanesePatternsHtml, `${origin}/ja/patterns/`],
+  [koreanPatternsHtml, `${origin}/ko/patterns/`],
+  [spanishPatternsHtml, `${origin}/es/patterns/`]
 ]) {
   for (const link of html.matchAll(/<a\b[^>]*\bhref="([^"]+)"/g)) {
     checkInternalUrl(link[1], localTarget(base).file, base);
@@ -282,29 +292,42 @@ function block(html, pattern) {
 
 const englishHeader = block(englishHtml, /<header class="site-header">[\s\S]*?<\/header>/);
 const chineseHeader = block(chineseHtml, /<header class="site-header">[\s\S]*?<\/header>/);
+const japaneseHeader = block(japaneseHtml, /<header class="site-header">[\s\S]*?<\/header>/);
+const koreanHeader = block(koreanHtml, /<header class="site-header">[\s\S]*?<\/header>/);
+const spanishHeader = block(spanishHtml, /<header class="site-header">[\s\S]*?<\/header>/);
+
 const englishFooter = block(englishHtml, /<footer class="site-footer">[\s\S]*?<\/footer>/);
 const chineseFooter = block(chineseHtml, /<footer class="site-footer">[\s\S]*?<\/footer>/);
+const japaneseFooter = block(japaneseHtml, /<footer class="site-footer">[\s\S]*?<\/footer>/);
+const koreanFooter = block(koreanHtml, /<footer class="site-footer">[\s\S]*?<\/footer>/);
+const spanishFooter = block(spanishHtml, /<footer class="site-footer">[\s\S]*?<\/footer>/);
 
-function subpageHeader(header, homeSwitch, patternsSwitch, anchorPrefix) {
+function subpageHeader(header, anchorPrefix) {
   return header
     .replaceAll('href="#ai-for-access"', `href="${anchorPrefix}#ai-for-access"`)
     .replaceAll('href="#access-for-ai"', `href="${anchorPrefix}#access-for-ai"`)
-    .replace(homeSwitch, patternsSwitch);
+    .replace('class="language-row" href="/zh/"', 'class="language-row" href="/zh/patterns/"')
+    .replace('class="language-row" href="/ja/"', 'class="language-row" href="/ja/patterns/"')
+    .replace('class="language-row" href="/ko/"', 'class="language-row" href="/ko/patterns/"')
+    .replace('class="language-row" href="/es/"', 'class="language-row" href="/es/patterns/"')
+    .replace('class="language-row" href="/"', 'class="language-row" href="/patterns/"');
 }
 
-const expectedEnglishPatternsHeader = subpageHeader(englishHeader, enHomeSwitch, enPatternsSwitch, '/');
-const expectedChinesePatternsHeader = subpageHeader(chineseHeader, zhHomeSwitch, zhPatternsSwitch, '/zh/');
-check(englishHeader !== '', 'index.html: header must not be empty');
-check(englishFooter !== '', 'index.html: footer must not be empty');
-
-const patternsHeaderEn = block(englishPatternsHtml, /<header class="site-header">[\s\S]*?<\/header>/);
-const patternsFooterEn = block(englishPatternsHtml, /<footer class="site-footer">[\s\S]*?<\/footer>/);
-const patternsHeaderZh = block(chinesePatternsHtml, /<header class="site-header">[\s\S]*?<\/header>/);
-const patternsFooterZh = block(chinesePatternsHtml, /<footer class="site-footer">[\s\S]*?<\/footer>/);
-check(patternsHeaderEn === expectedEnglishPatternsHeader, 'patterns/index.html: header must match the shared header, with home-page anchors');
-check(patternsHeaderZh === expectedChinesePatternsHeader, 'zh/patterns/index.html: header must match the shared header, with home-page anchors');
-check(patternsFooterEn === englishFooter, 'patterns/index.html: footer must match the shared footer on index.html');
-check(patternsFooterZh === chineseFooter, 'zh/patterns/index.html: footer must match the shared footer on zh/index.html');
+for (const [lang, homeH, patHtml, homeF, anchorPrefix] of [
+  ['index.html', englishHeader, englishPatternsHtml, englishFooter, '/'],
+  ['zh/index.html', chineseHeader, chinesePatternsHtml, chineseFooter, '/zh/'],
+  ['ja/index.html', japaneseHeader, japanesePatternsHtml, japaneseFooter, '/ja/'],
+  ['ko/index.html', koreanHeader, koreanPatternsHtml, koreanFooter, '/ko/'],
+  ['es/index.html', spanishHeader, spanishPatternsHtml, spanishFooter, '/es/']
+]) {
+  check(homeH !== '', `${lang}: header must not be empty`);
+  check(homeF !== '', `${lang}: footer must not be empty`);
+  const patH = block(patHtml, /<header class="site-header">[\s\S]*?<\/header>/);
+  const patF = block(patHtml, /<footer class="site-footer">[\s\S]*?<\/footer>/);
+  const expectedPatH = subpageHeader(homeH, anchorPrefix);
+  check(patH === expectedPatH, `${lang} patterns header must match the shared header, with home-page anchors`);
+  check(patF === homeF, `${lang} patterns footer must match the shared footer`);
+}
 
 // --- 404 page -------------------------------------------------------------
 
@@ -332,6 +355,15 @@ for (const heading of notFound.matchAll(/<h([1-4])\b[^>]*>([\s\S]*?)<\/h\1>/g)) 
 }
 check(notFound.includes('<a class="button button-primary" href="/" lang="en" hreflang="en">English home</a>'), '404.html: must link the English home page');
 check(notFound.includes('<a class="button button-secondary" href="/zh/" lang="zh-CN" hreflang="zh-CN">中文首页</a>'), '404.html: must link the Chinese home page');
+check(notFound.includes('<a class="button button-secondary" href="/ja/" lang="ja" hreflang="ja">日本語ホーム</a>'), '404.html: must link the Japanese home page');
+check(notFound.includes('<a class="button button-secondary" href="/ko/" lang="ko" hreflang="ko">한국어 홈</a>'), '404.html: must link the Korean home page');
+check(notFound.includes('<a class="button button-secondary" href="/es/" lang="es" hreflang="es">Inicio en español</a>'), '404.html: must link the Spanish home page');
+const notFoundActions = block(notFound, /<div class="actions">[\s\S]*?<\/div>/);
+const notFoundOrder = [...notFoundActions.matchAll(/hreflang="([^"]+)"/g)].map(m => m[1]);
+check(
+  JSON.stringify(notFoundOrder) === JSON.stringify(['en', 'ja', 'ko', 'es', 'zh-CN']),
+  `404.html: actions button order must be English, 日本語, 한국어, Español, 中文 (got ${notFoundOrder.join(', ')})`
+);
 check(
   /<script defer src="https:\/\/static\.cloudflareinsights\.com\/beacon\.min\.js" data-cf-beacon='\{"token": "3b49dd9a82634bba833340481ce6ccbe"\}'><\/script>/.test(notFound),
   '404.html: must load the Cloudflare Web Analytics beacon with the ai.speedle.io token'
@@ -353,13 +385,20 @@ if (existsSync(ogImage)) {
 
 // The full SPDL examples moved to the patterns pages; the home page keeps one
 // representative rule per area and links to the full examples.
-for (const [html, file] of [[englishHtml, 'index.html'], [chineseHtml, 'zh/index.html']]) {
+for (const [html, file] of [[englishHtml, 'index.html'], [chineseHtml, 'zh/index.html'], [japaneseHtml, 'ja/index.html'], [koreanHtml, 'ko/index.html'], [spanishHtml, 'es/index.html']]) {
   check(!/<pre\b[^>]*data-spdl=/.test(html), `${file}: full SPDL examples belong on the patterns page`);
 }
 check(englishHtml.includes('href="/patterns/"'), 'index.html must link the English patterns page');
 check(chineseHtml.includes('href="/zh/patterns/"'), 'zh/index.html must link the Chinese patterns page');
+check(japaneseHtml.includes('href="/ja/patterns/"'), 'ja/index.html must link the Japanese patterns page');
+check(koreanHtml.includes('href="/ko/patterns/"'), 'ko/index.html must link the Korean patterns page');
+check(spanishHtml.includes('href="/es/patterns/"'), 'es/index.html must link the Spanish patterns page');
+
 check(englishPatternsHtml.includes('href="/"'), 'patterns/index.html must link the English home page');
 check(chinesePatternsHtml.includes('href="/zh/"'), 'zh/patterns/index.html must link the Chinese home page');
+check(japanesePatternsHtml.includes('href="/ja/"'), 'ja/patterns/index.html must link the Japanese home page');
+check(koreanPatternsHtml.includes('href="/ko/"'), 'ko/patterns/index.html must link the Korean home page');
+check(spanishPatternsHtml.includes('href="/es/"'), 'es/patterns/index.html must link the Spanish home page');
 
 // Each repeated idea appears once on the home page. The concept diagram keeps
 // one copy of the identity and diagnose lines; the boundary card keeps the
@@ -376,6 +415,24 @@ for (const [html, file, phrases] of [
     '不检测提示词注入': 1,
     '诊断 API 说明每项决策': 1,
     '策略保留否决权': 1
+  }],
+  [japaneseHtml, 'ja/index.html', {
+    'Speedle は渡されたプリンシパルに基づいて決定': 1,
+    'プロンプトインジェクションの検出': 1,
+    'すべての決定は Speedle の diagnose API で説明できます': 1,
+    'ポリシーが拒否権を保持': 1
+  }],
+  [koreanHtml, 'ko/index.html', {
+    'Speedle은 전달받은 주체에 따라 결정을 내립니다': 1,
+    '프롬프트 주입을 탐지하거나': 1,
+    '모든 결정은 Speedle의 diagnose API로 설명할 수 있습니다': 1,
+    '정책이 거부권을 유지': 1
+  }],
+  [spanishHtml, 'es/index.html', {
+    'Speedle decide sobre las entidades principales que recibe': 1,
+    'Speedle no detecta la inyección de prompts': 1,
+    'Cada decisión se puede explicar con la API diagnose de Speedle': 1,
+    'La política mantiene el veto': 1
   }]
 ]) {
   for (const [phrase, expected] of Object.entries(phrases)) {
@@ -393,7 +450,10 @@ for (const label of ['身份输入', '构建', '运行', '策略决策点', '审
 }
 for (const [html, file, tag, title] of [
   [englishHtml, 'index.html', 'Boundary', 'Where Speedle stops'],
-  [chineseHtml, 'zh/index.html', '边界', 'Speedle 的能力边界']
+  [chineseHtml, 'zh/index.html', '边界', 'Speedle 的能力边界'],
+  [japaneseHtml, 'ja/index.html', '境界', 'Speedle の適用範囲'],
+  [koreanHtml, 'ko/index.html', '경계', 'Speedle의 경계'],
+  [spanishHtml, 'es/index.html', 'Límite', 'Dónde se detiene Speedle']
 ]) {
   check(html.includes(`<p class="crosscut-tag">${tag}</p>`), `${file}: the cross-cutting row must have a boundary card tagged "${tag}"`);
   check(html.includes(`>${title}<`), `${file}: the boundary card must be titled "${title}"`);
@@ -406,11 +466,21 @@ for (const keyword of ['AI 智能体授权', 'AI 访问控制', 'MCP 授权', 'R
   check(chineseHtml.includes(keyword), `zh/index.html must naturally include the Chinese keyword "${keyword}"`);
 }
 check(chineseHtml.includes('>产品<svg class="products-chevron"'), 'zh/index.html header must use the Chinese 产品 label');
+check(japaneseHtml.includes('>プロダクト<svg class="products-chevron"'), 'ja/index.html header must use the Japanese プロダクト label');
+check(koreanHtml.includes('>제품<svg class="products-chevron"'), 'ko/index.html header must use the Korean 제품 label');
+check(spanishHtml.includes('>Productos<svg class="products-chevron"'), 'es/index.html header must use the Spanish Productos label');
+
 for (const [html, file, footerLabel] of [
   [englishHtml, 'index.html', 'Speedle products'],
   [chineseHtml, 'zh/index.html', 'Speedle 产品'],
+  [japaneseHtml, 'ja/index.html', 'Speedle プロダクト'],
+  [koreanHtml, 'ko/index.html', 'Speedle 제품'],
+  [spanishHtml, 'es/index.html', 'Productos Speedle'],
   [englishPatternsHtml, 'patterns/index.html', 'Speedle products'],
-  [chinesePatternsHtml, 'zh/patterns/index.html', 'Speedle 产品']
+  [chinesePatternsHtml, 'zh/patterns/index.html', 'Speedle 产品'],
+  [japanesePatternsHtml, 'ja/patterns/index.html', 'Speedle プロダクト'],
+  [koreanPatternsHtml, 'ko/patterns/index.html', 'Speedle 제품'],
+  [spanishPatternsHtml, 'es/patterns/index.html', 'Productos Speedle']
 ]) {
   const footerFamily = (html.match(/<nav class="footer-family"[\s\S]*?<\/nav>/) || [])[0] || '';
   check(footerFamily.startsWith(`<nav class="footer-family" aria-label="${footerLabel}">`), `${file}: footer product navigation must use its localized accessible label`);
@@ -427,14 +497,25 @@ function spdlBlocks(html) {
 }
 const englishSpdl = spdlBlocks(englishPatternsHtml);
 const chineseSpdl = spdlBlocks(chinesePatternsHtml);
+const japaneseSpdl = spdlBlocks(japanesePatternsHtml);
+const koreanSpdl = spdlBlocks(koreanPatternsHtml);
+const spanishSpdl = spdlBlocks(spanishPatternsHtml);
+
 check(englishSpdl.size === 7, `patterns/index.html must contain seven SPDL examples (found ${englishSpdl.size})`);
 for (const name of ['training', 'release', 'rag', 'agents', 'mcp', 'a2a', 'zsp']) {
   check(englishSpdl.has(name), `patterns/index.html is missing the ${name} SPDL example`);
 }
-check(chineseSpdl.size === englishSpdl.size, 'zh/patterns/index.html must contain the same number of SPDL examples');
-for (const [name, source] of englishSpdl) {
-  check(chineseSpdl.has(name), `zh/patterns/index.html is missing the ${name} SPDL example`);
-  check(chineseSpdl.get(name) === source, `zh/patterns/index.html ${name} SPDL must be byte-identical, including comments`);
+for (const [lang, spdlMap] of [
+  ['zh/patterns/index.html', chineseSpdl],
+  ['ja/patterns/index.html', japaneseSpdl],
+  ['ko/patterns/index.html', koreanSpdl],
+  ['es/patterns/index.html', spanishSpdl]
+]) {
+  check(spdlMap.size === englishSpdl.size, `${lang} must contain the same number of SPDL examples`);
+  for (const [name, source] of englishSpdl) {
+    check(spdlMap.has(name), `${lang} is missing the ${name} SPDL example`);
+    check(spdlMap.get(name) === source, `${lang} ${name} SPDL must be byte-identical, including comments`);
+  }
 }
 
 function decodeSpdl(source) {
@@ -462,8 +543,20 @@ const cardSamples = {
 };
 const englishRules = representativeRules(englishHtml);
 const chineseRules = representativeRules(chineseHtml);
+const japaneseRules = representativeRules(japaneseHtml);
+const koreanRules = representativeRules(koreanHtml);
+const spanishRules = representativeRules(spanishHtml);
+
 check(englishRules.length === 7, `index.html must show one representative rule per area (found ${englishRules.length})`);
-check(chineseRules.length === englishRules.length, 'zh/index.html must show the same number of representative rules');
+for (const [lang, rules] of [
+  ['zh/index.html', chineseRules],
+  ['ja/index.html', japaneseRules],
+  ['ko/index.html', koreanRules],
+  ['es/index.html', spanishRules]
+]) {
+  check(rules.length === englishRules.length, `${lang} must show the same number of representative rules`);
+}
+
 for (const [index, { id, rule }] of englishRules.entries()) {
   const sampleName = cardSamples[id];
   check(sampleName !== undefined, `index.html: unexpected representative-rule card "${id}"`);
@@ -471,8 +564,15 @@ for (const [index, { id, rule }] of englishRules.entries()) {
     const sample = read(`samples/page-examples/${sampleName}/${sampleName}.spdl`);
     check(sample.split('\n').includes(decodeSpdl(rule)), `index.html: the ${id} representative rule must be an exact line from ${sampleName}.spdl`);
   }
-  const chineseRule = chineseRules[index];
-  check(chineseRule !== undefined && chineseRule.id === id && chineseRule.rule === rule, `zh/index.html: the ${id} representative rule must match index.html byte-for-byte`);
+  for (const [lang, rules] of [
+    ['zh/index.html', chineseRules],
+    ['ja/index.html', japaneseRules],
+    ['ko/index.html', koreanRules],
+    ['es/index.html', spanishRules]
+  ]) {
+    const r = rules[index];
+    check(r !== undefined && r.id === id && r.rule === rule, `${lang}: the ${id} representative rule must match index.html byte-for-byte`);
+  }
 }
 for (const [name, source] of englishSpdl) {
   const samplePath = `samples/page-examples/${name}/${name}.spdl`;
@@ -502,22 +602,52 @@ for (const line of zspSource.split('\n')) {
 const sampleSpdl = read('samples/zsp/zsp.spdl').replace(/\n$/, '');
 check(sampleSpdl === zspSource, 'samples/zsp/zsp.spdl must match the zsp SPDL example on patterns/index.html');
 const sampleLink = 'https://github.com/teramoby/ai.speedle.io/tree/main/samples/zsp';
-for (const html of [englishPatternsHtml, chinesePatternsHtml]) {
-  check(html.includes(`href="${sampleLink}"`), `${html === englishPatternsHtml ? 'patterns/index.html' : 'zh/patterns/index.html'} must link the samples/zsp runnable sample`);
+for (const [html, label] of [
+  [englishPatternsHtml, 'patterns/index.html'],
+  [chinesePatternsHtml, 'zh/patterns/index.html'],
+  [japanesePatternsHtml, 'ja/patterns/index.html'],
+  [koreanPatternsHtml, 'ko/patterns/index.html'],
+  [spanishPatternsHtml, 'es/patterns/index.html']
+]) {
+  check(html.includes(`href="${sampleLink}"`), `${label} must link the samples/zsp runnable sample`);
 }
 check(englishPatternsHtml.includes('Zero standing privileges · Self-hosted'), 'patterns/index.html ZSP block must present the pattern as self-hosted Speedle');
 check(chinesePatternsHtml.includes('零常驻权限 · 自托管'), 'zh/patterns/index.html ZSP block must present the pattern as self-hosted Speedle');
-// The ZSP copy must stay scoped: a pattern under the right conditions, with
-// token verification and an atomic consume left to production.
+check(japanesePatternsHtml.includes('常設特権ゼロ · セルフホスト'), 'ja/patterns/index.html ZSP block must present the pattern as self-hosted Speedle');
+check(koreanPatternsHtml.includes('상시 권한 배제 · 자체 호스팅'), 'ko/patterns/index.html ZSP block must present the pattern as self-hosted Speedle');
+check(spanishPatternsHtml.includes('Privilegios permanentes cero · Autohospedado'), 'es/patterns/index.html ZSP block must present the pattern as self-hosted Speedle');
+
 check(englishPatternsHtml.includes('Just-in-time tokens support a zero standing privileges pattern'), 'patterns/index.html ZSP title must present ZSP as a pattern');
 check(chinesePatternsHtml.includes('即时令牌支撑零常驻权限模式'), 'zh/patterns/index.html ZSP title must present ZSP as a pattern');
+check(japanesePatternsHtml.includes('ジャストインタイムトークンが常設特権ゼロパターンを支える'), 'ja/patterns/index.html ZSP title must present ZSP as a pattern');
+check(koreanPatternsHtml.includes('적시 토큰으로 상시 권한 배제 패턴을 지원'), 'ko/patterns/index.html ZSP title must present ZSP as a pattern');
+check(spanishPatternsHtml.includes('Los tokens Just-in-Time respaldan un patrón de privilegios permanentes cero'), 'es/patterns/index.html ZSP title must present ZSP as a pattern');
+
 check(englishPatternsHtml.includes('Under the right issuance and control conditions'), 'patterns/index.html ZSP copy must scope the claim to the right conditions');
 check(chinesePatternsHtml.includes('签发和管控到位时'), 'zh/patterns/index.html ZSP copy must scope the claim to the right conditions');
+check(japanesePatternsHtml.includes('適切な発行および管理条件のもとで'), 'ja/patterns/index.html ZSP copy must scope the claim to the right conditions');
+check(koreanPatternsHtml.includes('올바른 발급 및 통제 조건 하에서'), 'ko/patterns/index.html ZSP copy must scope the claim to the right conditions');
+check(spanishPatternsHtml.includes('Bajo las condiciones adecuadas de emisión y control'), 'es/patterns/index.html ZSP copy must scope the claim to the right conditions');
+
 check(englishPatternsHtml.includes('production also needs a trusted component'), 'patterns/index.html ZSP copy must state the production verification requirement');
 check(chinesePatternsHtml.includes('生产环境还需要可信组件'), 'zh/patterns/index.html ZSP copy must state the production verification requirement');
+check(japanesePatternsHtml.includes('本番環境には信頼できるコンポーネントも必要'), 'ja/patterns/index.html ZSP copy must state the production verification requirement');
+check(koreanPatternsHtml.includes('프로덕션 환경에는 신뢰할 수 있는 컴포넌트도 필요'), 'ko/patterns/index.html ZSP copy must state the production verification requirement');
+check(spanishPatternsHtml.includes('la producción también necesita un componente de confianza'), 'es/patterns/index.html ZSP copy must state the production verification requirement');
+
 check(englishPatternsHtml.includes('atomic consume'), 'patterns/index.html ZSP copy must state the atomic consume requirement');
 check(chinesePatternsHtml.includes('原子消费'), 'zh/patterns/index.html ZSP copy must state the atomic consume requirement');
-for (const [html, label] of [[englishPatternsHtml, 'patterns/index.html'], [chinesePatternsHtml, 'zh/patterns/index.html']]) {
+check(japanesePatternsHtml.includes('アトミックな消費'), 'ja/patterns/index.html ZSP copy must state the atomic consume requirement');
+check(koreanPatternsHtml.includes('원자적 소비'), 'ko/patterns/index.html ZSP copy must state the atomic consume requirement');
+check(spanishPatternsHtml.includes('consumo atómico'), 'es/patterns/index.html ZSP copy must state the atomic consume requirement');
+
+for (const [html, label] of [
+  [englishPatternsHtml, 'patterns/index.html'],
+  [chinesePatternsHtml, 'zh/patterns/index.html'],
+  [japanesePatternsHtml, 'ja/patterns/index.html'],
+  [koreanPatternsHtml, 'ko/patterns/index.html'],
+  [spanishPatternsHtml, 'es/patterns/index.html']
+]) {
   check(!html.includes('A token for each request, not a standing privilege'), `${label} must not use the old ZSP title`);
   check(!html.includes('每次请求一个令牌，不留常驻权限'), `${label} must not use the old ZSP title`);
 }
@@ -543,6 +673,9 @@ const claudePluginClaims = [
 for (const [text, file] of [
   [englishHtml, 'index.html'],
   [chineseHtml, 'zh/index.html'],
+  [japaneseHtml, 'ja/index.html'],
+  [koreanHtml, 'ko/index.html'],
+  [spanishHtml, 'es/index.html'],
   [readme, 'README.md']
 ]) {
   for (const claim of claudePluginClaims) {
@@ -573,8 +706,14 @@ check(llms.includes(SITE_DEFINITION), 'llms.txt must state the Speedle AI defini
 check(englishHtml.includes(SITE_DEFINITION), 'index.html must state the Speedle AI definition used by the llms files');
 check(/\n## /.test(llms), 'llms.txt must have link sections');
 check(llms.includes('](https://ai.speedle.io/zh/)'), 'llms.txt must include a 中文 link to the Chinese home page');
+check(llms.includes('](https://ai.speedle.io/ja/)'), 'llms.txt must link the Japanese home page');
+check(llms.includes('](https://ai.speedle.io/ko/)'), 'llms.txt must link the Korean home page');
+check(llms.includes('](https://ai.speedle.io/es/)'), 'llms.txt must link the Spanish home page');
 check(llms.includes('(https://ai.speedle.io/patterns/)'), 'llms.txt must link the patterns page');
 check(llms.includes('(https://ai.speedle.io/zh/patterns/)'), 'llms.txt must link the Chinese patterns page');
+check(llms.includes('(https://ai.speedle.io/ja/patterns/)'), 'llms.txt must link the Japanese patterns page');
+check(llms.includes('(https://ai.speedle.io/ko/patterns/)'), 'llms.txt must link the Korean patterns page');
+check(llms.includes('(https://ai.speedle.io/es/patterns/)'), 'llms.txt must link the Spanish patterns page');
 check(llms.includes('(https://engine.speedle.io/llms.txt)'), 'llms.txt must cross-link the Engine llms.txt');
 check(llms.includes('(https://cloud.speedle.io/llms.txt)'), 'llms.txt must cross-link the Cloud llms.txt');
 const llmsLinks = [...llms.matchAll(/\]\((https:\/\/[^)\s]*)\)/g)].map(match => match[1]);

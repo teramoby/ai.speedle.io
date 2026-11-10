@@ -26,9 +26,15 @@ site_files=(
   CNAME
   app.js
   apple-touch-icon.png
+  es/index.html
+  es/patterns/index.html
   favicon.ico
   favicon.svg
   index.html
+  ja/index.html
+  ja/patterns/index.html
+  ko/index.html
+  ko/patterns/index.html
   llms-full.txt
   llms.txt
   patterns/index.html

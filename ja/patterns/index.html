@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="color-scheme" content="light">
+  <title>パターン · Speedle AI</title>
+  <meta name="description" content="AI の構築と運用のための完全な SPDL 例：データとトレーニング、モデルリリース、権限を考慮した RAG、委任エージェント、MCP ツール呼び出し、A2A 呼び出し、常設特権ゼロ。">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://ai.speedle.io/ja/patterns/">
+  <link rel="alternate" hreflang="en" href="https://ai.speedle.io/patterns/">
+  <link rel="alternate" hreflang="zh-CN" href="https://ai.speedle.io/zh/patterns/">
+  <link rel="alternate" hreflang="x-default" href="https://ai.speedle.io/patterns/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ja_JP">
+  <meta property="og:site_name" content="Speedle AI">
+  <meta property="og:title" content="パターン · Speedle AI">
+  <meta property="og:description" content="AI の構築と運用のための完全な SPDL 例：データとトレーニング、モデルリリース、権限を考慮した RAG、委任エージェント、MCP ツール呼び出し、A2A 呼び出し、常設特権ゼロ。">
+  <meta property="og:url" content="https://ai.speedle.io/ja/patterns/">
+  <meta property="og:image" content="https://ai.speedle.io/assets/og-image.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Speedle AI：AI エージェントの認可とアクセス制御、Speedle スフィアマーク付き">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="パターン · Speedle AI">
+  <meta name="twitter:description" content="AI の構築と運用のための完全な SPDL 例：データとトレーニング、モデルリリース、権限を考慮した RAG、委任エージェント、MCP ツール呼び出し、A2A 呼び出し、常設特権ゼロ。">
+  <meta name="twitter:image" content="https://ai.speedle.io/assets/og-image.png">
+  <meta name="twitter:image:alt" content="Speedle AI：AI エージェントの認可とアクセス制御、Speedle スフィアマーク付き">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": "https://engine.speedle.io/#organization",
+    "name": "Speedle",
+    "url": "https://engine.speedle.io/",
+    "logo": "https://ai.speedle.io/apple-touch-icon.png",
+    "sameAs": [
+      "https://github.com/teramoby/speedle-plus",
+      "https://engine.speedle.io/",
+      "https://cloud.speedle.io/",
+      "https://ai.speedle.io/"
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": "https://ai.speedle.io/ja/patterns/#website",
+    "url": "https://ai.speedle.io/ja/patterns/",
+    "name": "Speedle AI",
+    "inLanguage": "ja",
+    "publisher": {
+      "@id": "https://engine.speedle.io/#organization"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "@id": "https://ai.speedle.io/ja/patterns/#software",
+    "name": "Speedle AI",
+    "url": "https://ai.speedle.io/ja/patterns/",
+    "inLanguage": "ja",
+    "description": "Speedle AI は、オープンソースの Speedle ポリシーエンジンを AI アクセス管理に適用します。AI エージェントの認可、MCP 認可、権限を考慮した RAG、常設特権ゼロ (ZSP)、エージェント間呼び出し (A2A) をカバーします。",
+    "applicationCategory": "SecurityApplication",
+    "isAccessibleForFree": true,
+    "license": "https://opensource.org/license/upl",
+    "codeRepository": "https://github.com/teramoby/speedle-plus",
+    "publisher": {
+      "@id": "https://engine.speedle.io/#organization"
+    }
+  }
+  </script>
+</head>
+<body>
+  <svg class="sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M8 16 16 8M9.5 8H16v6.5"/></symbol>
+    <symbol id="i-terminal" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="3"/><path d="m7.5 9.5 3 2.5-3 2.5M13 15h3.5"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.5v.5"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5.5 12.5 4 4 9-9.5"/></symbol>
+    <symbol id="i-cross" viewBox="0 0 24 24"><path d="m7 7 10 10M17 7 7 17"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="m12 3 7 3v5c0 4.6-2.8 8.1-7 10-4.2-1.9-7-5.4-7-10V6l7-3Z"/><path d="m8.5 12 2.2 2.2 4.8-5"/></symbol>
+    <symbol id="i-signals" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.5"/><circle cx="5" cy="5" r="1.7"/><circle cx="19" cy="5" r="1.7"/><circle cx="5" cy="19" r="1.7"/><circle cx="19" cy="19" r="1.7"/><path d="m6.3 6.3 3.9 3.9m3.6 0 3.9-3.9m-11.4 11.4 3.9-3.9m3.6 0 3.9 3.9"/></symbol>
+    <symbol id="i-speedle-sphere" viewBox="22 22 114 114"><g fill="none" stroke="currentColor" stroke-linejoin="miter" stroke-miterlimit="3" stroke-linecap="butt"><polygon stroke-width="3.6" points="41.83 47.82 30.67 80.15 42.9 112.09 72.8 128.69 106.38 122.19 127.93 95.63 127.36 61.43 104.94 35.6 71.16 30.23"/><g stroke-width="2.4"><polygon points="81.97 43.92 52.19 57.23 44.03 88.8 63.62 114.87 96.22 115.81 117.28 90.9 110.94 58.91"/><polygon points="68.57 60.42 57.6 86.19 78.73 104.59 102.75 90.18 96.47 62.88"/><path d="M41.83 47.82L52.19 57.23L68.57 60.42L81.97 43.92 71.16 30.23 M30.67 80.15L44.03 88.8 42.9 112.09 M52.19 57.23L57.6 86.19 44.03 88.8 78.73 104.59 63.62 114.87 72.8 128.69 M78.73 104.59L96.22 115.81 106.38 122.19 M96.22 115.81L102.75 90.18 117.28 90.9 127.93 95.63 M117.28 90.9L127.36 61.43 110.94 58.91 104.94 35.6 81.97 43.92 M110.94 58.91L96.47 62.88 117.28 90.9"/></g></g></symbol>
+  </svg>
+
+  <a class="skip-link" href="#main">コンテンツへスキップ</a>
+
+  <header class="site-header">
+    <div class="wrap nav">
+      <a class="brand" href="/ja/" aria-label="Speedle AI ホーム">
+        <img src="/assets/speedle-mark-ai.svg" width="152" height="52" alt="Speedle">
+        <span class="brand-divider" aria-hidden="true"></span>
+        <span class="brand-product">AI</span>
+      </a>
+      <button class="menu" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="ナビゲーションを開く">☰</button>
+      <nav id="site-nav" class="nav-links" aria-label="メインナビゲーション">
+        <div class="products">
+          <button class="products-toggle" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="products-menu">プロダクト<svg class="products-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+          <div class="products-panel" id="products-menu" role="menu" aria-label="Speedle プロダクト">
+            <span class="products-heading" aria-hidden="true">プロダクト</span>
+            <a class="product-row" href="https://engine.speedle.io/" role="menuitem">
+              <svg class="product-sphere product-engine" aria-hidden="true"><use href="#i-speedle-sphere"/></svg>
+              <span class="product-copy"><span class="product-name">Speedle Engine</span><span class="product-description">オープンソースの認可エンジン</span></span>
+            </a>
+            <a class="product-row" href="https://cloud.speedle.io/" role="menuitem">
+              <svg class="product-sphere product-cloud" aria-hidden="true"><use href="#i-speedle-sphere"/></svg>
+              <span class="product-copy"><span class="product-name">Speedle Cloud<span class="coming-soon">まもなく公開</span></span><span class="product-description">開発者向けホスト型認可サービス</span></span>
+            </a>
+            <a class="product-row" href="https://ai.speedle.io/ja/" role="menuitem" aria-current="page">
+              <svg class="product-sphere product-ai" aria-hidden="true"><use href="#i-speedle-sphere"/></svg>
+              <span class="product-copy"><span class="product-name">Speedle AI</span><span class="product-description">AI のためのアクセス制御、アクセスのための AI</span></span>
+              <svg class="product-check icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>
+            </a>
+          </div>
+        </div>
+        <a href="/ja/#ai-for-access">AI でアクセスを管理</a>
+        <a href="/ja/#access-for-ai">AI のアクセスを制御</a>
+        <div class="languages">
+          <button class="languages-button" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="languages-panel">日本語<svg class="languages-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+          <span class="languages-heading" aria-hidden="true">言語</span>
+          <div class="languages-panel" id="languages-panel" role="group" aria-label="言語">
+            <a class="language-row" href="/patterns/" lang="en" hreflang="en">English</a>
+            <a class="language-row" href="/ja/patterns/" lang="ja" hreflang="ja" aria-current="page">日本語</a>
+            <a class="language-row" href="/ko/patterns/" lang="ko" hreflang="ko">한국어</a>
+            <a class="language-row" href="/es/patterns/" lang="es" hreflang="es">Español</a>
+            <a class="language-row" href="/zh/patterns/" lang="zh-CN" hreflang="zh-CN">中文</a>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="section patterns" aria-labelledby="patterns-title">
+      <div class="wrap">
+        <header class="page-head">
+          <p class="eyebrow">Speedle AI · パターン</p>
+          <h1 id="patterns-title">AI の構築と運用のためのポリシーパターン</h1>
+          <p class="page-lead">AI システムがデータ、モデル、ツール、他のエージェントと接するあらゆる場面に Speedle の認可エンジンを適用：モデル提供前の構築フェーズ、および提供・動作中の運用フェーズ。これらはソリューションパターンであり、特定の ML やエージェントプラットフォームとの既成連携機能ではありません。</p>
+          <p class="note page-note"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>以下の各 SPDL 例は、Speedle ファイルストアを用いてパースされ、許可および拒否ケースに対して評価されています。名称、パス、属性は例示用です。決定を要求する際、アプリケーション側から属性を渡す必要があります。ポリシー執行ポイントは、条件が参照するすべての属性を渡さなければなりません。</p>
+        </header>
+
+        <section id="build" class="phase" aria-labelledby="build-title">
+          <div class="phase-head phase-build">
+            <p class="phase-tag">構築</p>
+            <h2 id="build-title">モデル提供前：データ、トレーニング、リリース</h2>
+          </div>
+          <article id="lc-data" class="area" aria-labelledby="lc-data-title">
+            <div class="area-copy">
+              <p class="area-step">01 / データとトレーニング</p>
+              <h3 id="lc-data-title">どのパイプラインがどのデータでトレーニングできるか</h3>
+              <p class="area-lead">トレーニングジョブはデータセットを読み取り、コンピュートを使用し、チェックポイントを出力します。アプリケーションは各データセットの読み取り、ジョブ開始、チェックポイントのエクスポート前に、機密性、テナント、同意、地域を属性として渡して問い合わせます。</p>
+              <dl class="area-facts">
+                <div><dt>主体</dt><dd>エンティティとしてのトレーニングパイプライン、ML エンジニアとそのチーム。</dd></div>
+                <div><dt>リソースとアクション</dt><dd>データセット：<code>read</code>。トレーニングジョブ：<code>start</code>。チェックポイント：<code>export</code>。</dd></div>
+                <div><dt>執行ポイント</dt><dd>データセットを開く前のデータローダー、コンピュートを割り当てる前のジョブスケジューラ、およびエクスポート前のアーティファクトストア。</dd></div>
+              </dl>
+            </div>
+            <figure class="spdl-card">
+              <figcaption><span>training.spdl</span><span>SPDL 例</span></figcaption>
+              <pre tabindex="0" data-spdl="training" aria-label="SPDL 例: データとトレーニング"><code>[service.ml-training]
+[policy]
+# Pipelines read only consented data from their own region
+grant role training-pipeline read expr:^/datasets/ if consent == true &amp;&amp; data_region == job_region
+# Restricted datasets never enter training
+deny role training-pipeline read expr:^/datasets/restricted/
+grant role ml-engineer start /jobs/training if gpu_hours &lt;= 64
+grant role ml-engineer export expr:^/checkpoints/
+[rolepolicy]
+grant entity pipeline-churn training-pipeline
+grant group ml-team ml-engineer</code></pre>
+              <p class="spdl-caption">データセットごとに同意とリージョンをチェックし、制限付きデータへのアクセスを直接拒否し、ジョブ開始時に GPU 時間制限を適用します。</p>
+            </figure>
+          </article>
+          <article id="lc-release" class="area" aria-labelledby="lc-release-title">
+            <div class="area-copy">
+              <p class="area-step">02 / モデルリリース</p>
+              <h3 id="lc-release-title">誰がモデルをリリースできるか</h3>
+              <p class="area-lead">モデルの登録、承認、プロモート、ロールバックは、別々の担当者が行う独立したアクションです。職務分掌により、モデルをトレーニングした本人がそれを承認することはできません。</p>
+              <dl class="area-facts">
+                <div><dt>主体</dt><dd>ML エンジニア、リリースマネージャー、およびリリースパイプラインのサービス ID。</dd></div>
+                <div><dt>リソースとアクション</dt><dd>モデルおよびエンドポイント：<code>register</code>、<code>approve</code>、<code>promote</code>、<code>rollback</code>。</dd></div>
+                <div><dt>執行ポイント</dt><dd>モデルレジストリおよびリリースパイプライン。モデルまたはエンドポイントの状態が変更される前に検証します。</dd></div>
+              </dl>
+            </div>
+            <figure class="spdl-card">
+              <figcaption><span>release.spdl</span><span>SPDL 例</span></figcaption>
+              <pre tabindex="0" data-spdl="release" aria-label="SPDL 例: モデルリリース"><code>[service.model-registry]
+[policy]
+grant role ml-engineer register expr:^/models/
+grant role release-manager approve, promote, rollback expr:^/models/
+# Separation of duties: nobody approves a model they trained
+deny role release-manager approve expr:^/models/ if trained_by == request_user
+[rolepolicy]
+grant group ml-team ml-engineer
+grant user dana release-manager</code></pre>
+              <p class="spdl-caption">エンジニアは登録できますがプロモートはできません。リリースマネージャーは <code>trained_by</code> がリクエストユーザーであるモデルを承認できません。</p>
+            </figure>
+          </article>
+        </section>
+
+        <section id="run" class="phase" aria-labelledby="run-title">
+          <div class="phase-head phase-run">
+            <p class="phase-tag">運用</p>
+            <h2 id="run-title">AI 提供および動作時：検索、エージェント、ツール、および他のエージェント</h2>
+          </div>
+          <article id="lc-rag" class="area area-feature" aria-labelledby="lc-rag-title">
+            <div class="area-copy">
+              <p class="area-step">03 / 推論と RAG</p>
+              <h3 id="lc-rag-title">ユーザーが閲覧可能な情報のみをプロンプトに挿入</h3>
+              <p class="area-lead">ユーザー、アプリ、テナントがモデルを呼び出します。権限を考慮した RAG では、リトリーバーが各ドキュメントまたはコレクションの内容をプロンプトに入れる前に Speedle に問い合わせるため、モデルにはリクエストを行った人物が閲覧可能な情報のみが渡されます。</p>
+              <ol class="rag-flow" aria-label="権限を考慮した検索フロー">
+                <li><span>1</span>リトリーバーが候補ドキュメントを検索します。</li>
+                <li><span>2</span>ユーザーのテナントとセキュリティクリアランスを添えて、Speedle にドキュメントまたはコレクションごとに問い合わせます。</li>
+                <li><span>3</span>許可されたコンテンツのみがプロンプトに入ります。</li>
+              </ol>
+              <dl class="area-facts">
+                <div><dt>主体</dt><dd>リクエストの背後にいるユーザーとそのグループ。エンティティとしてのクライアントアプリケーションとテナント。</dd></div>
+                <div><dt>リソースとアクション</dt><dd>コレクションおよびドキュメント：<code>retrieve</code>。モデル：<code>invoke</code>。</dd></div>
+                <div><dt>執行ポイント</dt><dd>ドキュメントがプロンプトに入る前のリトリーバー、およびリクエストをルーティングする前の API ゲートウェイまたは推論サービス。</dd></div>
+              </dl>
+            </div>
+            <figure class="spdl-card">
+              <figcaption><span>rag.spdl</span><span>SPDL 例</span></figcaption>
+              <pre tabindex="0" data-spdl="rag" aria-label="SPDL 例: 推論と RAG"><code>[service.rag]
+[policy]
+# The retriever asks per document, before its content enters the prompt
+grant role tenant-user retrieve expr:^/collections/ if doc_tenant == user_tenant &amp;&amp; doc_label in user_clearances
+# Documents on legal hold never reach a prompt
+deny role tenant-user retrieve expr:^/collections/legal-hold/
+# Apps call only the model tiers in their tenant's plan
+grant role tenant-app invoke expr:^/models/ if model_tier in plan_tiers
+[rolepolicy]
+grant group acme-staff tenant-user
+grant entity acme-helpdesk tenant-app</code></pre>
+              <p class="spdl-caption">ドキュメントはユーザーのテナント内で、かつユーザーに許可されたラベルでのみ取得されます。リーガルホールド対象は拒否され、アプリはプラン内のモデルティアのみを呼び出せます。</p>
+            </figure>
+          </article>
+          <article id="lc-agents" class="area" aria-labelledby="lc-agents-title">
+            <div class="area-copy">
+              <p class="area-step">04 / ユーザーを代理するエージェント</p>
+              <h3 id="lc-agents-title">AI エージェントはユーザーを代理して何ができるか</h3>
+              <p class="area-lead">エージェントは独自のアイデンティティを持ち、ユーザーの委任はリクエスト内の自己申告ではなく署名済み委任トークンによって証明されます。執行ポイントはトークンを検証後、Speedle に2回問い合わせ、両方が合格した場合のみ許可します：トークンのスコープ内のエージェント、および現時点における委任ユーザー自身の権限。トークン発行後にユーザーが権限を失った場合、エージェントは次のリクエストで即座にその権限を失います。100 を超える払い戻しには、ユーザー以外の人物による承認記録も必要です。</p>
+              <ol class="rag-flow" aria-label="委任エージェントの検証フロー">
+                <li><span>1</span>トークンの検証：署名、発行者、有効期限、およびこのエージェント宛に発行されたことを確認。</li>
+                <li><span>2</span>エージェントスコープ：エージェントを主体、トークンのスコープを属性として Speedle に問い合わせ。</li>
+                <li><span>3</span>委任元の最新権限：トークンの sub クレームで指定された委任ユーザーを主体として Speedle に問い合わせ。</li>
+              </ol>
+              <dl class="area-facts">
+                <div><dt>主体</dt><dd>スコープ検証用エンティティとしてのエージェント。第2検証用の検証済みトークンから取得した委任ユーザー。</dd></div>
+                <div><dt>リソースとアクション</dt><dd>チケット：<code>read</code>、<code>update</code>。注文：<code>refund</code>（金額を属性として付与）。すべてトークンスコープ内のアクションとリソースに限定。</dd></div>
+                <div><dt>執行ポイント</dt><dd>アクションが基幹システムに到達する前のエージェントランタイムまたはアプリケーションバックエンド。トークンを検証し、検証済みクレームのみを Speedle に渡します。</dd></div>
+                <div><dt>人間による承認</dt><dd>執行ポイントは払い戻しの署名済み承認記録を検証し、第2チェックで承認者を <code>approved_by</code> として渡します。承認者はユーザー自身であってはなりません。</dd></div>
+                <div><dt>セルフホストでの選択肢</dt><dd>カスタム関数 <code>DelegationValid</code> および <code>DelegatorAllowed</code> を使用してトークンと委任者を一度に評価する単一チェック。Speedle Cloud はカスタム関数を実行しません。</dd></div>
+              </dl>
+            </div>
+            <figure class="spdl-card">
+              <figcaption><span>agents.spdl</span><span>SPDL 例</span></figcaption>
+              <pre tabindex="0" data-spdl="agents" aria-label="SPDL 例: ユーザーに代わって動作するエージェント"><code>[service.crm]
+[policy]
+# Check 1: the agent, only while its verified token covers the request
+grant role in-scope read, update expr:^/tickets/
+grant role in-scope refund expr:^/orders/
+# Check 2: the delegating user (the token's sub), with their roles now
+grant role support read, update expr:^/tickets/
+grant role support refund expr:^/orders/ if amount &lt;= 100
+# Larger refunds: a verified approval by someone other than the user
+grant role support refund expr:^/orders/ if approved_by != request_user
+[rolepolicy]
+# Check 1 in three steps, each role needing the one before:
+# the token has not expired,
+grant entity triage-agent in-time if request_time &lt; token_expires
+# it lists this action,
+grant role in-time in-action if request_action in token_actions
+# and it lists this resource
+grant role in-action in-scope if request_resource in token_resources
+# Check 2: the user's own role
+grant user alice support</code></pre>
+              <p class="spdl-caption">第1チェックはエージェントに3段階でロールを付与し、トークン有効期限内かつ指定されたアクションとリソースに限定します。第2チェックはユーザー自身を検証するため、ユーザーのロールが剥奪されるとエージェントも拒否されます。100 を超える払い戻しは、ユーザー以外の承認者が必要です。</p>
+              <p class="spdl-caption zsp-sample"><a href="https://github.com/teramoby/ai.speedle.io/tree/main/samples/delegation">GitHub で両パターンの実行可能サンプルを見る</a></p>
+            </figure>
+          </article>
+          <article id="lc-mcp" class="area" aria-labelledby="lc-mcp-title">
+            <div class="area-copy">
+              <p class="area-step">05 / ツール呼び出し (MCP)</p>
+              <h3 id="lc-mcp-title">AI エージェントはこの引数でこの MCP ツールを呼び出せるか</h3>
+              <p class="area-lead">すべてのツール呼び出しは実行前に検証されます。ツールがリソース、呼び出しがアクション、引数が属性となり、払い戻し金額の上限などの制約がポリシーの一部となります。</p>
+              <dl class="area-facts">
+                <div><dt>主体</dt><dd>エージェント。それぞれが独自のエンティティ ID とロールを持ち、特権はエージェントごとおよびツールごとに厳格に制限されます。</dd></div>
+                <div><dt>リソースとアクション</dt><dd>ツール：<code>call</code>（ツールの引数を属性として付加）。</dd></div>
+                <div><dt>執行ポイント</dt><dd>ツールが実行される前の MCP クライアントホスト、または MCP サーバーの手前にあるゲートウェイ。</dd></div>
+              </dl>
+            </div>
+            <figure class="spdl-card">
+              <figcaption><span>mcp.spdl</span><span>SPDL 例</span></figcaption>
+              <pre tabindex="0" data-spdl="mcp" aria-label="SPDL 例: MCP によるツール呼び出し"><code>[service.mcp-gateway]
+[policy]
+# Tool arguments arrive as attributes and are checked before the tool runs
+grant role research-agent call /tools/web-search
+grant role billing-agent call /tools/issue-refund if amount &lt;= 100 &amp;&amp; customer_verified == true
+# Admin tools stay out of reach for research agents
+deny role research-agent call expr:^/tools/admin/
+[rolepolicy]
+grant entity agent-research-1 research-agent
+grant entity agent-billing-1 billing-agent</code></pre>
+              <p class="spdl-caption">リサーチエージェントへの Web 検索許可、認証済み顧客に対する請求エージェントへの 100 以下の払い戻し許可、およびリサーチエージェントに対する管理者ツールの明示的拒否。</p>
+            </figure>
+          </article>
+          <article id="lc-a2a" class="area" aria-labelledby="lc-a2a-title">
+            <div class="area-copy">
+              <p class="area-step">06 / エージェント間呼び出し (A2A)</p>
+              <h3 id="lc-a2a-title">どのエージェントがどのエージェントを呼び出せるか</h3>
+              <p class="area-lead">委任チェーン内の各ホップが検証されます。被呼出側は呼出側が既に保持しているスコープのみを受け取ることができ、ホップ数制限も適用されるため、委任によって権限が拡大することはありません。</p>
+              <dl class="area-facts">
+                <div><dt>主体</dt><dd>エンティティとして識別される呼出側エージェント。</dd></div>
+                <div><dt>リソースとアクション</dt><dd>他のエージェントとそのスキル：<code>call</code>（要求されたスコープ、呼出側のスコープ、ホップ数を属性として付加）。</dd></div>
+                <div><dt>執行ポイント</dt><dd>タスクを送信する前の呼出側エージェント、またはタスクを受信する前の受取側エージェント。アプリケーションは受け取った委任から呼出側のスコープを導出します。</dd></div>
+              </dl>
+            </div>
+            <figure class="spdl-card">
+              <figcaption><span>a2a.spdl</span><span>SPDL 例</span></figcaption>
+              <pre tabindex="0" data-spdl="a2a" aria-label="SPDL 例: エージェント間呼び出し (A2A)"><code>[service.a2a]
+[policy]
+# A callee gets only scopes the caller already holds, within two hops
+grant role planner-agent call /agents/researcher if IsSubSet(requested_scopes, caller_scopes) &amp;&amp; hops &lt;= 2
+grant role researcher-agent call /agents/writer if IsSubSet(requested_scopes, caller_scopes) &amp;&amp; hops &lt;= 2
+[rolepolicy]
+grant entity planner-1 planner-agent
+grant entity researcher-1 researcher-agent</code></pre>
+              <p class="spdl-caption"><code>IsSubSet</code> は呼出側が保持していない要求スコープをすべて拒否し、3ホップ目は遮断されます。</p>
+            </figure>
+          </article>
+          <article id="zsp" class="area" aria-labelledby="lc-zsp-title">
+            <div class="area-copy">
+              <p class="area-step">07 / 常設特権ゼロ · セルフホスト</p>
+              <h3 id="lc-zsp-title">ジャストインタイムトークンが常設特権ゼロパターンを支える</h3>
+              <p class="area-lead">適切な発行および管理条件のもとで、短寿命かつ限定スコープのジャストインタイム認証情報と、Speedle のポリシー決定およびアプリケーション側の執行を組み合わせることで、常設特権ゼロパターンを実現できます。この例ではトークンの有効期間、発効前時間、未使用状態を検証します。本番環境には信頼できるコンポーネントも必要であり、トークンの検証、主体・リソース・アクション・タスクスコープへのクレームのバインド、および使い捨て認証情報のアトミックな消費が求められます。</p>
+            </div>
+            <figure class="spdl-card">
+              <figcaption><span>zsp.spdl</span><span>SPDL 例</span></figcaption>
+              <pre tabindex="0" data-spdl="zsp" aria-label="SPDL 例: 常設特権ゼロ (ZSP)"><code>[service.zsp]
+[policy]
+# A just-in-time token: positive lifetime up to 600 s, inside its validity window, unused
+# request_time defaults to the ADS clock; attributes passed by the enforcement point take precedence
+# 60 s is the explicit clock-skew allowance
+grant role agent-runtime invoke /api/orders if expires_at &gt; issued_at &amp;&amp; expires_at - issued_at &lt;= 600 &amp;&amp; issued_at &lt;= request_time + 60 &amp;&amp; not_before &lt;= request_time + 60 &amp;&amp; request_time &lt; expires_at &amp;&amp; TokenUnused(token_id)
+[rolepolicy]
+grant entity agent-billing-1 agent-runtime</code></pre>
+              <p class="spdl-caption zsp-sample"><a href="https://github.com/teramoby/ai.speedle.io/tree/main/samples/zsp">GitHub で完全な実行可能サンプルを見る</a></p>
+            </figure>
+          </article>
+        </section>
+
+        <section id="risk-detection" class="subsection patterns-risk" aria-labelledby="patterns-risk-title">
+          <div class="section-head">
+            <div><p class="eyebrow">パート 01<span class="status-badge status-planned">計画中</span></p><h2 id="patterns-risk-title">AI リスク検出の目標フロー</h2></div>
+            <p>このアプローチは現在構想および開発段階であり、未リリースです。確定的なポリシー決定の上にさらなる精査を加えるものであり、リスクシグナルによってポリシーの拒否が許可に変わることはありません。</p>
+          </div>
+          <section class="decision-architecture" aria-labelledby="decision-flow-title">
+            <div class="architecture-head">
+              <div><p class="eyebrow">目標フローの概念設計</p><h3 id="decision-flow-title">ポリシー優先、リスクシグナルは2次。拒否権を維持</h3></div>
+              <span class="status-badge status-planned">計画中</span>
+            </div>
+            <ol class="decision-flow">
+              <li class="flow-node"><span class="flow-step">01 / リクエスト</span><h4>操作内容の提示</h4><p>エージェント、ユーザー、データ、アクション、タスクコンテキストによってリクエストが構成されます。</p><span class="flow-tag">実行前</span></li>
+              <li class="flow-node"><span class="flow-step">02 / ポリシー決定</span><h4>確定的境界の適用</h4><p>ポリシーが厳密な決定を下します。拒否の場合はここで停止し、許可された場合のみ次に進みます。</p><span class="flow-tag flow-tag-deny">拒否権 · 拒否は最終決定</span></li>
+              <li class="flow-node"><span class="flow-step">03 / AI リスクシグナル</span><h4>より広範な関係性の精査</h4><p>構築中のアプローチでは、より多くの次元や関連性からさらなるリスクを検出します。</p><span class="flow-tag flow-tag-planned">計画中</span></li>
+              <li class="flow-node"><span class="flow-step">04 / 最終決定</span><h4>保護の追加のみで権限は拡大しない</h4><p>リスクシグナルは監視や保護を追加できますが、ポリシーによる決定とその拒否権は保持されます。</p><span class="flow-tag">ポリシーの拒否権を維持</span></li>
+            </ol>
+            <p class="flow-note"><strong>リスクシグナルによってポリシーの拒否が許可に変わることはありません。</strong>この図は構築中のアプローチを示すものであり、リリース済みの AI リスク検出機能を表すものではありません。</p>
+          </section>
+        </section>
+
+        <p class="patterns-back"><a class="button button-secondary" href="/ja/">Speedle AI 日本語ホームに戻る<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-main">
+      <div class="footer-brand">
+        <a class="footer-lockup" href="/ja/" aria-label="Speedle AI ホーム">
+          <img src="/assets/speedle-mark-ai.svg" width="132" height="45" alt="Speedle">
+          <span class="footer-divider" aria-hidden="true"></span>
+          <span class="footer-product">AI</span>
+        </a>
+        <p class="footer-tagline">AI のためのアクセス制御、アクセスのための AI</p>
+        <nav class="social" aria-label="コミュニティリンク">
+          <a href="mailto:contact@speedle.io" aria-label="Email contact@speedle.io" title="contact@speedle.io"><img src="/assets/social-email.svg" alt=""></a>
+          <a href="https://groups.google.com/forum/#!forum/speedle-users" aria-label="Google Groups" title="Google Groups — speedle-users"><img src="/assets/social-google-groups.svg" alt=""></a>
+          <a href="https://github.com/teramoby/speedle-plus" aria-label="GitHub"><img src="/assets/social-github.svg" alt=""></a>
+          <a href="https://discord.gg/uaY2xVsbbT" aria-label="Discord"><img src="/assets/social-discord.svg" alt=""></a>
+        </nav>
+      </div>
+      <nav class="footer-family" aria-label="Speedle プロダクト">
+        <ul>
+          <li><a class="footer-card" href="https://engine.speedle.io/"><svg class="product-sphere product-engine" aria-hidden="true"><use href="#i-speedle-sphere"/></svg><span class="footer-card-name">Speedle Engine</span><span class="footer-card-description">オープンソースの認可エンジン</span></a></li>
+          <li><a class="footer-card" href="https://cloud.speedle.io/"><svg class="product-sphere product-cloud" aria-hidden="true"><use href="#i-speedle-sphere"/></svg><span class="footer-card-name">Speedle Cloud<span class="coming-soon">まもなく公開</span></span><span class="footer-card-description">開発者向けホスト型認可サービス</span></a></li>
+          <li><a class="footer-card" href="https://ai.speedle.io/ja/" aria-current="page"><svg class="product-sphere product-ai" aria-hidden="true"><use href="#i-speedle-sphere"/></svg><span class="footer-card-name">Speedle AI</span><span class="footer-card-description">AI のためのアクセス制御、アクセスのための AI</span><svg class="footer-card-check icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg></a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="wrap footer-bar">
+      <p class="footer-legal"><span>Universal Permissive License v1.0 に基づきライセンスされています。</span><span>Copyright © 2019–2026 The Speedle Authors. All rights reserved.</span></p>
+    </div>
+  </footer>
+  <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3b49dd9a82634bba833340481ce6ccbe"}'></script>
+</body>
+</html>
