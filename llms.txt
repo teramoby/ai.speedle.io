@@ -10,6 +10,12 @@ Speedle AI has two parts. **Use AI to manage access** shows how AI helps design,
 - [Patterns](https://ai.speedle.io/patterns/): the full SPDL examples for building and running AI, with subjects, resources, actions and enforcement points.
 - [中文首页](https://ai.speedle.io/zh/): Speedle AI 中文首页，涵盖 AI 智能体授权、AI 访问控制、MCP 授权、RAG 权限控制和智能体最小权限。
 - [中文模式](https://ai.speedle.io/zh/patterns/): 构建和运行 AI 的完整 SPDL 示例，涵盖数据与训练、模型发布、推理与 RAG、委托智能体、MCP 工具调用、A2A 调用和零常驻权限。
+- [日本語ホーム](https://ai.speedle.io/ja/): Speedle AI 日本語ホーム。AI エージェントの認可、AI アクセス制御、MCP 認可、RAG 権限管理、エージェントの最小権限を網羅。
+- [日本語パターン](https://ai.speedle.io/ja/patterns/): AI の構築と運用のための完全な SPDL 例。データとトレーニング、モデルリリース、推論と RAG、委任エージェント、MCP ツール呼び出し、A2A 呼び出し、常設特権ゼロ (ZSP) を網羅。
+- [한국어 홈](https://ai.speedle.io/ko/): Speedle AI 한국어 홈. AI 에이전트 인가, AI 접근 제어, MCP 인가, RAG 권한 제어, 에이전트 최소 권한을 다룹니다.
+- [한국어 패턴](https://ai.speedle.io/ko/patterns/): AI 구축 및 운영을 위한 완전한 SPDL 예제. 데이터 및 훈련, 모델 릴리스, 추론 및 RAG, 위임 에이전트, MCP 도구 호출, A2A 호출, 상시 권한 배제(ZSP)를 다룹니다.
+- [Inicio en español](https://ai.speedle.io/es/): Página de inicio de Speedle AI en español, que cubre autorización de agentes de IA, control de acceso a IA, autorización de MCP, control de permisos de RAG y privilegios mínimos de agentes.
+- [Patrones en español](https://ai.speedle.io/es/patterns/): Ejemplos completos de SPDL para construir y ejecutar IA, que cubren datos y entrenamiento, lanzamiento de modelos, inferencia y RAG, agentes delegados, llamadas a herramientas MCP, llamadas A2A y privilegios permanentes cero (ZSP).
 
 ## Use AI to manage access
 

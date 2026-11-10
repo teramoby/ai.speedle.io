@@ -1,0 +1,774 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="color-scheme" content="light">
+  <title>Speedle AI — Control de acceso para agentes de IA</title>
+  <meta name="description" content="Speedle AI: Autorización y control de acceso para IA: autorización MCP, RAG con permisos, llamadas A2A, privilegios permanentes cero y mínimo privilegio.">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://ai.speedle.io/es/">
+  <link rel="alternate" hreflang="en" href="https://ai.speedle.io/">
+  <link rel="alternate" hreflang="zh-CN" href="https://ai.speedle.io/zh/">
+  <link rel="alternate" hreflang="ja" href="https://ai.speedle.io/ja/">
+  <link rel="alternate" hreflang="ko" href="https://ai.speedle.io/ko/">
+  <link rel="alternate" hreflang="es" href="https://ai.speedle.io/es/">
+  <link rel="alternate" hreflang="x-default" href="https://ai.speedle.io/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_ES">
+  <meta property="og:site_name" content="Speedle AI">
+  <meta property="og:title" content="Speedle AI — Control de acceso para agentes de IA">
+  <meta property="og:description" content="Speedle AI: Autorización y control de acceso para IA: autorización MCP, RAG con permisos, llamadas A2A, privilegios permanentes cero y mínimo privilegio.">
+  <meta property="og:url" content="https://ai.speedle.io/es/">
+  <meta property="og:image" content="https://ai.speedle.io/assets/og-image.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Speedle AI: Autorización y control de acceso para agentes de IA, con la esfera de Speedle">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Speedle AI — Control de acceso para agentes de IA">
+  <meta name="twitter:description" content="Speedle AI: Autorización y control de acceso para IA: autorización MCP, RAG con permisos, llamadas A2A, privilegios permanentes cero y mínimo privilegio.">
+  <meta name="twitter:image" content="https://ai.speedle.io/assets/og-image.png">
+  <meta name="twitter:image:alt" content="Speedle AI: Autorización y control de acceso para agentes de IA, con la esfera de Speedle">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": "https://engine.speedle.io/#organization",
+    "name": "Speedle",
+    "url": "https://engine.speedle.io/",
+    "logo": "https://ai.speedle.io/apple-touch-icon.png",
+    "sameAs": [
+      "https://github.com/teramoby/speedle-plus",
+      "https://engine.speedle.io/",
+      "https://cloud.speedle.io/",
+      "https://ai.speedle.io/"
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": "https://ai.speedle.io/es/#website",
+    "url": "https://ai.speedle.io/es/",
+    "name": "Speedle AI",
+    "inLanguage": "es",
+    "publisher": {
+      "@id": "https://engine.speedle.io/#organization"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "@id": "https://ai.speedle.io/es/#software",
+    "name": "Speedle AI",
+    "url": "https://ai.speedle.io/es/",
+    "inLanguage": "es",
+    "description": "Speedle AI aplica el motor de políticas de código abierto Speedle a la gestión de acceso a la IA: autorización para agentes de IA, autorización MCP, RAG con reconocimiento de permisos, privilegios permanentes cero (ZSP) y llamadas entre agentes (A2A).",
+    "applicationCategory": "SecurityApplication",
+    "isAccessibleForFree": true,
+    "license": "https://opensource.org/license/upl",
+    "codeRepository": "https://github.com/teramoby/speedle-plus",
+    "publisher": {
+      "@id": "https://engine.speedle.io/#organization"
+    }
+  }
+  </script>
+</head>
+<body>
+<svg class="sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M8 16 16 8M9.5 8H16v6.5"/></symbol>
+    <symbol id="i-terminal" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="3"/><path d="m7.5 9.5 3 2.5-3 2.5M13 15h3.5"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.5v.5"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5.5 12.5 4 4 9-9.5"/></symbol>
+    <symbol id="i-cross" viewBox="0 0 24 24"><path d="m7 7 10 10M17 7 7 17"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="m12 3 7 3v5c0 4.6-2.8 8.1-7 10-4.2-1.9-7-5.4-7-10V6l7-3Z"/><path d="m8.5 12 2.2 2.2 4.8-5"/></symbol>
+    <symbol id="i-signals" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.5"/><circle cx="5" cy="5" r="1.7"/><circle cx="19" cy="5" r="1.7"/><circle cx="5" cy="19" r="1.7"/><circle cx="19" cy="19" r="1.7"/><path d="m6.3 6.3 3.9 3.9m3.6 0 3.9-3.9m-11.4 11.4 3.9-3.9m3.6 0 3.9 3.9"/></symbol>
+    <symbol id="i-speedle-sphere" viewBox="22 22 114 114"><g fill="none" stroke="currentColor" stroke-linejoin="miter" stroke-miterlimit="3" stroke-linecap="butt"><polygon stroke-width="3.6" points="41.83 47.82 30.67 80.15 42.9 112.09 72.8 128.69 106.38 122.19 127.93 95.63 127.36 61.43 104.94 35.6 71.16 30.23"/><g stroke-width="2.4"><polygon points="81.97 43.92 52.19 57.23 44.03 88.8 63.62 114.87 96.22 115.81 117.28 90.9 110.94 58.91"/><polygon points="68.57 60.42 57.6 86.19 78.73 104.59 102.75 90.18 96.47 62.88"/><path d="M41.83 47.82L52.19 57.23 68.57 60.42 81.97 43.92 71.16 30.23 M30.67 80.15L44.03 88.8 42.9 112.09 M52.19 57.23L57.6 86.19 44.03 88.8 78.73 104.59 63.62 114.87 72.8 128.69 M78.73 104.59L96.22 115.81 106.38 122.19 M96.22 115.81L102.75 90.18 117.28 90.9 127.93 95.63 M117.28 90.9L127.36 61.43 110.94 58.91 104.94 35.6 81.97 43.92 M110.94 58.91L96.47 62.88 117.28 90.9"/></g></g></symbol>
+  </svg>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+    <div class="wrap nav">
+      <a class="brand" href="/es/" aria-label="Inicio de Speedle AI">
+        <img src="/assets/speedle-mark-ai.svg" width="152" height="52" alt="Speedle">
+        <span class="brand-divider" aria-hidden="true"></span>
+        <span class="brand-product">AI</span>
+      </a>
+      <button class="menu" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Abrir navegación">☰</button>
+      <nav id="site-nav" class="nav-links" aria-label="Navegación principal">
+        <div class="products">
+          <button class="products-toggle" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="products-menu">Productos<svg class="products-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+          <div class="products-panel" id="products-menu" role="menu" aria-label="Productos Speedle">
+            <span class="products-heading" aria-hidden="true">Productos</span>
+            <a class="product-row" href="https://engine.speedle.io/" role="menuitem">
+              <svg class="product-sphere product-engine" aria-hidden="true"><use href="#i-speedle-sphere"/></svg>
+              <span class="product-copy"><span class="product-name">Speedle Engine</span><span class="product-description">Motor de autorización de código abierto</span></span>
+            </a>
+            <a class="product-row" href="https://cloud.speedle.io/" role="menuitem">
+              <svg class="product-sphere product-cloud" aria-hidden="true"><use href="#i-speedle-sphere"/></svg>
+              <span class="product-copy"><span class="product-name">Speedle Cloud<span class="coming-soon">Próximamente</span></span><span class="product-description">Autorización hospedada para desarrolladores</span></span>
+            </a>
+            <a class="product-row" href="https://ai.speedle.io/es/" role="menuitem" aria-current="page">
+              <svg class="product-sphere product-ai" aria-hidden="true"><use href="#i-speedle-sphere"/></svg>
+              <span class="product-copy"><span class="product-name">Speedle AI</span><span class="product-description">IA para control de acceso, control de acceso para IA</span></span>
+              <svg class="product-check icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>
+            </a>
+          </div>
+        </div>
+        <a href="#ai-for-access">Usar IA para gestionar el acceso</a>
+        <a href="#access-for-ai">Controlar a qué puede acceder la IA</a>
+        <div class="languages">
+          <button class="languages-button" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="languages-panel">Español<svg class="languages-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+          <span class="languages-heading" aria-hidden="true">Idioma</span>
+          <div class="languages-panel" id="languages-panel" role="group" aria-label="Idioma">
+            <a class="language-row" href="/" lang="en" hreflang="en">English</a>
+            <a class="language-row" href="/zh/" lang="zh-CN" hreflang="zh-CN">中文</a>
+            <a class="language-row" href="/ja/" lang="ja" hreflang="ja">日本語</a>
+            <a class="language-row" href="/ko/" lang="ko" hreflang="ko">한국어</a>
+            <a class="language-row" href="/es/" lang="es" hreflang="es" aria-current="page">Español</a>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+<main id="main">
+    <section id="top" class="hero" aria-labelledby="hero-title">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Speedle AI · Dos direcciones conectadas</p>
+          <h1 id="hero-title">Use la IA para gestionar el acceso y controle el acceso de la IA</h1>
+          <p class="hero-lead">Use la IA para diseñar, gestionar y verificar políticas de acceso, y aplique la misma política a la propia IA: autorización MCP, RAG con reconocimiento de permisos y mínimo privilegio para agentes de IA. Ambas direcciones se basan en decisiones de políticas claras y aplicables.</p>
+          <div class="actions"><a class="button button-primary" href="#policy-modeler">Probar la habilidad de modelado de políticas</a><a class="button button-secondary" href="https://engine.speedle.io/docs/">Leer la documentación<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a></div>
+          <p class="hero-note"><span aria-hidden="true"></span>Construido sobre el motor de políticas de código abierto Speedle.</p>
+        </div>
+        <div class="hero-paths" aria-label="Explorar las dos partes de Speedle para IA">
+          <a class="path-card" href="#ai-for-access">
+            <div class="path-top"><span class="path-index">PARTE 01</span><span class="path-icon" aria-hidden="true"><svg class="icon"><use href="#i-terminal"/></svg></span></div>
+            <h2>Use AI to manage access</h2>
+            <p>Ponga la IA a trabajar en el modelado, diseño, gestión y verificación de políticas: convierta documentos en SPDL con la habilidad de modelado de políticas de código abierto, use Speedle MCP y conozca el enfoque planificado de detección de riesgos de IA.</p>
+            <span class="path-link">Explorar Speedle MCP<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></span>
+          </a>
+          <a class="path-card" href="#access-for-ai">
+            <div class="path-top"><span class="path-index">PARTE 02</span><span class="path-icon" aria-hidden="true"><svg class="icon"><use href="#i-shield"/></svg></span></div>
+            <h2>Control what AI can access</h2>
+            <p>Políticas para construir y ejecutar IA: datos y entrenamiento, publicación de modelos, inferencia y RAG, agentes, llamadas a herramientas MCP y llamadas de agente a agente.</p>
+            <span class="path-link">Explorar construcción y ejecución<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></span>
+          </a>
+          <p class="hero-foundation"><span></span>Una base de políticas compartida<span></span></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="ai-for-access" class="section part part-one" aria-labelledby="ai-for-access-title">
+      <div class="wrap">
+        <header class="part-header">
+          <span class="part-number" aria-hidden="true">01</span>
+          <div class="part-heading"><p class="eyebrow">Use AI to manage access</p><h2 id="ai-for-access-title">Ponga la IA a trabajar en sus políticas de acceso</h2></div>
+          <p class="part-summary">La IA ayudando a las personas a gestionar el acceso: una habilidad de código abierto que convierte documentos de políticas en SPDL, una vista previa de Speedle MCP para diseñar, gestionar y verificar políticas, y un enfoque planificado de detección de riesgos de IA.</p>
+        </header>
+
+        <div id="policy-modeler" class="policy-modeler">
+          <div class="section-head">
+            <div><p class="eyebrow">Modelador de políticas Speedle · Habilidad de agente de código abierto<span class="status-badge status-available">Disponible</span></p><h3 id="policy-modeler-title">Convierta documentos de políticas en SPDL revisable</h3></div>
+            <p>Una habilidad de agente que lee un manual de empleados o una normativa, pregunta sobre lo que el documento deja abierto y modela el resultado como políticas RBAC + ABAC. Nunca adivina una regla.</p>
+          </div>
+
+          <div class="mode-grid">
+            <article class="mode-card">
+              <div class="mode-top"><span class="mode-label">Lo que produce</span><code>5 archivos</code></div>
+              <h4>De las cláusulas del manual a las políticas probadas</h4>
+              <p>Cada política cita la cláusula que implementa o una respuesta confirmada. El documento del modelo incluye un diagrama Mermaid de herencia de roles y la justificación de cada política.</p>
+              <ul class="mode-list">
+                <li><span><code>.spdl</code> importable para el almacén de archivos, verificado con <code>spctl check</code>.</span></li>
+                <li><span>Condiciones ABAC para departamento, ubicación, clase de datos e importe.</span></li>
+                <li><span>Casos ejecutables que cubren límites de permisos, denegaciones y aprobaciones.</span></li>
+              </ul>
+              <a class="mode-link" href="https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler">Abrir la carpeta de la habilidad<svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg></a>
+            </article>
+            <article class="mode-card">
+              <div class="mode-top"><span class="mode-label">Salida de ejemplo</span><code>EN + ZH</code></div>
+              <h4>Un manual ficticio, modelado de extremo a extremo</h4>
+              <p>Ambas ejecuciones comienzan a partir de un manual de empleados ficticio y terminan con un modelo probado. Cada uno pasa <code>spctl check</code> y los 37 casos de autorización en un PMS y ADS local.</p>
+              <ul class="mode-list">
+                <li><span>Herencia de roles y un rol de gerente delimitado por departamento.</span></li>
+                <li><span>Una denegación explícita que anula una concesión amplia a empleados.</span></li>
+                <li><span>Una cuenta de servicio de nómina modelada como <code>entity</code>.</span></li>
+              </ul>
+              <a class="mode-link" href="https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/en/model.md">Leer el ejemplo en inglés<svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg></a>
+            </article>
+          </div>
+
+          <p class="launch-note">El paquete sigue el formato Agent Skills: un <code>SKILL.md</code> con frontmatter de <code>name</code> y <code>description</code>, más referencias, scripts y ejemplos. Funciona con cualquier agente que admita ese formato. Para una instalación genérica, copie la carpeta de la habilidad en el directorio de habilidades de su agente y pídale que modele su manual. Los siguientes ejemplos muestran dos agentes compatibles.</p>
+
+          <div class="prerequisites">
+            <h4>Requisitos previos</h4>
+            <ul>
+              <li><code>spctl</code> — — valida el SPDL generado con <code>spctl check -f policies.spdl</code>.</li>
+              <li><code>speedle-pms</code> and <code>speedle-ads</code> — — ejecutan los casos de autorización de extremo a extremo en un Speedle local.</li>
+              <li>Python 3 — — ejecuta los casos de prueba en <code>scripts/run-cases.py</code>.</li>
+            </ul>
+          </div>
+
+          <div class="config-grid">
+            <figure class="config-card">
+              <figcaption><span>instalar + usar</span><span>Claude Code · ejemplo</span></figcaption>
+              <pre tabindex="0" aria-label="Instalar y usar el complemento de Speedle con Claude Code"><code>claude plugin marketplace add teramoby/ai.speedle.io
+claude plugin install speedle@speedle
+
+# En Claude Code:
+/plugin configure speedle@speedle
+/speedle:speedle-policy-modeler ./employee-handbook.md</code></pre>
+            </figure>
+            <figure class="config-card">
+              <figcaption><span>instalar + usar</span><span>Codex · ejemplo</span></figcaption>
+              <pre tabindex="0" aria-label="Instalar y usar la habilidad de modelado de políticas Speedle con Codex"><code>git clone --depth 1 https://github.com/teramoby/ai.speedle.io.git
+mkdir -p ~/.agents/skills
+cp -R ai.speedle.io/skills/speedle-policy-modeler \
+  ~/.agents/skills/
+
+# En la CLI de Codex o la extensión de IDE:
+$speedle-policy-modeler ./employee-handbook.md</code></pre>
+            </figure>
+          </div>
+
+          <div class="mcp-resources"><span>Habilidad y ejemplos</span><a href="https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler">Carpeta de la habilidad</a><a href="https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/en/model.md">Ejemplo en inglés</a><a href="https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/zh/model.md">Ejemplo en chino</a><a href="https://code.claude.com/docs/en/skills">Documentación de habilidades de Claude Code</a><a href="https://learn.chatgpt.com/docs/build-skills">Documentación de Agent Skills de ChatGPT / Codex</a></div>
+        </div>
+
+        <div id="mcp" class="subsection mcp">
+          <div class="section-head mcp-intro">
+            <div><p class="eyebrow">Speedle MCP<span class="status-badge status-preview">Vista previa</span></p><h3 id="mcp-title">Speedle MCP: un paquete, dos modos deliberadamente separados</h3></div>
+            <div class="mcp-lead">
+              <p><code>@speedle/mcp</code> está publicado en npm. Es un paquete con un binario <code>speedle-mcp</code> que se ejecuta como un servidor MCP stdio local.</p>
+              <a class="button button-outline" href="https://github.com/teramoby/speedle-mcp/blob/main/README.md">Leer el README<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a>
+            </div>
+          </div>
+
+          <div class="mode-grid">
+            <article class="mode-card">
+              <div class="mode-top"><span class="mode-label">Modo 01</span><code>check</code></div>
+              <h4>Comprobaciones de autorización</h4>
+              <p>El modo <code>check</code> registra solo <code>is_allowed</code> de forma predeterminada y solo lee la configuración de ADS. <code>diagnose</code>, <code>all_granted_roles</code> y <code>all_granted_permissions</code> son opcionales mediante los indicadores <code>--expose-diagnose</code>, <code>--expose-all-granted-roles</code> y <code>--expose-all-granted-permissions</code>. <code>diagnose</code> funciona solo con Speedle autohospedado; el servidor no se iniciará con él en Speedle Cloud. Responde preguntas de autorización; no aplica nada en la aplicación que realiza la llamada.</p>
+              <ul class="mode-list">
+                <li>Comprobaciones de autorización de solo lectura a través de la API REST de Speedle ADS.</li>
+                <li>Sujeto, recurso, acción y atributos tipados como entradas.</li>
+                <li>URL base de ADS, nombre de servicio y token de portador opcional desde variables de entorno.</li>
+              </ul>
+              <a class="mode-link" href="https://github.com/teramoby/speedle-mcp/blob/main/README.md#check-mode--self-hosted-speedle-loopback-or-internal-ads">Leer la configuración del modo check<svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg></a>
+            </article>
+            <article class="mode-card">
+              <div class="mode-top"><span class="mode-label">Modo 02</span><code>manage</code></div>
+              <h4>Diseño y gestión de políticas</h4>
+              <p>El modo <code>manage</code> registra solo las herramientas de gestión y solo lee la configuración de PMS para diseñar y gestionar políticas de Speedle a través de la API REST de PMS.</p>
+              <ul class="mode-list">
+                <li>Servicios, políticas de autorización y políticas de roles.</li>
+                <li>Políticas vigentes como SPDL; PMS valida cada política al crearla.</li>
+                <li>Una opción de solo lectura; las eliminaciones destructivas requieren confirmación explícita del objetivo.</li>
+              </ul>
+              <a class="mode-link" href="https://github.com/teramoby/speedle-mcp/blob/main/README.md#manage-mode--self-hosted-speedle-policy-management-pms">Leer la configuración del modo manage<svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg></a>
+            </article>
+          </div>
+
+          <aside class="mcp-security" aria-labelledby="mcp-security-title">
+            <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
+            <div><h4 id="mcp-security-title">Mantenga la gestión de políticas fuera del agente gobernado</h4><p><strong>Nunca otorgue el modo <code>manage</code> a un agente que esté gobernado por estas políticas.</strong> Un agente que posea herramientas de comprobación y de gestión podría ser inducido mediante prompts a otorgarse acceso a sí mismo.</p><p><strong>Proporcione al agente gobernado únicamente <code>is_allowed</code>.</strong> Ese es el valor predeterminado de <code>check</code>. <code>diagnose</code>, <code>all_granted_roles</code> y <code>all_granted_permissions</code> muestran políticas, condiciones y concesiones, por lo que debe activarlos solo en un servidor de verificación para autores y operadores de políticas, y nunca pasar los indicadores <code>--expose-*</code> al servidor del agente.</p><p>No existe un modo predeterminado que exponga ambos. Ejecutar <code>speedle-mcp</code> sin ningún modo muestra el uso y sale con un código distinto de cero.</p></div>
+          </aside>
+
+          <p class="launch-note">Requiere Node.js 22 o posterior. Estos ejemplos coinciden con el README del paquete publicado. El complemento de Claude Code anterior fija <code>@speedle/mcp@0.2.1</code>.</p>
+
+          <div class="config-grid">
+            <figure class="config-card">
+              <figcaption><span>instalar</span><span>npm · npx</span></figcaption>
+              <pre tabindex="0" aria-label="Instalar @speedle/mcp o ejecutar el binario speedle-mcp"><code>npm install @speedle/mcp
+
+npx @speedle/mcp check
+npx @speedle/mcp manage</code></pre>
+            </figure>
+            <figure class="config-card">
+              <figcaption><span>modo check</span><span>autohospedado</span></figcaption>
+              <pre tabindex="0" aria-label="Configuración de cliente MCP para el modo check de Speedle MCP"><code>{
+  "mcpServers": {
+    "speedle-check": {
+      "command": "npx",
+      "args": ["-y", "@speedle/mcp", "check"],
+      "env": {
+        "SPEEDLE_ENDPOINT": "http://127.0.0.1:6734",
+        "SPEEDLE_SERVICE_NAME": "books"
+      }
+    }
+  }
+}</code></pre>
+            </figure>
+          </div>
+
+          <div class="config-grid">
+            <figure class="config-card">
+              <figcaption><span>modo check · opcional</span><span>autohospedado</span></figcaption>
+              <pre tabindex="0" aria-label="Configuración de cliente MCP que habilita herramientas adicionales del modo check"><code>{
+  "mcpServers": {
+    "speedle-check": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@speedle/mcp",
+        "check",
+        "--expose-diagnose",
+        "--expose-all-granted-roles",
+        "--expose-all-granted-permissions"
+      ],
+      "env": {
+        "SPEEDLE_ENDPOINT": "http://127.0.0.1:6734",
+        "SPEEDLE_SERVICE_NAME": "books"
+      }
+    }
+  }
+}</code></pre>
+            </figure>
+            <figure class="config-card">
+              <figcaption><span>modo manage</span><span>autohospedado</span></figcaption>
+              <pre tabindex="0" aria-label="Configuración de cliente MCP para el modo manage de Speedle MCP"><code>{
+  "mcpServers": {
+    "speedle-manage": {
+      "command": "npx",
+      "args": ["-y", "@speedle/mcp", "manage"],
+      "env": {
+        "SPEEDLE_PMS_ENDPOINT": "http://127.0.0.1:6733"
+      }
+    }
+  }
+}</code></pre>
+            </figure>
+          </div>
+
+          <div class="mcp-resources"><span>Fuente y fundamentos</span><a href="https://github.com/teramoby/speedle-mcp">Speedle MCP</a><a href="https://github.com/teramoby/speedle-mcp/blob/main/README.md">README</a><a href="https://github.com/teramoby/speedle-plus">Speedle</a><a href="https://cloud.speedle.io/">Speedle Cloud</a><a href="https://github.com/teramoby/speedle-sdk">Speedle SDK</a></div>
+        </div>
+
+        <div id="risk-detection" class="risk-detection">
+          <article class="risk-card" aria-labelledby="risk-title">
+            <div class="risk-card-top"><h3 id="risk-title">Detección de riesgos de IA</h3><span class="status-badge status-planned">Planificado</span></div>
+            <p>La IA puede analizar más dimensiones y relaciones para encontrar riesgos que una sola regla no detecta. Esta es una dirección que Speedle está explorando y desarrollando, no una característica definitiva. La política mantiene el veto: una señal de riesgo puede añadir supervisión o protección, pero nunca convierte una denegación en una autorización.</p>
+            <a class="mode-link" href="/es/patterns/#risk-detection">Ver el flujo objetivo<svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="access-for-ai" class="section part part-two" aria-labelledby="access-for-ai-title">
+      <div class="wrap">
+        <header class="part-header">
+          <span class="part-number" aria-hidden="true">02</span>
+          <div class="part-heading"><p class="eyebrow">Control what AI can access</p><h2 id="access-for-ai-title">Gobierne el acceso mientras construye y ejecuta IA</h2></div>
+          <p class="part-summary">El motor de políticas de Speedle aplicado dondequiera que los sistemas de IA interactúan con datos, modelos, herramientas y otros agentes: en la fase de construcción, antes de que el modelo esté en servicio, y en la fase de ejecución, mientras sirve y actúa. Estos son patrones de solución, no integraciones predeterminadas con ninguna plataforma de ML o agentes.</p>
+        </header>
+
+        <div id="lifecycle" class="concept">
+          <div class="section-head">
+            <div><p class="eyebrow">Concepto</p><h3 id="concept-title">Un único punto de decisión para construir y ejecutar IA</h3></div>
+            <p>Cada área tiene un punto de aplicación en su aplicación. Consulta a Speedle antes de actuar y aplica la respuesta.</p>
+          </div>
+          <figure class="concept-figure">
+            <svg class="cd cd-wide" viewBox="0 0 1080 616" role="img" aria-labelledby="cdw-title cdw-desc">
+              <title id="cdw-title">Concepto: Conceptoo: Speedle como punto de decisión para construir y ejecutar IA</title>
+              <desc id="cdw-desc">An identity band at the top: your IdP and OAuth authenticate users and agents, MCP authorization builds on OAuth, and the principals flow into Speedle. On the left, the Build lane has two areas: data and training, asked by the data loader and job scheduler; and model release, asked by the model registry and release pipeline. On the right, the Run lane has four areas: inference and RAG, asked by the retriever per document and the API gateway; agents acting for users, asked by the agent runtime about the agent’s token scope and then the delegating user; tool calls over MCP, asked by the MCP host or gateway; and agent-to-agent calls, asked by the calling or receiving agent. Every area's enforcement point sends a request to Speedle's policy decision point in the centre and receives allow or deny. From Speedle, decisions and their explanations flow into the audit and explain band at the bottom: the diagnose API shows which policy matched and why, and applications registran cada decisión con el agente y el humano delegador.</desc>
+              <defs>
+                <linearGradient id="cdw-pdp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4f0fb"/><stop offset="1" stop-color="#e9e1f8"/></linearGradient>
+                <filter id="cdw-lift" x="-8%" y="-8%" width="116%" height="130%"><feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#2e1c58" flood-opacity=".09"/></filter>
+                <filter id="cdw-lift-strong" x="-15%" y="-10%" width="130%" height="125%"><feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#5229ad" flood-opacity=".14"/></filter>
+                <marker id="cdw-ask" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0 1 9 5 0 9z" fill="#5229ad"/></marker>
+                <marker id="cdw-ans" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0 1 9 5 0 9z" fill="#7546d8"/></marker>
+              </defs>
+
+              <g class="cd-band cd-band-id">
+                <rect x="0.5" y="0.5" width="1079" height="71" rx="14"/>
+                <text class="cd-label cd-teal" x="24" y="33">ENTRADA DE IDENTIDAD</text>
+                <text class="cd-sub" x="24" y="55">Aspectos transversales</text>
+                <line class="cd-divider" x1="236" y1="16" x2="236" y2="56"/>
+                <text class="cd-strong" x="260" y="33">Su IdP y OAuth autentican usuarios y agentes. La autorización MCP se basa en OAuth.</text>
+                <text class="cd-text" x="260" y="55">La aplicación los pasa como entidades principales. Speedle decide sobre las entidades principales que recibe.</text>
+              </g>
+              <line class="cd-in" x1="540" y1="76" x2="540" y2="144" marker-end="url(#cdw-ans)"/>
+              <text class="cd-mono" x="552" y="116">entidades principales</text>
+
+              <g class="cd-lane cd-lane-build">
+                <rect x="0.5" y="96.5" width="329" height="407" rx="18"/>
+                <text class="cd-label cd-purple" x="20" y="129">CONSTRUCCIÓN</text>
+                <text class="cd-sub" x="86" y="129">antes de poner en servicio un modelo</text>
+              </g>
+              <g class="cd-lane cd-lane-run">
+                <rect x="750.5" y="96.5" width="329" height="407" rx="18"/>
+                <text class="cd-label cd-teal" x="770" y="129">EJECUCIÓN</text>
+                <text class="cd-sub" x="818" y="129">mientras la IA sirve y actúa</text>
+              </g>
+
+              <g class="cd-card cd-card-build" filter="url(#cdw-lift)">
+                <rect x="14.5" y="148.5" width="301" height="163" rx="12"/>
+                <rect class="cd-chip" x="30" y="170" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="48" y="187">01</text>
+                <text class="cd-title" x="78" y="189">Datos y entrenamiento</text>
+                <text class="cd-text" x="30" y="224">Cargador de datos, programador de tareas</text>
+                <line class="cd-rule" x1="30" y1="246" x2="300" y2="246"/>
+                <text class="cd-res" x="30" y="272">conjuntos de datos, tareas de entrenamiento,</text>
+                <text class="cd-res" x="30" y="292">exportación de puntos de control</text>
+              </g>
+              <g class="cd-card cd-card-build" filter="url(#cdw-lift)">
+                <rect x="14.5" y="324.5" width="301" height="163" rx="12"/>
+                <rect class="cd-chip" x="30" y="346" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="48" y="363">02</text>
+                <text class="cd-title" x="78" y="365">Publicación de modelos</text>
+                <text class="cd-text" x="30" y="400">Registro de modelos, canalización de publicaciones</text>
+                <line class="cd-rule" x1="30" y1="422" x2="300" y2="422"/>
+                <text class="cd-res" x="30" y="448">registrar, aprobar, promocionar,</text>
+                <text class="cd-res" x="30" y="468">revertir</text>
+              </g>
+
+              <g class="cd-card cd-card-key" filter="url(#cdw-lift)">
+                <rect x="764.5" y="148.5" width="301" height="75" rx="12"/>
+                <rect class="cd-chip" x="780" y="164" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="798" y="181">03</text>
+                <text class="cd-title" x="828" y="183">Inferencia y RAG</text>
+                <text class="cd-text" x="780" y="210">Recuperador por documento · pasarela</text>
+              </g>
+              <g class="cd-card cd-card-run" filter="url(#cdw-lift)">
+                <rect x="764.5" y="236.5" width="301" height="75" rx="12"/>
+                <rect class="cd-chip" x="780" y="252" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="798" y="269">04</text>
+                <text class="cd-title" x="828" y="271">Agentes actuando en nombre de usuarios</text>
+                <text class="cd-text" x="780" y="298">Entorno de ejecución de agentes · usuario + agente</text>
+              </g>
+              <g class="cd-card cd-card-run" filter="url(#cdw-lift)">
+                <rect x="764.5" y="324.5" width="301" height="75" rx="12"/>
+                <rect class="cd-chip" x="780" y="340" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="798" y="357">05</text>
+                <text class="cd-title" x="828" y="359">Llamadas a herramientas (MCP)</text>
+                <text class="cd-text" x="780" y="386">Host o pasarela MCP, por llamada</text>
+              </g>
+              <g class="cd-card cd-card-run" filter="url(#cdw-lift)">
+                <rect x="764.5" y="412.5" width="301" height="75" rx="12"/>
+                <rect class="cd-chip" x="780" y="428" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="798" y="445">06</text>
+                <text class="cd-title" x="828" y="447">Llamadas entre agentes (A2A)</text>
+                <text class="cd-text" x="780" y="474">Agente emisor o receptor</text>
+              </g>
+
+              <g class="cd-arrows">
+                <line class="cd-ask" x1="322" y1="224" x2="404" y2="224" marker-end="url(#cdw-ask)"/>
+                <line class="cd-ans" x1="404" y1="236" x2="322" y2="236" marker-end="url(#cdw-ans)"/>
+                <line class="cd-ask" x1="322" y1="400" x2="404" y2="400" marker-end="url(#cdw-ask)"/>
+                <line class="cd-ans" x1="404" y1="412" x2="322" y2="412" marker-end="url(#cdw-ans)"/>
+                <line class="cd-ask" x1="758" y1="180" x2="676" y2="180" marker-end="url(#cdw-ask)"/>
+                <line class="cd-ans" x1="676" y1="192" x2="758" y2="192" marker-end="url(#cdw-ans)"/>
+                <line class="cd-ask" x1="758" y1="268" x2="676" y2="268" marker-end="url(#cdw-ask)"/>
+                <line class="cd-ans" x1="676" y1="280" x2="758" y2="280" marker-end="url(#cdw-ans)"/>
+                <line class="cd-ask" x1="758" y1="356" x2="676" y2="356" marker-end="url(#cdw-ask)"/>
+                <line class="cd-ans" x1="676" y1="368" x2="758" y2="368" marker-end="url(#cdw-ans)"/>
+                <line class="cd-ask" x1="758" y1="444" x2="676" y2="444" marker-end="url(#cdw-ask)"/>
+                <line class="cd-ans" x1="676" y1="456" x2="758" y2="456" marker-end="url(#cdw-ans)"/>
+              </g>
+
+              <g class="cd-pdp">
+                <rect x="410" y="148" width="260" height="340" rx="20" fill="url(#cdw-pdp)" filter="url(#cdw-lift-strong)"/>
+                <rect class="cd-pdp-ring" x="418.5" y="156.5" width="243" height="323" rx="14"/>
+                <circle class="cd-pdp-badge" cx="540" cy="212" r="30"/>
+                <path class="cd-pdp-icon" transform="translate(520.8 192.8) scale(1.6)" d="m12 3 7 3v5c0 4.6-2.8 8.1-7 10-4.2-1.9-7-5.4-7-10V6l7-3Z M8.5 12l2.2 2.2 4.8-5"/>
+                <text class="cd-pdp-eyebrow" x="540" y="272">SPEEDLE</text>
+                <text class="cd-pdp-title" x="540" y="304">Punto de decisión</text>
+                <text class="cd-pdp-title" x="540" y="331">de políticas</text>
+                <line class="cd-pdp-rule" x1="450" y1="354" x2="630" y2="354"/>
+                <text class="cd-pdp-text" x="540" y="380">Evalúa la política SPDL para</text>
+                <text class="cd-pdp-text" x="540" y="400">las solicitudes de cada área</text>
+                <rect class="cd-pdp-chip" x="468" y="420" width="144" height="34" rx="17"/>
+                <text class="cd-pdp-answer" x="540" y="442">permitir | denegar</text>
+              </g>
+
+              <line class="cd-out" x1="540" y1="492" x2="540" y2="524" marker-end="url(#cdw-ask)"/>
+              <text class="cd-mono" x="552" y="514">decisión + motivo</text>
+              <g class="cd-band cd-band-audit">
+                <rect x="0.5" y="528.5" width="1079" height="71" rx="14"/>
+                <text class="cd-label cd-purple" x="24" y="561">SALIDA DE AUDITORÍA Y EXPLICACIÓN</text>
+                <text class="cd-sub" x="24" y="583">Aspectos transversales</text>
+                <line class="cd-divider" x1="236" y1="544" x2="236" y2="584"/>
+                <text class="cd-strong" x="260" y="561">Cada decisión se puede explicar con la API diagnose de Speedle: qué política coincidió y por qué.</text>
+                <text class="cd-text" x="260" y="583">Las aplicaciones registran cada decisión con el agente y el humano delegador.</text>
+              </g>
+
+            </svg>
+            <svg class="cd cd-stack" viewBox="0 0 360 1220" role="img" aria-labelledby="cds-title cds-desc">
+              <title id="cds-title">Concepto: Conceptoo: Speedle como punto de decisión para construir y ejecutar IA</title>
+              <desc id="cds-desc">Stacked from top to bottom. Identity in: your IdP and OAuth authenticate users and agents, MCP authorization builds on OAuth, and the application passes the principals to Speedle. Speedle's policy decision point evaluates SPDL policy and answers allow or deny. Every area's enforcement point asks it. Build lane: data and training, asked by the data loader and job scheduler; model release, asked by the model registry and release pipeline. Run lane: inference and RAG, asked by the retriever per document and the API gateway; agents acting for users, asked by the agent runtime about the agent’s token scope and then the delegating user; tool calls over MCP, asked by the MCP host or gateway per call; agent-to-agent calls, asked by the calling or receiving agent. Audit and explain out: the diagnose API shows which policy matched and why, and applications registran cada decisión con el agente y el humano delegador.</desc>
+              <defs>
+                <linearGradient id="cds-pdp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4f0fb"/><stop offset="1" stop-color="#e9e1f8"/></linearGradient>
+                <filter id="cds-lift" x="-8%" y="-10%" width="116%" height="140%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#2e1c58" flood-opacity=".09"/></filter>
+                <filter id="cds-lift-strong" x="-12%" y="-15%" width="124%" height="145%"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#5229ad" flood-opacity=".13"/></filter>
+                <marker id="cds-ask" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0 1 9 5 0 9z" fill="#5229ad"/></marker>
+                <marker id="cds-ans" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0 1 9 5 0 9z" fill="#7546d8"/></marker>
+              </defs>
+
+              <g class="cd-band cd-band-id">
+                <rect x="0.5" y="0.5" width="359" height="163" rx="14"/>
+                <text class="cd-label cd-teal" x="18" y="31">ENTRADA DE IDENTIDAD</text>
+                <text class="cd-sub cd-end" x="342" y="31">Aspectos transversales</text>
+                <text class="cd-strong" x="18" y="59">Su IdP y OAuth autentican</text>
+                <text class="cd-strong" x="18" y="79">usuarios y agentes.</text>
+                <text class="cd-text" x="18" y="105">MCP authorization builds on OAuth.</text>
+                <text class="cd-text" x="18" y="125">Speedle decide sobre las entidades</text>
+                <text class="cd-text" x="18" y="145">principales que recibe.</text>
+              </g>
+              <line class="cd-in" x1="164" y1="168" x2="164" y2="204" marker-end="url(#cds-ans)"/>
+              <text class="cd-mono" x="176" y="192">entidades principales</text>
+
+              <g class="cd-pdp">
+                <rect x="0" y="208" width="328" height="160" rx="18" fill="url(#cds-pdp)" filter="url(#cds-lift-strong)"/>
+                <rect class="cd-pdp-ring" x="7.5" y="215.5" width="313" height="145" rx="12"/>
+                <circle class="cd-pdp-badge" cx="52" cy="288" r="26"/>
+                <path class="cd-pdp-icon" transform="translate(36.4 272.4) scale(1.3)" d="m12 3 7 3v5c0 4.6-2.8 8.1-7 10-4.2-1.9-7-5.4-7-10V6l7-3Z M8.5 12l2.2 2.2 4.8-5"/>
+                <text class="cd-pdp-eyebrow cd-start" x="96" y="250">SPEEDLE</text>
+                <text class="cd-pdp-title cd-pdp-title-sm cd-start" x="96" y="276">Punto de decisión de políticas</text>
+                <text class="cd-pdp-text cd-start" x="96" y="300">Evalúa la política SPDL</text>
+                <rect class="cd-pdp-chip" x="96" y="316" width="128" height="32" rx="16"/>
+                <text class="cd-pdp-answer" x="160" y="337">permitir | denegar</text>
+              </g>
+
+              <g class="cd-lane cd-lane-build">
+                <rect x="0.5" y="392.5" width="327" height="217" rx="16"/>
+                <text class="cd-label cd-purple" x="16" y="423">CONSTRUCCIÓN</text>
+                <text class="cd-sub" x="80" y="423">antes de poner en servicio un modelo</text>
+              </g>
+              <g class="cd-lane cd-lane-run">
+                <rect x="0.5" y="626.5" width="327" height="389" rx="16"/>
+                <text class="cd-label cd-teal" x="16" y="657">EJECUCIÓN</text>
+                <text class="cd-sub" x="62" y="657">mientras la IA sirve y actúa</text>
+              </g>
+
+              <g class="cd-arrows">
+                <line class="cd-ask" x1="346" y1="288" x2="332" y2="288" marker-end="url(#cds-ask)"/>
+                <line class="cd-spine" x1="346" y1="288" x2="346" y2="966"/>
+                <line class="cd-ask" x1="316" y1="474" x2="346" y2="474"/>
+                <line class="cd-ask" x1="316" y1="560" x2="346" y2="560"/>
+                <line class="cd-ask" x1="316" y1="708" x2="346" y2="708"/>
+                <line class="cd-ask" x1="316" y1="794" x2="346" y2="794"/>
+                <line class="cd-ask" x1="316" y1="880" x2="346" y2="880"/>
+                <line class="cd-ask" x1="316" y1="966" x2="346" y2="966"/>
+                <circle class="cd-node" cx="346" cy="474" r="3.5"/>
+                <circle class="cd-node" cx="346" cy="560" r="3.5"/>
+                <circle class="cd-node" cx="346" cy="708" r="3.5"/>
+                <circle class="cd-node" cx="346" cy="794" r="3.5"/>
+                <circle class="cd-node" cx="346" cy="880" r="3.5"/>
+                <circle class="cd-node" cx="346" cy="966" r="3.5"/>
+              </g>
+
+              <g class="cd-card cd-card-build" filter="url(#cds-lift)">
+                <rect x="12.5" y="436.5" width="303" height="75" rx="12"/>
+                <rect class="cd-chip" x="26" y="452" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="44" y="469">01</text>
+                <text class="cd-title cd-title-sm" x="74" y="470">Datos y entrenamiento</text>
+                <text class="cd-text" x="26" y="498">Cargador de datos, programador de tareas</text>
+              </g>
+              <g class="cd-card cd-card-build" filter="url(#cds-lift)">
+                <rect x="12.5" y="522.5" width="303" height="75" rx="12"/>
+                <rect class="cd-chip" x="26" y="538" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="44" y="555">02</text>
+                <text class="cd-title cd-title-sm" x="74" y="556">Publicación de modelos</text>
+                <text class="cd-text" x="26" y="584">Registro de modelos, canalización de publicaciones</text>
+              </g>
+              <g class="cd-card cd-card-key" filter="url(#cds-lift)">
+                <rect x="12.5" y="670.5" width="303" height="75" rx="12"/>
+                <rect class="cd-chip" x="26" y="686" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="44" y="703">03</text>
+                <text class="cd-title cd-title-sm" x="74" y="704">Inferencia y RAG</text>
+                <text class="cd-text" x="26" y="732">Recuperador por documento · pasarela</text>
+              </g>
+              <g class="cd-card cd-card-run" filter="url(#cds-lift)">
+                <rect x="12.5" y="756.5" width="303" height="75" rx="12"/>
+                <rect class="cd-chip" x="26" y="772" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="44" y="789">04</text>
+                <text class="cd-title cd-title-sm" x="74" y="790">Agentes actuando en nombre de usuarios</text>
+                <text class="cd-text" x="26" y="818">Entorno de ejecución de agentes · usuario + agente</text>
+              </g>
+              <g class="cd-card cd-card-run" filter="url(#cds-lift)">
+                <rect x="12.5" y="842.5" width="303" height="75" rx="12"/>
+                <rect class="cd-chip" x="26" y="858" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="44" y="875">05</text>
+                <text class="cd-title cd-title-sm" x="74" y="876">Llamadas a herramientas (MCP)</text>
+                <text class="cd-text" x="26" y="904">Host o pasarela MCP, por llamada</text>
+              </g>
+              <g class="cd-card cd-card-run" filter="url(#cds-lift)">
+                <rect x="12.5" y="928.5" width="303" height="75" rx="12"/>
+                <rect class="cd-chip" x="26" y="944" width="36" height="24" rx="7"/>
+                <text class="cd-num" x="44" y="961">06</text>
+                <text class="cd-title cd-title-sm" x="74" y="962">Llamadas entre agentes (A2A)</text>
+                <text class="cd-text" x="26" y="990">Agente emisor o receptor</text>
+              </g>
+
+              <g class="cd-band cd-band-audit">
+                <rect x="0.5" y="1040.5" width="359" height="163" rx="14"/>
+                <text class="cd-label cd-purple" x="18" y="1071">SALIDA DE AUDITORÍA Y EXPLICACIÓN</text>
+                <text class="cd-strong" x="18" y="1099">Cada decisión se puede explicar</text>
+                <text class="cd-strong" x="18" y="1119">con la API diagnose de Speedle.</text>
+                <text class="cd-text" x="18" y="1145">Qué política coincidió y por qué. Apps</text>
+                <text class="cd-text" x="18" y="1165">registran cada decisión con el agente</text>
+                <text class="cd-text" x="18" y="1185">y el humano delegador.</text>
+              </g>
+            </svg>
+            <figcaption class="concept-legend">
+              <span><svg viewBox="0 0 40 10" aria-hidden="true"><line x1="1" y1="5" x2="32" y2="5" stroke="#5229ad" stroke-width="2"/><path d="M30 1 39 5 30 9z" fill="#5229ad"/></svg>El punto de aplicación consulta a Speedle: sujeto, acción, recurso, atributos.</span>
+              <span><svg viewBox="0 0 40 10" aria-hidden="true"><line x1="1" y1="5" x2="32" y2="5" stroke="#7546d8" stroke-width="2" stroke-dasharray="5 4"/><path d="M30 1 39 5 30 9z" fill="#7546d8"/></svg>Speedle responde permitir o denegar; la aplicación lo aplica.</span>
+            </figcaption>
+          </figure>
+        </div>
+
+        <div id="patterns" class="subsection patterns-summary">
+          <div class="section-head">
+            <div><p class="eyebrow">Patrones de solución</p><h3 id="patterns-title">Un patrón de políticas por área</h3></div>
+            <p>Una frase y una regla representativa por área. Los ejemplos completos de SPDL, con los atributos que necesita cada comprobación, están en la página de patrones.</p>
+          </div>
+          <div class="pattern-grid">
+            <article id="lc-data" class="pattern-card">
+              <p class="pattern-step">Construcción · 01 Datos y entrenamiento</p>
+              <h4><a href="/es/patterns/#lc-data">Datos y entrenamiento</a></h4>
+              <p>Los trabajos de entrenamiento leen conjuntos de datos y escriben puntos de control; el consentimiento y la región se verifican por conjunto de datos, y los datos restringidos nunca entran al entrenamiento.</p>
+              <code class="pattern-rule">grant role training-pipeline read expr:^/datasets/ if consent == true &amp;&amp; data_region == job_region</code>
+            </article>
+            <article id="lc-release" class="pattern-card">
+              <p class="pattern-step">Construcción · 02 Publicación de modelos</p>
+              <h4><a href="/es/patterns/#lc-release">Publicación de modelos</a></h4>
+              <p>Registrar, aprobar, promocionar y revertir son acciones independientes, y nadie aprueba un modelo que haya entrenado.</p>
+              <code class="pattern-rule">deny role release-manager approve expr:^/models/ if trained_by == request_user</code>
+            </article>
+            <article id="lc-rag" class="pattern-card">
+              <p class="pattern-step">Ejecución · 03 Inferencia y RAG</p>
+              <h4><a href="/es/patterns/#lc-rag">Inferencia y RAG</a></h4>
+              <p>El recuperador consulta sobre cada documento antes de que su contenido ingrese al prompt, de modo que el modelo solo ve lo que el usuario tiene permiso para leer.</p>
+              <code class="pattern-rule">grant role tenant-user retrieve expr:^/collections/ if doc_tenant == user_tenant &amp;&amp; doc_label in user_clearances</code>
+            </article>
+            <article id="lc-agents" class="pattern-card">
+              <p class="pattern-step">Ejecución · 04 Agentes actuando en nombre de usuarios</p>
+              <h4><a href="/es/patterns/#lc-agents">Agentes actuando en nombre de usuarios</a></h4>
+              <p>El agente se verifica dentro del alcance de su token de delegación, luego se verifica el usuario delegador con sus permisos actuales.</p>
+              <code class="pattern-rule">grant entity triage-agent in-time if request_time &lt; token_expires</code>
+            </article>
+            <article id="lc-mcp" class="pattern-card">
+              <p class="pattern-step">Ejecución · 05 Llamadas a herramientas (MCP)</p>
+              <h4><a href="/es/patterns/#lc-mcp">Llamadas a herramientas mediante MCP</a></h4>
+              <p>Cada llamada a una herramienta se comprueba antes de ejecutarse, y los argumentos se convierten en atributos que la política puede limitar.</p>
+              <code class="pattern-rule">grant role billing-agent call /tools/issue-refund if amount &lt;= 100 &amp;&amp; customer_verified == true</code>
+            </article>
+            <article id="lc-a2a" class="pattern-card">
+              <p class="pattern-step">Ejecución · 06 Llamadas entre agentes (A2A)</p>
+              <h4><a href="/es/patterns/#lc-a2a">Llamadas de agente a agente</a></h4>
+              <p>Se verifica cada salto, y el receptor solo puede recibir los alcances que el emisor ya posee.</p>
+              <code class="pattern-rule">grant role planner-agent call /agents/researcher if IsSubSet(requested_scopes, caller_scopes) &amp;&amp; hops &lt;= 2</code>
+            </article>
+            <article id="zsp" class="pattern-card">
+              <p class="pattern-step">Ejecución · 07 Privilegios permanentes cero · Autohospedado</p>
+              <h4><a href="/es/patterns/#zsp">Privilegios permanentes cero (ZSP)</a></h4>
+              <p>Los tokens de corta duración emitidos justo a tiempo pueden admitir privilegios permanentes cero cuando la emisión y los controles están implementados. Speedle es donde define su estrategia ZSP como política y la aplica en cada solicitud: el acceso existe solo dentro del período de tiempo y las condiciones escritas en SPDL.</p>
+              <code class="pattern-rule">grant role agent-runtime invoke /api/orders if expires_at &gt; issued_at &amp;&amp; expires_at - issued_at &lt;= 600 &amp;&amp; issued_at &lt;= request_time + 60 &amp;&amp; not_before &lt;= request_time + 60 &amp;&amp; request_time &lt; expires_at &amp;&amp; TokenUnused(token_id)</code>
+            </article>
+          </div>
+          <p class="patterns-more"><a class="button button-secondary" href="/es/patterns/">Ver los patrones completos y ejemplos de SPDL<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
+        </div>
+
+        <div id="cross-cutting" class="crosscut">
+          <div class="section-head">
+            <div><p class="eyebrow">Aspectos transversales</p><h3 id="crosscut-title">Lo que todas las áreas tienen en común</h3></div>
+            <p>Identidad, auditoría, mapeo de riesgos y límites se aplican a todas las áreas de construcción y ejecución.</p>
+          </div>
+          <div class="crosscut-grid">
+            <article class="crosscut-card">
+              <p class="crosscut-tag">Integración de identidad</p>
+              <h4>Speedle decide; su IdP autentica</h4>
+              <p>Speedle es el punto de decisión de autorización. La autenticación proviene de su IdP o servidor de autorización OAuth, tanto para usuarios como para agentes; la autorización MCP se basa en OAuth. La aplicación asigna identidades verificadas a entidades principales (usuario, grupos, entidad) antes de consultar a Speedle.</p>
+            </article>
+            <article class="crosscut-card">
+              <p class="crosscut-tag">Auditoría y explicabilidad</p>
+              <h4>Diagnóstico y registros de auditoría</h4>
+              <p>La <a href="https://engine.speedle.io/docs/pms/diagnosis/">API diagnose</a> de Speedle devuelve la decisión, el motivo, los roles efectivos y las políticas examinadas, incluido cuál coincidió y por qué. Las aplicaciones registran cada decisión con el agente y el humano delegador. Diagnose expone detalles de políticas y solicitudes, por lo que debe limitarse a operadores de confianza.</p>
+            </article>
+            <article class="crosscut-card">
+              <p class="crosscut-tag">Mapeo de riesgos</p>
+              <h4>Se asigna a OWASP LLM06:2025 Exceso de agencia</h4>
+              <p>El documento <a href="https://genai.owasp.org/llmrisk/llm062025-excessive-agency/">OWASP Top 10 for LLM Applications 2025</a> identifica el Exceso de agencia: un agente con más funcionalidad, permisos o autonomía de los que requiere su tarea. Los roles por agente, las comprobaciones por herramienta, la delegación limitada por tarea y tiempo, y la aprobación humana para acciones de alto riesgo acotan cada uno de estos tres factores.</p>
+            </article>
+            <article id="boundary" class="crosscut-card">
+              <p class="crosscut-tag">Límite</p>
+              <h4>Dónde se detiene Speedle</h4>
+              <p>Speedle no detecta la inyección de prompts, no filtra entradas o salidas de modelos ni verifica las cadenas de suministro de modelos y conjuntos de datos; utilice controles dedicados para ello. <strong>Limita lo que puede hacer un agente comprometido o engañado:</strong> Speedle responde con denegación a cualquier solicitud fuera de la política, sin importar lo que indique el prompt.</p>
+            </article>
+          </div>
+        </div>
+
+        <div id="ecosystem" class="ecosystem" aria-labelledby="ecosystem-title">
+          <div class="ecosystem-head"><p class="eyebrow">Ecosistema</p><h3 id="ecosystem-title">Comience con los componentes básicos de Speedle</h3></div>
+          <div class="resource-grid">
+            <a class="resource-card" href="https://engine.speedle.io/"><span>CÓDIGO ABIERTO</span><strong>Speedle Engine<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>El motor de autorización de código abierto y lenguaje de políticas SPDL legible.</p></a>
+            <a class="resource-card" href="https://cloud.speedle.io/"><span>HOSPEDADO</span><strong><span class="resource-name">Speedle Cloud<span class="coming-soon">Próximamente</span></span><svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>Autorización hospedada para desarrolladores, construida sobre el motor de políticas Speedle.</p></a>
+            <a class="resource-card" href="https://engine.speedle.io/docs/sdks/"><span>INTEGRAR</span><strong>Speedle SDK<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></strong><p>Clientes en Python, Go, Java, C#, Rust y Node.js para la API de decisiones.</p></a>
+          </div>
+          <figure class="config-card sdk-snippet">
+            <figcaption><span>SDK de Python · solicitar una decisión</span><span>0.2.0</span></figcaption>
+            <pre tabindex="0" aria-label="Ejemplo del SDK de Python: solicitar una decisión a Speedle"><code>from speedle import Auth, Client
+
+with Client(backend="speedle", endpoint="http://localhost:6734",
+            auth=Auth.none(), service_name="docs") as speedle:
+    allowed = speedle.is_allowed("alice", "get", "/docs/public")
+    # True una vez que el servicio docs conceda a alice get /docs/public</code></pre>
+            <p class="sdk-caption">Un breve ejemplo; la <a href="https://engine.speedle.io/docs/sdks/">documentación del SDK</a> cubre cada cliente de lenguaje, el modelo de solicitud y el manejo de errores. El cliente de Node.js está publicado en npm: <code>npm install @speedle/sdk</code>.</p>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section about" aria-labelledby="about-title">
+      <div class="wrap">
+        <div class="cta">
+          <div class="cta-copy"><p class="eyebrow">Código abierto · Exploración abierta</p><h2 id="about-title">Comparta un escenario real de autorización de IA</h2><p>Ayude a dar forma a los próximos ejemplos. Comparta los conjuntos de datos, modelos, herramientas o flujos de trabajo de agentes que su aplicación necesita proteger.</p></div>
+          <div class="actions"><a class="button button-primary" href="https://github.com/teramoby/ai.speedle.io/issues">Comparta su escenario<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a><a class="button button-secondary" href="https://github.com/teramoby/speedle-plus">Explorar Speedle</a></div>
+        </div>
+        <p class="provenance">Speedle nació de <a href="https://github.com/oracle/speedle">Oracle Speedle</a> y continúa siendo mantenido por los desarrolladores originales bajo la Licencia Permisiva Universal (UPL) 1.0. <a href="https://engine.speedle.io/about/">Lea la historia del proyecto</a>.</p>
+      </div>
+    </section>
+  </main>
+
+<footer class="site-footer">
+    <div class="wrap footer-main">
+      <div class="footer-brand">
+        <a class="footer-lockup" href="/es/" aria-label="Inicio de Speedle AI">
+          <img src="/assets/speedle-mark-ai.svg" width="132" height="45" alt="Speedle">
+          <span class="footer-divider" aria-hidden="true"></span>
+          <span class="footer-product">AI</span>
+        </a>
+        <p class="footer-tagline">IA para control de acceso, control de acceso para IA</p>
+        <nav class="social" aria-label="Enlaces de la comunidad">
+          <a href="mailto:contact@speedle.io" aria-label="Email contact@speedle.io" title="contact@speedle.io"><img src="/assets/social-email.svg" alt=""></a>
+          <a href="https://groups.google.com/forum/#!forum/speedle-users" aria-label="Google Groups" title="Google Groups — speedle-users"><img src="/assets/social-google-groups.svg" alt=""></a>
+          <a href="https://github.com/teramoby/speedle-plus" aria-label="GitHub"><img src="/assets/social-github.svg" alt=""></a>
+          <a href="https://discord.gg/uaY2xVsbbT" aria-label="Discord"><img src="/assets/social-discord.svg" alt=""></a>
+        </nav>
+      </div>
+      <nav class="footer-family" aria-label="Productos Speedle">
+        <ul>
+          <li><a class="footer-card" href="https://engine.speedle.io/"><svg class="product-sphere product-engine" aria-hidden="true"><use href="#i-speedle-sphere"/></svg><span class="footer-card-name">Speedle Engine</span><span class="footer-card-description">Motor de autorización de código abierto</span></a></li>
+          <li><a class="footer-card" href="https://cloud.speedle.io/"><svg class="product-sphere product-cloud" aria-hidden="true"><use href="#i-speedle-sphere"/></svg><span class="footer-card-name">Speedle Cloud<span class="coming-soon">Próximamente</span></span><span class="footer-card-description">Autorización hospedada para desarrolladores</span></a></li>
+          <li><a class="footer-card" href="https://ai.speedle.io/es/" aria-current="page"><svg class="product-sphere product-ai" aria-hidden="true"><use href="#i-speedle-sphere"/></svg><span class="footer-card-name">Speedle AI</span><span class="footer-card-description">IA para control de acceso, control de acceso para IA</span><svg class="footer-card-check icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg></a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="wrap footer-bar">
+      <p class="footer-legal"><span>Con licencia bajo Universal Permissive License v1.0.</span><span>Copyright © 2019–2026 The Speedle Authors. Todos los derechos reservados.</span></p>
+    </div>
+  </footer>
+  <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3b49dd9a82634bba833340481ce6ccbe"}'></script>
+</body>
+</html>

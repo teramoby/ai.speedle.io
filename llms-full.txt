@@ -4,6 +4,9 @@
 
 Source: https://ai.speedle.io/
 Chinese: https://ai.speedle.io/zh/
+Japanese: https://ai.speedle.io/ja/
+Korean: https://ai.speedle.io/ko/
+Spanish: https://ai.speedle.io/es/
 
 Speedle AI — AI for access control, access control for AI — applies the engine to authorization for AI agents: MCP tool calls, permission-aware RAG, agent-to-agent (A2A) calls, zero standing privileges (ZSP) and the AI lifecycle from training data to model release. Everything here is a solution pattern on the Speedle policy engine; none of it is a shipped integration with an ML or agent platform.
 
@@ -201,8 +204,8 @@ A runnable local sample with PMS, ADS and the custom function, including the ato
 
 ## Where things are
 
-- [Speedle AI home](https://ai.speedle.io/) and [中文首页](https://ai.speedle.io/zh/)
-- [AI patterns](https://ai.speedle.io/patterns/) and [中文模式](https://ai.speedle.io/zh/patterns/): the full SPDL examples for all seven areas.
+- [Speedle AI home](https://ai.speedle.io/), [中文首页](https://ai.speedle.io/zh/), [日本語ホーム](https://ai.speedle.io/ja/), [한국어 홈](https://ai.speedle.io/ko/) and [Inicio en español](https://ai.speedle.io/es/)
+- [AI patterns](https://ai.speedle.io/patterns/), [中文模式](https://ai.speedle.io/zh/patterns/), [日本語パターン](https://ai.speedle.io/ja/patterns/), [한국어 패턴](https://ai.speedle.io/ko/patterns/) and [Patrones en español](https://ai.speedle.io/es/patterns/): the full SPDL examples for all seven areas.
 - [Documentation](https://engine.speedle.io/docs/) and [文档](https://engine.speedle.io/zh/docs/): concepts, deployment, APIs and operations.
 - [SPDL reference](https://engine.speedle.io/docs/spdl/) and [SPDL 参考](https://engine.speedle.io/zh/docs/spdl/): grammar, attributes, built-in functions and custom functions.
 - [Getting started](https://engine.speedle.io/quick-start/) and [快速开始](https://engine.speedle.io/zh/quick-start/): run Speedle and make a first authorization decision.
