@@ -164,7 +164,7 @@
         <header class="part-header">
           <span class="part-number" aria-hidden="true">01</span>
           <div class="part-heading"><p class="eyebrow">用 AI 管权限</p><h2 id="ai-for-access-title">用 AI 管好访问策略</h2></div>
-          <p class="part-summary">AI 帮人管理访问：开源技能把制度文档变成 SPDL；已发布的 Speedle MCP 包用于设计、管理和检查策略；AI 风险检测方案已列入计划。</p>
+          <p class="part-summary">AI 帮人管理访问：开源技能把制度文档变成 SPDL；Speedle MCP 用于设计、管理和检查策略（预览）；AI 风险检测方案已列入计划。</p>
         </header>
 
         <div id="policy-modeler" class="policy-modeler">
@@ -236,7 +236,7 @@ $speedle-policy-modeler ./employee-handbook.md</code></pre>
 
         <div id="mcp" class="subsection mcp">
           <div class="section-head mcp-intro">
-            <div><p class="eyebrow">Speedle MCP<span class="status-badge status-available">可用</span></p><h3 id="mcp-title">Speedle MCP：两种独立模式</h3></div>
+            <div><p class="eyebrow">Speedle MCP<span class="status-badge status-preview">预览</span></p><h3 id="mcp-title">Speedle MCP：两种独立模式</h3></div>
             <div class="mcp-lead">
               <p><code>@speedle/mcp</code> 已在 npm 发布。它是一个 npm 包，附带 <code>speedle-mcp</code> 命令，用于在本地以 stdio 方式运行 MCP 服务器。</p>
               <a class="button button-outline" href="https://github.com/teramoby/speedle-mcp/blob/main/README.md">阅读 README<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a>
@@ -273,7 +273,71 @@ $speedle-policy-modeler ./employee-handbook.md</code></pre>
             <div><h4 id="mcp-security-title">别让受控智能体管理策略</h4><p><strong>不要给受这些策略约束的智能体开放 <code>manage</code> 模式。</strong>如果智能体同时拿到检查和管理工具，提示词可能诱导它给自己开通访问权限。</p><p><strong>受控智能体只开放 <code>is_allowed</code>。</strong>这是 <code>check</code> 模式的默认设置。<code>diagnose</code>、<code>all_granted_roles</code> 和 <code>all_granted_permissions</code> 会展示策略、条件和授权，只在给策略编写者和运维人员使用的 check 服务中开启，不要给智能体的服务加 <code>--expose-*</code> 参数。</p><p>没有同时开放两类工具的默认模式。不带模式运行 <code>speedle-mcp</code> 会打印用法，并以非零状态码退出。</p></div>
           </aside>
 
-          <p class="launch-note">需要 Node.js 22 或更高版本。运行 <code>npm install @speedle/mcp</code> 安装；上面的 Claude Code 插件固定使用 0.2.1 版本。</p>
+          <p class="launch-note">需要 Node.js 22 或更高版本。这些示例与已发布的包 README 一致。上面的 Claude Code 插件固定使用 <code>@speedle/mcp@0.2.1</code> 版本。</p>
+
+          <div class="config-grid">
+            <figure class="config-card">
+              <figcaption><span>安装</span><span>npm · npx</span></figcaption>
+              <pre tabindex="0" aria-label="安装 @speedle/mcp，或直接运行 speedle-mcp"><code>npm install @speedle/mcp
+
+npx @speedle/mcp check
+npx @speedle/mcp manage</code></pre>
+            </figure>
+            <figure class="config-card">
+              <figcaption><span>check 模式</span><span>自托管</span></figcaption>
+              <pre tabindex="0" aria-label="Speedle MCP check 模式的客户端配置"><code>{
+  "mcpServers": {
+    "speedle-check": {
+      "command": "npx",
+      "args": ["-y", "@speedle/mcp", "check"],
+      "env": {
+        "SPEEDLE_ENDPOINT": "http://127.0.0.1:6734",
+        "SPEEDLE_SERVICE_NAME": "books"
+      }
+    }
+  }
+}</code></pre>
+            </figure>
+          </div>
+
+          <div class="config-grid">
+            <figure class="config-card">
+              <figcaption><span>check 模式 · 可选工具</span><span>自托管</span></figcaption>
+              <pre tabindex="0" aria-label="开启 check 模式额外工具的客户端配置"><code>{
+  "mcpServers": {
+    "speedle-check": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@speedle/mcp",
+        "check",
+        "--expose-diagnose",
+        "--expose-all-granted-roles",
+        "--expose-all-granted-permissions"
+      ],
+      "env": {
+        "SPEEDLE_ENDPOINT": "http://127.0.0.1:6734",
+        "SPEEDLE_SERVICE_NAME": "books"
+      }
+    }
+  }
+}</code></pre>
+            </figure>
+            <figure class="config-card">
+              <figcaption><span>manage 模式</span><span>自托管</span></figcaption>
+              <pre tabindex="0" aria-label="Speedle MCP manage 模式的客户端配置"><code>{
+  "mcpServers": {
+    "speedle-manage": {
+      "command": "npx",
+      "args": ["-y", "@speedle/mcp", "manage"],
+      "env": {
+        "SPEEDLE_PMS_ENDPOINT": "http://127.0.0.1:6733"
+      }
+    }
+  }
+}</code></pre>
+            </figure>
+          </div>
 
           <div class="mcp-resources"><span>源码与相关项目</span><a href="https://github.com/teramoby/speedle-mcp">Speedle MCP</a><a href="https://github.com/teramoby/speedle-mcp/blob/main/README.md">README</a><a href="https://github.com/teramoby/speedle-plus">Speedle</a><a href="https://cloud.speedle.io/zh-CN/">Speedle Cloud</a><a href="https://github.com/teramoby/speedle-sdk">Speedle SDK</a></div>
         </div>

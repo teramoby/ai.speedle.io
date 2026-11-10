@@ -163,7 +163,7 @@
         <header class="part-header">
           <span class="part-number" aria-hidden="true">01</span>
           <div class="part-heading"><p class="eyebrow">Use AI to manage access</p><h2 id="ai-for-access-title">Put AI to work on your access policies</h2></div>
-          <p class="part-summary">AI helping people manage access: an open-source skill that turns policy documents into SPDL, the published Speedle MCP package for designing, managing and checking policies, and a planned AI risk-detection approach.</p>
+          <p class="part-summary">AI helping people manage access: an open-source skill that turns policy documents into SPDL, a preview of Speedle MCP for designing, managing and checking policies, and a planned AI risk-detection approach.</p>
         </header>
 
         <div id="policy-modeler" class="policy-modeler">
@@ -235,7 +235,7 @@ $speedle-policy-modeler ./employee-handbook.md</code></pre>
 
         <div id="mcp" class="subsection mcp">
           <div class="section-head mcp-intro">
-            <div><p class="eyebrow">Speedle MCP<span class="status-badge status-available">Available</span></p><h3 id="mcp-title">Speedle MCP: one package, two deliberately separate modes</h3></div>
+            <div><p class="eyebrow">Speedle MCP<span class="status-badge status-preview">Preview</span></p><h3 id="mcp-title">Speedle MCP: one package, two deliberately separate modes</h3></div>
             <div class="mcp-lead">
               <p><code>@speedle/mcp</code> is published on npm. It is one package with a <code>speedle-mcp</code> binary that runs as a local stdio MCP server.</p>
               <a class="button button-outline" href="https://github.com/teramoby/speedle-mcp/blob/main/README.md">Read the README<svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a>
@@ -272,7 +272,71 @@ $speedle-policy-modeler ./employee-handbook.md</code></pre>
             <div><h4 id="mcp-security-title">Keep policy management out of the governed agent</h4><p><strong>Never give <code>manage</code> to an agent that is itself governed by these policies.</strong> An agent holding both check and management tools could be prompted into granting itself access.</p><p><strong>Give a governed agent <code>is_allowed</code> only.</strong> That is the <code>check</code> default. <code>diagnose</code>, <code>all_granted_roles</code> and <code>all_granted_permissions</code> show policies, conditions and grants, so turn them on only in a check server for policy authors and operators, and never pass the <code>--expose-*</code> flags to the agent’s server.</p><p>There is no default mode that exposes both. Running <code>speedle-mcp</code> with no mode prints usage and exits non-zero.</p></div>
           </aside>
 
-          <p class="launch-note">Requires Node.js 22 or later. Install with <code>npm install @speedle/mcp</code>; the Claude Code plugin above pins version 0.2.1.</p>
+          <p class="launch-note">Requires Node.js 22 or later. These examples match the published package README. The Claude Code plugin above pins <code>@speedle/mcp@0.2.1</code>.</p>
+
+          <div class="config-grid">
+            <figure class="config-card">
+              <figcaption><span>install</span><span>npm · npx</span></figcaption>
+              <pre tabindex="0" aria-label="Install @speedle/mcp or run the speedle-mcp binary"><code>npm install @speedle/mcp
+
+npx @speedle/mcp check
+npx @speedle/mcp manage</code></pre>
+            </figure>
+            <figure class="config-card">
+              <figcaption><span>check mode</span><span>self-hosted</span></figcaption>
+              <pre tabindex="0" aria-label="MCP client configuration for Speedle MCP check mode"><code>{
+  "mcpServers": {
+    "speedle-check": {
+      "command": "npx",
+      "args": ["-y", "@speedle/mcp", "check"],
+      "env": {
+        "SPEEDLE_ENDPOINT": "http://127.0.0.1:6734",
+        "SPEEDLE_SERVICE_NAME": "books"
+      }
+    }
+  }
+}</code></pre>
+            </figure>
+          </div>
+
+          <div class="config-grid">
+            <figure class="config-card">
+              <figcaption><span>check mode · opt in</span><span>self-hosted</span></figcaption>
+              <pre tabindex="0" aria-label="MCP client configuration that opts in to extra check-mode tools"><code>{
+  "mcpServers": {
+    "speedle-check": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@speedle/mcp",
+        "check",
+        "--expose-diagnose",
+        "--expose-all-granted-roles",
+        "--expose-all-granted-permissions"
+      ],
+      "env": {
+        "SPEEDLE_ENDPOINT": "http://127.0.0.1:6734",
+        "SPEEDLE_SERVICE_NAME": "books"
+      }
+    }
+  }
+}</code></pre>
+            </figure>
+            <figure class="config-card">
+              <figcaption><span>manage mode</span><span>self-hosted</span></figcaption>
+              <pre tabindex="0" aria-label="MCP client configuration for Speedle MCP manage mode"><code>{
+  "mcpServers": {
+    "speedle-manage": {
+      "command": "npx",
+      "args": ["-y", "@speedle/mcp", "manage"],
+      "env": {
+        "SPEEDLE_PMS_ENDPOINT": "http://127.0.0.1:6733"
+      }
+    }
+  }
+}</code></pre>
+            </figure>
+          </div>
 
           <div class="mcp-resources"><span>Source and foundations</span><a href="https://github.com/teramoby/speedle-mcp">Speedle MCP</a><a href="https://github.com/teramoby/speedle-mcp/blob/main/README.md">README</a><a href="https://github.com/teramoby/speedle-plus">Speedle</a><a href="https://cloud.speedle.io/">Speedle Cloud</a><a href="https://github.com/teramoby/speedle-sdk">Speedle SDK</a></div>
         </div>

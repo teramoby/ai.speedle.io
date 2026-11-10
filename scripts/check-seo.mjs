@@ -533,6 +533,7 @@ for (const keyword of ['SPDL 示例', '数据与训练', '零常驻权限', 'AI 
 
 // --- Claude Code plugin installation -------------------------------------
 
+const readme = read('README.md');
 const claudePluginClaims = [
   'claude plugin marketplace add teramoby/ai.speedle.io',
   'claude plugin install speedle@speedle',
@@ -542,13 +543,12 @@ const claudePluginClaims = [
 for (const [text, file] of [
   [englishHtml, 'index.html'],
   [chineseHtml, 'zh/index.html'],
-  [read('README.md'), 'README.md']
+  [readme, 'README.md']
 ]) {
   for (const claim of claudePluginClaims) {
     check(text.includes(claim), `${file} must include the Claude Code plugin instruction "${claim}"`);
   }
 }
-const readme = read('README.md');
 for (const claim of [
   'claude plugin marketplace update speedle',
   'claude plugin update speedle@speedle',
@@ -612,12 +612,9 @@ check(llmsFull.includes('claude plugin install speedle@speedle'), 'llms-full.txt
 check(chineseHtml.includes('npm install @speedle/mcp'), 'zh/index.html must show the @speedle/mcp install command');
 check(chineseHtml.includes('npm install @speedle/sdk'), 'zh/index.html must show the @speedle/sdk install command');
 check(chineseHtml.includes('已在 npm 发布'), 'zh/index.html must state that the npm packages are published');
-check(englishHtml.includes('Speedle MCP<span class="status-badge status-available">Available</span>'), 'index.html must mark Speedle MCP as available');
-check(chineseHtml.includes('Speedle MCP<span class="status-badge status-available">可用</span>'), 'zh/index.html must mark Speedle MCP as available');
 for (const [text, file] of [[englishHtml, 'index.html'], [llms, 'llms.txt'], [llmsFull, 'llms-full.txt'], [readme, 'README.md']]) {
   check(!text.includes('not published'), `${file} must not say the npm packages are unpublished`);
   check(!text.includes('Available at launch'), `${file} must not mark MCP install examples as future`);
-  check(!text.includes('launch preview'), `${file} must not describe published MCP as a launch preview`);
 }
 check(!chineseHtml.includes('目前尚未发布'), 'zh/index.html must not say @speedle/mcp is unpublished');
 check(!englishHtml.includes('speedle-mcp/issues/1'), 'index.html must not link the closed check-mode issue');

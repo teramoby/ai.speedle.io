@@ -17,7 +17,7 @@ Speedle AI has two parts. **Use AI to manage access** shows how AI helps design,
 - [Policy modeler skill folder](https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler): SKILL.md, references, scripts, templates and English/Chinese example runs.
 - [Policy modeler English sample](https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/en/model.md): a full English model with role inheritance, ABAC conditions and all 37 authorization cases passing.
 - [Policy modeler Chinese sample](https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/zh/model.md): the Chinese run of the same synthetic handbook workflow.
-- [Speedle MCP](https://ai.speedle.io/#mcp): `@speedle/mcp` is published on npm (`npm install @speedle/mcp`) with separate check and manage modes. The `speedle-mcp` binary runs as a local stdio MCP server: `npx @speedle/mcp check` or `npx @speedle/mcp manage`.
+- [Speedle MCP preview](https://ai.speedle.io/#mcp): `@speedle/mcp` is published on npm (`npm install @speedle/mcp`) with separate check and manage modes. The `speedle-mcp` binary runs as a local stdio MCP server: `npx @speedle/mcp check` or `npx @speedle/mcp manage`.
 - [Speedle MCP repository](https://github.com/teramoby/speedle-mcp): source and README for the published package.
 - [AI-based risk detection being built](https://ai.speedle.io/#risk-detection): a planned direction, not a shipped feature; policy keeps the veto and a risk signal never turns a deny into an allow.
 

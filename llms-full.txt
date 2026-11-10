@@ -5,7 +5,7 @@
 Source: https://ai.speedle.io/
 Chinese: https://ai.speedle.io/zh/
 
-Speedle AI — AI for access control, access control for AI — applies the engine to authorization for AI agents: MCP tool calls, permission-aware RAG, agent-to-agent (A2A) calls, zero standing privileges (ZSP) and the AI lifecycle from training data to model release. The lifecycle examples below are solution patterns on the Speedle policy engine, not shipped integrations with ML or agent platforms.
+Speedle AI — AI for access control, access control for AI — applies the engine to authorization for AI agents: MCP tool calls, permission-aware RAG, agent-to-agent (A2A) calls, zero standing privileges (ZSP) and the AI lifecycle from training data to model release. Everything here is a solution pattern on the Speedle policy engine; none of it is a shipped integration with an ML or agent platform.
 
 ## What Speedle is
 
@@ -91,7 +91,7 @@ The `SKILL.md` frontmatter follows the Agent Skills format with `name` and `desc
 - Chinese sample: https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/zh/model.md
 - OpenAI Build skills documentation: https://learn.chatgpt.com/docs/build-skills — lists `$HOME/.agents/skills` as the personal Codex skill directory and `$` as explicit skill invocation in Codex CLI or the IDE extension.
 
-### Speedle MCP
+### Speedle MCP (launch preview)
 
 `@speedle/mcp` is published on npm. It is one package with a `speedle-mcp` binary that runs as a local stdio MCP server for authorization work, with two deliberately separate modes. It requires Node.js 22 or later.
 
@@ -102,7 +102,7 @@ npx @speedle/mcp check
 npx @speedle/mcp manage
 ```
 
-MCP clients run the binary through `npx -y`. A self-hosted check server sets `command` to `npx` and `args` to `["-y", "@speedle/mcp", "check"]`, plus `SPEEDLE_ENDPOINT` and `SPEEDLE_SERVICE_NAME`. That default registers only `is_allowed`. Opt in to the other read-only tools by adding `--expose-diagnose`, `--expose-all-granted-roles` and `--expose-all-granted-permissions` to `args`. A self-hosted manage server uses `"args": ["-y", "@speedle/mcp", "manage"]` and `SPEEDLE_PMS_ENDPOINT`. The Claude Code plugins pin `@speedle/mcp@0.2.1` and configure these values through `userConfig`. Running `speedle-mcp` with no mode prints usage and exits non-zero.
+MCP clients run the binary through `npx -y`. A self-hosted check server sets `command` to `npx` and `args` to `["-y", "@speedle/mcp", "check"]`, plus `SPEEDLE_ENDPOINT` and `SPEEDLE_SERVICE_NAME`. That default registers only `is_allowed`. Opt in to the other read-only tools by adding `--expose-diagnose`, `--expose-all-granted-roles` and `--expose-all-granted-permissions` to `args`. A self-hosted manage server uses `"args": ["-y", "@speedle/mcp", "manage"]` and `SPEEDLE_PMS_ENDPOINT`. The home page has the full client configuration. The Claude Code plugins pin `@speedle/mcp@0.2.1` and configure these values through `userConfig`. Running `speedle-mcp` with no mode prints usage and exits non-zero.
 
 - **check mode:** registers only `is_allowed` by default and reads only ADS configuration. `diagnose`, `all_granted_roles` and `all_granted_permissions` are opt-in through the `--expose-diagnose`, `--expose-all-granted-roles` and `--expose-all-granted-permissions` flags. `diagnose` works only with self-hosted Speedle; the server will not start with it against Speedle Cloud. It answers authorization questions through the Speedle ADS REST API using subject, resource, action and typed attributes; it does not enforce anything in the calling application.
 - **manage mode:** registers only the management tools and reads only PMS configuration for designing and managing Speedle policies through the PMS REST API: services, authorization policies and role policies. Effective policies are shown as SPDL, and PMS validates each policy on create. A read-only option exists and destructive deletes require explicit target confirmation.
