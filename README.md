@@ -33,9 +33,11 @@ documents Codex's `$HOME/.agents/skills` directory and `$` skill invocation.
 The interactive example uses simplified
 browser-local policy rules and does not simulate AI risk detection. It is
 not a Speedle engine, MCP integration, RAG adapter, or production service.
-The Speedle MCP section is a launch preview: `@speedle/mcp` is not published
-on npm, and its install and client configuration snippets are marked as
-available at launch. MCP facts come from teramoby/speedle-mcp issues #1 and #2.
+The Speedle MCP section is a launch preview. `@speedle/mcp` is published on
+npm. The install and client configuration snippets match the speedle-mcp
+README: `npm install @speedle/mcp`, `npx @speedle/mcp check` and
+`npx @speedle/mcp manage`. `@speedle/sdk` is published on npm:
+`npm install @speedle/sdk`.
 Speedle AI uses white backgrounds with light-purple accents; the header,
 Products navigation, sphere favicons and footer follow the shared three-site
 format of speedle.io.
@@ -46,8 +48,8 @@ format of speedle.io.
 hand-maintained; there is no generator. The sitemap and both home pages declare
 `hreflang` alternates for `en`, `zh-CN` and `x-default`. The complete Chinese
 site is at `/zh/` and `/zh/patterns/`. Every factual claim in these files must
-already be true on the page: `@speedle/mcp` is not on npm, Speedle Cloud is
-coming soon, and AI risk detection is not shipped.
+already be true on the page: `@speedle/mcp` and `@speedle/sdk` are published
+on npm, Speedle Cloud is coming soon, and AI risk detection is not shipped.
 
 `node scripts/check-seo.mjs` verifies that the sitemap and `llms` link targets
 resolve to files and anchors in this repository, that each sitemap entry's

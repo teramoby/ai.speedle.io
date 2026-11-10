@@ -17,8 +17,8 @@ Speedle AI has two parts. **Use AI to manage access** shows how AI helps design,
 - [Policy modeler skill folder](https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler): SKILL.md, references, scripts, templates and English/Chinese example runs.
 - [Policy modeler English sample](https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/en/model.md): a full English model with role inheritance, ABAC conditions and all 37 authorization cases passing.
 - [Policy modeler Chinese sample](https://github.com/teramoby/ai.speedle.io/blob/main/skills/speedle-policy-modeler/examples/zh/model.md): the Chinese run of the same synthetic handbook workflow.
-- [Speedle MCP preview](https://ai.speedle.io/#mcp): `@speedle/mcp` is planned as one npm package with separate check and manage modes; it is not published on npm yet.
-- [Speedle MCP repository](https://github.com/teramoby/speedle-mcp): check-mode issue #1 and manage-mode issue #2.
+- [Speedle MCP preview](https://ai.speedle.io/#mcp): `@speedle/mcp` is published on npm (`npm install @speedle/mcp`) with separate check and manage modes. The `speedle-mcp` binary runs as a local stdio MCP server: `npx @speedle/mcp check` or `npx @speedle/mcp manage`.
+- [Speedle MCP repository](https://github.com/teramoby/speedle-mcp): source and README for the published package.
 - [AI-based risk detection being built](https://ai.speedle.io/#risk-detection): a planned direction, not a shipped feature; policy keeps the veto and a risk signal never turns a deny into an allow.
 
 ## Control what AI can access
@@ -43,7 +43,7 @@ Speedle AI has two parts. **Use AI to manage access** shows how AI helps design,
 - [AI pattern SPDL examples](https://ai.speedle.io/patterns/): role inheritance, deny over grant, conditions and custom functions across the seven AI areas. Chinese: [中文示例](https://ai.speedle.io/zh/patterns/).
 - [Documentation](https://engine.speedle.io/docs/): concepts, deployment, APIs and operations. Chinese: [文档](https://engine.speedle.io/zh/docs/).
 - [Getting started](https://engine.speedle.io/quick-start/): run Speedle and make a first authorization decision. Chinese: [快速开始](https://engine.speedle.io/zh/quick-start/).
-- [SDKs](https://engine.speedle.io/docs/sdks/): client libraries for the decision API at 0.2.0 on PyPI (`speedle`), Maven Central (`io.speedle:speedle-sdk`), Go (`github.com/teramoby/speedle-sdk/go`), NuGet (`Speedle.Sdk`) and crates.io (`speedle`); `@speedle/sdk` is not published on npm yet. Chinese: [SDK](https://engine.speedle.io/zh/docs/sdks/).
+- [SDKs](https://engine.speedle.io/docs/sdks/): client libraries for the decision API at 0.2.0 on PyPI (`speedle`), Maven Central (`io.speedle:speedle-sdk`), Go (`github.com/teramoby/speedle-sdk/go`), NuGet (`Speedle.Sdk`) and crates.io (`speedle`). `@speedle/sdk` is published on npm: `npm install @speedle/sdk`. Chinese: [SDK](https://engine.speedle.io/zh/docs/sdks/).
 - [Playground](https://engine.speedle.io/playground/): try SPDL and authorization requests in the browser. Chinese: [策略实验室](https://engine.speedle.io/zh/playground/).
 - [Speedle Cloud docs](https://engine.speedle.io/docs/cloud/): the documentation hub for hosted Speedle Cloud; sign-in on cloud.speedle.io opens soon. Chinese: [Speedle Cloud 文档](https://engine.speedle.io/zh/docs/cloud/).
 - [Speedle Cloud](https://cloud.speedle.io/): hosted authorization for developers, built on the Speedle policy engine; sign-in opens soon. Chinese: [中文首页](https://cloud.speedle.io/zh-CN/).
