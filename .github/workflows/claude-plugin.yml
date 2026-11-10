@@ -1,0 +1,69 @@
+name: Claude Code plugins
+
+on:
+  pull_request:
+    paths:
+      - '.claude-plugin/**'
+      - 'plugins/**'
+      - 'skills/**'
+  push:
+    branches:
+      - main
+    paths:
+      - '.claude-plugin/**'
+      - 'plugins/**'
+      - 'skills/**'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out plugins
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+          cache: false
+
+      - name: Install Claude Code
+        run: npm install --global @anthropic-ai/claude-code@2.1.321
+
+      - name: Validate marketplace and speedle plugin
+        run: claude plugin validate --strict .
+
+      - name: Validate speedle-manage plugin
+        run: claude plugin validate --strict ./plugins/speedle-manage
+
+      - name: Install both plugins from the local marketplace
+        run: |
+          claude plugin marketplace add ./
+          claude plugin install speedle@speedle --config SPEEDLE_SERVICE_NAME=plugin_smoke
+          claude plugin install speedle-manage@speedle
+
+      - name: Check installed plugins and MCP servers
+        run: |
+          claude plugin list --json | node -e '
+            const fs = require("node:fs");
+            const plugins = JSON.parse(fs.readFileSync(0, "utf8"));
+            const byId = new Map(plugins.map(plugin => [plugin.id, plugin]));
+            for (const [id, server] of [
+              ["speedle@speedle", "check"],
+              ["speedle-manage@speedle", "manage"]
+            ]) {
+              const plugin = byId.get(id);
+              if (!plugin) throw new Error(id + " is not installed");
+              if (!plugin.enabled) throw new Error(id + " is not enabled");
+              if (plugin.errors?.length) throw new Error(id + ": " + plugin.errors.join("; "));
+              if (!plugin.mcpServers?.[server]) throw new Error(id + " has no " + server + " MCP server");
+            }
+            if (byId.size !== 2) throw new Error("expected 2 installed plugins, found " + byId.size);
+          '
+          claude plugin details speedle@speedle
+          claude plugin details speedle-manage@speedle
