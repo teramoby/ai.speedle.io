@@ -200,6 +200,11 @@ function checkPage(definition) {
   for (const lang of ['en', 'zh-CN', 'ja', 'ko', 'es']) {
     check(languagesBlock.includes(`hreflang="${lang}"`), `${file}: languages dropdown must list ${lang}`);
   }
+  const langOrder = [...languagesBlock.matchAll(/class="language-row"[^>]*hreflang="([^"]+)"/g)].map(m => m[1]);
+  check(
+    JSON.stringify(langOrder) === JSON.stringify(['en', 'ja', 'ko', 'es', 'zh-CN']),
+    `${file}: languages dropdown order must be English, 日本語, 한국어, Español, 中文 (got ${langOrder.join(', ')})`
+  );
   const siteNav = (html.match(/<nav id="site-nav"[\s\S]*?<\/nav>/) || [])[0] || '';
   for (const href of ['https://engine.speedle.io/', 'https://engine.speedle.io/zh/', 'https://cloud.speedle.io/', 'https://cloud.speedle.io/zh-CN/']) {
     const product = href.includes('engine') ? 'Engine' : 'Cloud';
@@ -353,6 +358,12 @@ check(notFound.includes('<a class="button button-secondary" href="/zh/" lang="zh
 check(notFound.includes('<a class="button button-secondary" href="/ja/" lang="ja" hreflang="ja">日本語ホーム</a>'), '404.html: must link the Japanese home page');
 check(notFound.includes('<a class="button button-secondary" href="/ko/" lang="ko" hreflang="ko">한국어 홈</a>'), '404.html: must link the Korean home page');
 check(notFound.includes('<a class="button button-secondary" href="/es/" lang="es" hreflang="es">Inicio en español</a>'), '404.html: must link the Spanish home page');
+const notFoundActions = block(notFound, /<div class="actions">[\s\S]*?<\/div>/);
+const notFoundOrder = [...notFoundActions.matchAll(/hreflang="([^"]+)"/g)].map(m => m[1]);
+check(
+  JSON.stringify(notFoundOrder) === JSON.stringify(['en', 'ja', 'ko', 'es', 'zh-CN']),
+  `404.html: actions button order must be English, 日本語, 한국어, Español, 中文 (got ${notFoundOrder.join(', ')})`
+);
 check(
   /<script defer src="https:\/\/static\.cloudflareinsights\.com\/beacon\.min\.js" data-cf-beacon='\{"token": "3b49dd9a82634bba833340481ce6ccbe"\}'><\/script>/.test(notFound),
   '404.html: must load the Cloudflare Web Analytics beacon with the ai.speedle.io token'
