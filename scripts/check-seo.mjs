@@ -7,7 +7,8 @@
 // It verifies sitemap and llms link targets, hreflang alternates, page metadata,
 // JSON-LD and the absence of FAQ content, the language switch, Cloudflare Web
 // Analytics, headline punctuation, byte-identical SPDL examples across the
-// English and Chinese patterns pages, and the shared 404 page.
+// English and Chinese patterns pages, cross-site Engine and Cloud links on
+// each non-English page, and the shared 404 page.
 
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -80,6 +81,12 @@ function count(html, needle) {
   return html.split(needle).length - 1;
 }
 
+// A localized page must send Engine and Cloud visitors to that same locale.
+// Chinese Cloud lives at /zh-CN/; every other locale uses /<lang>/.
+function usesLocalePrefix(pathname, prefix) {
+  return pathname === `/${prefix}` || pathname.startsWith(`/${prefix}/`);
+}
+
 // --- robots.txt -----------------------------------------------------------
 
 const robots = read('robots.txt');
@@ -149,20 +156,20 @@ const patternsAlternates = {
 };
 const pageDefinitions = [
   { file: 'index.html', canonical: `${origin}/`, language: 'en', alternates: homeAlternates },
-  { file: 'zh/index.html', canonical: `${origin}/zh/`, language: 'zh-CN', alternates: homeAlternates },
-  { file: 'ja/index.html', canonical: `${origin}/ja/`, language: 'ja', alternates: homeAlternates },
-  { file: 'ko/index.html', canonical: `${origin}/ko/`, language: 'ko', alternates: homeAlternates },
-  { file: 'es/index.html', canonical: `${origin}/es/`, language: 'es', alternates: homeAlternates },
+  { file: 'zh/index.html', canonical: `${origin}/zh/`, language: 'zh-CN', alternates: homeAlternates, engineLocale: 'zh', cloudLocale: 'zh-CN' },
+  { file: 'ja/index.html', canonical: `${origin}/ja/`, language: 'ja', alternates: homeAlternates, engineLocale: 'ja', cloudLocale: 'ja' },
+  { file: 'ko/index.html', canonical: `${origin}/ko/`, language: 'ko', alternates: homeAlternates, engineLocale: 'ko', cloudLocale: 'ko' },
+  { file: 'es/index.html', canonical: `${origin}/es/`, language: 'es', alternates: homeAlternates, engineLocale: 'es', cloudLocale: 'es' },
   { file: 'patterns/index.html', canonical: `${origin}/patterns/`, language: 'en', alternates: patternsAlternates },
-  { file: 'zh/patterns/index.html', canonical: `${origin}/zh/patterns/`, language: 'zh-CN', alternates: patternsAlternates },
-  { file: 'ja/patterns/index.html', canonical: `${origin}/ja/patterns/`, language: 'ja', alternates: patternsAlternates },
-  { file: 'ko/patterns/index.html', canonical: `${origin}/ko/patterns/`, language: 'ko', alternates: patternsAlternates },
-  { file: 'es/patterns/index.html', canonical: `${origin}/es/patterns/`, language: 'es', alternates: patternsAlternates }
+  { file: 'zh/patterns/index.html', canonical: `${origin}/zh/patterns/`, language: 'zh-CN', alternates: patternsAlternates, engineLocale: 'zh', cloudLocale: 'zh-CN' },
+  { file: 'ja/patterns/index.html', canonical: `${origin}/ja/patterns/`, language: 'ja', alternates: patternsAlternates, engineLocale: 'ja', cloudLocale: 'ja' },
+  { file: 'ko/patterns/index.html', canonical: `${origin}/ko/patterns/`, language: 'ko', alternates: patternsAlternates, engineLocale: 'ko', cloudLocale: 'ko' },
+  { file: 'es/patterns/index.html', canonical: `${origin}/es/patterns/`, language: 'es', alternates: patternsAlternates, engineLocale: 'es', cloudLocale: 'es' }
 ];
 const pageReports = [];
 
 function checkPage(definition) {
-  const { file, canonical, language, alternates } = definition;
+  const { file, canonical, language, alternates, engineLocale, cloudLocale } = definition;
   const html = read(file);
   const title = (html.match(/<title>([^<]*)<\/title>/) || [])[1] || '';
   const description = (html.match(/<meta name="description" content="([^"]*)"/) || [])[1] || '';
@@ -245,6 +252,38 @@ function checkPage(definition) {
   check(software && software.url === canonical, `${file}: SoftwareApplication URL must match the page`);
   if (['zh-CN', 'ja', 'ko', 'es'].includes(language)) {
     check(software && software.inLanguage === language, `${file}: SoftwareApplication must declare inLanguage="${language}"`);
+  }
+  if (engineLocale) {
+    const organization = graph.find(node => node['@type'] === 'Organization');
+    let organizationPath = '';
+    try {
+      organizationPath = organization && organization.url ? new URL(organization.url).pathname : '';
+    } catch {
+      organizationPath = '';
+    }
+    check(
+      usesLocalePrefix(organizationPath, engineLocale),
+      `${file}: Organization URL must use the Engine locale /${engineLocale}/`
+    );
+    for (const match of html.matchAll(/<a\b[^>]*\bhref="([^"]+)"/g)) {
+      let parsed;
+      try {
+        parsed = new URL(match[1]);
+      } catch {
+        continue;
+      }
+      if (parsed.hostname === 'engine.speedle.io') {
+        check(
+          usesLocalePrefix(parsed.pathname, engineLocale),
+          `${file}: Engine link ${match[1]} must use /${engineLocale}/ instead of the English page`
+        );
+      } else if (parsed.hostname === 'cloud.speedle.io') {
+        check(
+          usesLocalePrefix(parsed.pathname, cloudLocale),
+          `${file}: Cloud link ${match[1]} must use /${cloudLocale}/ instead of the English page`
+        );
+      }
+    }
   }
 
   // No page has a FAQ or structured data for one.

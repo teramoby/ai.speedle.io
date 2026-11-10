@@ -206,12 +206,12 @@ A runnable local sample with PMS, ADS and the custom function, including the ato
 
 - [Speedle AI home](https://ai.speedle.io/), [中文首页](https://ai.speedle.io/zh/), [日本語ホーム](https://ai.speedle.io/ja/), [한국어 홈](https://ai.speedle.io/ko/) and [Inicio en español](https://ai.speedle.io/es/)
 - [AI patterns](https://ai.speedle.io/patterns/), [中文模式](https://ai.speedle.io/zh/patterns/), [日本語パターン](https://ai.speedle.io/ja/patterns/), [한국어 패턴](https://ai.speedle.io/ko/patterns/) and [Patrones en español](https://ai.speedle.io/es/patterns/): the full SPDL examples for all seven areas.
-- [Documentation](https://engine.speedle.io/docs/) and [文档](https://engine.speedle.io/zh/docs/): concepts, deployment, APIs and operations.
-- [SPDL reference](https://engine.speedle.io/docs/spdl/) and [SPDL 参考](https://engine.speedle.io/zh/docs/spdl/): grammar, attributes, built-in functions and custom functions.
-- [Getting started](https://engine.speedle.io/quick-start/) and [快速开始](https://engine.speedle.io/zh/quick-start/): run Speedle and make a first authorization decision.
-- [SDKs](https://engine.speedle.io/docs/sdks/) and [SDK](https://engine.speedle.io/zh/docs/sdks/): the six language clients.
-- [Playground](https://engine.speedle.io/playground/) and [策略实验室](https://engine.speedle.io/zh/playground/): try SPDL and authorization requests in the browser.
-- [Speedle Cloud docs](https://engine.speedle.io/docs/cloud/) and [Speedle Cloud 文档](https://engine.speedle.io/zh/docs/cloud/): the hosted service documentation hub.
+- [Documentation](https://engine.speedle.io/docs/), [文档](https://engine.speedle.io/zh/docs/), [ドキュメント](https://engine.speedle.io/ja/docs/), [문서](https://engine.speedle.io/ko/docs/) and [Documentación](https://engine.speedle.io/es/docs/): concepts, deployment, APIs and operations.
+- [SPDL reference](https://engine.speedle.io/docs/spdl/), [SPDL 参考](https://engine.speedle.io/zh/docs/spdl/), [SPDL リファレンス](https://engine.speedle.io/ja/docs/spdl/), [SPDL 참조](https://engine.speedle.io/ko/docs/spdl/) and [Referencia de SPDL](https://engine.speedle.io/es/docs/spdl/): grammar, attributes, built-in functions and custom functions.
+- [Getting started](https://engine.speedle.io/quick-start/), [快速开始](https://engine.speedle.io/zh/quick-start/), [クイックスタート](https://engine.speedle.io/ja/quick-start/), [빠른 시작](https://engine.speedle.io/ko/quick-start/) and [Inicio rápido](https://engine.speedle.io/es/quick-start/): run Speedle and make a first authorization decision.
+- [SDKs](https://engine.speedle.io/docs/sdks/), [SDK](https://engine.speedle.io/zh/docs/sdks/), [SDK](https://engine.speedle.io/ja/docs/sdks/), [SDK](https://engine.speedle.io/ko/docs/sdks/) and [SDK](https://engine.speedle.io/es/docs/sdks/): the six language clients.
+- [Playground](https://engine.speedle.io/playground/), [策略实验室](https://engine.speedle.io/zh/playground/), [Playground](https://engine.speedle.io/ja/playground/), [Playground](https://engine.speedle.io/ko/playground/) and [Playground](https://engine.speedle.io/es/playground/): try SPDL and authorization requests in the browser.
+- [Speedle Cloud docs](https://engine.speedle.io/docs/cloud/), [Speedle Cloud 文档](https://engine.speedle.io/zh/docs/cloud/), [Speedle Cloud ドキュメント](https://engine.speedle.io/ja/docs/cloud/), [Speedle Cloud 문서](https://engine.speedle.io/ko/docs/cloud/) and [Documentación de Speedle Cloud](https://engine.speedle.io/es/docs/cloud/): the hosted service documentation hub.
 - [Speedle Cloud](https://cloud.speedle.io/) and [中文首页](https://cloud.speedle.io/zh-CN/): hosted authorization for developers; sign-in opens soon.
 - [Speedle MCP](https://github.com/teramoby/speedle-mcp): the published npm package `@speedle/mcp` and its README. Read it at https://github.com/teramoby/speedle-mcp/blob/main/README.md.
 - [Speedle policy modeler skill](https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler): the open-source Agent Skill.
@@ -220,9 +220,9 @@ A runnable local sample with PMS, ADS and the custom function, including the ato
 
 - Speedle Engine llms.txt: https://engine.speedle.io/llms.txt
 - Speedle Cloud llms.txt: https://cloud.speedle.io/llms.txt
-- Speedle Engine: https://engine.speedle.io/ (Chinese: https://engine.speedle.io/zh/)
+- Speedle Engine: https://engine.speedle.io/ (Chinese: https://engine.speedle.io/zh/, Japanese: https://engine.speedle.io/ja/, Korean: https://engine.speedle.io/ko/, Spanish: https://engine.speedle.io/es/)
 - Speedle Cloud (sign-in opens soon): https://cloud.speedle.io/
 - Speedle source code (UPL 1.0): https://github.com/teramoby/speedle-plus
 - Speedle SDK: https://github.com/teramoby/speedle-sdk
 - Speedle MCP: https://github.com/teramoby/speedle-mcp
-- Speedle documentation: https://engine.speedle.io/docs/
+- Speedle documentation: https://engine.speedle.io/docs/ (Chinese: https://engine.speedle.io/zh/docs/, Japanese: https://engine.speedle.io/ja/docs/, Korean: https://engine.speedle.io/ko/docs/, Spanish: https://engine.speedle.io/es/docs/)
