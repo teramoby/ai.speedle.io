@@ -1,22 +1,83 @@
 'use strict';
 
-// Keep the prompt selectable when JavaScript or clipboard access is unavailable.
-document.querySelectorAll('.skill-install').forEach(function(card) {
-  const button = card.querySelector('.copy-prompt');
-  const prompt = card.querySelector('.install-prompt code');
-  const status = card.querySelector('.copy-status');
-  if (!button || !prompt || !status) return;
+// Keep code selectable when JavaScript or clipboard access is unavailable.
+function legacyCopy(text) {
+  if (typeof document.execCommand !== 'function') return false;
+  const active = document.activeElement;
+  const selection = window.getSelection();
+  const ranges = selection ? Array.from({length: selection.rangeCount}, (_, i) => selection.getRangeAt(i).cloneRange()) : [];
+  const input = document.createElement('textarea');
+  input.className = 'command-copy-input';
+  input.value = text;
+  input.readOnly = true;
+  input.tabIndex = -1;
+  input.setAttribute('aria-hidden', 'true');
+  document.body.append(input);
+  try {
+    input.focus({preventScroll: true});
+    input.select();
+    input.setSelectionRange(0, text.length);
+    return document.execCommand('copy');
+  } finally {
+    input.remove();
+    if (active && active.isConnected) active.focus({preventScroll: true});
+    if (selection) {
+      selection.removeAllRanges();
+      ranges.forEach(range => selection.addRange(range));
+    }
+  }
+}
+
+async function copyCommand(text) {
+  if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      // Older contexts and denied async clipboard access can use selection copy.
+    }
+  }
+  return legacyCopy(text);
+}
+
+document.querySelectorAll('.install-copy').forEach(function(block) {
+  const button = block.querySelector('.command-copy-button');
+  const code = block.querySelector('pre code');
+  const status = block.querySelector('.command-copy-status');
+  const tooltip = block.querySelector('.copy-tooltip');
+  if (!button || !code || !status || !tooltip) return;
+  let busy = false;
+  let reset;
   button.hidden = false;
   button.addEventListener('click', async function() {
-    button.disabled = true;
+    if (busy) return;
+    busy = true;
+    clearTimeout(reset);
+    delete button.dataset.state;
+    tooltip.textContent = button.getAttribute('aria-label');
     status.textContent = '';
     try {
-      await navigator.clipboard.writeText(prompt.textContent);
+      if (!await copyCommand(code.textContent)) throw new Error('Clipboard unavailable');
+      button.dataset.state = 'copied';
+      tooltip.textContent = button.dataset.success;
       status.textContent = button.dataset.success;
     } catch {
+      button.dataset.state = 'error';
+      tooltip.textContent = button.dataset.failure;
       status.textContent = button.dataset.failure;
+      const range = document.createRange();
+      range.selectNodeContents(code);
+      const selection = window.getSelection();
+      if (selection) {
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
     } finally {
-      button.disabled = false;
+      busy = false;
+      reset = setTimeout(function() {
+        delete button.dataset.state;
+        tooltip.textContent = button.getAttribute('aria-label');
+      }, 2200);
     }
   });
 });

@@ -222,41 +222,73 @@
           <div class="config-grid">
             <figure class="config-card skill-install">
               <figcaption><span>instalar + usar</span><span>Claude Code · ejemplo</span></figcaption>
-              <p class="install-note">Pide la instalación al agente y usa la habilidad</p>
-              <pre class="install-prompt" tabindex="0"><code>Instala esta habilidad por mí: https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler</code></pre>
-              <button class="copy-prompt" type="button" data-success="Copiado" data-failure="No se pudo copiar; selecciona y copia la instrucción" hidden>Copiar instrucción</button>
-              <span class="copy-status" role="status"></span>
-              <pre tabindex="0"><code>/speedle-policy-modeler ./employee-handbook.md</code></pre>
-              <p class="install-note">La habilidad no necesita una clave de API. La validación requiere Speedle spctl, PMS/ADS y Python 3. Reinicia el agente si la habilidad no aparece.</p>
-              <details class="manual-install">
-                <summary>Instalación manual</summary>
-              <pre tabindex="0" aria-label="Instalar y usar el complemento de Speedle con Claude Code"><code>claude plugin marketplace add teramoby/ai.speedle.io
+              <div class="install-body">
+                <p class="mode-label">Pide la instalación al agente y usa la habilidad</p>
+                <div class="install-copy">
+                  <button class="command-copy-button" type="button" aria-label="Copiar" data-success="Copiado" data-failure="No se pudo copiar; selecciona y copia la instrucción" hidden><svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><svg class="copied-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span class="copy-tooltip" aria-hidden="true">Copiar</span></button>
+                  <pre class="install-prompt" tabindex="0"><code>Instala esta habilidad por mí:
+<span class="install-url"><span>https:/</span><wbr><span>/</span><wbr><span>github.com/</span><wbr><span>teramoby/</span><wbr><span>ai.speedle.io/</span><wbr><span>tree/</span><wbr><span>main/</span><wbr><span>skills/</span><wbr><span>speedle-policy-modeler</span></span></code></pre>
+                  <span class="command-copy-status" role="status" aria-live="polite"></span>
+                </div>
+                <div class="install-usage">
+                  <p class="mode-label">Usar la habilidad</p>
+                  <div class="install-copy">
+                    <button class="command-copy-button" type="button" aria-label="Copiar" data-success="Copiado" data-failure="No se pudo copiar; selecciona y copia los comandos" hidden><svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><svg class="copied-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span class="copy-tooltip" aria-hidden="true">Copiar</span></button>
+                    <pre tabindex="0"><code>/speedle-policy-modeler ./employee-handbook.md</code></pre>
+                    <span class="command-copy-status" role="status" aria-live="polite"></span>
+                  </div>
+                </div>
+                <p class="install-note">La habilidad no necesita una clave de API. La validación requiere Speedle spctl, PMS/ADS y Python 3. Reinicia el agente si la habilidad no aparece.</p>
+                <details class="manual-install">
+                  <summary>Instalación manual</summary>
+                  <div class="install-copy">
+                    <button class="command-copy-button" type="button" aria-label="Copiar" data-success="Copiado" data-failure="No se pudo copiar; selecciona y copia los comandos" hidden><svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><svg class="copied-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span class="copy-tooltip" aria-hidden="true">Copiar</span></button>
+                    <pre tabindex="0" aria-label="Instalar y usar el complemento de Speedle con Claude Code"><code>claude plugin marketplace add teramoby/ai.speedle.io
 claude plugin install speedle@speedle
 
 # En Claude Code:
 /plugin configure speedle@speedle
 /speedle:speedle-policy-modeler ./employee-handbook.md</code></pre>
-                <p class="install-note">El complemento manual también añade el servidor MCP check. Configura su endpoint ADS y el nombre del servicio; establece un bearer token solo si ADS lo requiere.</p>
-              </details>
+                    <span class="command-copy-status" role="status" aria-live="polite"></span>
+                  </div>
+                  <p class="install-note">El complemento manual también añade el servidor MCP check. Configura su endpoint ADS y el nombre del servicio; establece un bearer token solo si ADS lo requiere.</p>
+                </details>
+              </div>
             </figure>
             <figure class="config-card skill-install">
               <figcaption><span>instalar + usar</span><span>Codex · ejemplo</span></figcaption>
-              <p class="install-note">Pide la instalación al agente y usa la habilidad</p>
-              <pre class="install-prompt" tabindex="0"><code>Instala esta habilidad por mí: https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler</code></pre>
-              <button class="copy-prompt" type="button" data-success="Copiado" data-failure="No se pudo copiar; selecciona y copia la instrucción" hidden>Copiar instrucción</button>
-              <span class="copy-status" role="status"></span>
-              <pre tabindex="0"><code>$speedle-policy-modeler ./employee-handbook.md</code></pre>
-              <p class="install-note">La habilidad no necesita una clave de API. La validación requiere Speedle spctl, PMS/ADS y Python 3. Reinicia el agente si la habilidad no aparece.</p>
-              <details class="manual-install">
-                <summary>Instalación manual</summary>
-              <pre tabindex="0" aria-label="Instalar y usar la habilidad de modelado de políticas Speedle con Codex"><code>git clone --depth 1 https://github.com/teramoby/ai.speedle.io.git
+              <div class="install-body">
+                <p class="mode-label">Pide la instalación al agente y usa la habilidad</p>
+                <div class="install-copy">
+                  <button class="command-copy-button" type="button" aria-label="Copiar" data-success="Copiado" data-failure="No se pudo copiar; selecciona y copia la instrucción" hidden><svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><svg class="copied-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span class="copy-tooltip" aria-hidden="true">Copiar</span></button>
+                  <pre class="install-prompt" tabindex="0"><code>Instala esta habilidad por mí:
+<span class="install-url"><span>https:/</span><wbr><span>/</span><wbr><span>github.com/</span><wbr><span>teramoby/</span><wbr><span>ai.speedle.io/</span><wbr><span>tree/</span><wbr><span>main/</span><wbr><span>skills/</span><wbr><span>speedle-policy-modeler</span></span></code></pre>
+                  <span class="command-copy-status" role="status" aria-live="polite"></span>
+                </div>
+                <div class="install-usage">
+                  <p class="mode-label">Usar la habilidad</p>
+                  <div class="install-copy">
+                    <button class="command-copy-button" type="button" aria-label="Copiar" data-success="Copiado" data-failure="No se pudo copiar; selecciona y copia los comandos" hidden><svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><svg class="copied-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span class="copy-tooltip" aria-hidden="true">Copiar</span></button>
+                    <pre tabindex="0"><code>$speedle-policy-modeler ./employee-handbook.md</code></pre>
+                    <span class="command-copy-status" role="status" aria-live="polite"></span>
+                  </div>
+                </div>
+                <p class="install-note">La habilidad no necesita una clave de API. La validación requiere Speedle spctl, PMS/ADS y Python 3. Reinicia el agente si la habilidad no aparece.</p>
+                <details class="manual-install">
+                  <summary>Instalación manual</summary>
+                  <div class="install-copy">
+                    <button class="command-copy-button" type="button" aria-label="Copiar" data-success="Copiado" data-failure="No se pudo copiar; selecciona y copia los comandos" hidden><svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><svg class="copied-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span class="copy-tooltip" aria-hidden="true">Copiar</span></button>
+                    <pre tabindex="0" aria-label="Instalar y usar la habilidad de modelado de políticas Speedle con Codex"><code>git clone --depth 1 https://github.com/teramoby/ai.speedle.io.git
 mkdir -p ~/.agents/skills
 cp -R ai.speedle.io/skills/speedle-policy-modeler \
   ~/.agents/skills/
 
 # En la CLI de Codex o la extensión de IDE:
 $speedle-policy-modeler ./employee-handbook.md</code></pre>
-              </details>
+                    <span class="command-copy-status" role="status" aria-live="polite"></span>
+                  </div>
+                </details>
+              </div>
             </figure>
           </div>
 

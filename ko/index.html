@@ -222,41 +222,73 @@
           <div class="config-grid">
             <figure class="config-card skill-install">
               <figcaption><span>설치 및 사용</span><span>Claude Code · 예제</span></figcaption>
-              <p class="install-note">에이전트에게 설치를 요청한 후 사용</p>
-              <pre class="install-prompt" tabindex="0"><code>이 스킬을 설치해 주세요: https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler</code></pre>
-              <button class="copy-prompt" type="button" data-success="복사됨" data-failure="복사에 실패했습니다. 프롬프트를 선택하여 복사하세요" hidden>프롬프트 복사</button>
-              <span class="copy-status" role="status"></span>
-              <pre tabindex="0"><code>/speedle-policy-modeler ./employee-handbook.md</code></pre>
-              <p class="install-note">스킬에는 API 키가 필요하지 않습니다. 검증에는 Speedle spctl, PMS/ADS 및 Python 3이 필요합니다. 스킬이 표시되지 않으면 에이전트를 다시 시작하세요.</p>
-              <details class="manual-install">
-                <summary>수동 설치</summary>
-              <pre tabindex="0" aria-label="Claude Code에서 Speedle 플러그인 설치 및 사용"><code>claude plugin marketplace add teramoby/ai.speedle.io
+              <div class="install-body">
+                <p class="mode-label">에이전트에게 설치를 요청한 후 사용</p>
+                <div class="install-copy">
+                  <button class="command-copy-button" type="button" aria-label="복사" data-success="복사됨" data-failure="복사에 실패했습니다. 프롬프트를 선택하여 복사하세요" hidden><svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><svg class="copied-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span class="copy-tooltip" aria-hidden="true">복사</span></button>
+                  <pre class="install-prompt" tabindex="0"><code>이 스킬을 설치해 주세요:
+<span class="install-url"><span>https:/</span><wbr><span>/</span><wbr><span>github.com/</span><wbr><span>teramoby/</span><wbr><span>ai.speedle.io/</span><wbr><span>tree/</span><wbr><span>main/</span><wbr><span>skills/</span><wbr><span>speedle-policy-modeler</span></span></code></pre>
+                  <span class="command-copy-status" role="status" aria-live="polite"></span>
+                </div>
+                <div class="install-usage">
+                  <p class="mode-label">스킬 사용</p>
+                  <div class="install-copy">
+                    <button class="command-copy-button" type="button" aria-label="복사" data-success="복사됨" data-failure="복사에 실패했습니다. 명령어를 선택하여 복사하세요" hidden><svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><svg class="copied-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span class="copy-tooltip" aria-hidden="true">복사</span></button>
+                    <pre tabindex="0"><code>/speedle-policy-modeler ./employee-handbook.md</code></pre>
+                    <span class="command-copy-status" role="status" aria-live="polite"></span>
+                  </div>
+                </div>
+                <p class="install-note">스킬에는 API 키가 필요하지 않습니다. 검증에는 Speedle spctl, PMS/ADS 및 Python 3이 필요합니다. 스킬이 표시되지 않으면 에이전트를 다시 시작하세요.</p>
+                <details class="manual-install">
+                  <summary>수동 설치</summary>
+                  <div class="install-copy">
+                    <button class="command-copy-button" type="button" aria-label="복사" data-success="복사됨" data-failure="복사에 실패했습니다. 명령어를 선택하여 복사하세요" hidden><svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><svg class="copied-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span class="copy-tooltip" aria-hidden="true">복사</span></button>
+                    <pre tabindex="0" aria-label="Claude Code에서 Speedle 플러그인 설치 및 사용"><code>claude plugin marketplace add teramoby/ai.speedle.io
 claude plugin install speedle@speedle
 
 # Claude Code에서:
 /plugin configure speedle@speedle
 /speedle:speedle-policy-modeler ./employee-handbook.md</code></pre>
-                <p class="install-note">수동 설치 플러그인은 check MCP 서버도 제공합니다. ADS 엔드포인트와 서비스 이름을 설정하고, ADS가 요구하는 경우에만 bearer token을 설정하세요.</p>
-              </details>
+                    <span class="command-copy-status" role="status" aria-live="polite"></span>
+                  </div>
+                  <p class="install-note">수동 설치 플러그인은 check MCP 서버도 제공합니다. ADS 엔드포인트와 서비스 이름을 설정하고, ADS가 요구하는 경우에만 bearer token을 설정하세요.</p>
+                </details>
+              </div>
             </figure>
             <figure class="config-card skill-install">
               <figcaption><span>설치 및 사용</span><span>Codex · 예제</span></figcaption>
-              <p class="install-note">에이전트에게 설치를 요청한 후 사용</p>
-              <pre class="install-prompt" tabindex="0"><code>이 스킬을 설치해 주세요: https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler</code></pre>
-              <button class="copy-prompt" type="button" data-success="복사됨" data-failure="복사에 실패했습니다. 프롬프트를 선택하여 복사하세요" hidden>프롬프트 복사</button>
-              <span class="copy-status" role="status"></span>
-              <pre tabindex="0"><code>$speedle-policy-modeler ./employee-handbook.md</code></pre>
-              <p class="install-note">스킬에는 API 키가 필요하지 않습니다. 검증에는 Speedle spctl, PMS/ADS 및 Python 3이 필요합니다. 스킬이 표시되지 않으면 에이전트를 다시 시작하세요.</p>
-              <details class="manual-install">
-                <summary>수동 설치</summary>
-              <pre tabindex="0" aria-label="Codex에서 Speedle 정책 모델러 스킬 설치 및 사용"><code>git clone --depth 1 https://github.com/teramoby/ai.speedle.io.git
+              <div class="install-body">
+                <p class="mode-label">에이전트에게 설치를 요청한 후 사용</p>
+                <div class="install-copy">
+                  <button class="command-copy-button" type="button" aria-label="복사" data-success="복사됨" data-failure="복사에 실패했습니다. 프롬프트를 선택하여 복사하세요" hidden><svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><svg class="copied-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span class="copy-tooltip" aria-hidden="true">복사</span></button>
+                  <pre class="install-prompt" tabindex="0"><code>이 스킬을 설치해 주세요:
+<span class="install-url"><span>https:/</span><wbr><span>/</span><wbr><span>github.com/</span><wbr><span>teramoby/</span><wbr><span>ai.speedle.io/</span><wbr><span>tree/</span><wbr><span>main/</span><wbr><span>skills/</span><wbr><span>speedle-policy-modeler</span></span></code></pre>
+                  <span class="command-copy-status" role="status" aria-live="polite"></span>
+                </div>
+                <div class="install-usage">
+                  <p class="mode-label">스킬 사용</p>
+                  <div class="install-copy">
+                    <button class="command-copy-button" type="button" aria-label="복사" data-success="복사됨" data-failure="복사에 실패했습니다. 명령어를 선택하여 복사하세요" hidden><svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><svg class="copied-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span class="copy-tooltip" aria-hidden="true">복사</span></button>
+                    <pre tabindex="0"><code>$speedle-policy-modeler ./employee-handbook.md</code></pre>
+                    <span class="command-copy-status" role="status" aria-live="polite"></span>
+                  </div>
+                </div>
+                <p class="install-note">스킬에는 API 키가 필요하지 않습니다. 검증에는 Speedle spctl, PMS/ADS 및 Python 3이 필요합니다. 스킬이 표시되지 않으면 에이전트를 다시 시작하세요.</p>
+                <details class="manual-install">
+                  <summary>수동 설치</summary>
+                  <div class="install-copy">
+                    <button class="command-copy-button" type="button" aria-label="복사" data-success="복사됨" data-failure="복사에 실패했습니다. 명령어를 선택하여 복사하세요" hidden><svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><svg class="copied-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span class="copy-tooltip" aria-hidden="true">복사</span></button>
+                    <pre tabindex="0" aria-label="Codex에서 Speedle 정책 모델러 스킬 설치 및 사용"><code>git clone --depth 1 https://github.com/teramoby/ai.speedle.io.git
 mkdir -p ~/.agents/skills
 cp -R ai.speedle.io/skills/speedle-policy-modeler \
   ~/.agents/skills/
 
 # Codex CLI 또는 IDE 확장 프로그램에서:
 $speedle-policy-modeler ./employee-handbook.md</code></pre>
-              </details>
+                    <span class="command-copy-status" role="status" aria-live="polite"></span>
+                  </div>
+                </details>
+              </div>
             </figure>
           </div>
 

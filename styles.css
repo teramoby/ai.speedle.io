@@ -459,6 +459,44 @@ h1 { max-width: 760px; margin: 20px 0 24px; font-size: clamp(3.1rem, 6vw, 5.6rem
 .config-card figcaption { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 18px; border-bottom: 1px solid var(--line-purple); color: var(--ink); background: var(--tint-light); font: 600 .78rem/1.4 var(--mono); }
 .config-card figcaption span:last-child { color: var(--primary-dark); font-size: .75rem; letter-spacing: .04em; text-transform: uppercase; }
 .config-card pre { max-width: 100%; margin: 0; padding: 20px; overflow: auto; color: var(--ink); font: 500 .9rem/1.8 var(--mono); white-space: pre-wrap; overflow-wrap: break-word; }
+
+/* Agent-first skill installation cards share the configuration card type scale. */
+.skill-install .install-body { display: grid; gap: 16px; padding: 18px; }
+.skill-install p { margin: 0; }
+.skill-install .mode-label { max-width: none; }
+.skill-install .install-note { color: var(--muted); font-size: .88rem; line-height: 1.65; }
+.install-copy { position: relative; display: grid; min-width: 0; border: 1px solid var(--line); border-radius: var(--radius-control); background: var(--soft); }
+.skill-install pre { min-width: 0; padding: 12px 16px 16px; white-space: pre; overflow-wrap: normal; hyphens: none; }
+.install-copy pre { min-height: 64px; margin-right: 68px; }
+.skill-install .install-prompt { white-space: pre-wrap; }
+.install-url { overflow-wrap: normal; word-break: normal; }
+.install-url > span { white-space: nowrap; }
+.command-copy-button { position: absolute; top: 8px; right: 8px; display: grid; place-items: center; width: 44px; height: 44px; padding: 10px; border: 1px solid var(--line-purple); border-radius: var(--radius-control); background: transparent; color: var(--primary-dark); cursor: pointer; }
+.command-copy-button[hidden] { display: none; }
+.command-copy-button:hover { border-color: var(--primary-dark); background: var(--tint); }
+.command-copy-button:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
+.command-copy-button svg { width: 21px; height: 21px; }
+.command-copy-button .copied-icon { display: none; }
+.command-copy-button[data-state="copied"] { color: var(--success); }
+.command-copy-button[data-state="copied"] .copy-icon { display: none; }
+.command-copy-button[data-state="copied"] .copied-icon { display: block; }
+.copy-tooltip { position: absolute; right: 0; bottom: calc(100% + 6px); z-index: 2; padding: 5px 8px; border: 1px solid var(--line-purple); border-radius: var(--radius-control); background: var(--ink); color: var(--white); font: 600 .75rem/1.4 var(--sans); white-space: nowrap; pointer-events: none; visibility: hidden; }
+.command-copy-button:hover .copy-tooltip,
+.command-copy-button:focus-visible .copy-tooltip,
+.command-copy-button[data-state] .copy-tooltip { visibility: visible; }
+.command-copy-button[data-state="error"] .copy-tooltip { width: min(230px, calc(100vw - 100px)); white-space: normal; }
+.command-copy-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.command-copy-input { position: fixed; left: -9999px; top: 0; }
+.install-usage { display: grid; min-width: 0; gap: 8px; }
+.install-usage pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+.manual-install { min-width: 0; border-top: 1px solid var(--line); }
+.manual-install summary { display: flex; align-items: center; gap: 8px; width: fit-content; padding: 14px 0 0; cursor: pointer; list-style: none; color: var(--muted); font: 600 .78rem/1.65 var(--mono); }
+.manual-install summary::-webkit-details-marker { display: none; }
+.manual-install summary::before { content: ""; width: 7px; height: 7px; flex: none; border-right: 1px solid currentColor; border-bottom: 1px solid currentColor; transform: rotate(-45deg); }
+.manual-install[open] summary::before { transform: rotate(45deg); }
+.manual-install summary:hover { color: var(--primary-dark); text-decoration: underline; text-underline-offset: 4px; }
+.manual-install > .install-copy, .manual-install > .install-note { margin-top: 14px; }
+
 .mcp-resources { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 22px; margin-top: 28px; font-size: .88rem; line-height: 1.65; }
 .mcp-resources > span { margin-right: 4px; color: var(--muted); }
 .mcp-resources a { color: var(--primary-dark); font-weight: 700; }
@@ -830,11 +868,3 @@ h1 { max-width: 760px; margin: 20px 0 24px; font-size: clamp(3.1rem, 6vw, 5.6rem
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
-
-/* Agent-first skill installation cards. */
-.skill-install .install-prompt { white-space: pre-wrap; overflow-wrap: anywhere; }
-.skill-install .install-note { margin: 16px 20px; color: var(--muted); font-size: .88rem; }
-.copy-prompt { margin: 0 20px 12px; padding: 8px 12px; border: 1px solid var(--line-purple); border-radius: var(--radius-control); background: var(--white); color: var(--primary-dark); }
-.copy-status { display: block; margin: 0 20px; color: var(--muted); font-size: .88rem; }
-.manual-install { border-top: 1px solid var(--line); }
-.manual-install summary { padding: 16px 20px; cursor: pointer; color: var(--primary-dark); }
