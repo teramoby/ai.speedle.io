@@ -225,27 +225,31 @@
               <div class="install-body">
                 <p class="mode-label">エージェントにインストールを依頼してから使用</p>
                 <div class="install-copy">
-                  <button class="copy-prompt" type="button" data-success="コピーしました" data-failure="コピーできませんでした。プロンプトを選択してコピーしてください" hidden>コピー</button>
+                  <button class="command-copy-button" type="button" aria-label="コピー" data-success="コピーしました" data-failure="コピーできませんでした。プロンプトを選択してコピーしてください" hidden><svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><svg class="copied-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span class="copy-tooltip" aria-hidden="true">コピー</span></button>
                   <pre class="install-prompt" tabindex="0"><code>このスキルをインストールしてください：
 <span class="install-url">https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler</span></code></pre>
-                  <span class="copy-status" role="status"></span>
+                  <span class="command-copy-status" role="status" aria-live="polite"></span>
                 </div>
                 <div class="install-usage">
                   <p class="mode-label">スキルを使用</p>
-                  <pre tabindex="0"><code>/speedle-policy-modeler ./employee-handbook.md</code></pre>
+                  <div class="install-copy">
+                    <button class="command-copy-button" type="button" aria-label="コピー" data-success="コピーしました" data-failure="コピーできませんでした。コマンドを選択してコピーしてください" hidden><svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><svg class="copied-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span class="copy-tooltip" aria-hidden="true">コピー</span></button>
+                    <pre tabindex="0"><code>/speedle-policy-modeler ./employee-handbook.md</code></pre>
+                    <span class="command-copy-status" role="status" aria-live="polite"></span>
+                  </div>
                 </div>
                 <p class="install-note">スキルに API キーは不要です。検証には Speedle spctl、PMS/ADS、Python 3 が必要です。スキルが表示されない場合はエージェントを再起動してください。</p>
                 <details class="manual-install">
                   <summary>手動インストール</summary>
                   <div class="install-copy">
-                    <button class="copy-prompt" type="button" data-success="コピーしました" data-failure="コピーできませんでした。コマンドを選択してコピーしてください" hidden>コピー</button>
+                    <button class="command-copy-button" type="button" aria-label="コピー" data-success="コピーしました" data-failure="コピーできませんでした。コマンドを選択してコピーしてください" hidden><svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><svg class="copied-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span class="copy-tooltip" aria-hidden="true">コピー</span></button>
                     <pre tabindex="0" aria-label="Claude Code で Speedle プラグインをインストールして使用"><code>claude plugin marketplace add teramoby/ai.speedle.io
 claude plugin install speedle@speedle
 
 # Claude Code で：
 /plugin configure speedle@speedle
 /speedle:speedle-policy-modeler ./employee-handbook.md</code></pre>
-                    <span class="copy-status" role="status"></span>
+                    <span class="command-copy-status" role="status" aria-live="polite"></span>
                   </div>
                   <p class="install-note">手動インストールのプラグインには check MCP サーバーも含まれます。ADS エンドポイントとサービス名を設定し、ADS が要求する場合のみ bearer token を設定してください。</p>
                 </details>
@@ -256,20 +260,24 @@ claude plugin install speedle@speedle
               <div class="install-body">
                 <p class="mode-label">エージェントにインストールを依頼してから使用</p>
                 <div class="install-copy">
-                  <button class="copy-prompt" type="button" data-success="コピーしました" data-failure="コピーできませんでした。プロンプトを選択してコピーしてください" hidden>コピー</button>
+                  <button class="command-copy-button" type="button" aria-label="コピー" data-success="コピーしました" data-failure="コピーできませんでした。プロンプトを選択してコピーしてください" hidden><svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><svg class="copied-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span class="copy-tooltip" aria-hidden="true">コピー</span></button>
                   <pre class="install-prompt" tabindex="0"><code>このスキルをインストールしてください：
 <span class="install-url">https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler</span></code></pre>
-                  <span class="copy-status" role="status"></span>
+                  <span class="command-copy-status" role="status" aria-live="polite"></span>
                 </div>
                 <div class="install-usage">
                   <p class="mode-label">スキルを使用</p>
-                  <pre tabindex="0"><code>$speedle-policy-modeler ./employee-handbook.md</code></pre>
+                  <div class="install-copy">
+                    <button class="command-copy-button" type="button" aria-label="コピー" data-success="コピーしました" data-failure="コピーできませんでした。コマンドを選択してコピーしてください" hidden><svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><svg class="copied-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span class="copy-tooltip" aria-hidden="true">コピー</span></button>
+                    <pre tabindex="0"><code>$speedle-policy-modeler ./employee-handbook.md</code></pre>
+                    <span class="command-copy-status" role="status" aria-live="polite"></span>
+                  </div>
                 </div>
                 <p class="install-note">スキルに API キーは不要です。検証には Speedle spctl、PMS/ADS、Python 3 が必要です。スキルが表示されない場合はエージェントを再起動してください。</p>
                 <details class="manual-install">
                   <summary>手動インストール</summary>
                   <div class="install-copy">
-                    <button class="copy-prompt" type="button" data-success="コピーしました" data-failure="コピーできませんでした。コマンドを選択してコピーしてください" hidden>コピー</button>
+                    <button class="command-copy-button" type="button" aria-label="コピー" data-success="コピーしました" data-failure="コピーできませんでした。コマンドを選択してコピーしてください" hidden><svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><svg class="copied-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span class="copy-tooltip" aria-hidden="true">コピー</span></button>
                     <pre tabindex="0" aria-label="Codex で Speedle ポリシーモデラースキルをインストールして使用"><code>git clone --depth 1 https://github.com/teramoby/ai.speedle.io.git
 mkdir -p ~/.agents/skills
 cp -R ai.speedle.io/skills/speedle-policy-modeler \
@@ -277,7 +285,7 @@ cp -R ai.speedle.io/skills/speedle-policy-modeler \
 
 # Codex CLI または IDE 拡張機能で：
 $speedle-policy-modeler ./employee-handbook.md</code></pre>
-                    <span class="copy-status" role="status"></span>
+                    <span class="command-copy-status" role="status" aria-live="polite"></span>
                   </div>
                 </details>
               </div>

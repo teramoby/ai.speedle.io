@@ -464,19 +464,30 @@ h1 { max-width: 760px; margin: 20px 0 24px; font-size: clamp(3.1rem, 6vw, 5.6rem
 .skill-install .install-body { display: grid; gap: 16px; padding: 18px; }
 .skill-install p { margin: 0; }
 .skill-install .mode-label { max-width: none; }
-.skill-install .install-note, .copy-status { color: var(--muted); font-size: .88rem; line-height: 1.65; }
+.skill-install .install-note { color: var(--muted); font-size: .88rem; line-height: 1.65; }
 .install-copy { position: relative; display: grid; min-width: 0; border: 1px solid var(--line); border-radius: var(--radius-control); background: var(--soft); }
 .skill-install pre { min-width: 0; padding: 12px 16px 16px; white-space: pre; overflow-wrap: normal; hyphens: none; }
-.install-copy pre { margin-right: 84px; }
+.install-copy pre { min-height: 64px; margin-right: 68px; }
 .skill-install .install-prompt { white-space: pre-wrap; }
 .install-url { overflow-wrap: anywhere; }
-.copy-prompt { position: absolute; top: 8px; right: 12px; padding: 4px 10px; border: 1px solid var(--line-purple); border-radius: var(--radius-control); background: var(--white); color: var(--primary-dark); font: 600 .75rem/1.65 var(--mono); }
-.copy-prompt:hover { border-color: var(--primary-dark); background: var(--tint); }
-.copy-prompt:disabled { cursor: wait; }
-.copy-status { padding: 0 16px 12px; }
-.copy-status:empty { display: none; }
+.command-copy-button { position: absolute; top: 8px; right: 8px; display: grid; place-items: center; width: 44px; height: 44px; padding: 10px; border: 1px solid var(--line-purple); border-radius: var(--radius-control); background: transparent; color: var(--primary-dark); cursor: pointer; }
+.command-copy-button[hidden] { display: none; }
+.command-copy-button:hover { border-color: var(--primary-dark); background: var(--tint); }
+.command-copy-button:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
+.command-copy-button svg { width: 21px; height: 21px; }
+.command-copy-button .copied-icon { display: none; }
+.command-copy-button[data-state="copied"] { color: var(--success); }
+.command-copy-button[data-state="copied"] .copy-icon { display: none; }
+.command-copy-button[data-state="copied"] .copied-icon { display: block; }
+.copy-tooltip { position: absolute; right: 0; bottom: calc(100% + 6px); z-index: 2; padding: 5px 8px; border: 1px solid var(--line-purple); border-radius: var(--radius-control); background: var(--ink); color: var(--white); font: 600 .75rem/1.4 var(--sans); white-space: nowrap; pointer-events: none; visibility: hidden; }
+.command-copy-button:hover .copy-tooltip,
+.command-copy-button:focus-visible .copy-tooltip,
+.command-copy-button[data-state] .copy-tooltip { visibility: visible; }
+.command-copy-button[data-state="error"] .copy-tooltip { width: min(230px, calc(100vw - 100px)); white-space: normal; }
+.command-copy-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.command-copy-input { position: fixed; left: -9999px; top: 0; }
 .install-usage { display: grid; min-width: 0; gap: 8px; }
-.install-usage pre { padding: 12px 16px; white-space: pre-wrap; overflow-wrap: anywhere; border: 1px solid var(--line); border-radius: var(--radius-control); background: var(--soft); }
+.install-usage pre { white-space: pre-wrap; overflow-wrap: anywhere; }
 .manual-install { min-width: 0; border-top: 1px solid var(--line); }
 .manual-install summary { display: flex; align-items: center; gap: 8px; width: fit-content; padding: 14px 0 0; cursor: pointer; list-style: none; color: var(--muted); font: 600 .78rem/1.65 var(--mono); }
 .manual-install summary::-webkit-details-marker { display: none; }
