@@ -25,6 +25,9 @@ handbook or regulation into SPDL, a design document and executable test cases.
 `examples/en/` and `examples/zh/` record two synthetic runs, each validated with
 `spctl check` and 37 authorization cases against a local PMS and ADS.
 
+Ask your agent to install the skill from its [GitHub directory](https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler).
+The [skill README](skills/speedle-policy-modeler/README.md) documents direct
+installation, prerequisites and usage for Claude Code and Codex.
 For a generic install, copy the skill folder into the agent's skills directory.
 The home page provides Claude Code and Codex install/use examples. OpenAI's
 official [Build skills documentation](https://learn.chatgpt.com/docs/build-skills)

@@ -45,6 +45,9 @@ jobs:
         working-directory: samples/zsp
         run: go build -o "$RUNNER_TEMP/speedle-bin/zsp-demo" .
 
+      - name: Test agent-first skill installation
+        run: node --test scripts/install.test.mjs
+
       - name: Check site files
         run: node scripts/check-seo.mjs
 

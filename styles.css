@@ -830,3 +830,11 @@ h1 { max-width: 760px; margin: 20px 0 24px; font-size: clamp(3.1rem, 6vw, 5.6rem
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* Agent-first skill installation cards. */
+.skill-install .install-prompt { white-space: pre-wrap; overflow-wrap: anywhere; }
+.skill-install .install-note { margin: 16px 20px; color: var(--muted); font-size: .88rem; }
+.copy-prompt { margin: 0 20px 12px; padding: 8px 12px; border: 1px solid var(--line-purple); border-radius: var(--radius-control); background: var(--white); color: var(--primary-dark); }
+.copy-status { display: block; margin: 0 20px; color: var(--muted); font-size: .88rem; }
+.manual-install { border-top: 1px solid var(--line); }
+.manual-install summary { padding: 16px 20px; cursor: pointer; color: var(--primary-dark); }
