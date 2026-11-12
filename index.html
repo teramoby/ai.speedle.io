@@ -221,41 +221,65 @@
           <div class="config-grid">
             <figure class="config-card skill-install">
               <figcaption><span>install + use</span><span>Claude Code · example</span></figcaption>
-              <p class="install-note">Ask your agent, then use the skill</p>
-              <pre class="install-prompt" tabindex="0"><code>Install this skill for me: https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler</code></pre>
-              <button class="copy-prompt" type="button" data-success="Copied" data-failure="Copy failed; select and copy the prompt" hidden>Copy prompt</button>
-              <span class="copy-status" role="status"></span>
-              <pre tabindex="0"><code>/speedle-policy-modeler ./employee-handbook.md</code></pre>
-              <p class="install-note">The skill needs no API key. Validation requires Speedle spctl, PMS/ADS and Python 3. Restart the agent if the skill is not listed.</p>
-              <details class="manual-install">
-                <summary>Manual install</summary>
-              <pre tabindex="0" aria-label="Install and use the Speedle plugin with Claude Code"><code>claude plugin marketplace add teramoby/ai.speedle.io
+              <div class="install-body">
+                <p class="mode-label">Ask your agent, then use the skill</p>
+                <div class="install-copy">
+                  <button class="copy-prompt" type="button" data-success="Copied" data-failure="Copy failed; select and copy the prompt" hidden>Copy</button>
+                  <pre class="install-prompt" tabindex="0"><code>Install this skill for me:
+https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler</code></pre>
+                  <span class="copy-status" role="status"></span>
+                </div>
+                <div class="install-usage">
+                  <p class="mode-label">Use the skill</p>
+                  <pre tabindex="0"><code>/speedle-policy-modeler ./employee-handbook.md</code></pre>
+                </div>
+                <p class="install-note">The skill needs no API key. Validation requires Speedle spctl, PMS/ADS and Python 3. Restart the agent if the skill is not listed.</p>
+                <details class="manual-install">
+                  <summary>Manual install</summary>
+                  <div class="install-copy">
+                    <button class="copy-prompt" type="button" data-success="Copied" data-failure="Copy failed; select and copy the commands" hidden>Copy</button>
+                    <pre tabindex="0" aria-label="Install and use the Speedle plugin with Claude Code"><code>claude plugin marketplace add teramoby/ai.speedle.io
 claude plugin install speedle@speedle
 
 # In Claude Code:
 /plugin configure speedle@speedle
 /speedle:speedle-policy-modeler ./employee-handbook.md</code></pre>
-                <p class="install-note">The manual plugin also adds the check MCP server. Configure its ADS endpoint and service name; set a bearer token only if ADS requires one.</p>
-              </details>
+                    <span class="copy-status" role="status"></span>
+                  </div>
+                  <p class="install-note">The manual plugin also adds the check MCP server. Configure its ADS endpoint and service name; set a bearer token only if ADS requires one.</p>
+                </details>
+              </div>
             </figure>
             <figure class="config-card skill-install">
               <figcaption><span>install + use</span><span>Codex · example</span></figcaption>
-              <p class="install-note">Ask your agent, then use the skill</p>
-              <pre class="install-prompt" tabindex="0"><code>Install this skill for me: https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler</code></pre>
-              <button class="copy-prompt" type="button" data-success="Copied" data-failure="Copy failed; select and copy the prompt" hidden>Copy prompt</button>
-              <span class="copy-status" role="status"></span>
-              <pre tabindex="0"><code>$speedle-policy-modeler ./employee-handbook.md</code></pre>
-              <p class="install-note">The skill needs no API key. Validation requires Speedle spctl, PMS/ADS and Python 3. Restart the agent if the skill is not listed.</p>
-              <details class="manual-install">
-                <summary>Manual install</summary>
-              <pre tabindex="0" aria-label="Install and use the Speedle policy modeler skill with Codex"><code>git clone --depth 1 https://github.com/teramoby/ai.speedle.io.git
+              <div class="install-body">
+                <p class="mode-label">Ask your agent, then use the skill</p>
+                <div class="install-copy">
+                  <button class="copy-prompt" type="button" data-success="Copied" data-failure="Copy failed; select and copy the prompt" hidden>Copy</button>
+                  <pre class="install-prompt" tabindex="0"><code>Install this skill for me:
+https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler</code></pre>
+                  <span class="copy-status" role="status"></span>
+                </div>
+                <div class="install-usage">
+                  <p class="mode-label">Use the skill</p>
+                  <pre tabindex="0"><code>$speedle-policy-modeler ./employee-handbook.md</code></pre>
+                </div>
+                <p class="install-note">The skill needs no API key. Validation requires Speedle spctl, PMS/ADS and Python 3. Restart the agent if the skill is not listed.</p>
+                <details class="manual-install">
+                  <summary>Manual install</summary>
+                  <div class="install-copy">
+                    <button class="copy-prompt" type="button" data-success="Copied" data-failure="Copy failed; select and copy the commands" hidden>Copy</button>
+                    <pre tabindex="0" aria-label="Install and use the Speedle policy modeler skill with Codex"><code>git clone --depth 1 https://github.com/teramoby/ai.speedle.io.git
 mkdir -p ~/.agents/skills
 cp -R ai.speedle.io/skills/speedle-policy-modeler \
   ~/.agents/skills/
 
 # In Codex CLI or the IDE extension:
 $speedle-policy-modeler ./employee-handbook.md</code></pre>
-              </details>
+                    <span class="copy-status" role="status"></span>
+                  </div>
+                </details>
+              </div>
             </figure>
           </div>
 

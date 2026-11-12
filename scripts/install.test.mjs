@@ -21,9 +21,22 @@ for (const locale of ['', 'zh/', 'ja/', 'ko/', 'es/']) {
       assert.match(manual, /<summary>[^<]+<\/summary>/);
       const prompt = primary.match(/<pre class="install-prompt"[^>]*><code>([^<]+)<\/code><\/pre>/)?.[1];
       assert.ok(prompt?.endsWith(url));
-      assert.ok(!prompt.includes('\n'), 'prompt is one line');
+      assert.equal(prompt, prompt.trim(), 'no leading or trailing preformatted whitespace');
+      assert.equal(prompt.split('\n').length, 2, 'the full URL has its own unindented line');
+      assert.equal(prompt.split('\n')[1], url);
       assert.match(primary, /<button class="copy-prompt" type="button" data-success="[^"]+" data-failure="[^"]+" hidden>[^<]+<\/button>/);
-      assert.match(primary, /role="status"/);
+      assert.match(primary, /<div class="install-body">/);
+      assert.match(primary, /<p class="mode-label">[^<]+<\/p>/);
+      assert.match(primary, /<div class="install-usage">\s*<p class="mode-label">[^<]+<\/p>\s*<pre/);
+      const blocks = [...card.matchAll(/<div class="install-copy">([\s\S]*?)<\/div>/g)];
+      assert.equal(blocks.length, 2, 'prompt and manual commands each have their own copy control');
+      blocks.forEach(([, block]) => {
+        assert.match(block, /<button class="copy-prompt"[^>]+hidden>[^<]+<\/button>/);
+        assert.match(block, /<span class="copy-status" role="status"><\/span>/);
+        const code = block.match(/<code>([\s\S]*?)<\/code>/)?.[1];
+        assert.ok(code);
+        assert.equal(code, code.trim(), 'no leading or trailing code whitespace');
+      });
       const invocation = `${index === 0 ? '/' : '$'}speedle-policy-modeler ./employee-handbook.md`;
       assert.ok(primary.indexOf(invocation) > primary.indexOf(prompt));
       assert.ok(!primary.includes('git clone') && !primary.includes('claude plugin'));
@@ -41,20 +54,26 @@ for (const locale of ['', 'zh/', 'ja/', 'ko/', 'es/']) {
 
 function setup(clipboard) {
   const handlers = [];
-  const cards = ['first prompt', 'second prompt'].map(text => {
+  const texts = [
+    `Install this skill for me:\n${url}`,
+    'claude plugin marketplace add teramoby/ai.speedle.io\nclaude plugin install speedle@speedle',
+    'second prompt',
+    'git clone --depth 1 https://github.com/teramoby/ai.speedle.io.git\nmkdir -p ~/.agents/skills'
+  ];
+  const cards = texts.map(text => {
     const button = { hidden: true, disabled: false, dataset: { success: 'Copied', failure: 'Copy manually' }, addEventListener: (_, handler) => handlers.push(handler) };
     const status = { textContent: '' };
-    const elements = { '.copy-prompt': button, '.install-prompt code': { textContent: text }, '.copy-status': status };
+    const elements = { '.copy-prompt': button, 'pre code': { textContent: text }, '.copy-status': status };
     return { button, status, querySelector: selector => elements[selector] };
   });
   runInNewContext(app, {
-    document: { querySelectorAll: selector => selector === '.skill-install' ? cards : [], querySelector: () => ({ querySelectorAll: () => [] }) },
+    document: { querySelectorAll: selector => selector === '.install-copy' ? cards : [], querySelector: () => ({ querySelectorAll: () => [] }) },
     window: {}, navigator: { clipboard }
   });
   return { cards, handlers };
 }
 
-test('copy buttons copy only their own prompt, announce success and permit repeat use', async () => {
+test('copy buttons copy their exact prompt or manual commands, announce success and permit repeat use', async () => {
   const copied = [];
   const { cards, handlers } = setup({ writeText: async text => copied.push(text) });
   for (const [index, handler] of handlers.entries()) {
@@ -64,7 +83,7 @@ test('copy buttons copy only their own prompt, announce success and permit repea
     assert.equal(cards[index].button.disabled, false);
   }
   await handlers[0]();
-  assert.deepEqual(copied, ['first prompt', 'second prompt', 'first prompt']);
+  assert.deepEqual(copied, cards.map(card => card.querySelector('pre code').textContent).concat(cards[0].querySelector('pre code').textContent));
 });
 
 for (const clipboard of [undefined, { writeText: async () => { throw new Error('Permission denied'); } }]) {

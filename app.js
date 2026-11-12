@@ -1,17 +1,17 @@
 'use strict';
 
-// Keep the prompt selectable when JavaScript or clipboard access is unavailable.
-document.querySelectorAll('.skill-install').forEach(function(card) {
-  const button = card.querySelector('.copy-prompt');
-  const prompt = card.querySelector('.install-prompt code');
-  const status = card.querySelector('.copy-status');
-  if (!button || !prompt || !status) return;
+// Keep code selectable when JavaScript or clipboard access is unavailable.
+document.querySelectorAll('.install-copy').forEach(function(block) {
+  const button = block.querySelector('.copy-prompt');
+  const code = block.querySelector('pre code');
+  const status = block.querySelector('.copy-status');
+  if (!button || !code || !status) return;
   button.hidden = false;
   button.addEventListener('click', async function() {
     button.disabled = true;
     status.textContent = '';
     try {
-      await navigator.clipboard.writeText(prompt.textContent);
+      await navigator.clipboard.writeText(code.textContent);
       status.textContent = button.dataset.success;
     } catch {
       status.textContent = button.dataset.failure;
