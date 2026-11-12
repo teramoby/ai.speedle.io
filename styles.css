@@ -465,15 +465,18 @@ h1 { max-width: 760px; margin: 20px 0 24px; font-size: clamp(3.1rem, 6vw, 5.6rem
 .skill-install p { margin: 0; }
 .skill-install .mode-label { max-width: none; }
 .skill-install .install-note, .copy-status { color: var(--muted); font-size: .88rem; line-height: 1.65; }
-.install-copy { display: grid; min-width: 0; border: 1px solid var(--line); border-radius: var(--radius-control); background: var(--soft); }
+.install-copy { position: relative; display: grid; min-width: 0; border: 1px solid var(--line); border-radius: var(--radius-control); background: var(--soft); }
 .skill-install pre { min-width: 0; padding: 12px 16px 16px; white-space: pre; overflow-wrap: normal; hyphens: none; }
-.copy-prompt { justify-self: end; margin: 8px 12px 0; padding: 4px 10px; border: 1px solid var(--line-purple); border-radius: var(--radius-control); background: var(--white); color: var(--primary-dark); font: 600 .75rem/1.65 var(--mono); }
+.install-copy pre { margin-right: 84px; }
+.skill-install .install-prompt { white-space: pre-wrap; }
+.install-url { overflow-wrap: anywhere; }
+.copy-prompt { position: absolute; top: 8px; right: 12px; padding: 4px 10px; border: 1px solid var(--line-purple); border-radius: var(--radius-control); background: var(--white); color: var(--primary-dark); font: 600 .75rem/1.65 var(--mono); }
 .copy-prompt:hover { border-color: var(--primary-dark); background: var(--tint); }
 .copy-prompt:disabled { cursor: wait; }
 .copy-status { padding: 0 16px 12px; }
 .copy-status:empty { display: none; }
 .install-usage { display: grid; min-width: 0; gap: 8px; }
-.install-usage pre { padding: 12px 16px; border: 1px solid var(--line); border-radius: var(--radius-control); background: var(--soft); }
+.install-usage pre { padding: 12px 16px; white-space: pre-wrap; overflow-wrap: anywhere; border: 1px solid var(--line); border-radius: var(--radius-control); background: var(--soft); }
 .manual-install { min-width: 0; border-top: 1px solid var(--line); }
 .manual-install summary { display: flex; align-items: center; gap: 8px; width: fit-content; padding: 14px 0 0; cursor: pointer; list-style: none; color: var(--muted); font: 600 .78rem/1.65 var(--mono); }
 .manual-install summary::-webkit-details-marker { display: none; }

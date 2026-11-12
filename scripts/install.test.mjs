@@ -19,11 +19,13 @@ for (const locale of ['', 'zh/', 'ja/', 'ko/', 'es/']) {
       const [primary, manual] = card.split('<details class="manual-install">');
       assert.ok(manual, 'manual installation is collapsed by default');
       assert.match(manual, /<summary>[^<]+<\/summary>/);
-      const prompt = primary.match(/<pre class="install-prompt"[^>]*><code>([^<]+)<\/code><\/pre>/)?.[1];
-      assert.ok(prompt?.endsWith(url));
-      assert.equal(prompt, prompt.trim(), 'no leading or trailing preformatted whitespace');
-      assert.equal(prompt.split('\n').length, 2, 'the full URL has its own unindented line');
-      assert.equal(prompt.split('\n')[1], url);
+      const prompt = primary.match(/<pre class="install-prompt"[^>]*><code>([^<]+)<span class="install-url">([^<]+)<\/span><\/code><\/pre>/);
+      assert.ok(prompt, 'URL has its own wrapping span');
+      const promptText = prompt[1] + prompt[2];
+      assert.ok(promptText.endsWith(url));
+      assert.equal(promptText, promptText.trim(), 'no leading or trailing preformatted whitespace');
+      assert.equal(promptText.split('\n').length, 2, 'the full URL has its own unindented line');
+      assert.equal(promptText.split('\n')[1], url);
       assert.match(primary, /<button class="copy-prompt" type="button" data-success="[^"]+" data-failure="[^"]+" hidden>[^<]+<\/button>/);
       assert.match(primary, /<div class="install-body">/);
       assert.match(primary, /<p class="mode-label">[^<]+<\/p>/);
@@ -33,12 +35,12 @@ for (const locale of ['', 'zh/', 'ja/', 'ko/', 'es/']) {
       blocks.forEach(([, block]) => {
         assert.match(block, /<button class="copy-prompt"[^>]+hidden>[^<]+<\/button>/);
         assert.match(block, /<span class="copy-status" role="status"><\/span>/);
-        const code = block.match(/<code>([\s\S]*?)<\/code>/)?.[1];
+        const code = block.match(/<code>([\s\S]*?)<\/code>/)?.[1]?.replace(/<\/?span(?: class="install-url")?>/g, '');
         assert.ok(code);
         assert.equal(code, code.trim(), 'no leading or trailing code whitespace');
       });
       const invocation = `${index === 0 ? '/' : '$'}speedle-policy-modeler ./employee-handbook.md`;
-      assert.ok(primary.indexOf(invocation) > primary.indexOf(prompt));
+      assert.ok(primary.indexOf(invocation) > primary.indexOf(prompt[1]));
       assert.ok(!primary.includes('git clone') && !primary.includes('claude plugin'));
       assert.match(primary, /Python 3/);
       if (index === 0) {
