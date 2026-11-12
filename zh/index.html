@@ -220,17 +220,35 @@
           </div>
 
           <div class="config-grid">
-            <figure class="config-card">
+            <figure class="config-card skill-install">
               <figcaption><span>安装与使用</span><span>Claude Code · 示例</span></figcaption>
+              <p class="install-note">先让智能体安装，再使用技能</p>
+              <pre class="install-prompt" tabindex="0"><code>请帮我安装这个技能： https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler</code></pre>
+              <button class="copy-prompt" type="button" data-success="已复制" data-failure="复制失败，请选中提示词手动复制" hidden>复制提示词</button>
+              <span class="copy-status" role="status"></span>
+              <pre tabindex="0"><code>/speedle-policy-modeler ./employee-handbook.md</code></pre>
+              <p class="install-note">技能无需 API 密钥。验证需要 Speedle spctl、PMS/ADS 和 Python 3。如果未列出技能，请重启智能体。</p>
+              <details class="manual-install">
+                <summary>手动安装</summary>
               <pre tabindex="0" aria-label="在 Claude Code 中安装和使用 Speedle 插件"><code>claude plugin marketplace add teramoby/ai.speedle.io
 claude plugin install speedle@speedle
 
 # 在 Claude Code 中：
 /plugin configure speedle@speedle
 /speedle:speedle-policy-modeler ./employee-handbook.md</code></pre>
+                <p class="install-note">手动安装的插件还提供 check MCP 服务器。请配置 ADS 地址和服务名；仅在 ADS 要求时设置 bearer token。</p>
+              </details>
             </figure>
-            <figure class="config-card">
+            <figure class="config-card skill-install">
               <figcaption><span>安装与使用</span><span>Codex · 示例</span></figcaption>
+              <p class="install-note">先让智能体安装，再使用技能</p>
+              <pre class="install-prompt" tabindex="0"><code>请帮我安装这个技能： https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler</code></pre>
+              <button class="copy-prompt" type="button" data-success="已复制" data-failure="复制失败，请选中提示词手动复制" hidden>复制提示词</button>
+              <span class="copy-status" role="status"></span>
+              <pre tabindex="0"><code>$speedle-policy-modeler ./employee-handbook.md</code></pre>
+              <p class="install-note">技能无需 API 密钥。验证需要 Speedle spctl、PMS/ADS 和 Python 3。如果未列出技能，请重启智能体。</p>
+              <details class="manual-install">
+                <summary>手动安装</summary>
               <pre tabindex="0" aria-label="在 Codex 中安装和使用 Speedle 策略建模技能"><code>git clone --depth 1 https://github.com/teramoby/ai.speedle.io.git
 mkdir -p ~/.agents/skills
 cp -R ai.speedle.io/skills/speedle-policy-modeler \
@@ -238,6 +256,7 @@ cp -R ai.speedle.io/skills/speedle-policy-modeler \
 
 # 在 Codex CLI 或 IDE 扩展中：
 $speedle-policy-modeler ./employee-handbook.md</code></pre>
+              </details>
             </figure>
           </div>
 

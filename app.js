@@ -1,5 +1,26 @@
 'use strict';
 
+// Keep the prompt selectable when JavaScript or clipboard access is unavailable.
+document.querySelectorAll('.skill-install').forEach(function(card) {
+  const button = card.querySelector('.copy-prompt');
+  const prompt = card.querySelector('.install-prompt code');
+  const status = card.querySelector('.copy-status');
+  if (!button || !prompt || !status) return;
+  button.hidden = false;
+  button.addEventListener('click', async function() {
+    button.disabled = true;
+    status.textContent = '';
+    try {
+      await navigator.clipboard.writeText(prompt.textContent);
+      status.textContent = button.dataset.success;
+    } catch {
+      status.textContent = button.dataset.failure;
+    } finally {
+      button.disabled = false;
+    }
+  });
+});
+
 /* Shared accessible menu controller from speedle.io header-20261027, with the v8 1160 px breakpoint. */
 document.querySelectorAll('header.site-header').forEach(function(header) {
   var button = header.querySelector('.menu');

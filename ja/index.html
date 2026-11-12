@@ -220,17 +220,35 @@
           </div>
 
           <div class="config-grid">
-            <figure class="config-card">
+            <figure class="config-card skill-install">
               <figcaption><span>インストール + 使用法</span><span>Claude Code · 例</span></figcaption>
+              <p class="install-note">エージェントにインストールを依頼してから使用</p>
+              <pre class="install-prompt" tabindex="0"><code>このスキルをインストールしてください： https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler</code></pre>
+              <button class="copy-prompt" type="button" data-success="コピーしました" data-failure="コピーできませんでした。プロンプトを選択してコピーしてください" hidden>プロンプトをコピー</button>
+              <span class="copy-status" role="status"></span>
+              <pre tabindex="0"><code>/speedle-policy-modeler ./employee-handbook.md</code></pre>
+              <p class="install-note">スキルに API キーは不要です。検証には Speedle spctl、PMS/ADS、Python 3 が必要です。スキルが表示されない場合はエージェントを再起動してください。</p>
+              <details class="manual-install">
+                <summary>手動インストール</summary>
               <pre tabindex="0" aria-label="Claude Code で Speedle プラグインをインストールして使用"><code>claude plugin marketplace add teramoby/ai.speedle.io
 claude plugin install speedle@speedle
 
 # Claude Code で：
 /plugin configure speedle@speedle
 /speedle:speedle-policy-modeler ./employee-handbook.md</code></pre>
+                <p class="install-note">手動インストールのプラグインには check MCP サーバーも含まれます。ADS エンドポイントとサービス名を設定し、ADS が要求する場合のみ bearer token を設定してください。</p>
+              </details>
             </figure>
-            <figure class="config-card">
+            <figure class="config-card skill-install">
               <figcaption><span>インストール + 使用法</span><span>Codex · 例</span></figcaption>
+              <p class="install-note">エージェントにインストールを依頼してから使用</p>
+              <pre class="install-prompt" tabindex="0"><code>このスキルをインストールしてください： https://github.com/teramoby/ai.speedle.io/tree/main/skills/speedle-policy-modeler</code></pre>
+              <button class="copy-prompt" type="button" data-success="コピーしました" data-failure="コピーできませんでした。プロンプトを選択してコピーしてください" hidden>プロンプトをコピー</button>
+              <span class="copy-status" role="status"></span>
+              <pre tabindex="0"><code>$speedle-policy-modeler ./employee-handbook.md</code></pre>
+              <p class="install-note">スキルに API キーは不要です。検証には Speedle spctl、PMS/ADS、Python 3 が必要です。スキルが表示されない場合はエージェントを再起動してください。</p>
+              <details class="manual-install">
+                <summary>手動インストール</summary>
               <pre tabindex="0" aria-label="Codex で Speedle ポリシーモデラースキルをインストールして使用"><code>git clone --depth 1 https://github.com/teramoby/ai.speedle.io.git
 mkdir -p ~/.agents/skills
 cp -R ai.speedle.io/skills/speedle-policy-modeler \
@@ -238,6 +256,7 @@ cp -R ai.speedle.io/skills/speedle-policy-modeler \
 
 # Codex CLI または IDE 拡張機能で：
 $speedle-policy-modeler ./employee-handbook.md</code></pre>
+              </details>
             </figure>
           </div>
 
