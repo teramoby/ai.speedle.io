@@ -19,9 +19,12 @@ for (const locale of ['', 'zh/', 'ja/', 'ko/', 'es/']) {
       const [primary, manual] = card.split('<details class="manual-install">');
       assert.ok(manual, 'manual installation is collapsed by default');
       assert.match(manual, /<summary>[^<]+<\/summary>/);
-      const prompt = primary.match(/<pre class="install-prompt"[^>]*><code>([^<]+)<span class="install-url">([^<]+)<\/span><\/code><\/pre>/);
+      const prompt = primary.match(/<pre class="install-prompt"[^>]*><code>([^<]+)<span class="install-url">((?:<span>[^<]*<\/span>(?:<wbr>)?)+)<\/span><\/code><\/pre>/);
       assert.ok(prompt, 'URL has its own wrapping span');
-      const promptText = prompt[1] + prompt[2];
+      const segments = url.split('/');
+      const wrappedUrl = segments.map((segment, i) => `<span>${segment}${i < segments.length - 1 ? '/' : ''}</span>`).join('<wbr>');
+      assert.equal(prompt[2], wrappedUrl, 'URL segments stay together with break opportunities only after slashes');
+      const promptText = prompt[1] + prompt[2].replace(/<\/?span>|<wbr>/g, '');
       assert.ok(promptText.endsWith(url));
       assert.equal(promptText, promptText.trim(), 'no leading or trailing preformatted whitespace');
       assert.equal(promptText.split('\n').length, 2, 'the full URL has its own unindented line');
@@ -37,7 +40,7 @@ for (const locale of ['', 'zh/', 'ja/', 'ko/', 'es/']) {
         assert.match(block, /<svg class="copied-icon"[^>]+aria-hidden="true"/);
         assert.match(block, /<span class="copy-tooltip" aria-hidden="true">[^<]+<\/span>/);
         assert.match(block, /<span class="command-copy-status" role="status" aria-live="polite"><\/span>/);
-        const code = block.match(/<code>([\s\S]*?)<\/code>/)?.[1]?.replace(/<\/?span(?: class="install-url")?>/g, '');
+        const code = block.match(/<code>([\s\S]*?)<\/code>/)?.[1]?.replace(/<\/?span(?: class="install-url")?>|<wbr>/g, '');
         assert.ok(code);
         assert.equal(code, code.trim(), 'no leading or trailing code whitespace');
       });

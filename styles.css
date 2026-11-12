@@ -469,7 +469,8 @@ h1 { max-width: 760px; margin: 20px 0 24px; font-size: clamp(3.1rem, 6vw, 5.6rem
 .skill-install pre { min-width: 0; padding: 12px 16px 16px; white-space: pre; overflow-wrap: normal; hyphens: none; }
 .install-copy pre { min-height: 64px; margin-right: 68px; }
 .skill-install .install-prompt { white-space: pre-wrap; }
-.install-url { overflow-wrap: anywhere; }
+.install-url { overflow-wrap: normal; word-break: normal; }
+.install-url > span { white-space: nowrap; }
 .command-copy-button { position: absolute; top: 8px; right: 8px; display: grid; place-items: center; width: 44px; height: 44px; padding: 10px; border: 1px solid var(--line-purple); border-radius: var(--radius-control); background: transparent; color: var(--primary-dark); cursor: pointer; }
 .command-copy-button[hidden] { display: none; }
 .command-copy-button:hover { border-color: var(--primary-dark); background: var(--tint); }
