@@ -100,7 +100,7 @@ hand-maintained; there is no generator. The sitemap and both home pages declare
 `hreflang` alternates for `en`, `zh-CN` and `x-default`. The complete Chinese
 site is at `/zh/` and `/zh/patterns/`. Every factual claim in these files must
 already be true on the page: `@speedle/mcp` and `@speedle/sdk` are published
-on npm, Speedle Cloud is coming soon, and AI risk detection is not shipped.
+on npm, Speedle Cloud is in public beta, and AI risk detection is not shipped.
 
 `node scripts/check-seo.mjs` verifies that the sitemap and `llms` link targets
 resolve to files and anchors in this repository, that each sitemap entry's
