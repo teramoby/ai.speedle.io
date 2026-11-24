@@ -186,3 +186,11 @@ A bare `@reviewbot` mention means `review`. `check` means `recheck`. See
 ## Contributing
 
 Contributions are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Shared language preference
+
+Explicit language-menu selections persist in the secure functional
+`speedle_locale` cookie shared with Engine and Cloud on `speedle.io`.
+The neutral homepage follows this choice; explicit localized URLs remain
+stable. Unsupported values are ignored, and language links work with cookies
+blocked. Preview and staging hosts do not read or write this preference.
