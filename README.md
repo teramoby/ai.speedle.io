@@ -189,8 +189,18 @@ Contributions are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Shared language preference
 
-Explicit language-menu selections persist in the secure functional
-`speedle_locale` cookie shared with Engine and Cloud on `speedle.io`.
+An explicit language selection uses a session-only `speedle_locale` cookie to
+synchronize Engine, AI and Cloud on the production `speedle.io` hosts. The
+language menu's unchecked-by-default remember option stores the locale and
+`speedle_locale_remember=1` for up to one year only after an explicit opt-in.
+Opt-out returns the current language to session-only storage. “Clear saved
+language” deletes both family cookies and this origin's old language storage
+without changing the page currently displayed. A stale tab reads the current
+consent marker before saving another selection, so it cannot silently restore
+long-term storage after withdrawal.
+
 The neutral homepage follows this choice; explicit localized URLs remain
-stable. Unsupported values are ignored, and language links work with cookies
-blocked. Preview and staging hosts do not read or write this preference.
+stable. Invalid values and blocked storage leave language links usable. Preview
+and staging hosts do not read or write production preferences; their remember
+checkbox is disabled. The controls are translated on all five language menus,
+including the patterns and 404 pages.
