@@ -186,3 +186,21 @@ A bare `@reviewbot` mention means `review`. `check` means `recheck`. See
 ## Contributing
 
 Contributions are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Shared language preference
+
+An explicit language selection uses a session-only `speedle_locale` cookie to
+synchronize Engine, AI and Cloud on the production `speedle.io` hosts. The
+language menu's unchecked-by-default remember option stores the locale and
+`speedle_locale_remember=1` for up to one year only after an explicit opt-in.
+Opt-out returns the current language to session-only storage. “Clear saved
+language” deletes both family cookies and this origin's old language storage
+without changing the page currently displayed. A stale tab reads the current
+consent marker before saving another selection, so it cannot silently restore
+long-term storage after withdrawal.
+
+The neutral homepage follows this choice; explicit localized URLs remain
+stable. Invalid values and blocked storage leave language links usable. Preview
+and staging hosts do not read or write production preferences; their remember
+checkbox is disabled. The controls are translated on all five language menus,
+including the patterns and 404 pages.

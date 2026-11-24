@@ -1,5 +1,135 @@
 'use strict';
 
+/* Session language sharing; long-term memory requires the explicit menu opt-in. */
+(function () {
+  if (typeof location === 'undefined') return;
+  var hosts = ['speedle.io', 'engine.speedle.io', 'ai.speedle.io', 'cloud.speedle.io'];
+  var production = location.protocol === 'https:' && hosts.indexOf(location.hostname) >= 0;
+  var locales = ['en', 'ja', 'ko', 'es', 'zh-CN'];
+  var scope = '; Domain=speedle.io; Path=/; SameSite=Lax; Secure';
+  var storageKeys = ['speedle-cloud.locale', 'speedle-ai.locale'];
+  function cookie(name) {
+    if (!production) return null;
+    try {
+      var parts = document.cookie.split(';');
+      for (var i = 0; i < parts.length; i++) {
+        var pair = parts[i].trim().split('=');
+        if (pair.length === 2 && pair[0] === name) return pair[1];
+      }
+    } catch (error) { /* Cookie restrictions do not disable real language links. */ }
+    return null;
+  }
+  function remembered() { return cookie('speedle_locale_remember') === '1'; }
+  function removeStorage() {
+    storageKeys.forEach(function (key) {
+      try { window.localStorage.removeItem(key); } catch (error) { /* Storage may be blocked. */ }
+      try { window.sessionStorage.removeItem(key); } catch (error) { /* Storage may be blocked. */ }
+    });
+  }
+  function write(name, value, lifetime) {
+    if (!production) return;
+    try { document.cookie = name + '=' + value + scope + (lifetime || ''); }
+    catch (error) { /* Keep language selection available without storage. */ }
+  }
+  function save(locale, persistent) {
+    if (locales.indexOf(locale) < 0) return;
+    write('speedle_locale', locale, persistent ? '; Max-Age=31536000' : '');
+    if (!persistent) {
+      write('speedle_locale_remember', '', '; Max-Age=0');
+      removeStorage();
+    }
+  }
+  function currentLocale() {
+    var locale = document.documentElement.lang;
+    return locales.indexOf(locale) >= 0 ? locale : 'en';
+  }
+  var preference = cookie('speedle_locale');
+  if (locales.indexOf(preference) < 0) preference = null;
+  // Legacy values never imply consent: shorten their lifetime and purge old
+  // per-origin copies so another origin cannot resurrect a withdrawn choice.
+  if (!remembered()) {
+    removeStorage();
+    if (preference) save(preference, false);
+  }
+
+  var text = {
+    en: ['Remember my language across Speedle Engine, AI and Cloud (uses cookies, up to one year)', 'Clear saved language'],
+    'zh-CN': ['记住我的语言，并在 Speedle Engine、AI 和 Cloud 间同步（使用 Cookie，最长保存一年）。', '清除已保存的语言'],
+    ja: ['言語を Speedle Engine、AI、Cloud 間で記憶・同期する（Cookie を使用、最長1年間）', '保存した言語を消去'],
+    ko: ['Speedle Engine, AI, Cloud에서 언어 기억 및 동기화(Cookie 사용, 최대 1년)', '저장된 언어 지우기'],
+    es: ['Recordar mi idioma en Speedle Engine, AI y Cloud (usa cookies, hasta un año)', 'Borrar el idioma guardado']
+  };
+  var controls = [];
+  function refresh() {
+    controls.forEach(function (input) { input.checked = remembered(); });
+  }
+  document.querySelectorAll('.languages-panel').forEach(function (panel) {
+    var labels = text[currentLocale()] || text.en;
+    var container = document.createElement('div');
+    container.className = 'language-preferences';
+    var label = document.createElement('label');
+    label.className = 'language-remember';
+    var input = document.createElement('input');
+    input.type = 'checkbox';
+    input.className = 'language-remember-input';
+    input.disabled = !production;
+    input.checked = remembered();
+    var caption = document.createElement('span');
+    caption.textContent = labels[0];
+    label.append(input, caption);
+    var clear = document.createElement('button');
+    clear.type = 'button';
+    clear.className = 'language-clear';
+    clear.textContent = labels[1];
+    clear.addEventListener('click', function () {
+      write('speedle_locale', '', '; Max-Age=0');
+      write('speedle_locale_remember', '', '; Max-Age=0');
+      removeStorage();
+      refresh();
+    });
+    input.addEventListener('change', function () {
+      if (input.checked && production) {
+        write('speedle_locale_remember', '1', '; Max-Age=31536000');
+        save(currentLocale(), remembered());
+      } else {
+        save(currentLocale(), false);
+      }
+      refresh();
+    });
+    container.append(label, clear);
+    panel.append(container);
+    controls.push(input);
+  });
+  function refreshOnMenuEntry(event) {
+    var target = event.target;
+    if (target && typeof target.closest === 'function' && target.closest('.languages-button, .menu')) refresh();
+  }
+  document.addEventListener('focusin', refreshOnMenuEntry);
+  document.addEventListener('pointerdown', refreshOnMenuEntry, true);
+  window.addEventListener('focus', refresh);
+
+  function rememberChoice(event) {
+    if (event.type === 'auxclick' && event.button !== 1) return;
+    if (event.type === 'click' && event.button > 0) return;
+    var target = event.target;
+    var link = target && typeof target.closest === 'function' && target.closest('.languages a[hreflang], #top-nav-lang a[hreflang]');
+    if (!link || event.defaultPrevented) return;
+    var locale = link.getAttribute('hreflang');
+    // Read the live marker instead of a stale tab's checkbox state.
+    save(locale, remembered());
+    refresh();
+  }
+  document.addEventListener('click', rememberChoice, true);
+  document.addEventListener('auxclick', rememberChoice, true);
+
+  // Specific localized URLs stay stable. Only a neutral homepage follows the
+  // optional family choice, preserving its query and fragment.
+  if (preference && preference !== 'en' && (location.pathname === '/' || location.pathname === '/index.html')) {
+    var prefix = preference === 'zh-CN' ? 'zh' : preference;
+    location.replace('/' + prefix + '/' + location.search + location.hash);
+  }
+})();
+
 // Keep code selectable when JavaScript or clipboard access is unavailable.
 function legacyCopy(text) {
   if (typeof document.execCommand !== 'function') return false;
